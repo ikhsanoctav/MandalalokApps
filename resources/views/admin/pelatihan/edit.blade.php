@@ -1,0 +1,119 @@
+@extends('layouts.admin')
+@section('content')
+
+<div class="mb-6">
+    <a href="{{ route('admin.pelatihan.index') }}" class="text-blue-600 hover:text-blue-700 text-sm font-medium inline-flex items-center gap-1 mb-2">
+        <i class="fa-solid fa-arrow-left"></i> Kembali ke Daftar Pelatihan
+    </a>
+    <h1 class="text-2xl font-bold text-slate-800">Edit Pelatihan: {{ $pelatihan->judul }}</h1>
+    <p class="text-sm text-slate-500 mt-1">Ubah data dan pengaturan jadwal pelatihan UMKM.</p>
+</div>
+
+<div class="bg-white/90 backdrop-blur-sm shadow-sm rounded-3xl border overflow-hidden p-6 max-w-4xl">
+    <form action="{{ route('admin.pelatihan.update', $pelatihan->id) }}" method="POST" enctype="multipart/form-data">
+        @csrf
+        @method('PUT')
+        
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+            <div class="md:col-span-2">
+                <label class="block text-sm font-semibold text-slate-700 mb-2">Banner Pelatihan (Opsional)</label>
+                @if($pelatihan->banner)
+                    <div class="mb-3">
+                        <img src="{{ asset($pelatihan->banner) }}" alt="Banner Pelatihan" class="w-full max-w-md h-auto rounded-xl border border-slate-200">
+                    </div>
+                @endif
+                <input type="file" name="banner" accept="image/*" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-2.5 text-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all file:mr-4 file:py-2 file:px-4 file:rounded-xl file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100">
+                <p class="text-[10px] text-slate-500 mt-1">Biarkan kosong jika tidak ingin mengubah banner. Maks 2MB, rasio ideal 16:9 (Landscape).</p>
+                @error('banner') <span class="text-red-500 text-xs">{{ $message }}</span> @enderror
+            </div>
+
+            <div class="md:col-span-2">
+                <label class="block text-sm font-semibold text-slate-700 mb-2">Judul Pelatihan <span class="text-red-500">*</span></label>
+                <input type="text" name="judul" value="{{ old('judul', $pelatihan->judul) }}" required class="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-2.5 text-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all">
+                @error('judul') <span class="text-red-500 text-xs">{{ $message }}</span> @enderror
+            </div>
+
+            <div class="md:col-span-2">
+                <label class="block text-sm font-semibold text-slate-700 mb-2">Deskripsi Pelatihan</label>
+                <textarea name="deskripsi" rows="3" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-2.5 text-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all">{{ old('deskripsi', $pelatihan->deskripsi) }}</textarea>
+                @error('deskripsi') <span class="text-red-500 text-xs">{{ $message }}</span> @enderror
+            </div>
+
+            <div>
+                <label class="block text-sm font-semibold text-slate-700 mb-2">Waktu Mulai <span class="text-red-500">*</span></label>
+                <input type="datetime-local" name="tanggal_mulai" value="{{ old('tanggal_mulai', $pelatihan->tanggal_mulai->format('Y-m-d\TH:i')) }}" required class="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-2.5 text-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all">
+                @error('tanggal_mulai') <span class="text-red-500 text-xs">{{ $message }}</span> @enderror
+            </div>
+
+            <div>
+                <label class="block text-sm font-semibold text-slate-700 mb-2">Waktu Selesai <span class="text-red-500">*</span></label>
+                <input type="datetime-local" name="tanggal_selesai" value="{{ old('tanggal_selesai', $pelatihan->tanggal_selesai->format('Y-m-d\TH:i')) }}" required class="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-2.5 text-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all">
+                @error('tanggal_selesai') <span class="text-red-500 text-xs">{{ $message }}</span> @enderror
+            </div>
+
+            <div>
+                <label class="block text-sm font-semibold text-slate-700 mb-2">Lokasi <span class="text-red-500">*</span></label>
+                <input type="text" name="lokasi" value="{{ old('lokasi', $pelatihan->lokasi) }}" required class="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-2.5 text-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all">
+                @error('lokasi') <span class="text-red-500 text-xs">{{ $message }}</span> @enderror
+            </div>
+
+            <div>
+                <label class="block text-sm font-semibold text-slate-700 mb-2">Kuota Peserta <span class="text-red-500">*</span></label>
+                <input type="number" name="kuota" value="{{ old('kuota', $pelatihan->kuota) }}" required min="1" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-2.5 text-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all">
+                @error('kuota') <span class="text-red-500 text-xs">{{ $message }}</span> @enderror
+            </div>
+
+            @php
+                $syaratLama = old('syarat_dokumen', $pelatihan->syarat_dokumen ?? []);
+                if(!is_array($syaratLama) || count($syaratLama) === 0) {
+                    $syaratLama = [''];
+                }
+            @endphp
+            <div class="md:col-span-2" x-data="{ syarat: {{ json_encode($syaratLama) }} }">
+                <label class="block text-sm font-semibold text-slate-700 mb-2">Syarat Dokumen (Opsional)</label>
+                <p class="text-xs text-slate-500 mb-2">Persyaratan dokumen yang wajib diunggah pelaku UMKM saat mendaftar.</p>
+                
+                <template x-for="(s, index) in syarat" :key="index">
+                    <div class="flex gap-2 mb-2">
+                        <input type="text" x-model="syarat[index]" name="syarat_dokumen[]" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-2.5 text-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all" placeholder="Misal: Fotokopi KTP">
+                        <button type="button" @click="syarat.splice(index, 1)" x-show="syarat.length > 1" class="px-4 py-2.5 bg-red-50 text-red-600 rounded-xl hover:bg-red-100 transition-colors">
+                            <i class="fa-solid fa-trash"></i>
+                        </button>
+                    </div>
+                </template>
+                
+                <button type="button" @click="syarat.push('')" class="mt-2 text-sm text-blue-600 font-semibold hover:text-blue-700 inline-flex items-center gap-1">
+                    <i class="fa-solid fa-plus-circle"></i> Tambah Syarat Lainnya
+                </button>
+                
+                @error('syarat_dokumen') <span class="text-red-500 text-xs block mt-1">{{ $message }}</span> @enderror
+            </div>
+
+            <div class="md:col-span-2">
+                <label class="block text-sm font-semibold text-slate-700 mb-2">Status Publikasi <span class="text-red-500">*</span></label>
+                <select name="status" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-2.5 text-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all" required>
+                    <option value="draft" {{ old('status', $pelatihan->status) == 'draft' ? 'selected' : '' }}>Draft (Belum Tampil di Pelaku)</option>
+                    <option value="published" {{ old('status', $pelatihan->status) == 'published' ? 'selected' : '' }}>Published (Tampil & Bisa Daftar)</option>
+                    <option value="completed" {{ old('status', $pelatihan->status) == 'completed' ? 'selected' : '' }}>Selesai</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="flex items-center justify-between border-t pt-6 gap-3">
+            <button type="button" onclick="if(confirm('Apakah Anda yakin ingin menghapus pelatihan ini?')) document.getElementById('delete-form').submit()" class="px-5 py-2.5 text-sm font-semibold text-red-600 bg-red-50 hover:bg-red-100 rounded-xl transition-all">
+                Hapus Pelatihan
+            </button>
+            <div class="flex gap-2">
+                <a href="{{ route('admin.pelatihan.index') }}" class="px-5 py-2.5 text-sm font-semibold text-slate-600 bg-slate-100 hover:bg-slate-200 rounded-xl transition-all">Batal</a>
+                <button type="submit" class="btn-primary px-6 py-2.5 text-sm font-bold text-white rounded-xl transition-all shadow-md">Simpan Perubahan</button>
+            </div>
+        </div>
+    </form>
+
+    <form id="delete-form" action="{{ route('admin.pelatihan.destroy', $pelatihan->id) }}" method="POST" class="hidden">
+        @csrf
+        @method('DELETE')
+    </form>
+</div>
+
+@endsection

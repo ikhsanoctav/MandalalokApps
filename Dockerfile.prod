@@ -1,0 +1,48 @@
+# Stage 1: Build Node.js Assets
+FROM node:20-alpine as node_builder
+WORKDIR /app
+COPY package*.json ./
+RUN npm ci
+COPY . .
+RUN npm run build
+
+# Stage 2: Build PHP Application
+FROM php:8.2-fpm-alpine
+
+# Set working directory
+WORKDIR /var/www/html
+
+# Install dependencies
+RUN apk add --no-cache \
+    libzip-dev \
+    zip \
+    unzip \
+    git \
+    curl \
+    oniguruma-dev \
+    libpng-dev \
+    libxml2-dev
+
+# Install PHP extensions
+RUN docker-php-ext-install pdo_mysql mbstring exif pcntl bcmath gd zip
+
+# Get latest Composer
+COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
+
+# Copy application files
+COPY . .
+
+# Copy compiled assets from node_builder
+COPY --from=node_builder /app/public/build /var/www/html/public/build
+
+# Set permissions
+RUN chown -R www-data:www-data /var/www/html \
+    && chmod -R 775 /var/www/html/storage \
+    && chmod -R 775 /var/www/html/bootstrap/cache
+
+# Install PHP dependencies
+RUN composer install --no-dev --optimize-autoloader --no-interaction
+
+# Expose port 9000 and start php-fpm server
+EXPOSE 9000
+CMD ["php-fpm"]

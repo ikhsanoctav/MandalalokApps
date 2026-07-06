@@ -1,0 +1,263 @@
+[
+  {
+    "updatedAt": "2026-06-16T16:36:53.940Z",
+    "createdAt": "2026-06-11T06:05:26.849Z",
+    "id": "HVY6kS6rMvTCMkiI",
+    "name": "Mang Loka Unified AI (Chatbot & DSS)",
+    "description": null,
+    "active": true,
+    "isArchived": false,
+    "nodes": [
+      {
+        "parameters": {
+          "httpMethod": "POST",
+          "path": "chat-api",
+          "responseMode": "responseNode",
+          "options": {}
+        },
+        "id": "785f9e4d-5324-46b7-bb59-8cb0664c5453",
+        "name": "Webhook – Terima Pesan",
+        "type": "n8n-nodes-base.webhook",
+        "typeVersion": 2,
+        "position": [
+          -16,
+          400
+        ],
+        "webhookId": "chat-api"
+      },
+      {
+        "parameters": {
+          "promptType": "define",
+          "text": "=Instruksi Sistem:\n{{ $json.systemContext || $json.body.systemContext }}\n\nPesan Pengguna:\n{{ $json.message || $json.body.message }}\n\n(PENTING: Jawablah HANYA dalam Bahasa Indonesia secara natural.)"
+        },
+        "id": "6b2de124-2523-477e-9931-203c5f0892a5",
+        "name": "LLM Chain – Mang Loka",
+        "type": "@n8n/n8n-nodes-langchain.chainLlm",
+        "typeVersion": 1.4,
+        "position": [
+          256,
+          400
+        ]
+      },
+      {
+        "parameters": {
+          "respondWith": "json",
+          "responseBody": "={{ { output: $json.output || $json.text || $json.response || 'Maaf, saya tidak dapat memproses permintaan Anda saat ini.' } }}",
+          "options": {
+            "responseHeaders": {
+              "entries": [
+                {
+                  "name": "Content-Type",
+                  "value": "application/json"
+                }
+              ]
+            }
+          }
+        },
+        "id": "8a5423d7-0066-4b67-ac86-2e52bb4f4297",
+        "name": "Balas ke Laravel",
+        "type": "n8n-nodes-base.respondToWebhook",
+        "typeVersion": 1.1,
+        "position": [
+          512,
+          400
+        ]
+      },
+      {
+        "parameters": {
+          "httpMethod": "POST",
+          "path": "dss-api",
+          "responseMode": "responseNode",
+          "options": {}
+        },
+        "id": "c0cc2137-a679-40d6-bbfb-ad00b5a77fa9",
+        "name": "Webhook – DSS",
+        "type": "n8n-nodes-base.webhook",
+        "typeVersion": 2,
+        "position": [
+          -16,
+          800
+        ],
+        "webhookId": "dss-api"
+      },
+      {
+        "parameters": {
+          "jsCode": "const body = $json.body || $json;\nlet stats = {};\ntry {\n  stats = typeof body.stats_json === 'string' ? JSON.parse(body.stats_json) : (body.stats_json || {});\n} catch (e) {\n  throw new Error('stats_json tidak valid: ' + e.message);\n}\n\nconst schema = {\n  ringkasan_eksekutif: '',\n  keputusan_strategis_utama: ['', '', ''],\n  indikator_kunci: {\n    tingkat_verifikasi_persen: 0,\n    rasio_penolakan_persen: 0,\n    jumlah_kelurahan_kritis: 0,\n    rata_rata_tenaga_kerja: 0,\n    kategori_paling_dominan: '',\n    sektor_paling_dominan: '',\n    kelurahan_paling_aktif: ''\n  },\n  analisis_swot: {\n    kekuatan: ['', ''],\n    kelemahan: ['', ''],\n    peluang: ['', ''],\n    ancaman: ['', '']\n  },\n  analisis_verifikasi: {\n    insight: '',\n    tingkat_keberhasilan: '',\n    rekomendasi_operasional: ''\n  },\n  analisis_kategori: {\n    kategori_dominan: '',\n    persentase_dominan: 0,\n    insight_ekosistem: '',\n    potensi_kolaborasi: ''\n  },\n  analisis_sektor: {\n    sektor_dominan: '',\n    insight_dan_risiko: '',\n    rekomendasi_diversifikasi: ''\n  },\n  analisis_wilayah: {\n    kelurahan_terkuat: '',\n    kelurahan_perlu_perhatian: [],\n    insight_ketimpangan: '',\n    strategi_pemerataan: ''\n  },\n  analisis_pertumbuhan: {\n    tren_umum: '',\n    bulan_terbaik: '',\n    insight_musiman: '',\n    proyeksi: ''\n  },\n  rekomendasi_kebijakan: {\n    jangka_pendek_1_3_bulan: ['', '', ''],\n    jangka_menengah_3_6_bulan: ['', ''],\n    jangka_panjang_6_12_bulan: ['', '']\n  },\n  program_kerja_kategori: [\n    {\n      kategori: '',\n      skor_kebutuhan_pelatihan: 80,\n      usulan_program: '',\n      alasan: ''\n    }\n  ],\n  prioritas_intervensi: [\n    {\n      area: '',\n      alasan: '',\n      skor_urgensi: 8,\n      aksi_konkret: ''\n    }\n  ],\n  catatan_metodologi: ''\n};\n\nconst prompt = [\n  'Kamu adalah analis kebijakan UMKM senior untuk DSS Mandalaloka.',\n  'Analisis HARUS berbasis data statistik aktual berikut, jangan mengarang angka di luar data.',\n  JSON.stringify(stats, null, 2),\n  '',\n  'Tugas:',\n  '1. Buat analisis kebijakan UMKM yang tajam, spesifik, dan bisa dieksekusi.',\n  '2. Gunakan bahasa Indonesia formal.',\n  '3. Semua angka harus dihitung final, bukan rumus.',\n  '4. Wajib kembalikan JSON valid murni tanpa markdown.',\n  '5. Semua key harus sama persis dengan schema berikut.',\n  JSON.stringify(schema, null, 2)\n].join('\\n');\n\nconst result = await this.helpers.httpRequest({\n  method: 'POST',\n  url: 'http://host.docker.internal:11434/api/generate',\n  headers: { 'Content-Type': 'application/json' },\n  body: {\n    model: 'qwen2.5:1.5b',\n    prompt,\n    stream: false,\n    format: 'json',\n    options: {\n      temperature: 0.25,\n      top_p: 0.9,\n      num_predict: 1800\n    }\n  },\n  json: true,\n  timeout: 85000\n});\nconst raw = String(result.response || '').trim();\n\nfunction parseJson(text) {\n  try {\n    return JSON.parse(text);\n  } catch (firstError) {\n    const start = text.indexOf('{');\n    const end = text.lastIndexOf('}');\n    if (start !== -1 && end !== -1 && end > start) {\n      return JSON.parse(text.slice(start, end + 1));\n    }\n    throw firstError;\n  }\n}\n\nfunction arrayValue(value, fallback = []) {\n  return Array.isArray(value) ? value : fallback;\n}\n\nfunction objectValue(value, fallback = {}) {\n  return value && typeof value === 'object' && !Array.isArray(value) ? value : fallback;\n}\n\nconst analysis = objectValue(parseJson(raw));\nanalysis.keputusan_strategis_utama = arrayValue(analysis.keputusan_strategis_utama, []);\nanalysis.indikator_kunci = objectValue(analysis.indikator_kunci);\nanalysis.analisis_swot = objectValue(analysis.analisis_swot);\nanalysis.analisis_swot.kekuatan = arrayValue(analysis.analisis_swot.kekuatan, []);\nanalysis.analisis_swot.kelemahan = arrayValue(analysis.analisis_swot.kelemahan, []);\nanalysis.analisis_swot.peluang = arrayValue(analysis.analisis_swot.peluang, []);\nanalysis.analisis_swot.ancaman = arrayValue(analysis.analisis_swot.ancaman, []);\nanalysis.analisis_verifikasi = objectValue(analysis.analisis_verifikasi);\nanalysis.analisis_kategori = objectValue(analysis.analisis_kategori);\nanalysis.analisis_sektor = objectValue(analysis.analisis_sektor);\nanalysis.analisis_wilayah = objectValue(analysis.analisis_wilayah);\nanalysis.analisis_wilayah.kelurahan_perlu_perhatian = arrayValue(analysis.analisis_wilayah.kelurahan_perlu_perhatian, []);\nanalysis.analisis_pertumbuhan = objectValue(analysis.analisis_pertumbuhan);\nanalysis.rekomendasi_kebijakan = objectValue(analysis.rekomendasi_kebijakan);\nanalysis.rekomendasi_kebijakan.jangka_pendek_1_3_bulan = arrayValue(analysis.rekomendasi_kebijakan.jangka_pendek_1_3_bulan, []);\nanalysis.rekomendasi_kebijakan.jangka_menengah_3_6_bulan = arrayValue(analysis.rekomendasi_kebijakan.jangka_menengah_3_6_bulan, []);\nanalysis.rekomendasi_kebijakan.jangka_panjang_6_12_bulan = arrayValue(analysis.rekomendasi_kebijakan.jangka_panjang_6_12_bulan, []);\nanalysis.program_kerja_kategori = arrayValue(analysis.program_kerja_kategori, []);\nanalysis.prioritas_intervensi = arrayValue(analysis.prioritas_intervensi, []);\nanalysis.catatan_metodologi = analysis.catatan_metodologi || 'Analisis dibuat oleh Ollama melalui n8n berdasarkan statistik database terbaru.';\n\nreturn [{ json: { output: JSON.stringify(analysis) } }];"
+        },
+        "id": "8adf8a3d-c737-4cec-9392-ae5b5d2472d2",
+        "name": "DSS Ollama LLM JSON",
+        "type": "n8n-nodes-base.code",
+        "typeVersion": 2,
+        "position": [
+          256,
+          800
+        ]
+      },
+      {
+        "parameters": {
+          "respondWith": "json",
+          "responseBody": "={{ { output: $json.output || $json.text || $json.response || 'Error DSS' } }}",
+          "options": {
+            "responseHeaders": {
+              "entries": [
+                {
+                  "name": "Content-Type",
+                  "value": "application/json"
+                }
+              ]
+            }
+          }
+        },
+        "id": "b5b4dd6c-d366-487c-b4a0-19515e4b4ca9",
+        "name": "Balas ke Laravel DSS",
+        "type": "n8n-nodes-base.respondToWebhook",
+        "typeVersion": 1.1,
+        "position": [
+          512,
+          800
+        ]
+      },
+      {
+        "parameters": {
+          "model": "qwen2.5:1.5b",
+          "options": {
+            "temperature": 0.2,
+            "numPredict": 512
+          }
+        },
+        "id": "c27626f6-1877-4bb3-98da-a30184b3cdc8",
+        "name": "Ollama – Chatbot",
+        "type": "@n8n/n8n-nodes-langchain.lmChatOllama",
+        "typeVersion": 1,
+        "position": [
+          256,
+          624
+        ],
+        "credentials": {
+          "ollamaApi": {
+            "id": "TD9iO9kxQSRwhdBj",
+            "name": "Ollama account"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "model": "qwen2.5:1.5b",
+          "options": {
+            "temperature": 0.2,
+            "numPredict": 768,
+            "format": "json"
+          }
+        },
+        "id": "731ab343-af82-406a-9f7a-d4eccb602ef4",
+        "name": "Ollama – DSS (JSON)",
+        "type": "@n8n/n8n-nodes-langchain.lmChatOllama",
+        "typeVersion": 1,
+        "position": [
+          256,
+          1008
+        ],
+        "credentials": {
+          "ollamaApi": {
+            "id": "TD9iO9kxQSRwhdBj",
+            "name": "Ollama account"
+          }
+        }
+      }
+    ],
+    "connections": {
+      "Webhook – Terima Pesan": {
+        "main": [
+          [
+            {
+              "node": "LLM Chain – Mang Loka",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "LLM Chain – Mang Loka": {
+        "main": [
+          [
+            {
+              "node": "Balas ke Laravel",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Webhook – DSS": {
+        "main": [
+          [
+            {
+              "node": "DSS Ollama LLM JSON",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Ollama – Chatbot": {
+        "ai_languageModel": [
+          [
+            {
+              "node": "LLM Chain – Mang Loka",
+              "type": "ai_languageModel",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "DSS Ollama LLM JSON": {
+        "main": [
+          [
+            {
+              "node": "Balas ke Laravel DSS",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      }
+    },
+    "settings": {
+      "executionOrder": "v1",
+      "binaryMode": "separate"
+    },
+    "staticData": null,
+    "meta": {
+      "templateCredsSetupCompleted": true
+    },
+    "pinData": {},
+    "versionId": "74ab5317-f24d-4815-9888-385565c04b0f",
+    "activeVersionId": "74ab5317-f24d-4815-9888-385565c04b0f",
+    "versionCounter": 29,
+    "triggerCount": 2,
+    "tags": [],
+    "shared": [
+      {
+        "updatedAt": "2026-06-11T06:05:26.857Z",
+        "createdAt": "2026-06-11T06:05:26.857Z",
+        "role": "workflow:owner",
+        "workflowId": "HVY6kS6rMvTCMkiI",
+        "projectId": "rkpN5TH2FxmEjnsi",
+        "project": {
+          "updatedAt": "2026-05-31T14:44:38.633Z",
+          "createdAt": "2026-05-31T14:43:36.284Z",
+          "id": "rkpN5TH2FxmEjnsi",
+          "name": "Ikhsan Octav <ikhsanocta12@gmail.com>",
+          "type": "personal",
+          "icon": null,
+          "description": null,
+          "creatorId": "181142b7-b429-432c-9e2a-f28c91d446bc"
+        }
+      }
+    ],
+    "versionMetadata": {
+      "name": "c",
+      "description": ""
+    }
+  }
+]
