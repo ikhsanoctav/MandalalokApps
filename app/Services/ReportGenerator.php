@@ -34,12 +34,18 @@ class ReportGenerator
     {
         $filename = 'Laporan_UMKM_' . date('Ymd_His');
 
+        // Get selected columns or use default if none selected
+        $selectedColumns = $filters['columns'] ?? [
+            'no_pendaftaran', 'nama_usaha', 'pemilik', 'kategori', 
+            'sektor', 'tahun_berdiri', 'no_izin', 'jumlah_tk', 'status_verifikasi'
+        ];
+
         if ($format === 'excel') {
-            return Excel::download(new UmkmExport($filters), "{$filename}.xlsx");
+            return Excel::download(new UmkmExport($filters, $selectedColumns), "{$filename}.xlsx");
         }
 
         if ($format === 'csv') {
-            return Excel::download(new UmkmExport($filters), "{$filename}.csv", \Maatwebsite\Excel\Excel::CSV);
+            return Excel::download(new UmkmExport($filters, $selectedColumns), "{$filename}.csv", \Maatwebsite\Excel\Excel::CSV);
         }
 
         if ($format === 'pdf') {
@@ -64,8 +70,21 @@ class ReportGenerator
 
             $umkms = $query->latest()->get();
 
+            $kop = [
+                'nama_instansi' => \App\Models\Setting::get('kop_nama_instansi', 'Pemerintah Kabupaten/Kota'),
+                'nama_unit'     => \App\Models\Setting::get('kop_nama_unit', 'Dinas Koperasi dan UKM'),
+                'alamat'        => \App\Models\Setting::get('kop_alamat', ''),
+                'telepon'       => \App\Models\Setting::get('kop_telepon', ''),
+                'email'         => \App\Models\Setting::get('kop_email', ''),
+                'website'       => \App\Models\Setting::get('kop_website', ''),
+                'logo_path'     => \App\Models\Setting::get('kop_logo_path', ''),
+            ];
+
             $pdf = Pdf::loadView('admin.laporan.pdf.umkm', [
                 'umkms' => $umkms,
+                'kop' => $kop,
+                'filters' => $filters,
+                'selectedColumns' => $selectedColumns,
                 'tanggal_cetak' => now()->format('d F Y H:i'),
             ])->setPaper('a4', 'landscape');
 

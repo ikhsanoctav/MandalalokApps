@@ -2,7 +2,7 @@
 
 namespace Tests\Feature;
 
-use Illuminate\Support\Facades\Http;
+use App\Services\OllamaService;
 use Tests\TestCase;
 
 class ChatbotTest extends TestCase
@@ -17,16 +17,17 @@ class ChatbotTest extends TestCase
 
     public function test_chatbot_successful_response(): void
     {
-        $url = config('services.n8n.webhook_url', 'http://n8n:5678/webhook/chat-api');
-
-        Http::fake([
-            $url => Http::response([
-                'output' => 'Halo! Ini adalah respons dari AI n8n.'
-            ], 200)
-        ]);
+        $this->mock(OllamaService::class, function ($mock) {
+            $mock->shouldReceive('generateChatResponse')
+                ->once()
+                ->withArgs(fn ($systemContext, $message, $history) => is_string($systemContext)
+                    && $message === 'Halo Ollama'
+                    && $history === [])
+                ->andReturn('Halo! Ini adalah respons dari AI Ollama.');
+        });
 
         $response = $this->postJson(route('api.chat'), [
-            'message' => 'Halo n8n',
+            'message' => 'Halo Ollama',
             'name' => 'Budi',
             'kelurahan' => 'Pasirlayung',
             'phone' => '08123456789'
@@ -35,27 +36,20 @@ class ChatbotTest extends TestCase
         $response->assertStatus(200)
             ->assertJson([
                 'success' => true,
-                'reply' => 'Halo! Ini adalah respons dari AI n8n.'
+                'reply' => 'Halo! Ini adalah respons dari AI Ollama.'
             ]);
-
-        Http::assertSent(function ($request) use ($url) {
-            return $request->url() === $url
-                && $request['message'] === 'Halo n8n'
-                && isset($request['systemContext'])
-                && isset($request['sessionId']);
-        });
     }
 
-    public function test_chatbot_handles_n8n_failure_gracefully(): void
+    public function test_chatbot_handles_ollama_failure_gracefully(): void
     {
-        $url = config('services.n8n.webhook_url', 'http://n8n:5678/webhook/chat-api');
-
-        Http::fake([
-            $url => Http::response('Server Error', 500)
-        ]);
+        $this->mock(OllamaService::class, function ($mock) {
+            $mock->shouldReceive('generateChatResponse')
+                ->once()
+                ->andReturn(null);
+        });
 
         $response = $this->postJson(route('api.chat'), [
-            'message' => 'Halo n8n'
+            'message' => 'Halo Ollama'
         ]);
 
         $response->assertStatus(200)

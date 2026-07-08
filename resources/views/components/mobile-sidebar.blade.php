@@ -349,7 +349,10 @@
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                         d="M19 20H5a2 2 0 01-2-2V6a2 2 0 012-2h10a2 2 0 012 2v1m2 13a2 2 0 01-2-2V7m2 13a2 2 0 002-2V9.5a2.5 2.5 0 00-2.5-2.5H15"></path>
                 </svg>
-                <span>Pelatihan UMKM</span>
+                <span class="flex-1">Pelatihan UMKM</span>
+                @if($jumlah_pelatihan_tersedia > 0)
+                    <span class="inline-flex items-center justify-center min-w-[20px] h-5 px-1.5 rounded-full bg-emerald-500 text-white text-[10px] font-bold leading-none">{{ $jumlah_pelatihan_tersedia > 9 ? '9+' : $jumlah_pelatihan_tersedia }}</span>
+                @endif
             </a>
 
             @if(\App\Models\Setting::get('pelaku_submission_active', false))

@@ -113,22 +113,12 @@
                         <p class="text-xs text-slate-500 mt-1">Visualisasi data pertumbuhan UMKM</p>
                     </div>
 
-                    <form action="{{ route('superadmin.laporan.export') }}" method="POST" class="flex gap-2">
-                        @csrf
-                        <input type="hidden" name="periode_awal" value="{{ request('periode_awal') }}">
-                        <input type="hidden" name="periode_akhir" value="{{ request('periode_akhir') }}">
-                        <input type="hidden" name="kategori" value="{{ request('kategori') }}">
-                        <input type="hidden" name="status_verifikasi" value="{{ request('status_verifikasi') }}">
-                        
-                        <button type="submit" name="format" value="excel" class="group inline-flex items-center px-4 py-2.5 bg-white border-2 border-emerald-500 text-emerald-600 rounded-lg text-sm font-bold hover:bg-emerald-50 hover:shadow-lg hover:shadow-emerald-500/20 transition-all duration-300">
-                            <svg class="w-4 h-4 mr-2 transform group-hover:-translate-y-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
-                            XLSX
+                    <div class="flex gap-2">
+                        <button type="button" onclick="document.getElementById('exportModal').classList.remove('hidden')" class="group inline-flex items-center px-4 py-2.5 bg-indigo-600 text-white rounded-lg text-sm font-bold shadow-md hover:bg-indigo-700 hover:shadow-lg transition-all duration-300">
+                            <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
+                            Export Data
                         </button>
-                        <button type="submit" name="format" value="pdf" class="group inline-flex items-center px-4 py-2.5 bg-gradient-to-r from-rose-500 to-red-600 text-white rounded-lg text-sm font-bold shadow-lg shadow-rose-500/30 hover:shadow-rose-500/50 hover:scale-105 transition-all duration-300">
-                            <svg class="w-4 h-4 mr-2 transform group-hover:-translate-y-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
-                            PDF
-                        </button>
-                    </form>
+                    </div>
                 </div>
 
                 <div class="flex-grow w-full relative" style="min-height: 320px;">
@@ -218,6 +208,127 @@
             @endif
         </div>
 
+    </div>
+
+    <div id="exportModal" class="fixed inset-0 z-50 hidden overflow-y-auto" aria-labelledby="modal-title" role="dialog" aria-modal="true">
+        <div class="flex items-end justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
+            <div class="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity" aria-hidden="true" onclick="document.getElementById('exportModal').classList.add('hidden')"></div>
+            <span class="hidden sm:inline-block sm:align-middle sm:h-screen" aria-hidden="true">&#8203;</span>
+            <div class="inline-block align-bottom bg-white rounded-2xl text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-md sm:w-full">
+                <form action="{{ route('superadmin.laporan.export') }}" method="POST">
+                    @csrf
+                    <input type="hidden" name="periode_awal" value="{{ request('periode_awal') }}">
+                    <input type="hidden" name="periode_akhir" value="{{ request('periode_akhir') }}">
+                    <input type="hidden" name="kategori" value="{{ request('kategori') }}">
+                    <input type="hidden" name="status_verifikasi" value="{{ request('status_verifikasi') }}">
+                    
+                    <div class="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
+                        <div class="sm:flex sm:items-start">
+                            <div class="mx-auto flex-shrink-0 flex items-center justify-center h-12 w-12 rounded-full bg-indigo-100 sm:mx-0 sm:h-10 sm:w-10">
+                                <svg class="h-6 w-6 text-indigo-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+                                </svg>
+                            </div>
+                            <div class="mt-3 text-center sm:mt-0 sm:ml-4 sm:text-left w-full">
+                                <h3 class="text-lg leading-6 font-medium text-gray-900" id="modal-title">Export Data UMKM</h3>
+                                <div class="mt-2">
+                                    <p class="text-sm text-gray-500 mb-4">Pilih format file dan kolom yang ingin disertakan dalam laporan (data akan difilter sesuai tampilan saat ini).</p>
+                                    
+                                    <div class="mt-4 mb-5 border-t border-slate-100 pt-4" x-data="exportColumnSelector()">
+                                        <p class="text-sm font-semibold text-slate-700 mb-2">Pilih Kolom Data:</p>
+                                        
+                                        <!-- Active columns as tags -->
+                                        <div class="flex flex-wrap gap-2 mb-3">
+                                            <template x-for="(col, index) in activeColumns" :key="col.value">
+                                                <span class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-medium bg-indigo-50 text-indigo-700 border border-indigo-200">
+                                                    <span x-text="col.label"></span>
+                                                    <button type="button" @click="removeColumn(index)" class="hover:bg-indigo-200 hover:text-indigo-900 rounded-full p-0.5 transition-colors focus:outline-none">
+                                                        <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+                                                    </button>
+                                                    <input type="hidden" name="columns[]" :value="col.value">
+                                                </span>
+                                            </template>
+                                        </div>
+
+                                        <!-- Dropdown to add more -->
+                                        <div class="relative" x-show="availableColumns.length > 0">
+                                            <select @change="addColumn($event.target.value); $event.target.value=''" class="w-full text-sm border-slate-300 rounded-lg shadow-sm focus:border-indigo-500 focus:ring-indigo-500 bg-slate-50 py-2 px-3 cursor-pointer">
+                                                <option value="">+ Tambah Kolom Lainnya...</option>
+                                                <template x-for="col in availableColumns" :key="col.value">
+                                                    <option :value="col.value" x-text="col.label"></option>
+                                                </template>
+                                            </select>
+                                        </div>
+                                        
+                                        <div x-show="activeColumns.length === 0" class="text-xs text-red-500 mt-2 font-medium">
+                                            * Pilih setidaknya satu kolom untuk diexport.
+                                        </div>
+                                    </div>
+
+                                    <div class="space-y-3">
+                                        <button type="submit" name="format" value="excel" class="w-full flex items-center justify-center px-4 py-2 border border-transparent rounded-lg shadow-md text-sm font-bold text-white bg-emerald-600 hover:bg-emerald-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-emerald-500 transition-all transform hover:-translate-y-0.5">
+                                            <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
+                                            Export ke Excel (.xlsx)
+                                        </button>
+                                        <button type="submit" name="format" value="pdf" class="w-full flex items-center justify-center px-4 py-2 border border-transparent rounded-lg shadow-md text-sm font-bold text-white bg-rose-600 hover:bg-rose-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-rose-500 transition-all transform hover:-translate-y-0.5">
+                                            <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
+                                            Export ke PDF (.pdf)
+                                        </button>
+                                    </div>
+                                    
+                                    <script>
+                                        function exportColumnSelector() {
+                                            const allCols = [
+                                                { value: 'no_pendaftaran', label: 'No. Pendaftaran' },
+                                                { value: 'nama_usaha', label: 'Nama Usaha' },
+                                                { value: 'pemilik', label: 'Nama Pemilik' },
+                                                { value: 'kategori', label: 'Kategori' },
+                                                { value: 'sektor', label: 'Sektor' },
+                                                { value: 'status_usaha', label: 'Status Usaha' },
+                                                { value: 'tahun_berdiri', label: 'Thn Berdiri' },
+                                                { value: 'no_izin', label: 'No. Izin' },
+                                                { value: 'jenis_izin', label: 'Jenis Izin' },
+                                                { value: 'npwp', label: 'NPWP Usaha' },
+                                                { value: 'telepon', label: 'Telepon Usaha' },
+                                                { value: 'email', label: 'Email Usaha' },
+                                                { value: 'jumlah_tk', label: 'Jumlah TK' },
+                                                { value: 'alamat', label: 'Alamat Usaha' },
+                                                { value: 'petugas', label: 'Petugas Pendata' },
+                                                { value: 'tgl_pendataan', label: 'Tgl Pendataan' },
+                                                { value: 'status_verifikasi', label: 'Status Verifikasi' },
+                                                { value: 'alasan_penolakan', label: 'Alasan Penolakan' }
+                                            ];
+                                            const defaultVals = ['no_pendaftaran', 'nama_usaha', 'pemilik', 'kategori', 'sektor', 'tahun_berdiri', 'no_izin', 'jumlah_tk', 'status_verifikasi'];
+                                            
+                                            return {
+                                                activeColumns: allCols.filter(c => defaultVals.includes(c.value)),
+                                                get availableColumns() {
+                                                    const activeVals = this.activeColumns.map(c => c.value);
+                                                    return allCols.filter(c => !activeVals.includes(c.value));
+                                                },
+                                                addColumn(val) {
+                                                    if (!val) return;
+                                                    const col = allCols.find(c => c.value === val);
+                                                    if (col) this.activeColumns.push(col);
+                                                },
+                                                removeColumn(index) {
+                                                    this.activeColumns.splice(index, 1);
+                                                }
+                                            }
+                                        }
+                                    </script>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="bg-gray-50 px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse">
+                        <button type="button" onclick="document.getElementById('exportModal').classList.add('hidden')" class="mt-3 w-full inline-flex justify-center rounded-xl border border-gray-300 shadow-sm px-4 py-2 bg-white text-base font-medium text-gray-700 hover:bg-gray-50 sm:mt-0 sm:w-auto sm:text-sm">
+                            Batal
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
     </div>
 @endsection
 

@@ -101,7 +101,7 @@ class SystemController extends Controller
 
     public function settingsUpdate(Request $request)
     {
-        $settings = Setting::all();
+        $settings = Setting::all()->filter(fn($s) => $s->group !== 'kop_surat');
 
         foreach ($settings as $setting) {
             $key = $setting->key;
@@ -130,11 +130,69 @@ class SystemController extends Controller
         );
 
         session()->flash('toast', [
-            'type' => 'success',
-            'title' => 'Pengaturan Disimpan!',
+            'type'    => 'success',
+            'title'   => 'Pengaturan Disimpan!',
             'message' => 'Konfigurasi sistem berhasil diperbarui.',
         ]);
 
         return redirect()->route('superadmin.settings');
+    }
+
+    /**
+     * Simpan pengaturan kop surat (termasuk upload logo).
+     */
+    public function settingsKopSurat(Request $request)
+    {
+        $request->validate([
+            'kop_nama_instansi' => 'nullable|string|max:255',
+            'kop_nama_unit'     => 'nullable|string|max:255',
+            'kop_alamat'        => 'nullable|string|max:500',
+            'kop_telepon'       => 'nullable|string|max:50',
+            'kop_email'         => 'nullable|email|max:100',
+            'kop_website'       => 'nullable|string|max:255',
+            'kop_logo'          => 'nullable|image|mimes:png,jpg,jpeg|max:2048',
+        ]);
+
+        $kopKeys = ['kop_nama_instansi', 'kop_nama_unit', 'kop_alamat', 'kop_telepon', 'kop_email', 'kop_website'];
+
+        foreach ($kopKeys as $key) {
+            $setting = Setting::where('key', $key)->first();
+            if ($setting) {
+                $setting->value = $request->input($key, '');
+                $setting->save();
+            }
+        }
+
+        // Handle logo upload
+        if ($request->hasFile('kop_logo')) {
+            $file     = $request->file('kop_logo');
+            $filename = 'kop_logo_' . time() . '.' . $file->getClientOriginalExtension();
+            $path     = $file->storeAs('kop_logo', $filename, 'public');
+
+            $logoSetting = Setting::where('key', 'kop_logo_path')->first();
+            if ($logoSetting) {
+                // Hapus logo lama jika ada
+                if (! empty($logoSetting->value) && \Illuminate\Support\Facades\Storage::disk('public')->exists($logoSetting->value)) {
+                    \Illuminate\Support\Facades\Storage::disk('public')->delete($logoSetting->value);
+                }
+                $logoSetting->value = $path;
+                $logoSetting->save();
+            }
+        }
+
+        AktivitasLogger::log(
+            'Memperbarui kop surat laporan & dokumen cetak.',
+            'settings',
+            null,
+            $request
+        );
+
+        session()->flash('toast', [
+            'type'    => 'success',
+            'title'   => 'Kop Surat Disimpan!',
+            'message' => 'Template kop surat berhasil diperbarui.',
+        ]);
+
+        return redirect()->route('superadmin.settings')->with('active_tab', 'kop_surat');
     }
 }

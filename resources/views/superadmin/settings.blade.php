@@ -8,12 +8,12 @@
         <div class="flex flex-col gap-1 md:flex-row md:items-center md:justify-between">
             <div>
                 <h2 class="text-xl md:text-2xl font-bold text-slate-800 tracking-tight">Pengaturan Sistem</h2>
-                <p class="text-xs md:text-sm text-slate-500 font-medium">Ubah parameter global, kontak dinas, serta status
+                <p class="text-xs md:text-sm text-slate-500 font-medium">Ubah parameter global, kontak dinas, kop surat, serta status
                     pendaftaran sistem secara instan.</p>
             </div>
         </div>
 
-        <div class="flex items-center gap-1 bg-slate-100 p-1 rounded-xl w-fit">
+        <div class="flex items-center gap-1 bg-slate-100 p-1 rounded-xl w-fit flex-wrap">
             <template x-for="tab in tabs" :key="tab.id">
                 <button @click="activeTab = tab.id"
                     class="px-4 py-2 rounded-lg text-xs md:text-sm font-bold transition-all focus:outline-none"
@@ -26,6 +26,7 @@
             </template>
         </div>
 
+        {{-- TAB: Sistem & Aturan, Umum, Kontak --}}
         <form action="{{ route('superadmin.settings.update') }}" method="POST"
             class="bg-white rounded-2xl border border-slate-200/60 shadow-sm overflow-hidden">
             @csrf
@@ -213,11 +214,173 @@
                 </div>
             </div>
 
-            <div class="px-6 py-4 bg-slate-50 border-t border-slate-100 flex items-center justify-end gap-3">
+            {{-- Footer tombol simpan untuk tab non-kop-surat --}}
+            <div x-show="activeTab !== 'kop_surat'" class="px-6 py-4 bg-slate-50 border-t border-slate-100 flex items-center justify-end gap-3">
                 <button type="submit"
                     class="bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs md:text-sm px-5 py-2.5 rounded-md shadow-sm hover:shadow-md transition-all flex items-center gap-1.5 focus:outline-none focus:ring-2 focus:ring-blue-500/20 hover:scale-102">
                     <span class="mdi mdi-content-save"></span>
                     <span>Simpan Pengaturan</span>
+                </button>
+            </div>
+        </form>
+
+        {{-- TAB: Kop Surat (form terpisah karena multipart) --}}
+        @php
+            $kopNamaInstansi = \App\Models\Setting::get('kop_nama_instansi', 'PEMERINTAH KOTA BANDUNG');
+            $kopNamaUnit     = \App\Models\Setting::get('kop_nama_unit', 'KECAMATAN MANDALAJATI');
+            $kopAlamat       = \App\Models\Setting::get('kop_alamat', '');
+            $kopTelepon      = \App\Models\Setting::get('kop_telepon', '');
+            $kopEmail        = \App\Models\Setting::get('kop_email', '');
+            $kopWebsite      = \App\Models\Setting::get('kop_website', '');
+            $kopLogoPath     = \App\Models\Setting::get('kop_logo_path', '');
+        @endphp
+
+        <form action="{{ route('superadmin.settings.kop_surat') }}" method="POST" enctype="multipart/form-data"
+            class="bg-white rounded-2xl border border-slate-200/60 shadow-sm overflow-hidden"
+            x-show="activeTab === 'kop_surat'" x-cloak>
+            @csrf
+
+            <div class="p-6 md:p-8 space-y-6">
+                <div class="pb-3 border-b border-slate-100">
+                    <h3 class="font-bold text-slate-800 text-base flex items-center gap-2">
+                        <span class="mdi mdi-file-document-outline text-blue-600"></span>
+                        Template Kop Surat
+                    </h3>
+                    <p class="text-xs text-slate-400 mt-0.5">Kustomisasi kop surat yang akan tampil pada semua dokumen cetak PDF dan laporan ekspor.</p>
+                </div>
+
+                {{-- PREVIEW KOP SURAT --}}
+                <div class="border-2 border-dashed border-slate-200 rounded-xl p-4 bg-slate-50/50" id="kop-preview-container">
+                    <p class="text-xs font-bold text-slate-400 uppercase tracking-wider mb-3 flex items-center gap-1.5">
+                        <span class="mdi mdi-eye-outline"></span> Preview Kop Surat
+                    </p>
+                    <div class="bg-white border border-slate-200 rounded-lg p-4 font-serif shadow-sm">
+                        <div class="flex items-center gap-4 pb-3 border-b-2 border-double border-black">
+                            {{-- Logo preview --}}
+                            <div class="flex-shrink-0">
+                                <img id="logo-preview-img"
+                                    src="{{ $kopLogoPath ? Storage::url($kopLogoPath) : asset('images/Logo_Mandalaloka.png') }}"
+                                    alt="Logo"
+                                    class="w-16 h-16 object-contain"
+                                    onerror="this.style.display='none'">
+                                <div id="logo-placeholder" class="w-16 h-16 bg-slate-100 rounded flex items-center justify-center {{ $kopLogoPath ? 'hidden' : '' }}">
+                                    <span class="mdi mdi-image-outline text-2xl text-slate-300"></span>
+                                </div>
+                            </div>
+                            {{-- Text Kop --}}
+                            <div class="flex-1 text-center">
+                                <div class="text-sm font-bold uppercase tracking-wide leading-tight" id="preview-instansi">{{ $kopNamaInstansi ?: 'NAMA INSTANSI' }}</div>
+                                <div class="text-base font-extrabold uppercase tracking-wide mt-0.5" id="preview-unit">{{ $kopNamaUnit ?: 'NAMA UNIT / DINAS' }}</div>
+                                <div class="text-xs text-gray-600 mt-1" id="preview-alamat">{{ $kopAlamat ?: 'Alamat instansi akan tampil di sini' }}</div>
+                                <div class="text-xs text-gray-600" id="preview-kontak">
+                                    @if($kopTelepon || $kopEmail)
+                                        Telepon: {{ $kopTelepon }}{{ $kopTelepon && $kopEmail ? ' | Email: ' : '' }}{{ $kopEmail }}
+                                    @else
+                                        Telepon: (xxx) xxxxxx | Email: nama@instansi.go.id
+                                    @endif
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    {{-- Logo Upload --}}
+                    <div class="md:col-span-2">
+                        <label class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">Logo Instansi</label>
+                        <div class="flex items-start gap-4">
+                            <div class="flex-shrink-0">
+                                <img id="logo-thumb"
+                                    src="{{ $kopLogoPath ? Storage::url($kopLogoPath) : asset('images/Logo_Mandalaloka.png') }}"
+                                    class="w-20 h-20 object-contain rounded-lg border border-slate-200 bg-white p-1 {{ !$kopLogoPath ? 'opacity-40' : '' }}"
+                                    alt="Logo saat ini">
+                            </div>
+                            <div class="flex-1">
+                                <label for="kop_logo"
+                                    class="flex flex-col items-center justify-center w-full h-28 border-2 border-dashed border-slate-300 rounded-xl cursor-pointer bg-slate-50 hover:bg-blue-50 hover:border-blue-400 transition-all group">
+                                    <span class="mdi mdi-cloud-upload-outline text-3xl text-slate-400 group-hover:text-blue-500 transition-colors"></span>
+                                    <span class="text-xs font-bold text-slate-500 group-hover:text-blue-600 mt-1">Klik untuk upload logo baru</span>
+                                    <span class="text-[10px] text-slate-400 mt-0.5">PNG, JPG, JPEG – Maks. 2MB</span>
+                                    <input id="kop_logo" name="kop_logo" type="file" accept="image/png,image/jpg,image/jpeg" class="hidden"
+                                        onchange="previewLogo(this)">
+                                </label>
+                                <p class="text-[10px] text-slate-400 mt-1.5">Logo akan tampil di pojok kiri kop surat pada semua dokumen cetak & PDF.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    {{-- Nama Instansi --}}
+                    <div class="space-y-2">
+                        <label for="kop_nama_instansi" class="block text-xs font-bold text-slate-500 uppercase tracking-wider">Nama Instansi / Pemerintah</label>
+                        <input type="text" name="kop_nama_instansi" id="kop_nama_instansi"
+                            value="{{ $kopNamaInstansi }}"
+                            placeholder="Contoh: PEMERINTAH KOTA BANDUNG"
+                            class="w-full px-4 py-2.5 rounded-lg border border-slate-250 bg-slate-50/20 text-sm text-slate-750 font-semibold focus:outline-none focus:ring-2 focus:ring-blue-100 focus:border-blue-500 transition-all uppercase"
+                            oninput="document.getElementById('preview-instansi').textContent = this.value || 'NAMA INSTANSI'">
+                        <p class="text-[10px] text-slate-400">Baris pertama kop surat (contoh: nama pemerintah kota/kabupaten)</p>
+                    </div>
+
+                    {{-- Nama Unit --}}
+                    <div class="space-y-2">
+                        <label for="kop_nama_unit" class="block text-xs font-bold text-slate-500 uppercase tracking-wider">Nama Unit / Dinas / Kecamatan</label>
+                        <input type="text" name="kop_nama_unit" id="kop_nama_unit"
+                            value="{{ $kopNamaUnit }}"
+                            placeholder="Contoh: KECAMATAN MANDALAJATI"
+                            class="w-full px-4 py-2.5 rounded-lg border border-slate-250 bg-slate-50/20 text-sm text-slate-750 font-semibold focus:outline-none focus:ring-2 focus:ring-blue-100 focus:border-blue-500 transition-all uppercase"
+                            oninput="document.getElementById('preview-unit').textContent = this.value || 'NAMA UNIT / DINAS'">
+                        <p class="text-[10px] text-slate-400">Baris kedua kop surat yang lebih besar (nama kecamatan/dinas)</p>
+                    </div>
+
+                    {{-- Alamat --}}
+                    <div class="space-y-2 md:col-span-2">
+                        <label for="kop_alamat" class="block text-xs font-bold text-slate-500 uppercase tracking-wider">Alamat Lengkap</label>
+                        <input type="text" name="kop_alamat" id="kop_alamat"
+                            value="{{ $kopAlamat }}"
+                            placeholder="Contoh: Jl. Sindanglaya No.50, Sindangjaya, Kec. Mandalajati, Kota Bandung, Jawa Barat 40195"
+                            class="w-full px-4 py-2.5 rounded-lg border border-slate-250 bg-slate-50/20 text-sm text-slate-750 font-semibold focus:outline-none focus:ring-2 focus:ring-blue-100 focus:border-blue-500 transition-all"
+                            oninput="document.getElementById('preview-alamat').textContent = this.value || 'Alamat instansi akan tampil di sini'">
+                    </div>
+
+                    {{-- Telepon --}}
+                    <div class="space-y-2">
+                        <label for="kop_telepon" class="block text-xs font-bold text-slate-500 uppercase tracking-wider">Nomor Telepon</label>
+                        <input type="text" name="kop_telepon" id="kop_telepon"
+                            value="{{ $kopTelepon }}"
+                            placeholder="Contoh: (022) 7815252"
+                            class="w-full px-4 py-2.5 rounded-lg border border-slate-250 bg-slate-50/20 text-sm text-slate-750 font-semibold focus:outline-none focus:ring-2 focus:ring-blue-100 focus:border-blue-500 transition-all"
+                            oninput="updateKontakPreview()">
+                    </div>
+
+                    {{-- Email --}}
+                    <div class="space-y-2">
+                        <label for="kop_email" class="block text-xs font-bold text-slate-500 uppercase tracking-wider">Email Resmi</label>
+                        <input type="email" name="kop_email" id="kop_email"
+                            value="{{ $kopEmail }}"
+                            placeholder="Contoh: kecamatan@bandung.go.id"
+                            class="w-full px-4 py-2.5 rounded-lg border border-slate-250 bg-slate-50/20 text-sm text-slate-750 font-semibold focus:outline-none focus:ring-2 focus:ring-blue-100 focus:border-blue-500 transition-all"
+                            oninput="updateKontakPreview()">
+                    </div>
+
+                    {{-- Website --}}
+                    <div class="space-y-2 md:col-span-2">
+                        <label for="kop_website" class="block text-xs font-bold text-slate-500 uppercase tracking-wider">Website <span class="text-slate-400 font-normal normal-case">(opsional)</span></label>
+                        <input type="text" name="kop_website" id="kop_website"
+                            value="{{ $kopWebsite }}"
+                            placeholder="Contoh: https://mandalajati.bandung.go.id"
+                            class="w-full px-4 py-2.5 rounded-lg border border-slate-250 bg-slate-50/20 text-sm text-slate-750 font-semibold focus:outline-none focus:ring-2 focus:ring-blue-100 focus:border-blue-500 transition-all">
+                    </div>
+                </div>
+            </div>
+
+            <div class="px-6 py-4 bg-slate-50 border-t border-slate-100 flex items-center justify-between gap-3">
+                <p class="text-xs text-slate-400 flex items-center gap-1.5">
+                    <span class="mdi mdi-information-outline text-blue-400"></span>
+                    Perubahan kop surat langsung berlaku pada semua dokumen PDF & cetak baru.
+                </p>
+                <button type="submit"
+                    class="bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs md:text-sm px-5 py-2.5 rounded-md shadow-sm hover:shadow-md transition-all flex items-center gap-1.5 focus:outline-none focus:ring-2 focus:ring-blue-500/20">
+                    <span class="mdi mdi-content-save"></span>
+                    <span>Simpan Kop Surat</span>
                 </button>
             </div>
         </form>
@@ -231,7 +394,7 @@
         <script>
             function settingsPanel() {
                 return {
-                    activeTab: 'system',
+                    activeTab: '{{ session("active_tab", "system") }}',
                     tabs: [{
                             id: 'system',
                             label: 'Sistem & Aturan',
@@ -246,8 +409,43 @@
                             id: 'contact',
                             label: 'Kontak Bantuan',
                             icon: 'mdi-phone-classic'
+                        },
+                        {
+                            id: 'kop_surat',
+                            label: 'Kop Surat',
+                            icon: 'mdi-file-document-outline'
                         }
                     ]
+                }
+            }
+
+            function previewLogo(input) {
+                if (input.files && input.files[0]) {
+                    const reader = new FileReader();
+                    reader.onload = function(e) {
+                        const previewImg = document.getElementById('logo-preview-img');
+                        const thumb = document.getElementById('logo-thumb');
+                        const placeholder = document.getElementById('logo-placeholder');
+
+                        if (previewImg) { previewImg.src = e.target.result; previewImg.style.display = ''; }
+                        if (thumb) { thumb.src = e.target.result; thumb.classList.remove('opacity-40'); }
+                        if (placeholder) { placeholder.classList.add('hidden'); }
+                    };
+                    reader.readAsDataURL(input.files[0]);
+                }
+            }
+
+            function updateKontakPreview() {
+                const telp = document.getElementById('kop_telepon').value;
+                const email = document.getElementById('kop_email').value;
+                const el = document.getElementById('preview-kontak');
+                if (!telp && !email) {
+                    el.textContent = 'Telepon: (xxx) xxxxxx | Email: nama@instansi.go.id';
+                } else {
+                    let parts = [];
+                    if (telp) parts.push('Telepon: ' + telp);
+                    if (email) parts.push('Email: ' + email);
+                    el.textContent = parts.join(' | ');
                 }
             }
         </script>

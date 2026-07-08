@@ -1,5 +1,5 @@
 # Stage 1: Build Node.js Assets
-FROM node:20-alpine as node_builder
+FROM node:20-alpine AS node_builder
 WORKDIR /app
 COPY package*.json ./
 RUN npm ci
@@ -7,7 +7,7 @@ COPY . .
 RUN npm run build
 
 # Stage 2: Build PHP Application
-FROM php:8.2-fpm-alpine
+FROM php:8.4-fpm-alpine
 
 # Set working directory
 WORKDIR /var/www/html
@@ -21,10 +21,11 @@ RUN apk add --no-cache \
     curl \
     oniguruma-dev \
     libpng-dev \
-    libxml2-dev
+    libxml2-dev \
+    sqlite-dev
 
 # Install PHP extensions
-RUN docker-php-ext-install pdo_mysql mbstring exif pcntl bcmath gd zip
+RUN docker-php-ext-install pdo_mysql pdo_sqlite mbstring exif pcntl bcmath gd zip
 
 # Get latest Composer
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer

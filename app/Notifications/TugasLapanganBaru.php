@@ -4,7 +4,6 @@ namespace App\Notifications;
 
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
-use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
 use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
 use Illuminate\Notifications\Messages\BroadcastMessage;
@@ -30,9 +29,9 @@ class TugasLapanganBaru extends Notification implements ShouldQueue, ShouldBroad
         return [
             'title' => 'Tugas Verifikasi Lapangan Baru',
             'message' => 'Anda ditugaskan untuk melakukan verifikasi lapangan untuk UMKM ' . $this->umkm->nama_usaha,
-            'url' => route('verifikasi.index'), // Rute untuk petugas melihat daftar tugas
+            'url' => route('operator.verifikasi.index'),
             'type' => 'warning',
-            'umkm_id' => $this->umkm->id
+            'umkm_id' => $this->umkm->id_umkm ?? $this->umkm->id,
         ];
     }
 
@@ -41,9 +40,9 @@ class TugasLapanganBaru extends Notification implements ShouldQueue, ShouldBroad
         return new BroadcastMessage([
             'title' => 'Tugas Verifikasi Lapangan Baru',
             'message' => 'Anda ditugaskan memverifikasi UMKM ' . $this->umkm->nama_usaha,
-            'url' => route('verifikasi.index'),
+            'url' => route('operator.verifikasi.index'),
             'type' => 'warning',
-            'umkm_id' => $this->umkm->id
+            'umkm_id' => $this->umkm->id_umkm ?? $this->umkm->id,
         ]);
     }
 }

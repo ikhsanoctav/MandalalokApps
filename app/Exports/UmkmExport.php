@@ -11,10 +11,12 @@ use Maatwebsite\Excel\Concerns\WithMapping;
 class UmkmExport implements FromCollection, WithHeadings, WithMapping
 {
     protected $filters;
+    protected $selectedColumns;
 
-    public function __construct(array $filters = [])
+    public function __construct(array $filters = [], array $selectedColumns = [])
     {
         $this->filters = $filters;
+        $this->selectedColumns = $selectedColumns;
     }
 
     /**
@@ -45,49 +47,69 @@ class UmkmExport implements FromCollection, WithHeadings, WithMapping
 
     public function map($umkm): array
     {
-        return [
-            $umkm->no_pendaftaran,
-            $umkm->nama_usaha,
-            $umkm->pemilik->nama_lengkap ?? '-',
-            $umkm->kategori->nama_kategori ?? '-',
-            $umkm->sektor->nama_sektor ?? '-',
-            $umkm->status_usaha,
-            $umkm->tahun_berdiri,
-            $umkm->no_izin_usaha,
-            $umkm->jenis_izin,
-            $umkm->npwp_usaha,
-            $umkm->telp_usaha,
-            $umkm->email_usaha,
-            $umkm->jumlah_tenaga_kerja,
-            $umkm->alamat_usaha,
-            $umkm->petugas->name ?? '-',
-            $umkm->tanggal_pendataan ? $umkm->tanggal_pendataan->format('d-m-Y') : '-',
-            $umkm->status_verifikasi,
-            $umkm->status_verifikasi === 'ditolak' ? ($umkm->catatan_penolakan ?? '-') : '-',
+        $row = [];
+        
+        $colMap = [
+            'no_pendaftaran' => $umkm->no_pendaftaran,
+            'nama_usaha' => $umkm->nama_usaha,
+            'pemilik' => $umkm->pemilik->nama_lengkap ?? '-',
+            'kategori' => $umkm->kategori->nama_kategori ?? '-',
+            'sektor' => $umkm->sektor->nama_sektor ?? '-',
+            'status_usaha' => $umkm->status_usaha,
+            'tahun_berdiri' => $umkm->tahun_berdiri,
+            'no_izin' => $umkm->no_izin_usaha,
+            'jenis_izin' => $umkm->jenis_izin,
+            'npwp' => $umkm->npwp_usaha,
+            'telepon' => $umkm->telp_usaha,
+            'email' => $umkm->email_usaha,
+            'jumlah_tk' => $umkm->jumlah_tenaga_kerja,
+            'alamat' => $umkm->alamat_usaha,
+            'petugas' => $umkm->petugas->name ?? '-',
+            'tgl_pendataan' => $umkm->tanggal_pendataan ? $umkm->tanggal_pendataan->format('d-m-Y') : '-',
+            'status_verifikasi' => $umkm->status_verifikasi,
+            'alasan_penolakan' => $umkm->status_verifikasi === 'ditolak' ? ($umkm->catatan_penolakan ?? '-') : '-',
         ];
+
+        foreach ($this->selectedColumns as $col) {
+            if (array_key_exists($col, $colMap)) {
+                $row[] = $colMap[$col];
+            }
+        }
+
+        return $row;
     }
 
     public function headings(): array
     {
-        return [
-            'No Pendaftaran',
-            'Nama Usaha',
-            'Pemilik',
-            'Kategori',
-            'Sektor',
-            'Status Usaha',
-            'Tahun Berdiri',
-            'No Izin Usaha',
-            'Jenis Izin',
-            'NPWP Usaha',
-            'Telepon Usaha',
-            'Email Usaha',
-            'Jumlah Tenaga Kerja',
-            'Alamat Usaha',
-            'Petugas Pendata',
-            'Tanggal Pendataan',
-            'Status Verifikasi',
-            'Alasan Penolakan',
+        $headers = [];
+
+        $headerMap = [
+            'no_pendaftaran' => 'No Pendaftaran',
+            'nama_usaha' => 'Nama Usaha',
+            'pemilik' => 'Pemilik',
+            'kategori' => 'Kategori',
+            'sektor' => 'Sektor',
+            'status_usaha' => 'Status Usaha',
+            'tahun_berdiri' => 'Tahun Berdiri',
+            'no_izin' => 'No Izin Usaha',
+            'jenis_izin' => 'Jenis Izin',
+            'npwp' => 'NPWP Usaha',
+            'telepon' => 'Telepon Usaha',
+            'email' => 'Email Usaha',
+            'jumlah_tk' => 'Jumlah Tenaga Kerja',
+            'alamat' => 'Alamat Usaha',
+            'petugas' => 'Petugas Pendata',
+            'tgl_pendataan' => 'Tanggal Pendataan',
+            'status_verifikasi' => 'Status Verifikasi',
+            'alasan_penolakan' => 'Alasan Penolakan',
         ];
+
+        foreach ($this->selectedColumns as $col) {
+            if (array_key_exists($col, $headerMap)) {
+                $headers[] = $headerMap[$col];
+            }
+        }
+
+        return $headers;
     }
 }

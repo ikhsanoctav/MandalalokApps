@@ -520,12 +520,20 @@
 
             <a href="{{ route('pelaku.pelatihan.index') }}"
                 class="menu-item flex items-center gap-3 px-3 py-2.5 rounded-full transition-all group relative hover:bg-white/5 {{ request()->routeIs('pelaku.pelatihan.*') ? 'menu-item-active' : '' }}">
-                <svg class="w-5 h-5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                        d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path>
-                </svg>
-                <span x-cloak x-show="sidebarOpen" class="text-sm font-medium whitespace-nowrap">Pelatihan UMKM</span>
-                <div x-cloak x-show="!sidebarOpen" class="tooltip-text">Pelatihan UMKM</div>
+                <div class="relative flex-shrink-0">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path>
+                    </svg>
+                    @if($jumlah_pelatihan_tersedia > 0)
+                        <span x-cloak x-show="!sidebarOpen" class="absolute -top-1.5 -right-1.5 flex h-4 w-4 items-center justify-center rounded-full bg-emerald-500 text-white text-[9px] font-bold leading-none ring-1 ring-slate-900">{{ $jumlah_pelatihan_tersedia > 9 ? '9+' : $jumlah_pelatihan_tersedia }}</span>
+                    @endif
+                </div>
+                <span x-cloak x-show="sidebarOpen" class="text-sm font-medium whitespace-nowrap flex-1">Pelatihan UMKM</span>
+                @if($jumlah_pelatihan_tersedia > 0)
+                    <span x-cloak x-show="sidebarOpen" class="ml-auto inline-flex items-center justify-center min-w-[20px] h-5 px-1.5 rounded-full bg-emerald-500 text-white text-[10px] font-bold leading-none">{{ $jumlah_pelatihan_tersedia > 9 ? '9+' : $jumlah_pelatihan_tersedia }}</span>
+                @endif
+                <div x-cloak x-show="!sidebarOpen" class="tooltip-text">Pelatihan UMKM ({{ $jumlah_pelatihan_tersedia }} tersedia)</div>
             </a>
 
             @if(\App\Models\Setting::get('pelaku_submission_active', false))

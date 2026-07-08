@@ -254,44 +254,60 @@
                         @enderror
 </div>
 
-                    <div>
-                        <label class="block text-sm font-semibold text-slate-700 mb-1.5">Kategori Usaha <span
-                                class="text-red-500">*</span></label>
-                        <select name="id_kategori" required
-                            class="w-full px-4 py-2.5 rounded-lg border border-slate-300 bg-white text-slate-700 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-200">
-                            <option value="" disabled selected>Pilih Kategori</option>
-                            @foreach ($kategori as $kat)
-                                <option value="{{ $kat->id }}"
-                                    {{ old('id_kategori') == $kat->id ? 'selected' : '' }}>{{ $kat->nama_kategori }}
-                                </option>
+                    <div class="md:col-span-2 grid grid-cols-1 md:grid-cols-2 gap-4 border p-4 rounded-xl bg-slate-50 border-slate-200" x-data="{
+                        omset: '{{ old('perkiraan_omset', $umkm->perkiraan_omset ?? '') }}',
+                        kategoriMap: {
+                            @foreach($kategoris ?? $kategori ?? \App\Models\KategoriUMKM::all() as $kat)
+                                '{{ strtolower($kat->nama_kategori) }}': '{{ $kat->id }}',
                             @endforeach
-                        </select>
-                    
-                        @error('id_kategori')
-                            <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
-                        @enderror
-</div>
+                        },
+                        get kategoriName() {
+                            if (this.omset === '< Rp 5 Juta' || this.omset === 'Rp 5 Juta - Rp 10 Juta') return 'mikro';
+                            if (this.omset === 'Rp 10 Juta - Rp 50 Juta') return 'kecil';
+                            if (this.omset === 'Rp 50 Juta - Rp 100 Juta' || this.omset === '> Rp 100 Juta') return 'menengah';
+                            return '';
+                        },
+                        get kategoriId() {
+                            return this.kategoriMap[this.kategoriName] || '';
+                        },
+                        get kategoriDisplay() {
+                            if (!this.kategoriName) return 'Pilih Perkiraan Omset Dahulu';
+                            return 'Usaha ' + this.kategoriName.charAt(0).toUpperCase() + this.kategoriName.slice(1);
+                        }
+                    }">
+                        <div>
+                            <label class="block text-sm font-bold text-slate-700 mb-2">Perkiraan Omset Bulanan <span class="text-red-500">*</span></label>
+                            <div class="relative">
+                                <select name="perkiraan_omset" x-model="omset" required
+                                    class="w-full bg-white border border-slate-300 text-slate-700 text-sm rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 block p-2.5 appearance-none cursor-pointer transition-all">
+                                    <option value="" disabled>Pilih Perkiraan Omset...</option>
+                                    <option value="< Rp 5 Juta">< Rp 5 Juta</option>
+                                    <option value="Rp 5 Juta - Rp 10 Juta">Rp 5 Juta - Rp 10 Juta</option>
+                                    <option value="Rp 10 Juta - Rp 50 Juta">Rp 10 Juta - Rp 50 Juta</option>
+                                    <option value="Rp 50 Juta - Rp 100 Juta">Rp 50 Juta - Rp 100 Juta</option>
+                                    <option value="> Rp 100 Juta">> Rp 100 Juta</option>
+                                </select>
+                                <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-4 text-slate-400">
+                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                                </div>
+                            </div>
+                            @error('perkiraan_omset')
+                                <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
+                            @enderror
+                        </div>
 
-                                        <div>
-                                            <label class="block text-sm font-bold text-slate-700 mb-2">Perkiraan Omset Bulanan (Opsional)</label>
-                                            <div class="relative">
-                                                <select name="perkiraan_omset"
-                                                    class="w-full bg-slate-50 hover:bg-white border-2 border-slate-200 text-slate-700 font-medium text-base rounded-lg focus:ring-4 focus:ring-indigo-500/20 focus:border-indigo-500 block p-4 appearance-none transition-all cursor-pointer">
-                                                    <option value="" selected>Pilih Perkiraan Omset...</option>
-                                                    <option value="< Rp 5 Juta" {{ old('perkiraan_omset', $umkm->perkiraan_omset ?? '') == '< Rp 5 Juta' ? 'selected' : '' }}>< Rp 5 Juta</option>
-                                                    <option value="Rp 5 Juta - Rp 10 Juta" {{ old('perkiraan_omset', $umkm->perkiraan_omset ?? '') == 'Rp 5 Juta - Rp 10 Juta' ? 'selected' : '' }}>Rp 5 Juta - Rp 10 Juta</option>
-                                                    <option value="Rp 10 Juta - Rp 50 Juta" {{ old('perkiraan_omset', $umkm->perkiraan_omset ?? '') == 'Rp 10 Juta - Rp 50 Juta' ? 'selected' : '' }}>Rp 10 Juta - Rp 50 Juta</option>
-                                                    <option value="Rp 50 Juta - Rp 100 Juta" {{ old('perkiraan_omset', $umkm->perkiraan_omset ?? '') == 'Rp 50 Juta - Rp 100 Juta' ? 'selected' : '' }}>Rp 50 Juta - Rp 100 Juta</option>
-                                                    <option value="> Rp 100 Juta" {{ old('perkiraan_omset', $umkm->perkiraan_omset ?? '') == '> Rp 100 Juta' ? 'selected' : '' }}>> Rp 100 Juta</option>
-                                                </select>
-                                                <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-4 text-slate-400">
-                                                    <i class="mdi mdi-chevron-down text-xl"></i>
-                                                </div>
-                                            </div>
-                                            @error('perkiraan_omset')
-                                                <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
-                                            @enderror
-                                        </div>
+                        <div>
+                            <label class="block text-sm font-bold text-slate-700 mb-2">Kategori Usaha (Otomatis)</label>
+                            <input type="hidden" name="id_kategori" :value="kategoriId">
+                            <div class="px-4 py-2.5 rounded-lg border border-indigo-200 bg-indigo-50 text-indigo-700 font-semibold text-sm flex items-center gap-2 h-[42px]">
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4M7.835 4.697a3.42 3.42 0 001.946-.806 3.42 3.42 0 014.438 0 3.42 3.42 0 001.946.806 3.42 3.42 0 013.138 3.138 3.42 3.42 0 00.806 1.946 3.42 3.42 0 010 4.438 3.42 3.42 0 00-.806 1.946 3.42 3.42 0 01-3.138 3.138 3.42 3.42 0 00-1.946.806 3.42 3.42 0 01-4.438 0 3.42 3.42 0 00-1.946-.806 3.42 3.42 0 01-3.138-3.138 3.42 3.42 0 00-.806-1.946 3.42 3.42 0 010-4.438 3.42 3.42 0 00.806-1.946 3.42 3.42 0 013.138-3.138z"></path></svg>
+                                <span x-text="kategoriDisplay"></span>
+                            </div>
+                            @error('id_kategori')
+                                <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
+                            @enderror
+                        </div>
+                    </div>
                     
                     <div>
                         <label class="block text-sm font-semibold text-slate-700 mb-1.5">Sektor Usaha <span

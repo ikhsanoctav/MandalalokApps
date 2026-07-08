@@ -95,6 +95,7 @@ Route::middleware(['auth', 'role:super_admin'])->prefix('superadmin')->name('sup
     Route::get('/logs', [SystemController::class, 'logs'])->name('logs');
     Route::get('/settings', [SystemController::class, 'settings'])->name('settings');
     Route::post('/settings', [SystemController::class, 'settingsUpdate'])->name('settings.update');
+    Route::post('/settings/kop-surat', [SystemController::class, 'settingsKopSurat'])->name('settings.kop_surat');
     // Pengaduan Masyarakat (Sentimen AI)
     Route::get('/pengaduan', [\App\Http\Controllers\Superadmin\PengaduanController::class, 'index'])->name('pengaduan.index');
     Route::post('/pengaduan/{id}/status', [\App\Http\Controllers\Superadmin\PengaduanController::class, 'updateStatus'])->name('pengaduan.status');
