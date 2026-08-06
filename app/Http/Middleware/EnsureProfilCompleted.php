@@ -50,7 +50,7 @@ class EnsureProfilCompleted
                             $message = 'Verifikasi akun Anda ditolak. Silakan perbaiki data profil Anda terlebih dahulu.';
                         }
                     }
-                    return redirect()->route('pelaku.profil.edit')
+                    return redirect()->route('pelaku.profil.edit', ['edit' => 1])
                         ->with('info', $message);
                 }
             }

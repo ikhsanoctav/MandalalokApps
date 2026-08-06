@@ -3,7 +3,7 @@
 
 @section('content')
     <div class="w-full space-y-8 pb-12" x-data="{ 
-        isEditing: {{ ($errors->any() || !$pemilik) ? 'true' : 'false' }},
+        isEditing: {{ ($errors->any() || !$pemilik || empty($pemilik->tempat_lahir) || empty($pemilik->jenis_kelamin) || empty($pemilik->alamat) || empty($pemilik->kelurahan) || empty($pemilik->foto_ktp) || request()->has('edit')) ? 'true' : 'false' }},
         selectedKel: '{!! addslashes(old('kelurahan', $pemilik->kelurahan ?? $user->kelurahan ?? '')) !!}',
         selectedRw: '',
         selectedRt: '',
