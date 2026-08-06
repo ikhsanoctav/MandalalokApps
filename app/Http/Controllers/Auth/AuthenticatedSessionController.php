@@ -35,6 +35,23 @@ class AuthenticatedSessionController extends Controller
             return redirect()->route('admin.dashboard');
         } elseif ($user->hasRole('operator_lapangan')) {
             return redirect()->route('operator.dashboard');
+        } elseif ($user->hasRole('pelaku_umkm')) {
+            $pemilik = \App\Models\Pemilik::where('nik_hash', $user->nik_hash)->first();
+            $isComplete = false;
+            if ($pemilik) {
+                $isComplete = !empty($pemilik->nama_lengkap) &&
+                              !empty($pemilik->jenis_kelamin) &&
+                              !empty($pemilik->alamat) &&
+                              !empty($pemilik->kelurahan) &&
+                              !empty($pemilik->foto_ktp);
+            }
+            
+            if (!$isComplete) {
+                return redirect()->route('pelaku.profil.edit')
+                        ->with('info', 'Selamat datang! Silakan lengkapi data diri Anda terlebih dahulu.');
+            }
+            
+            return redirect()->route('pelaku.dashboard');
         }
 
         return redirect()->route('dashboard');

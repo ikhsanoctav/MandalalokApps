@@ -8,7 +8,7 @@
     <div class="flex justify-between items-center">
         <div>
             <h2 class="text-2xl font-bold text-slate-800">Pembobotan Kriteria AHP</h2>
-            <p class="text-sm text-slate-500">Bandingkan tingkat kepentingan antar kriteria menggunakan skala Saaty (1-9).</p>
+            <p class="text-sm text-slate-700">Bandingkan tingkat kepentingan antar kriteria menggunakan skala Saaty (1-9).</p>
         </div>
     </div>
 
@@ -62,7 +62,7 @@
                     <table class="w-full text-sm border-collapse">
                         <thead>
                             <tr class="bg-slate-50">
-                                <th class="p-3 border border-slate-200 text-slate-500">Kriteria</th>
+                                <th class="p-3 border border-slate-200 text-slate-700">Kriteria</th>
                                 @foreach($kriterias as $k)
                                     <th class="p-3 border border-slate-200 text-center text-slate-700 font-semibold" title="{{ $k->nama_kriteria }}">{{ $k->kode }}</th>
                                 @endforeach

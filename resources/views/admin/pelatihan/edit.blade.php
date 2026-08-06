@@ -1,18 +1,27 @@
 @extends('layouts.admin')
 @section('content')
+<div class="max-w-5xl mx-auto space-y-8 pb-12">
+    <!-- Header Section -->
+    <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
+        <div class="flex items-center gap-4">
+            <div class="w-14 h-14 rounded-2xl bg-indigo-100 flex items-center justify-center text-indigo-600 shadow-inner">
+                <i class="mdi mdi-school text-3xl"></i>
+            </div>
+            <div>
+                <h2 class="text-3xl font-extrabold text-slate-800 tracking-tight">Edit Pelatihan: {{ $pelatihan->judul }}</h2>
+                <p class="text-slate-500 mt-1 font-medium">Ubah data dan pengaturan jadwal pelatihan UMKM.</p>
+            </div>
+        </div>
+        <a href="{{ route('admin.pelatihan.index') }}" class="inline-flex items-center gap-2 px-5 py-2.5 bg-white border-2 border-slate-200 hover:border-indigo-300 hover:text-indigo-600 text-slate-700 font-bold rounded-lg transition-all shadow-sm">
+            <i class="mdi mdi-arrow-left"></i> Kembali
+        </a>
+    </div>
 
-<div class="mb-6">
-    <a href="{{ route('admin.pelatihan.index') }}" class="text-blue-600 hover:text-blue-700 text-sm font-medium inline-flex items-center gap-1 mb-2">
-        <i class="fa-solid fa-arrow-left"></i> Kembali ke Daftar Pelatihan
-    </a>
-    <h1 class="text-2xl font-bold text-slate-800">Edit Pelatihan: {{ $pelatihan->judul }}</h1>
-    <p class="text-sm text-slate-500 mt-1">Ubah data dan pengaturan jadwal pelatihan UMKM.</p>
-</div>
-
-<div class="bg-white/90 backdrop-blur-sm shadow-sm rounded-3xl border overflow-hidden p-6 max-w-4xl">
-    <form action="{{ route('admin.pelatihan.update', $pelatihan->id) }}" method="POST" enctype="multipart/form-data">
-        @csrf
-        @method('PUT')
+    <div class="bg-white/80 backdrop-blur-xl rounded-[2rem] shadow-xl shadow-slate-200/50 border border-white/80 overflow-hidden relative p-8">
+        <div class="absolute top-0 right-0 w-64 h-64 bg-indigo-50 rounded-full mix-blend-multiply filter blur-3xl opacity-50 pointer-events-none transform translate-x-1/2 -translate-y-1/2"></div>
+        <form action="{{ route('admin.pelatihan.update', $pelatihan->id) }}" method="POST" enctype="multipart/form-data" class="relative z-10">
+            @csrf
+            @method('PUT')
         
         <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
             <div class="md:col-span-2">
@@ -100,7 +109,15 @@
         </div>
 
         <div class="flex items-center justify-between border-t pt-6 gap-3">
-            <button type="button" onclick="if(confirm('Apakah Anda yakin ingin menghapus pelatihan ini?')) document.getElementById('delete-form').submit()" class="px-5 py-2.5 text-sm font-semibold text-red-600 bg-red-50 hover:bg-red-100 rounded-xl transition-all">
+            <button type="button" x-data @click="$dispatch('open-confirm-modal', {
+                title: 'Hapus Pelatihan',
+                message: 'Apakah Anda yakin ingin menghapus pelatihan ini?',
+                confirmText: 'Ya, Hapus',
+                action: () => {
+                    document.getElementById('delete-form').submit();
+                    return new Promise(() => {});
+                }
+            })" class="px-5 py-2.5 text-sm font-semibold text-red-600 bg-red-50 hover:bg-red-100 rounded-xl transition-all">
                 Hapus Pelatihan
             </button>
             <div class="flex gap-2">

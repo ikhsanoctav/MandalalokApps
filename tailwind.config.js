@@ -33,6 +33,12 @@ export default {
                     400: '#ebd173',
                     500: '#d4af37',
                     600: '#b8902d',
+                },
+                official: {
+                    navy: '#0f2e5c',
+                    navylight: '#1a498b',
+                    gold: '#d4af37',
+                    golddark: '#b8902d',
                 }
             },
             backgroundImage: {
@@ -41,5 +47,5 @@ export default {
         },
     },
 
-    plugins: [forms],
+    plugins: [forms, require('@tailwindcss/typography')],
 };

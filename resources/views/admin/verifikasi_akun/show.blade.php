@@ -160,9 +160,17 @@
                                 </p>
                             </div>
 
-                            <form action="{{ route(auth()->user()->hasRole('super_admin') ? 'superadmin.verifikasi_akun.verify' : 'admin.verifikasi_akun.verify', $pemilik->id_pemilik) }}" method="POST" class="mb-3" onsubmit="return confirm('Apakah Anda yakin ingin menyetujui akun ini?');">
+                            <form id="verify-form" action="{{ route(auth()->user()->hasRole('super_admin') ? 'superadmin.verifikasi_akun.verify' : 'admin.verifikasi_akun.verify', $pemilik->id_pemilik) }}" method="POST" class="mb-3">
                                 @csrf
-                                <button type="submit" class="w-full flex items-center justify-center gap-2 py-3 bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl font-bold transition-all shadow-sm hover:shadow-md hover:-translate-y-0.5">
+                                <button type="button" x-data @click="$dispatch('open-confirm-modal', {
+                                    title: 'Verifikasi Akun',
+                                    message: 'Apakah Anda yakin ingin menyetujui akun ini?',
+                                    confirmText: 'Ya, Setujui',
+                                    action: () => {
+                                        document.getElementById('verify-form').submit();
+                                        return new Promise(() => {}); // Prevent immediate modal close before redirect
+                                    }
+                                })" class="w-full flex items-center justify-center gap-2 py-3 bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl font-bold transition-all shadow-sm hover:shadow-md hover:-translate-y-0.5">
                                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
                                     Setujui (Verify)
                                 </button>

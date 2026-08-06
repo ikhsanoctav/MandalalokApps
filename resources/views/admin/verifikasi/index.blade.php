@@ -21,7 +21,7 @@
                         Filter</a>
                 </div>
 
-                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 md:gap-4">
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-3 md:gap-4">
                     <input type="text" name="search" placeholder="Cari nama usaha..." value="{{ request('search') }}"
                         class="w-full px-3 py-2 md:px-4 md:py-2.5 rounded-lg border border-slate-300 bg-white text-slate-700 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-200">
 
@@ -44,6 +44,14 @@
                                 {{ request('kategori') == $kategori->id ? 'selected' : '' }}>{{ $kategori->nama_kategori }}
                             </option>
                         @endforeach
+                    </select>
+
+                    <select name="sort"
+                        class="w-full px-3 py-2 md:px-4 md:py-2.5 rounded-lg border border-slate-300 bg-white text-slate-700 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-200">
+                        <option value="terbaru" {{ request('sort') == 'terbaru' ? 'selected' : '' }}>Terbaru</option>
+                        <option value="terlama" {{ request('sort') == 'terlama' ? 'selected' : '' }}>Terlama</option>
+                        <option value="a-z" {{ request('sort') == 'a-z' ? 'selected' : '' }}>Nama A-Z</option>
+                        <option value="z-a" {{ request('sort') == 'z-a' ? 'selected' : '' }}>Nama Z-A</option>
                     </select>
 
                     <div class="flex gap-2">
@@ -84,11 +92,11 @@
                         <div class="grid grid-cols-2 gap-2 text-xs">
                             <div>
                                 <p class="text-slate-500">Pemilik</p>
-                                <p class="font-medium text-slate-700">{{ $umkm->pemilik->nama_lengkap ?? '-' }}</p>
+                                <p class="font-medium text-slate-700">{{ $umkm->pemilik?->nama_lengkap ?? '-' }}</p>
                             </div>
                             <div>
                                 <p class="text-slate-500">Kelurahan</p>
-                                <p class="font-medium text-slate-700">{{ $umkm->pemilik->kelurahan ?? '-' }}</p>
+                                <p class="font-medium text-slate-700">{{ $umkm->pemilik?->kelurahan ?? '-' }}</p>
                             </div>
 
                             <div>
@@ -143,8 +151,8 @@
                                     <p class="text-xs text-slate-400">{{ $umkm->no_pendaftaran ?? '-' }}</p>
                                 </td>
                                 <td class="px-4 py-3">
-                                    <p class="text-sm text-slate-600">{{ $umkm->pemilik->nama_lengkap ?? '-' }}</p>
-                                    <p class="text-xs text-slate-400">{{ $umkm->pemilik->kelurahan ?? '-' }}</p>
+                                    <p class="text-sm text-slate-600">{{ $umkm->pemilik?->nama_lengkap ?? '-' }}</p>
+                                    <p class="text-xs text-slate-400">{{ $umkm->pemilik?->kelurahan ?? '-' }}</p>
                                 </td>
 
                                 <td class="px-4 py-3">

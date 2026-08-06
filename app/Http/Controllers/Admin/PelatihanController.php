@@ -8,6 +8,7 @@ use App\Models\User;
 use App\Models\PesertaPelatihan;
 use Spatie\Permission\Models\Role;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
 
 class PelatihanController extends Controller
@@ -104,38 +105,65 @@ class PelatihanController extends Controller
 
     public function destroy($id)
     {
-        $pelatihan = Pelatihan::findOrFail($id);
-        $pelatihan->delete();
+        DB::transaction(function () use ($id) {
+            $pelatihan = Pelatihan::with('peserta')->findOrFail($id);
+
+            // Clean up banner file
+            if ($pelatihan->banner && file_exists(public_path($pelatihan->banner))) {
+                @unlink(public_path($pelatihan->banner));
+            }
+
+            // Clean up participant document files
+            foreach ($pelatihan->peserta as $peserta) {
+                if (!empty($peserta->dokumen_syarat) && is_array($peserta->dokumen_syarat)) {
+                    foreach ($peserta->dokumen_syarat as $filePath) {
+                        if ($filePath && file_exists(public_path($filePath))) {
+                            @unlink(public_path($filePath));
+                        }
+                    }
+                }
+            }
+
+            $pelatihan->delete();
+        });
 
         return redirect()->route('admin.pelatihan.index')->with('success', 'Pelatihan berhasil dihapus.');
     }
 
     public function registerUser(Request $request, $id)
     {
-        $pelatihan = Pelatihan::findOrFail($id);
-        
         $request->validate([
             'user_id' => 'required|exists:users,id',
         ]);
 
-        // Cek apakah sudah terdaftar
-        if (PesertaPelatihan::where('pelatihan_id', $id)->where('user_id', $request->user_id)->exists()) {
-            return back()->with('error', 'Pelaku UMKM tersebut sudah terdaftar di pelatihan ini.');
+        $error = DB::transaction(function () use ($request, $id) {
+            $pelatihan = Pelatihan::where('id', $id)->lockForUpdate()->firstOrFail();
+
+            // Cek apakah sudah terdaftar
+            if (PesertaPelatihan::where('pelatihan_id', $id)->where('user_id', $request->user_id)->exists()) {
+                return 'Pelaku UMKM tersebut sudah terdaftar di pelatihan ini.';
+            }
+
+            // Cek kuota dengan lock aktif
+            if ($pelatihan->peserta()->count() >= $pelatihan->kuota) {
+                return 'Kuota pelatihan sudah penuh.';
+            }
+
+            $kode_tiket = 'TRN-' . date('Y') . '-' . strtoupper(substr(uniqid(), -6));
+
+            PesertaPelatihan::create([
+                'pelatihan_id' => $id,
+                'user_id' => $request->user_id,
+                'kode_tiket' => $kode_tiket,
+                'status_kehadiran' => 'terdaftar',
+            ]);
+
+            return null;
+        });
+
+        if ($error) {
+            return back()->with('error', $error);
         }
-
-        // Cek kuota
-        if ($pelatihan->peserta()->count() >= $pelatihan->kuota) {
-            return back()->with('error', 'Kuota pelatihan sudah penuh.');
-        }
-
-        $kode_tiket = 'TRN-' . date('Y') . '-' . strtoupper(substr(uniqid(), -6));
-
-        PesertaPelatihan::create([
-            'pelatihan_id' => $id,
-            'user_id' => $request->user_id,
-            'kode_tiket' => $kode_tiket,
-            'status_kehadiran' => 'terdaftar',
-        ]);
 
         return back()->with('success', 'Pelaku UMKM berhasil didaftarkan ke pelatihan.');
     }

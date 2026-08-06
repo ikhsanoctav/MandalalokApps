@@ -39,6 +39,7 @@ class User extends Authenticatable
         'kelurahan',
         'password_reset_status',
         'password_reset_requested_at',
+        'is_active',
     ];
 
     /**
@@ -61,6 +62,7 @@ class User extends Authenticatable
         return [
             'email_verified_at' => 'datetime',
             'password' => 'hashed', // Standar keamanan terbaru Laravel
+            'is_active' => 'boolean',
         ];
     }
 
@@ -185,13 +187,19 @@ class User extends Authenticatable
                 if ($this->relationLoaded('kelurahanRel') && $this->kelurahanRel) {
                     return $this->kelurahanRel->nama_kelurahan;
                 }
+                if ($value) {
+                    return $value;
+                }
                 if ($this->id_kelurahan) {
-                    $kel = \App\Models\Kelurahan::find($this->id_kelurahan);
-                    if ($kel) {
-                        return $kel->nama_kelurahan;
+                    static $cache = [];
+                    if (!array_key_exists($this->id_kelurahan, $cache)) {
+                        $cache[$this->id_kelurahan] = \App\Models\Kelurahan::find($this->id_kelurahan)?->nama_kelurahan;
+                    }
+                    if ($cache[$this->id_kelurahan]) {
+                        return $cache[$this->id_kelurahan];
                     }
                 }
-                return $value ?: '-';
+                return '-';
             },
             set: fn ($value) => $value,
         );

@@ -46,7 +46,7 @@
                             min="1" max="100"
                             class="w-full border-slate-300 rounded-2xl p-2.5 focus:ring-blue-500 focus:border-blue-500"
                             placeholder="Biarkan kosong jika belum ada">
-                        <p class="text-[10px] text-slate-500 mt-1">*Ubah angka ini jika Anda ingin sistem otomatis
+                        <p class="text-[10px] text-slate-700 mt-1">*Ubah angka ini jika Anda ingin sistem otomatis
                             menambahkan RW baru (misal: jika dinaikkan dari 10 ke 15, sistem akan membuat RW 011 - 015).</p>
                         @error('jumlah_rw')
                             <span class="text-red-500 text-xs mt-1">{{ $message }}</span>

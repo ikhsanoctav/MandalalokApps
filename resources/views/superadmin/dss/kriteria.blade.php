@@ -8,7 +8,7 @@
     <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
         <div>
             <h1 class="text-3xl font-black text-slate-800">Pengaturan Bobot Kriteria</h1>
-            <p class="text-slate-500 mt-1">Ubah persentase prioritas untuk memanipulasi rekomendasi DSS (Algoritma SAW) secara langsung.</p>
+            <p class="text-slate-700 mt-1">Ubah persentase prioritas untuk memanipulasi rekomendasi DSS (Algoritma SAW) secara langsung.</p>
         </div>
         <a href="{{ route('superadmin.dss.saw.index') }}" class="px-6 py-2.5 bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold rounded-xl transition-all">
             <i class="mdi mdi-arrow-left mr-2"></i> Kembali ke Papan Peringkat
@@ -32,7 +32,7 @@
                 <div class="w-12 h-12 rounded-xl bg-indigo-100 text-indigo-600 flex items-center justify-center text-2xl font-black"><i class="mdi mdi-hand-coin"></i></div>
                 <div>
                     <h2 class="text-xl font-bold text-slate-800">DSS Bantuan Modal</h2>
-                    <p class="text-slate-500 text-sm">Total bobot sebaiknya 100%</p>
+                    <p class="text-slate-700 text-sm">Total bobot sebaiknya 100%</p>
                 </div>
             </div>
 
@@ -41,11 +41,11 @@
                 <div class="p-4 bg-slate-50 rounded-2xl border border-slate-200 flex flex-col sm:flex-row gap-4 items-start sm:items-center justify-between">
                     <div>
                         <p class="font-bold text-slate-800">{{ $kb->nama_kriteria }}</p>
-                        <p class="text-xs text-slate-500 mt-0.5"><span class="uppercase font-bold text-{{ $kb->jenis == 'benefit' ? 'emerald' : 'rose' }}-600">{{ $kb->jenis }}</span> - Kode: {{ $kb->kode_kriteria }}</p>
+                        <p class="text-xs text-slate-700 mt-0.5"><span class="uppercase font-bold text-{{ $kb->jenis == 'benefit' ? 'emerald' : 'rose' }}-600">{{ $kb->jenis }}</span> - Kode: {{ $kb->kode_kriteria }}</p>
                     </div>
                     <div class="flex items-center gap-2">
                         <input type="number" name="kriteria[{{ $kb->id }}][bobot]" value="{{ $kb->bobot }}" step="0.01" min="0" max="100" required class="w-24 text-center bg-white border-2 border-slate-300 rounded-2xl p-2 font-bold focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500">
-                        <span class="text-slate-500 font-bold">%</span>
+                        <span class="text-slate-700 font-bold">%</span>
                     </div>
                 </div>
                 @endforeach
@@ -63,7 +63,7 @@
                 <div class="w-12 h-12 rounded-xl bg-emerald-100 text-emerald-600 flex items-center justify-center text-2xl font-black"><i class="mdi mdi-school"></i></div>
                 <div>
                     <h2 class="text-xl font-bold text-slate-800">DSS Pelatihan & Pendampingan</h2>
-                    <p class="text-slate-500 text-sm">Total bobot sebaiknya 100%</p>
+                    <p class="text-slate-700 text-sm">Total bobot sebaiknya 100%</p>
                 </div>
             </div>
 
@@ -72,11 +72,11 @@
                 <div class="p-4 bg-slate-50 rounded-2xl border border-slate-200 flex flex-col sm:flex-row gap-4 items-start sm:items-center justify-between">
                     <div>
                         <p class="font-bold text-slate-800">{{ $kp->nama_kriteria }}</p>
-                        <p class="text-xs text-slate-500 mt-0.5"><span class="uppercase font-bold text-{{ $kp->jenis == 'benefit' ? 'emerald' : 'rose' }}-600">{{ $kp->jenis }}</span> - Kode: {{ $kp->kode_kriteria }}</p>
+                        <p class="text-xs text-slate-700 mt-0.5"><span class="uppercase font-bold text-{{ $kp->jenis == 'benefit' ? 'emerald' : 'rose' }}-600">{{ $kp->jenis }}</span> - Kode: {{ $kp->kode_kriteria }}</p>
                     </div>
                     <div class="flex items-center gap-2">
                         <input type="number" name="kriteria[{{ $kp->id }}][bobot]" value="{{ $kp->bobot }}" step="0.01" min="0" max="100" required class="w-24 text-center bg-white border-2 border-slate-300 rounded-2xl p-2 font-bold focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500">
-                        <span class="text-slate-500 font-bold">%</span>
+                        <span class="text-slate-700 font-bold">%</span>
                     </div>
                 </div>
                 @endforeach

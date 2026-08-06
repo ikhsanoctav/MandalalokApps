@@ -57,6 +57,7 @@ Route::middleware(['auth', 'role:super_admin'])->prefix('superadmin')->name('sup
     Route::get('/users/{id}/edit', [UserController::class, 'userEdit'])->name('users.edit');
     Route::put('/users/{id}', [UserController::class, 'userUpdate'])->name('users.update');
     Route::post('/users/{id}/reset-password', [UserController::class, 'resetPassword'])->name('users.reset-password');
+    Route::post('/users/{id}/toggle-active', [UserController::class, 'toggleActive'])->name('users.toggle-active');
     Route::delete('/users/{id}', [UserController::class, 'userDestroy'])->name('users.destroy');
 
     // Master Data (Kategori & Sektor)
@@ -83,6 +84,10 @@ Route::middleware(['auth', 'role:super_admin'])->prefix('superadmin')->name('sup
     // Berita / Warta
     Route::resource('/berita', BeritaController::class);
 
+    // Pelatihan
+    Route::resource('/pelatihan', \App\Http\Controllers\SuperAdmin\PelatihanController::class);
+    Route::post('/pelatihan/{id}/register-user', [\App\Http\Controllers\SuperAdmin\PelatihanController::class, 'registerUser'])->name('pelatihan.register_user');
+
     // Flyer Program Bantuan
     Route::get('/flyer', [FlyerController::class, 'index'])->name('flyer.index');
     Route::post('/flyer', [FlyerController::class, 'update'])->name('flyer.update');
@@ -97,15 +102,15 @@ Route::middleware(['auth', 'role:super_admin'])->prefix('superadmin')->name('sup
     Route::post('/settings', [SystemController::class, 'settingsUpdate'])->name('settings.update');
     Route::post('/settings/kop-surat', [SystemController::class, 'settingsKopSurat'])->name('settings.kop_surat');
     // Pengaduan Masyarakat (Sentimen AI)
-    Route::get('/pengaduan', [\App\Http\Controllers\Superadmin\PengaduanController::class, 'index'])->name('pengaduan.index');
-    Route::post('/pengaduan/{id}/status', [\App\Http\Controllers\Superadmin\PengaduanController::class, 'updateStatus'])->name('pengaduan.status');
+    Route::get('/pengaduan', [\App\Http\Controllers\SuperAdmin\PengaduanController::class, 'index'])->name('pengaduan.index');
+    Route::post('/pengaduan/{id}/status', [\App\Http\Controllers\SuperAdmin\PengaduanController::class, 'updateStatus'])->name('pengaduan.status');
 
     // DSS Mandalaloka (Algoritma SAW)
-    Route::get('/dss-saw', [\App\Http\Controllers\Superadmin\DssController::class, 'index'])->name('dss.saw.index');
-    Route::get('/dss-saw/kriteria', [\App\Http\Controllers\Superadmin\DssController::class, 'kriteria'])->name('dss.saw.kriteria');
-    Route::post('/dss-saw/kriteria', [\App\Http\Controllers\Superadmin\DssController::class, 'updateKriteria'])->name('dss.saw.update_kriteria');
+    Route::get('/dss-saw', [\App\Http\Controllers\SuperAdmin\DssController::class, 'index'])->name('dss.saw.index');
+    Route::get('/dss-saw/kriteria', [\App\Http\Controllers\SuperAdmin\DssController::class, 'kriteria'])->name('dss.saw.kriteria');
+    Route::post('/dss-saw/kriteria', [\App\Http\Controllers\SuperAdmin\DssController::class, 'updateKriteria'])->name('dss.saw.update_kriteria');
 
     // Asisten Eksekutif
-    Route::get('/assistant', [\App\Http\Controllers\Superadmin\ExecutiveAssistantController::class, 'index'])->name('assistant.index');
-    Route::post('/assistant/chat', [\App\Http\Controllers\Superadmin\ExecutiveAssistantController::class, 'chat'])->name('assistant.chat');
+    Route::get('/assistant', [\App\Http\Controllers\SuperAdmin\ExecutiveAssistantController::class, 'index'])->name('assistant.index');
+    Route::post('/assistant/chat', [\App\Http\Controllers\SuperAdmin\ExecutiveAssistantController::class, 'chat'])->name('assistant.chat');
 });

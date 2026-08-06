@@ -56,9 +56,9 @@
                     <td>{{ $loop->iteration }}</td>
                     <td>{{ $umkm->no_pendaftaran }}</td>
                     <td>{{ $umkm->nama_usaha }}</td>
-                    <td>{{ $umkm->pemilik->nama_lengkap ?? '-' }}</td>
-                    <td>{{ $umkm->kategori->nama_kategori ?? '-' }}</td>
-                    <td>{{ $umkm->sektor->nama_sektor ?? '-' }}</td>
+                    <td>{{ $umkm->pemilik?->nama_lengkap ?? '-' }}</td>
+                    <td>{{ $umkm->kategori?->nama_kategori ?? '-' }}</td>
+                    <td>{{ $umkm->sektor?->nama_sektor ?? '-' }}</td>
 
                     <td>{{ ucfirst($umkm->status_usaha) }}</td>
                     <td>{{ $umkm->tahun_berdiri }}</td>

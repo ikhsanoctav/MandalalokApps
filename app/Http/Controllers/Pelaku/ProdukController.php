@@ -188,6 +188,13 @@ class ProdukController extends Controller
 
         $produk->delete();
 
+        if (request()->wantsJson()) {
+            return response()->json([
+                'success' => true,
+                'message' => 'Produk berhasil dihapus.'
+            ]);
+        }
+
         return redirect()->route('pelaku.produk.index')->with('success', 'Produk berhasil dihapus.');
     }
 }

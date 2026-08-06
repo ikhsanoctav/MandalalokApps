@@ -8,7 +8,7 @@
     <div class="flex justify-between items-center">
         <div>
             <h2 class="text-2xl font-bold text-slate-800">Kelola Kriteria Penilaian</h2>
-            <p class="text-sm text-slate-500">Atur kriteria yang digunakan untuk pembobotan AHP dan perankingan SAW.</p>
+            <p class="text-sm text-slate-700">Atur kriteria yang digunakan untuk pembobotan AHP dan perankingan SAW.</p>
         </div>
         <button onclick="document.getElementById('modal-tambah').classList.remove('hidden')" class="bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-2 rounded-lg font-medium text-sm flex items-center gap-2">
             <i class="mdi mdi-plus"></i> Tambah Kriteria
@@ -24,7 +24,7 @@
     <div class="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden">
         <table class="w-full text-left border-collapse">
             <thead>
-                <tr class="bg-slate-50 text-slate-500 text-xs uppercase tracking-wider">
+                <tr class="bg-slate-50 text-slate-700 text-xs uppercase tracking-wider">
                     <th class="p-4 border-b border-slate-200 font-medium">Kode</th>
                     <th class="p-4 border-b border-slate-200 font-medium">Nama Kriteria</th>
                     <th class="p-4 border-b border-slate-200 font-medium">Tipe</th>
@@ -48,19 +48,27 @@
                         @if($k->aktif)
                             <span class="px-2.5 py-1 text-xs font-medium rounded-full bg-blue-100 text-blue-700">Aktif</span>
                         @else
-                            <span class="px-2.5 py-1 text-xs font-medium rounded-full bg-slate-100 text-slate-500">Non-Aktif</span>
+                            <span class="px-2.5 py-1 text-xs font-medium rounded-full bg-slate-100 text-slate-700">Non-Aktif</span>
                         @endif
                     </td>
                     <td class="p-4 text-right">
-                        <form action="{{ route('dss.kriteria.destroy', $k->id) }}" method="POST" class="inline-block" onsubmit="return confirm('Hapus kriteria ini?')">
+                        <form id="delete-form-{{ $k->id }}" action="{{ route('dss.kriteria.destroy', $k->id) }}" method="POST" class="inline-block" x-data>
                             @csrf @method('DELETE')
-                            <button type="submit" class="text-rose-500 hover:text-rose-700 p-2"><i class="mdi mdi-trash"></i></button>
+                            <button type="button" @click="$dispatch('open-confirm-modal', {
+                                title: 'Hapus Kriteria',
+                                message: 'Apakah Anda yakin ingin menghapus kriteria ini?',
+                                confirmText: 'Ya, Hapus',
+                                action: () => {
+                                    document.getElementById('delete-form-{{ $k->id }}').submit();
+                                    return new Promise(() => {});
+                                }
+                            })" class="text-rose-500 hover:text-rose-700 p-2"><i class="mdi mdi-trash"></i></button>
                         </form>
                     </td>
                 </tr>
                 @empty
                 <tr>
-                    <td colspan="5" class="p-8 text-center text-slate-500">Belum ada kriteria.</td>
+                    <td colspan="5" class="p-8 text-center text-slate-700">Belum ada kriteria.</td>
                 </tr>
                 @endforelse
             </tbody>

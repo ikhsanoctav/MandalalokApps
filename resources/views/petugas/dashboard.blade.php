@@ -34,7 +34,7 @@
                 </div>
 
                 <div class="flex-shrink-0 text-right backdrop-blur-xl bg-white/90 rounded-xl p-4 border border-white shadow-sm">
-                    <p class="text-xs text-slate-500 uppercase tracking-widest font-bold mb-1">Hari Ini</p>
+                    <p class="text-xs text-slate-700 uppercase tracking-widest font-bold mb-1">Hari Ini</p>
                     <p class="text-xl font-black text-slate-800">{{ now()->translatedFormat('l, d F Y') }}</p>
                     <p class="text-sm text-slate-600 mt-1 flex items-center justify-end gap-1 font-semibold"><i class="mdi mdi-clock-outline text-cyan-600"></i> <span id="realtimeClock">{{ now()->format('H:i') }}</span></p>
                 </div>
@@ -103,7 +103,7 @@
                             <h2 class="text-sm font-bold tracking-wider text-slate-700 uppercase flex items-center gap-2">
                                 <i class="mdi mdi-map-marker-distance text-indigo-500 text-lg"></i> Target Kunjungan Lapangan
                             </h2>
-                            <span class="text-xs font-semibold text-slate-500 bg-slate-100 px-2.5 py-1 rounded-full">Bulan Ini</span>
+                            <span class="text-xs font-semibold text-slate-700 bg-slate-100 px-2.5 py-1 rounded-full">Bulan Ini</span>
                         </div>
                         
                         @php
@@ -113,7 +113,7 @@
 
                         <div class="flex items-end gap-2 mb-2">
                             <span class="text-3xl font-black text-slate-800">{{ $percentage }}%</span>
-                            <span class="text-sm font-medium text-slate-500 mb-1">Selesai ({{ $totalSudahDikunjungi }} dari {{ $totalTarget }} UMKM)</span>
+                            <span class="text-sm font-medium text-slate-700 mb-1">Selesai ({{ $totalSudahDikunjungi }} dari {{ $totalTarget }} UMKM)</span>
                         </div>
 
                         <div class="w-full bg-slate-100 rounded-full h-3.5 mb-4 overflow-hidden border border-slate-200/60 shadow-inner">
@@ -150,7 +150,7 @@
                             <i class="mdi mdi-close-circle-outline text-2xl"></i>
                         </div>
                         <div>
-                            <p class="text-xs font-bold text-slate-500 uppercase tracking-wider mb-0.5">Ditolak Admin</p>
+                            <p class="text-xs font-bold text-slate-700 uppercase tracking-wider mb-0.5">Ditolak Admin</p>
                             <div class="flex items-baseline gap-2">
                                 <span class="text-2xl font-black text-slate-800">{{ $totalRejected }}</span>
                                 <span class="text-[10px] text-slate-400 font-medium">UMKM</span>
@@ -178,7 +178,7 @@
                             </div>
                             <div class="flex-1 min-w-0">
                                 <p class="text-sm font-bold text-slate-800 truncate group-hover:text-blue-600 transition-colors">{{ $umkm->nama_usaha }}</p>
-                                <p class="text-xs text-slate-500 truncate mb-1">{{ $umkm->pemilik->nama_lengkap ?? 'Tanpa Pemilik' }}</p>
+                                <p class="text-xs text-slate-700 truncate mb-1">{{ $umkm->pemilik?->nama_lengkap ?? 'Tanpa Pemilik' }}</p>
                                 <div class="flex items-center gap-2 text-[10px] font-medium text-slate-400">
                                     <span>{{ $umkm->created_at->diffForHumans() }}</span>
                                     <span>&bull;</span>
@@ -194,7 +194,7 @@
                                 <i class="mdi mdi-text-box-search-outline text-2xl"></i>
                             </div>
                             <p class="text-sm font-bold text-slate-700 mb-1">Belum ada inputan</p>
-                            <p class="text-xs text-slate-500">UMKM yang baru Anda tambahkan akan muncul di sini.</p>
+                            <p class="text-xs text-slate-700">UMKM yang baru Anda tambahkan akan muncul di sini.</p>
                         </div>
                     @endforelse
                 </div>
@@ -224,7 +224,7 @@
                             <h4
                                 class="text-sm font-bold text-slate-800 mb-0.5 group-hover:text-indigo-600 transition-colors">
                                 Data UMKM</h4>
-                            <p class="text-[11px] text-slate-500 leading-relaxed">Lihat data UMKM yang Anda input dan seluruh UMKM di wilayah kerja Anda.</p>
+                            <p class="text-[11px] text-slate-700 leading-relaxed">Lihat data UMKM yang Anda input dan seluruh UMKM di wilayah kerja Anda.</p>
                         </div>
                     </a>
 
@@ -238,7 +238,7 @@
                             <h4
                                 class="text-sm font-bold text-slate-800 mb-0.5 group-hover:text-cyan-600 transition-colors">
                                 Verifikasi Lapangan</h4>
-                            <p class="text-[11px] text-slate-500 leading-relaxed">Lakukan kunjungan lapangan untuk memverifikasi kondisi fisik UMKM.</p>
+                            <p class="text-[11px] text-slate-700 leading-relaxed">Lakukan kunjungan lapangan untuk memverifikasi kondisi fisik UMKM.</p>
                         </div>
                     </a>
                 </div>
@@ -258,7 +258,7 @@
                             <h4
                                 class="text-sm font-bold text-slate-800 mb-0.5 group-hover:text-slate-900 transition-colors">
                                 Edit Profil</h4>
-                            <p class="text-[11px] text-slate-500 leading-relaxed">Ubah nama, informasi pribadi, foto, dan password akun Anda.</p>
+                            <p class="text-[11px] text-slate-700 leading-relaxed">Ubah nama, informasi pribadi, foto, dan password akun Anda.</p>
                         </div>
                     </a>
 
@@ -271,7 +271,7 @@
                             <h4
                                 class="text-sm font-bold text-slate-800 mb-0.5 group-hover:text-violet-600 transition-colors">
                                 Notifikasi Verifikasi</h4>
-                            <p class="text-[11px] text-slate-500 leading-relaxed">Dapatkan notifikasi jika data yang Anda input diverifikasi atau ditolak.</p>
+                            <p class="text-[11px] text-slate-700 leading-relaxed">Dapatkan notifikasi jika data yang Anda input diverifikasi atau ditolak.</p>
                         </div>
                     </a>
                 </div>

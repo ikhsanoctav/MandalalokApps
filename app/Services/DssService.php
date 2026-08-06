@@ -14,7 +14,7 @@ class DssService
             return collect([]);
         }
 
-        $umkms = UMKM::where('status_verifikasi', 'terverifikasi')->with('pemilik')->get();
+        $umkms = UMKM::where('status_verifikasi', 'terverifikasi')->with(['pemilik', 'sektor'])->get();
         if ($umkms->isEmpty()) {
             return collect([]);
         }
@@ -25,8 +25,8 @@ class DssService
         
         foreach ($kriterias as $k) {
             $minMax[$k->kode_kriteria] = [
-                'min' => 9999999,
-                'max' => -9999999,
+                'min' => null,
+                'max' => null,
             ];
         }
 
@@ -81,8 +81,12 @@ class DssService
             // Update Min Max
             foreach ($kriterias as $k) {
                 $val = $row[$k->kode_kriteria] ?? 1;
-                if ($val < $minMax[$k->kode_kriteria]['min']) $minMax[$k->kode_kriteria]['min'] = $val;
-                if ($val > $minMax[$k->kode_kriteria]['max']) $minMax[$k->kode_kriteria]['max'] = $val;
+                if ($minMax[$k->kode_kriteria]['min'] === null || $val < $minMax[$k->kode_kriteria]['min']) {
+                    $minMax[$k->kode_kriteria]['min'] = $val;
+                }
+                if ($minMax[$k->kode_kriteria]['max'] === null || $val > $minMax[$k->kode_kriteria]['max']) {
+                    $minMax[$k->kode_kriteria]['max'] = $val;
+                }
             }
 
             $matrix[] = $row;
@@ -101,9 +105,9 @@ class DssService
                 $normVal = 0;
 
                 // Hindari division by zero
-                $max = $minMax[$code]['max'] == 0 ? 1 : $minMax[$code]['max'];
-                $min = $minMax[$code]['min'] == 0 ? 1 : $minMax[$code]['min'];
-                $val = $val == 0 ? 1 : $val; // fallback zero val
+                $max = empty($minMax[$code]['max']) ? 1 : $minMax[$code]['max'];
+                $min = empty($minMax[$code]['min']) ? 1 : $minMax[$code]['min'];
+                $val = ($val == 0) ? 1 : $val; // fallback zero val
 
                 if ($k->jenis === 'benefit') {
                     $normVal = $val / $max;

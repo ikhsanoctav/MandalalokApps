@@ -9,13 +9,13 @@
             class="bg-white rounded-2xl p-4 shadow-sm border border-slate-200/60 flex flex-col sm:flex-row justify-between items-center gap-4">
             <div>
                 <h1 class="text-xl font-bold text-slate-800">Role Access Matrix</h1>
-                <p class="text-xs text-slate-500 mt-0.5">Konfigurasikan kewenangan fitur (Spatie Permissions) untuk
+                <p class="text-xs text-slate-700 mt-0.5">Konfigurasikan kewenangan fitur (Spatie Permissions) untuk
                     masing-masing tipe peran</p>
             </div>
             <div class="flex items-center gap-3 w-full sm:w-auto">
                 <a href="{{ route('superadmin.users') }}"
                     class="flex items-center justify-center gap-2 px-4 py-2 rounded-lg border border-slate-200 hover:bg-slate-50 font-semibold text-xs text-slate-700 shadow-sm transition-all w-full sm:w-auto">
-                    <svg class="w-4 h-4 text-slate-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <svg class="w-4 h-4 text-slate-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                             d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z">
                         </path>
@@ -24,7 +24,7 @@
                 </a>
                 <a href="{{ route('superadmin.users.create') }}"
                     class="flex items-center justify-center gap-2 px-4 py-2 rounded-lg border border-slate-200 hover:bg-slate-50 font-semibold text-xs text-slate-700 shadow-sm transition-all w-full sm:w-auto">
-                    <svg class="w-4 h-4 text-slate-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <svg class="w-4 h-4 text-slate-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                             d="M18 9v3m0 0v3m0-3h3m-3 0h-3m-2-5a4 4 0 11-8 0 4 4 0 018 0zM3 20a6 6 0 0112 0v1H3v-1z"></path>
                     </svg>
@@ -59,7 +59,7 @@
                     <table class="w-full text-left border-collapse">
                         <thead>
                             <tr
-                                class="bg-slate-50 border-b border-slate-200/60 text-xs font-semibold text-slate-500 uppercase tracking-wider">
+                                class="bg-slate-50 border-b border-slate-200/60 text-xs font-semibold text-slate-700 uppercase tracking-wider">
                                 <th class="py-4 px-6 w-1/2">Modul Fitur & Perizinan</th>
                                 @foreach ($roles as $role)
                                     <th class="py-4 px-6 text-center w-1/6 uppercase tracking-wider">

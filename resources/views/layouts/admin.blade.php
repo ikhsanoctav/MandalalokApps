@@ -187,6 +187,7 @@
     @stack('scripts')
 
     @include('partials.toast-container')
+    @include('partials.confirm-modal')
 
 </body>
 

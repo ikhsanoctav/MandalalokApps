@@ -25,9 +25,39 @@
             $fotoKunjungan = $umkm->latestVerifikasiLapangan->foto_kunjungan;
         }
     }
+
+    // Tentukan Cover Banner berdasarkan Sektor UMKM
+    $sektorLower = strtolower($umkm->sektor?->nama_sektor ?? '');
+    $defaultCover = 'https://images.unsplash.com/photo-1528698827591-e19ccd7bc23d?auto=format&fit=crop&w=1200&q=80'; // default Toko
+    
+    if (str_contains($sektorLower, 'kuliner') || str_contains($sektorLower, 'makanan') || str_contains($sektorLower, 'minuman')) {
+        $defaultCover = 'https://images.unsplash.com/photo-1555396273-367ea4eb4db5?auto=format&fit=crop&w=1200&q=80';
+    } elseif (str_contains($sektorLower, 'fashion') || str_contains($sektorLower, 'pakaian') || str_contains($sektorLower, 'busana') || str_contains($sektorLower, 'rajut')) {
+        $defaultCover = 'https://images.unsplash.com/photo-1483985988355-763728e1935b?auto=format&fit=crop&w=1200&q=80';
+    } elseif (str_contains($sektorLower, 'jasa') || str_contains($sektorLower, 'servis') || str_contains($sektorLower, 'salon')) {
+        $defaultCover = 'https://images.unsplash.com/photo-1621905251189-08b45d6a269e?auto=format&fit=crop&w=1200&q=80';
+    } elseif (str_contains($sektorLower, 'kerajinan') || str_contains($sektorLower, 'kriya') || str_contains($sektorLower, 'seni')) {
+        $defaultCover = 'https://images.unsplash.com/photo-1513519245088-0e12902e5a38?auto=format&fit=crop&w=1200&q=80';
+    } elseif (str_contains($sektorLower, 'tani') || str_contains($sektorLower, 'kebun') || str_contains($sektorLower, 'hias')) {
+        $defaultCover = 'https://images.unsplash.com/photo-1492496913980-501348b61469?auto=format&fit=crop&w=1200&q=80';
+    }
+    
+    $coverUrl = $umkm->foto_utama ? Storage::url($umkm->foto_utama) : $defaultCover;
 @endphp
 
 <div class="space-y-5">
+    
+    <!-- Beautiful Cover Image Banner -->
+    <div class="relative h-44 sm:h-52 rounded-xl overflow-hidden bg-slate-100 border border-slate-200 shadow-sm flex items-center justify-center">
+        <img src="{{ $coverUrl }}" alt="{{ $umkm->nama_usaha }}" class="w-full h-full object-cover">
+        <div class="absolute inset-0 bg-gradient-to-t from-slate-900/60 via-slate-900/10 to-transparent"></div>
+        <div class="absolute bottom-4 left-4 text-white">
+            <h3 class="text-lg font-black tracking-wide drop-shadow-md">{{ $umkm->nama_usaha }}</h3>
+            <p class="text-xs font-mono text-indigo-200 mt-0.5 drop-shadow-md flex items-center gap-1">
+                <i class="mdi mdi-identifier"></i> {{ $umkm->no_pendaftaran ?? '-' }}
+            </p>
+        </div>
+    </div>
     
     <div class="flex items-center gap-2">
         <span
@@ -38,7 +68,6 @@
             @else bg-slate-100 text-slate-600 @endif">
             {{ ucfirst($umkm->status_verifikasi ?? 'Draft') }}
         </span>
-        <span class="text-xs text-slate-400 font-mono">{{ $umkm->no_pendaftaran ?? '-' }}</span>
     </div>
 
     @if ($umkm->foto_utama || count($galleries) > 0)
@@ -98,7 +127,7 @@
                 </div>
                 <div>
                     <label class="text-xs text-indigo-400">Petugas</label>
-                    <p class="font-semibold text-indigo-900">{{ $verifikasiLapangan->petugas->name ?? 'Petugas' }}</p>
+                    <p class="font-semibold text-indigo-900">{{ $verifikasiLapangan->petugas?->name ?? 'Petugas' }}</p>
                 </div>
             </div>
             @if($verifikasiLapangan->catatan_kunjungan)
@@ -130,26 +159,26 @@
         </h4>
         <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div class="col-span-2 md:col-span-2">
-                <label class="text-xs text-slate-500">Nama Usaha</label>
+                <label class="text-xs text-slate-700">Nama Usaha</label>
                 <p class="text-base font-semibold text-slate-800 nama-usaha-value">{{ $umkm->nama_usaha ?? '-' }}</p>
             </div>
             <div>
-                <label class="text-xs text-slate-500">Skala Usaha</label>
+                <label class="text-xs text-slate-700">Skala Usaha</label>
                 <p class="text-sm">
                     <span class="inline-flex px-2 py-1 rounded-md text-xs font-medium bg-blue-100 text-blue-700">
                     </span>
                 </p>
             </div>
             <div>
-                <label class="text-xs text-slate-500">Sektor Usaha</label>
-                <p class="text-sm">{{ $umkm->sektor->nama_sektor ?? '-' }}</p>
+                <label class="text-xs text-slate-700">Sektor Usaha</label>
+                <p class="text-sm">{{ $umkm->sektor?->nama_sektor ?? '-' }}</p>
             </div>
             <div>
-                <label class="text-xs text-slate-500">Bentuk Jualan</label>
+                <label class="text-xs text-slate-700">Bentuk Jualan</label>
                 <p class="text-sm">{{ $umkm->bentuk_jualan ?? '-' }}</p>
             </div>
             <div>
-                <label class="text-xs text-slate-500">Status Usaha</label>
+                <label class="text-xs text-slate-700">Status Usaha</label>
                 <p>
                     <span
                         class="inline-flex items-center gap-1 px-2 py-1 rounded-full text-xs font-medium {{ $umkm->status_usaha == 'aktif' ? 'bg-emerald-100 text-emerald-700' : 'bg-red-100 text-red-700' }}">
@@ -160,19 +189,19 @@
                 </p>
             </div>
             <div>
-                <label class="text-xs text-slate-500">Tahun Berdiri</label>
+                <label class="text-xs text-slate-700">Tahun Berdiri</label>
                 <p class="text-sm">{{ $umkm->tahun_berdiri ?? '-' }}</p>
             </div>
             <div>
-                <label class="text-xs text-slate-500">No. Telepon</label>
+                <label class="text-xs text-slate-700">No. Telepon</label>
                 <p class="text-sm">{{ $umkm->telp_usaha ?? '-' }}</p>
             </div>
             <div class="col-span-2">
-                <label class="text-xs text-slate-500">Alamat Usaha</label>
+                <label class="text-xs text-slate-700">Alamat Usaha</label>
                 <p class="text-sm">{{ $umkm->alamat_usaha ?? '-' }}</p>
             </div>
             <div class="col-span-2">
-                <label class="text-xs text-slate-500">Deskripsi</label>
+                <label class="text-xs text-slate-700">Deskripsi</label>
                 <p class="text-sm">{{ Str::limit($umkm->deskripsi ?? '-', 150) }}</p>
             </div>
         </div>
@@ -188,28 +217,28 @@
         </h4>
         <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div class="col-span-2">
-                <label class="text-xs text-slate-500">Nama Lengkap</label>
-                <p class="text-sm font-medium">{{ $umkm->pemilik->nama_lengkap ?? '-' }}</p>
+                <label class="text-xs text-slate-700">Nama Lengkap</label>
+                <p class="text-sm font-medium">{{ $umkm->pemilik?->nama_lengkap ?? '-' }}</p>
             </div>
             <div>
-                <label class="text-xs text-slate-500">NIK</label>
-                <p class="text-sm font-mono">{{ $umkm->pemilik->nik ?? '-' }}</p>
+                <label class="text-xs text-slate-700">NIK</label>
+                <p class="text-sm font-mono">{{ $umkm->pemilik?->nik ?? '-' }}</p>
             </div>
             <div>
-                <label class="text-xs text-slate-500">No. Telepon</label>
-                <p class="text-sm">{{ $umkm->pemilik->no_hp ?? ($umkm->pemilik->no_telepon ?? '-') }}</p>
+                <label class="text-xs text-slate-700">No. Telepon</label>
+                <p class="text-sm">{{ $umkm->pemilik?->no_hp ?? ($umkm->pemilik?->no_telepon ?? '-') }}</p>
             </div>
             <div>
-                <label class="text-xs text-slate-500">Email</label>
-                <p class="text-sm">{{ $umkm->pemilik->email ?? '-' }}</p>
+                <label class="text-xs text-slate-700">Email</label>
+                <p class="text-sm">{{ $umkm->pemilik?->email ?? '-' }}</p>
             </div>
             <div>
-                <label class="text-xs text-slate-500">Kelurahan</label>
-                <p class="text-sm">{{ $umkm->pemilik->kelurahan ?? '-' }}</p>
+                <label class="text-xs text-slate-700">Kelurahan</label>
+                <p class="text-sm">{{ $umkm->pemilik?->kelurahan ?? '-' }}</p>
             </div>
             <div class="col-span-2">
-                <label class="text-xs text-slate-500">Alamat</label>
-                <p class="text-sm">{{ $umkm->pemilik->alamat ?? '-' }}</p>
+                <label class="text-xs text-slate-700">Alamat</label>
+                <p class="text-sm">{{ $umkm->pemilik?->alamat ?? '-' }}</p>
             </div>
         </div>
     </div>
@@ -226,15 +255,15 @@
         <div class="grid grid-cols-3 gap-2 text-center">
             <div class="bg-slate-50 rounded-2xl p-2">
                 <p class="text-lg font-bold text-blue-600">{{ $umkm->jumlah_tenaga_kerja ?? 0 }}</p>
-                <p class="text-xs text-slate-500">Total</p>
+                <p class="text-xs text-slate-700">Total</p>
             </div>
             <div class="bg-slate-50 rounded-2xl p-2">
                 <p class="text-lg font-bold text-blue-600">{{ $umkm->tenaga_kerja_laki ?? 0 }}</p>
-                <p class="text-xs text-slate-500">Laki-laki</p>
+                <p class="text-xs text-slate-700">Laki-laki</p>
             </div>
             <div class="bg-slate-50 rounded-2xl p-2">
                 <p class="text-lg font-bold text-blue-600">{{ $umkm->tenaga_kerja_perempuan ?? 0 }}</p>
-                <p class="text-xs text-slate-500">Perempuan</p>
+                <p class="text-xs text-slate-700">Perempuan</p>
             </div>
         </div>
     </div>

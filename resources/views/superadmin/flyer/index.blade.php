@@ -8,10 +8,10 @@
         <div class="flex flex-col gap-1 md:flex-row md:items-center md:justify-between">
             <div>
                 <h2 class="text-xl md:text-2xl font-bold text-slate-800 tracking-tight">Manajemen Flyer Program</h2>
-                <p class="text-xs md:text-sm text-slate-500 font-medium">Unggah, aktifkan, dan kelola pop-up flyer informasi bantuan secara instan.</p>
+                <p class="text-xs md:text-sm text-slate-700 font-medium">Unggah, aktifkan, dan kelola pop-up flyer informasi bantuan secara instan.</p>
             </div>
             <div class="flex items-center gap-2">
-                <a href="{{ route('superadmin.dashboard') }}" class="inline-flex items-center gap-1.5 px-3 py-2 text-xs font-bold text-slate-500 hover:text-slate-700 bg-white border border-slate-200 rounded-md transition-all focus:outline-none">
+                <a href="{{ route('superadmin.dashboard') }}" class="inline-flex items-center gap-1.5 px-3 py-2 text-xs font-bold text-slate-700 hover:text-slate-700 bg-white border border-slate-200 rounded-md transition-all focus:outline-none">
                     <span class="mdi mdi-arrow-left"></span>
                     <span>Kembali ke Dashboard</span>
                 </a>
@@ -43,7 +43,7 @@
                                     class="pointer-events-none inline-block h-5 w-5 transform rounded-full bg-white shadow ring-0 transition duration-200 ease-in-out"
                                     :class="active ? 'translate-x-5' : 'translate-x-0'"></span>
                             </button>
-                            <span class="text-xs font-bold transition-colors" :class="active ? 'text-indigo-600' : 'text-slate-500'"
+                            <span class="text-xs font-bold transition-colors" :class="active ? 'text-indigo-600' : 'text-slate-700'"
                                 x-text="active ? 'Pop-up Aktif' : 'Pop-up Nonaktif'"></span>
                             <input type="hidden" name="flyer_popup_active" :value="active ? 'true' : 'false'">
                         </div>
@@ -109,7 +109,7 @@
                     <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
                         
                         <div class="lg:col-span-5 space-y-4">
-                            <label class="block text-xs font-bold text-slate-500 uppercase tracking-wider">Unggah Gambar Flyer Baru</label>
+                            <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider">Unggah Gambar Flyer Baru</label>
                             
                             <div class="relative group border-2 border-dashed border-slate-300 hover:border-indigo-400 rounded-2xl p-6 transition-all bg-slate-50/50 hover:bg-indigo-50/10 flex flex-col items-center justify-center text-center cursor-pointer min-h-[220px]">
                                 <input type="file" name="flyer_popup_image" id="flyer_popup_image" accept="image/*"
@@ -138,7 +138,7 @@
                         </div>
 
                         <div class="lg:col-span-7 flex flex-col space-y-4">
-                            <label class="block text-xs font-bold text-slate-500 uppercase tracking-wider">Preview Flyer Aktif</label>
+                            <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider">Preview Flyer Aktif</label>
                             
                             <div class="flex-1 border border-slate-200 rounded-2xl bg-slate-100/50 overflow-hidden flex items-center justify-center min-h-[260px] p-4 relative">
                                 

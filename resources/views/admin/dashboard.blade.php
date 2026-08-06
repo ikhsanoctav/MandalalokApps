@@ -98,7 +98,7 @@
             </div>
         </div>
 
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
             
             <div
                 class="bg-gradient-to-br from-blue-600 to-blue-800 rounded-3xl p-6 text-white shadow-[0_8px_30px_rgb(0,0,0,0.12)] hover:shadow-[0_8px_30px_rgba(37,99,235,0.4)] transition-all duration-300 hover:-translate-y-1.5 cursor-pointer relative overflow-hidden group">
@@ -162,8 +162,36 @@
                         <i class="mdi mdi-check-circle text-2xl"></i>
                     </div>
                 </div>
-
             </div>
+
+            <a href="{{ route('admin.verifikasi_akun.index') }}"
+                class="bg-gradient-to-br from-amber-500 to-orange-500 rounded-3xl p-6 text-white shadow-[0_8px_30px_rgb(0,0,0,0.12)] hover:shadow-[0_8px_30px_rgba(245,158,11,0.4)] transition-all duration-300 hover:-translate-y-1.5 block relative overflow-hidden group">
+                <div
+                    class="absolute top-0 right-0 -mt-4 -mr-4 w-24 h-24 bg-white rounded-full mix-blend-overlay opacity-10 blur-xl group-hover:scale-150 transition-transform duration-700">
+                </div>
+                <div class="flex justify-between items-start relative z-10">
+                    <div>
+                        <p class="text-[11px] font-bold opacity-80 uppercase tracking-widest mb-1">AKUN PENDING</p>
+                        <p class="text-4xl font-black tracking-tight">{{ number_format($pendingAkunCount) }}</p>
+                        <div class="mt-3 flex items-center gap-1.5">
+                            <span
+                                class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-white/20 text-white border border-white/30 text-xs font-semibold backdrop-blur-sm shadow-sm">
+                                <i class="mdi mdi-account-clock"></i>
+                                Verifikasi KTP
+                            </span>
+                        </div>
+                    </div>
+                    <div
+                        class="w-14 h-14 bg-white/10 backdrop-blur-md rounded-2xl flex items-center justify-center border border-white/20 group-hover:bg-white/20 transition-colors shadow-inner">
+                        <i class="mdi mdi-card-account-details-outline text-2xl"></i>
+                    </div>
+                </div>
+                <div class="mt-4 pt-3 border-t border-white/20">
+                    <div class="flex justify-between text-xs">
+                        <span>Lihat detail antrean <i class="mdi mdi-arrow-right"></i></span>
+                    </div>
+                </div>
+            </a>
         </div>
 
         <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
@@ -232,14 +260,20 @@
             </div>
 
             <div class="space-y-6">
-                <!-- Sektor Chart Card -->
+                <!-- Distribusi Chart Card -->
                 <div class="bg-white rounded-2xl p-6 border border-slate-200 shadow-sm hover:shadow-md transition-all">
-                    <div class="flex justify-between items-center mb-4">
+                    <div class="flex justify-between items-start mb-4">
                         <div>
-                            <h3 class="text-base font-bold text-slate-800">Distribusi Sektor</h3>
-                            <p class="text-xs text-slate-500 mt-0.5">Per Sektor Usaha</p>
+                            <h3 class="text-base font-bold text-slate-800">Distribusi UMKM</h3>
+                            <p class="text-xs text-slate-500 mt-0.5">Proporsi Data UMKM</p>
                         </div>
-                        <i class="mdi mdi-chart-donut text-2xl text-slate-400"></i>
+                        <div class="flex items-center gap-2">
+                            <select id="chartTypeSelector" onchange="switchChartType()" class="text-xs border-slate-200 rounded-lg text-slate-600 focus:ring-blue-500 focus:border-blue-500 bg-slate-50">
+                                <option value="sektor">Berdasarkan Sektor</option>
+                                <option value="kategori">Berdasarkan Kategori</option>
+                            </select>
+                            <i class="mdi mdi-chart-donut text-2xl text-slate-400 hidden sm:block"></i>
+                        </div>
                     </div>
                     <div class="flex flex-col sm:flex-row items-center justify-between gap-4 sm:h-[160px]">
                         <div class="w-full sm:w-1/2 h-[160px] sm:h-full flex items-center justify-center">
@@ -304,15 +338,15 @@
                             <tr class="hover:bg-slate-50">
                                 <td class="px-6 py-4">
                                     <p class="font-medium text-slate-800">{{ $umkm->nama_usaha }}</p>
-                                    <p class="text-xs text-slate-400 mt-0.5">{{ $umkm->kategori->nama_kategori ?? '-' }}
+                                    <p class="text-xs text-slate-400 mt-0.5">{{ $umkm->kategori?->nama_kategori ?? '-' }}
                                     </p>
                                 </td>
                                 <td class="px-6 py-4">
-                                    <p class="text-sm text-slate-600">{{ $umkm->pemilik->nama_lengkap ?? '-' }}</p>
-                                    <p class="text-xs text-slate-400">{{ $umkm->pemilik->nik_masked ?? '-' }}</p>
+                                    <p class="text-sm text-slate-600">{{ $umkm->pemilik?->nama_lengkap ?? '-' }}</p>
+                                    <p class="text-xs text-slate-400">{{ $umkm->pemilik?->nik_masked ?? '-' }}</p>
                                 </td>
                                 <td class="px-6 py-4">
-                                    <span class="text-sm text-slate-600">{{ $umkm->pemilik->kelurahan ?? '-' }}</span>
+                                    <span class="text-sm text-slate-600">{{ $umkm->pemilik?->kelurahan ?? '-' }}</span>
                                 </td>
                                 <td class="px-6 py-4 text-center">
                                     @if ($umkm->status_verifikasi == 'terverifikasi')
@@ -345,6 +379,8 @@
         let trendChart;
         let sektorChart;
         let initialSektorData = @json($distribusiSektor);
+        let initialWilayahData = @json($distribusiWilayah);
+        let initialKategoriData = @json($distribusiKategori);
         const sectorColors = [
             '#3b82f6', // blue
             '#10b981', // emerald
@@ -383,9 +419,51 @@
             autoRefreshInterval = setInterval(() => refreshAllData(), 10000);
         }
 
+        let lastDistribusiSektor = initialSektorData;
+        let lastDistribusiWilayah = initialWilayahData;
+        let lastDistribusiKategori = initialKategoriData;
+        let currentPieChartType = 'sektor';
+
+        function switchChartType() {
+            const selector = document.getElementById('chartTypeSelector');
+            if (selector) {
+                currentPieChartType = selector.value;
+                renderPieChart();
+            }
+        }
+
+        function renderPieChart() {
+            if (!sektorChart) return;
+            
+            let dataToRender = [];
+            let labelKey = '';
+            
+            if (currentPieChartType === 'sektor') {
+                dataToRender = lastDistribusiSektor.filter(s => s.total > 0);
+                labelKey = 'nama_sektor';
+            } else if (currentPieChartType === 'kategori') {
+                dataToRender = lastDistribusiKategori.filter(k => k.total > 0);
+                labelKey = 'nama_kategori';
+            } else {
+                dataToRender = lastDistribusiWilayah.filter(w => w.total > 0);
+                labelKey = 'nama_kelurahan';
+            }
+            
+            const labels = dataToRender.map(item => item[labelKey]);
+            const totals = dataToRender.map(item => item.total);
+            const colors = dataToRender.map((_, i) => sectorColors[i % sectorColors.length]);
+
+            sektorChart.data.labels = labels;
+            sektorChart.data.datasets[0].data = totals;
+            sektorChart.data.datasets[0].backgroundColor = colors;
+            sektorChart.update();
+
+            updateSektorLegend(dataToRender, colors, labelKey);
+        }
+
         async function refreshAllData() {
             try {
-                const url = `{{ route('admin.dashboard') }}?ajax=1&filter=${currentFilter}`;
+                let url = `{{ route('admin.dashboard') }}?ajax=1&filter=${currentFilter}`;
                 const response = await fetch(url, {
                     headers: {
                         'X-Requested-With': 'XMLHttpRequest',
@@ -437,22 +515,18 @@
 
                     // Update Distribusi Wilayah
                     if (data.distribusiWilayah && data.totalUmkm > 0) {
+                        lastDistribusiWilayah = data.distribusiWilayah;
                         updateRegionalData(data.distribusiWilayah, data.totalUmkm);
+                    }
+
+                    if (data.distribusiKategori) {
+                        lastDistribusiKategori = data.distribusiKategori;
                     }
 
                     // Update Distribusi Sektor
                     if (data.distribusiSektor && sektorChart) {
-                        const filteredSektor = data.distribusiSektor.filter(s => s.total > 0);
-                        const labels = filteredSektor.map(s => s.nama_sektor);
-                        const totals = filteredSektor.map(s => s.total);
-                        const colors = filteredSektor.map((_, i) => sectorColors[i % sectorColors.length]);
-
-                        sektorChart.data.labels = labels;
-                        sektorChart.data.datasets[0].data = totals;
-                        sektorChart.data.datasets[0].backgroundColor = colors;
-                        sektorChart.update();
-
-                        updateSektorLegend(filteredSektor, colors);
+                        lastDistribusiSektor = data.distribusiSektor;
+                        renderPieChart();
                     }
 
                     // Update Grafik
@@ -468,7 +542,7 @@
             }
         }
 
-        function updateSektorLegend(filteredData, colors) {
+        function updateSektorLegend(filteredData, colors, labelKey = 'nama_sektor') {
             const legendContainer = document.getElementById('sektorLegend');
             if (!legendContainer) return;
             
@@ -483,7 +557,7 @@
                     <div class="flex items-center justify-between py-1 border-b border-slate-50 last:border-0">
                         <div class="flex items-center gap-2 min-w-0">
                             <span class="w-2 h-2 rounded-full shrink-0" style="background-color: ${color}"></span>
-                            <span class="text-slate-600 font-medium truncate">${s.nama_sektor}</span>
+                            <span class="text-slate-600 font-medium truncate">${s[labelKey]}</span>
                         </div>
                         <span class="text-slate-800 font-semibold ml-2 shrink-0">${s.total}</span>
                     </div>
@@ -712,20 +786,15 @@
                 }
             });
 
-            // Sektor Chart
+            // Sektor Chart (Distribusi UMKM)
             const sektorCtx = document.getElementById('sektorChart').getContext('2d');
-            const filteredSektor = initialSektorData.filter(s => s.total > 0);
-            const sectorLabels = filteredSektor.map(s => s.nama_sektor);
-            const sectorTotals = filteredSektor.map(s => s.total);
-            const colors = filteredSektor.map((_, i) => sectorColors[i % sectorColors.length]);
-            
             sektorChart = new Chart(sektorCtx, {
                 type: 'doughnut',
                 data: {
-                    labels: sectorLabels,
+                    labels: [],
                     datasets: [{
-                        data: sectorTotals,
-                        backgroundColor: colors,
+                        data: [],
+                        backgroundColor: [],
                         borderWidth: 2,
                         borderColor: '#ffffff'
                     }]
@@ -743,7 +812,7 @@
             });
 
             // Render custom legend
-            updateSektorLegend(filteredSektor, colors);
+            renderPieChart();
         }
     </script>
 @endsection

@@ -4,7 +4,7 @@
 <div class="flex items-center justify-between">
     <div>
         <h1 class="text-2xl font-bold text-slate-800">Asisten Eksekutif AI</h1>
-        <p class="text-sm text-slate-500">Tanyakan data UMKM Mandalajati dalam bahasa sehari-hari.</p>
+        <p class="text-sm text-slate-700">Tanyakan data UMKM Mandalajati dalam bahasa sehari-hari.</p>
     </div>
 </div>
 @endsection

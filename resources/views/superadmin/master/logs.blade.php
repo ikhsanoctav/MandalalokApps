@@ -8,7 +8,7 @@
         <div class="flex flex-col gap-1 md:flex-row md:items-center md:justify-between">
             <div>
                 <h2 class="text-xl md:text-2xl font-bold text-slate-800 tracking-tight">Logs & Audit Sistem</h2>
-                <p class="text-xs md:text-sm text-slate-500 font-medium">Pantau dan verifikasi setiap aktivitas administratif
+                <p class="text-xs md:text-sm text-slate-700 font-medium">Pantau dan verifikasi setiap aktivitas administratif
                     secara real-time.</p>
             </div>
         </div>

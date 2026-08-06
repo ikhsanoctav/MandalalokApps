@@ -14,7 +14,7 @@
                 <div class="min-w-0">
                     <p class="text-xs font-semibold text-slate-400">#{{ $pengajuans->firstItem() + $index }}</p>
                     <h3 class="text-base font-bold text-slate-800 leading-snug">{{ $pengajuan->umkm->nama_usaha ?? '-' }}</h3>
-                    <p class="text-xs text-slate-500 mt-1">{{ $pengajuan->umkm->pemilik->nama_lengkap ?? '-' }}</p>
+                    <p class="text-xs text-slate-700 mt-1">{{ $pengajuan->umkm->pemilik?->nama_lengkap ?? '-' }}</p>
                 </div>
                 <div class="shrink-0">
                     {!! $pengajuan->status_badge !!}
@@ -28,7 +28,7 @@
                         {{ ucfirst($pengajuan->jenis_pengajuan) }}
                     </span>
                     @if ($pengajuan->jenis_pengajuan === 'bantuan' && $pengajuan->nama_program)
-                        <p class="text-xs text-slate-500 mt-1 leading-snug">{{ $pengajuan->nama_program }}</p>
+                        <p class="text-xs text-slate-700 mt-1 leading-snug">{{ $pengajuan->nama_program }}</p>
                     @endif
                 </div>
                 <div>
@@ -49,7 +49,7 @@
             </div>
 
             @if ($pengajuan->catatan)
-                <p class="text-xs text-slate-500 bg-slate-50 rounded-md p-3">{{ $pengajuan->catatan }}</p>
+                <p class="text-xs text-slate-700 bg-slate-50 rounded-md p-3">{{ $pengajuan->catatan }}</p>
             @endif
 
             <div class="grid grid-cols-2 gap-2 pt-1">
@@ -80,7 +80,7 @@
         </article>
     @empty
         <div class="px-4 py-12 text-center text-slate-400">
-            <p class="font-medium text-slate-500 text-sm">Tidak ada data pengajuan bantuan</p>
+            <p class="font-medium text-slate-700 text-sm">Tidak ada data pengajuan bantuan</p>
             <p class="text-xs mt-1 text-slate-400">Silakan sesuaikan filter pencarian Anda</p>
         </div>
     @endforelse
@@ -90,23 +90,23 @@
     <table class="w-full">
         <thead class="bg-slate-50 border-b border-slate-200">
             <tr>
-                <th class="px-6 py-3 text-left text-xs font-semibold text-slate-500 uppercase">No</th>
-                <th class="px-6 py-3 text-left text-xs font-semibold text-slate-500 uppercase">UMKM Pemohon</th>
-                <th class="px-6 py-3 text-left text-xs font-semibold text-slate-500 uppercase">Jenis Pengajuan</th>
-                <th class="px-6 py-3 text-left text-xs font-semibold text-slate-500 uppercase">Nominal</th>
-                <th class="px-6 py-3 text-left text-xs font-semibold text-slate-500 uppercase">Tanggal Daftar</th>
-                <th class="px-6 py-3 text-left text-xs font-semibold text-slate-500 uppercase">Status</th>
-                <th class="px-6 py-3 text-left text-xs font-semibold text-slate-500 uppercase">Catatan</th>
-                <th class="px-6 py-3 text-center text-xs font-semibold text-slate-500 uppercase">Aksi</th>
+                <th class="px-6 py-3 text-left text-xs font-semibold text-slate-700 uppercase">No</th>
+                <th class="px-6 py-3 text-left text-xs font-semibold text-slate-700 uppercase">UMKM Pemohon</th>
+                <th class="px-6 py-3 text-left text-xs font-semibold text-slate-700 uppercase">Jenis Pengajuan</th>
+                <th class="px-6 py-3 text-left text-xs font-semibold text-slate-700 uppercase">Nominal</th>
+                <th class="px-6 py-3 text-left text-xs font-semibold text-slate-700 uppercase">Tanggal Daftar</th>
+                <th class="px-6 py-3 text-left text-xs font-semibold text-slate-700 uppercase">Status</th>
+                <th class="px-6 py-3 text-left text-xs font-semibold text-slate-700 uppercase">Catatan</th>
+                <th class="px-6 py-3 text-center text-xs font-semibold text-slate-700 uppercase">Aksi</th>
             </tr>
         </thead>
         <tbody class="divide-y divide-slate-100">
             @forelse($pengajuans as $index => $pengajuan)
                 <tr class="hover:bg-slate-50 transition-colors">
-                    <td class="px-6 py-4 text-sm text-slate-500">{{ $pengajuans->firstItem() + $index }}</td>
+                    <td class="px-6 py-4 text-sm text-slate-700">{{ $pengajuans->firstItem() + $index }}</td>
                     <td class="px-6 py-4">
                         <p class="font-bold text-slate-800">{{ $pengajuan->umkm->nama_usaha ?? '-' }}</p>
-                        <p class="text-xs text-slate-400 mt-0.5">{{ $pengajuan->umkm->pemilik->nama_lengkap ?? '-' }}
+                        <p class="text-xs text-slate-400 mt-0.5">{{ $pengajuan->umkm->pemilik?->nama_lengkap ?? '-' }}
                         </p>
                     </td>
                     <td class="px-6 py-4">
@@ -126,7 +126,7 @@
                             {{ ucfirst($pengajuan->jenis_pengajuan) }}
                         </span>
                         @if ($pengajuan->jenis_pengajuan === 'bantuan' && $pengajuan->nama_program)
-                            <p class="text-[10px] text-slate-500 font-medium mt-1 leading-snug">{{ $pengajuan->nama_program }}</p>
+                            <p class="text-[10px] text-slate-700 font-medium mt-1 leading-snug">{{ $pengajuan->nama_program }}</p>
                         @endif
                     </td>
                     <td class="px-6 py-4 font-semibold text-slate-800">
@@ -136,13 +136,13 @@
                             <span class="text-slate-400 font-normal">-</span>
                         @endif
                     </td>
-                    <td class="px-6 py-4 text-sm text-slate-500">
+                    <td class="px-6 py-4 text-sm text-slate-700">
                         {{ $pengajuan->tanggal_pengajuan ? $pengajuan->tanggal_pengajuan->format('d M Y') : '-' }}
                     </td>
                     <td class="px-6 py-4">
                         {!! $pengajuan->status_badge !!}
                     </td>
-                    <td class="px-6 py-4 text-xs text-slate-500 max-w-[200px] truncate"
+                    <td class="px-6 py-4 text-xs text-slate-700 max-w-[200px] truncate"
                         title="{{ $pengajuan->catatan }}">
                         {{ $pengajuan->catatan ?? '-' }}
                     </td>
@@ -211,7 +211,7 @@
                                 d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z">
                             </path>
                         </svg>
-                        <p class="font-medium text-slate-500 text-sm">Tidak ada data pengajuan bantuan</p>
+                        <p class="font-medium text-slate-700 text-sm">Tidak ada data pengajuan bantuan</p>
                         <p class="text-xs mt-1 text-slate-400">Silakan sesuaikan filter pencarian Anda</p>
                     </td>
                 </tr>

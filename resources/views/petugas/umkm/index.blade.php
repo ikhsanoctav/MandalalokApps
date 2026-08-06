@@ -9,7 +9,7 @@
         <div class="flex items-center justify-between">
             <div>
                 <h2 class="text-2xl font-bold text-slate-800">Data UMKM</h2>
-                <p class="text-sm text-slate-500 mt-0.5">Kelurahan <span class="font-semibold text-slate-700">{{ $kelurahan ?: 'Belum Diatur' }}</span></p>
+                <p class="text-sm text-slate-700 mt-0.5">Kelurahan <span class="font-semibold text-slate-700">{{ $kelurahan ?: 'Belum Diatur' }}</span></p>
             </div>
             <div class="flex items-center gap-3">
                 <button onclick="openScanModal()"
@@ -65,7 +65,7 @@
                 {{-- Tab Header --}}
                 <div class="flex border-b border-slate-200">
                     <button @click="activeTab = 'saya'"
-                        :class="activeTab === 'saya' ? 'border-b-2 border-blue-600 text-blue-600 bg-blue-50/50' : 'text-slate-500 hover:text-slate-700 hover:bg-slate-50'"
+                        :class="activeTab === 'saya' ? 'border-b-2 border-blue-600 text-blue-600 bg-blue-50/50' : 'text-slate-700 hover:text-slate-700 hover:bg-slate-50'"
                         class="flex-1 px-6 py-3.5 text-sm font-semibold transition-all flex items-center justify-center gap-2">
                         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path></svg>
                         Input Saya
@@ -73,7 +73,7 @@
                             :class="activeTab === 'saya' ? 'bg-blue-600 text-white' : 'bg-slate-200 text-slate-600'">{{ $umkmSaya->count() }}</span>
                     </button>
                     <button @click="activeTab = 'wilayah'"
-                        :class="activeTab === 'wilayah' ? 'border-b-2 border-indigo-600 text-indigo-600 bg-indigo-50/50' : 'text-slate-500 hover:text-slate-700 hover:bg-slate-50'"
+                        :class="activeTab === 'wilayah' ? 'border-b-2 border-indigo-600 text-indigo-600 bg-indigo-50/50' : 'text-slate-700 hover:text-slate-700 hover:bg-slate-50'"
                         class="flex-1 px-6 py-3.5 text-sm font-semibold transition-all flex items-center justify-center gap-2">
                         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3.055 11H5a2 2 0 012 2v1a2 2 0 002 2 2 2 0 012 2v2.945M8 3.935V5.5A2.5 2.5 0 0010.5 8h.5a2 2 0 012 2 2 2 0 104 0 2 2 0 012-2h1.064M15 20.488V18a2 2 0 012-2h3.064M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
                         Semua Wilayah
@@ -81,7 +81,7 @@
                             :class="activeTab === 'wilayah' ? 'bg-indigo-600 text-white' : 'bg-slate-200 text-slate-600'">{{ $umkmWilayah->count() }}</span>
                     </button>
                     <button @click="activeTab = 'peta'"
-                        :class="activeTab === 'peta' ? 'border-b-2 border-teal-600 text-teal-600 bg-teal-50/50' : 'text-slate-500 hover:text-slate-700 hover:bg-slate-50'"
+                        :class="activeTab === 'peta' ? 'border-b-2 border-teal-600 text-teal-600 bg-teal-50/50' : 'text-slate-700 hover:text-slate-700 hover:bg-slate-50'"
                         class="flex-1 px-6 py-3.5 text-sm font-semibold transition-all flex items-center justify-center gap-2">
                         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
                         Peta Wilayah
@@ -104,14 +104,14 @@
                     <div class="block md:hidden divide-y divide-slate-100">
                         @forelse($umkmSaya as $umkm)
                             @php
-                                $searchStringSaya = strtolower($umkm->nama_usaha . ' ' . $umkm->no_pendaftaran . ' ' . ($umkm->pemilik->nama_lengkap ?? ''));
+                                $searchStringSaya = strtolower($umkm->nama_usaha . ' ' . $umkm->no_pendaftaran . ' ' . ($umkm->pemilik?->nama_lengkap ?? ''));
                             @endphp
                             <article class="p-4 space-y-3" x-show="searchSaya === '' || '{{ $searchStringSaya }}'.includes(searchSaya.toLowerCase())">
                                 <div class="flex items-start justify-between gap-3">
                                     <div class="min-w-0">
-                                        <p class="font-mono text-xs font-semibold text-slate-500">{{ $umkm->no_pendaftaran ?? '-' }}</p>
+                                        <p class="font-mono text-xs font-semibold text-slate-700">{{ $umkm->no_pendaftaran ?? '-' }}</p>
                                         <h3 class="text-base font-bold text-slate-800 leading-snug">{{ $umkm->nama_usaha }}</h3>
-                                        <p class="text-xs text-slate-500 mt-1">{{ $umkm->kategori->nama_kategori ?? '-' }}</p>
+                                        <p class="text-xs text-slate-700 mt-1">{{ $umkm->kategori?->nama_kategori ?? '-' }}</p>
                                     </div>
                                     <div class="shrink-0">
                                         @include('petugas.umkm._status-badge', ['status' => $umkm->status_verifikasi])
@@ -121,8 +121,8 @@
                                 <div class="grid grid-cols-2 gap-3 text-sm">
                                     <div>
                                         <p class="text-xs font-semibold text-slate-400 uppercase">Pemilik</p>
-                                        <p class="font-medium text-slate-700">{{ $umkm->pemilik->nama_lengkap ?? '-' }}</p>
-                                        <p class="text-xs text-slate-500">{{ $umkm->pemilik->nik_masked ?? '-' }}</p>
+                                        <p class="font-medium text-slate-700">{{ $umkm->pemilik?->nama_lengkap ?? '-' }}</p>
+                                        <p class="text-xs text-slate-700">{{ $umkm->pemilik?->nik_masked ?? '-' }}</p>
                                     </div>
                                     <div>
                                         <p class="text-xs font-semibold text-slate-400 uppercase">Tgl Input</p>
@@ -146,7 +146,7 @@
                             </article>
                         @empty
                             <div class="py-12 px-4 text-center">
-                                <p class="text-slate-500 font-medium">Belum ada data UMKM yang diinput.</p>
+                                <p class="text-slate-700 font-medium">Belum ada data UMKM yang diinput.</p>
                                 <a href="{{ route('operator.umkm.create') }}" class="text-blue-600 text-sm hover:underline mt-1 inline-block">Mulai Input Data Sekarang</a>
                             </div>
                         @endforelse
@@ -156,18 +156,18 @@
                         <table class="w-full text-left border-collapse">
                             <thead>
                                 <tr class="bg-slate-50 border-b border-slate-200">
-                                    <th class="py-3 px-6 text-xs font-bold text-slate-500 uppercase tracking-wider">No. Pendaftaran</th>
-                                    <th class="py-3 px-6 text-xs font-bold text-slate-500 uppercase tracking-wider">Nama Usaha</th>
-                                    <th class="py-3 px-6 text-xs font-bold text-slate-500 uppercase tracking-wider">Pemilik</th>
-                                    <th class="py-3 px-6 text-xs font-bold text-slate-500 uppercase tracking-wider">Tgl Input</th>
-                                    <th class="py-3 px-6 text-xs font-bold text-slate-500 uppercase tracking-wider">Status</th>
-                                    <th class="py-3 px-6 text-xs font-bold text-slate-500 uppercase tracking-wider text-right">Aksi</th>
+                                    <th class="py-3 px-6 text-xs font-bold text-slate-700 uppercase tracking-wider">No. Pendaftaran</th>
+                                    <th class="py-3 px-6 text-xs font-bold text-slate-700 uppercase tracking-wider">Nama Usaha</th>
+                                    <th class="py-3 px-6 text-xs font-bold text-slate-700 uppercase tracking-wider">Pemilik</th>
+                                    <th class="py-3 px-6 text-xs font-bold text-slate-700 uppercase tracking-wider">Tgl Input</th>
+                                    <th class="py-3 px-6 text-xs font-bold text-slate-700 uppercase tracking-wider">Status</th>
+                                    <th class="py-3 px-6 text-xs font-bold text-slate-700 uppercase tracking-wider text-right">Aksi</th>
                                 </tr>
                             </thead>
                             <tbody class="divide-y divide-slate-100">
                                 @forelse($umkmSaya as $umkm)
                                     @php
-                                        $searchStringSaya = strtolower($umkm->nama_usaha . ' ' . $umkm->no_pendaftaran . ' ' . ($umkm->pemilik->nama_lengkap ?? ''));
+                                        $searchStringSaya = strtolower($umkm->nama_usaha . ' ' . $umkm->no_pendaftaran . ' ' . ($umkm->pemilik?->nama_lengkap ?? ''));
                                     @endphp
                                     <tr class="hover:bg-slate-50 transition-colors" x-show="searchSaya === '' || '{{ $searchStringSaya }}'.includes(searchSaya.toLowerCase())">
                                         <td class="py-4 px-6">
@@ -175,11 +175,11 @@
                                         </td>
                                         <td class="py-4 px-6">
                                             <p class="font-bold text-sm text-slate-800">{{ $umkm->nama_usaha }}</p>
-                                            <p class="text-xs text-slate-500 mt-0.5">{{ $umkm->kategori->nama_kategori ?? '-' }}</p>
+                                            <p class="text-xs text-slate-700 mt-0.5">{{ $umkm->kategori?->nama_kategori ?? '-' }}</p>
                                         </td>
                                         <td class="py-4 px-6">
-                                            <div class="text-sm text-slate-700">{{ $umkm->pemilik->nama_lengkap ?? '-' }}</div>
-                                            <div class="text-xs text-slate-500 mt-0.5">{{ $umkm->pemilik->nik_masked ?? '-' }}</div>
+                                            <div class="text-sm text-slate-700">{{ $umkm->pemilik?->nama_lengkap ?? '-' }}</div>
+                                            <div class="text-xs text-slate-700 mt-0.5">{{ $umkm->pemilik?->nik_masked ?? '-' }}</div>
                                         </td>
                                         <td class="py-4 px-6 text-sm text-slate-600">
                                             {{ $umkm->tanggal_pendataan ? $umkm->tanggal_pendataan->format('d M Y') : '-' }}
@@ -209,14 +209,14 @@
                                             <div class="w-16 h-16 bg-slate-50 text-slate-300 rounded-full flex items-center justify-center mx-auto mb-3">
                                                 <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 13V6a2 2 0 00-2-2H6a2 2 0 00-2 2v7m16 0v5a2 2 0 01-2 2H6a2 2 0 01-2-2v-5m16 0h-2.586a1 1 0 00-.707.293l-2.414 2.414a1 1 0 01-.707.293h-3.172a1 1 0 01-.707-.293l-2.414-2.414A1 1 0 006.586 13H4"></path></svg>
                                             </div>
-                                            <p class="text-slate-500 font-medium">Belum ada data UMKM yang diinput.</p>
+                                            <p class="text-slate-700 font-medium">Belum ada data UMKM yang diinput.</p>
                                             <a href="{{ route('operator.umkm.create') }}" class="text-blue-600 text-sm hover:underline mt-1 inline-block">Mulai Input Data Sekarang</a>
                                         </td>
                                     </tr>
                                 @endforelse
                                 
                                 <tr x-cloak x-show="searchSaya !== '' && !Array.from($el.closest('tbody').querySelectorAll('tr:not([x-cloak])')).some(tr => tr.style.display !== 'none')">
-                                    <td colspan="6" class="py-8 px-6 text-center text-slate-500">
+                                    <td colspan="6" class="py-8 px-6 text-center text-slate-700">
                                         Tidak ada UMKM yang cocok dengan pencarian "<span x-text="searchSaya" class="font-bold"></span>".
                                     </td>
                                 </tr>
@@ -229,7 +229,7 @@
                 <div x-show="activeTab === 'wilayah'" x-transition:enter="transition ease-out duration-200" x-transition:enter-start="opacity-0" x-transition:enter-end="opacity-100">
                     @if(empty($kelurahan))
                         <div class="p-8 text-center">
-                            <p class="text-slate-500">Akun Anda belum memiliki pengaturan Kelurahan penugasan. Silakan hubungi Admin.</p>
+                            <p class="text-slate-700">Akun Anda belum memiliki pengaturan Kelurahan penugasan. Silakan hubungi Admin.</p>
                         </div>
                     @elseif($umkmWilayah->isEmpty())
                         <div class="p-8 text-center">
@@ -237,7 +237,7 @@
                                 <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"></path></svg>
                             </div>
                             <h3 class="text-lg font-bold text-slate-800 mb-1">Belum ada data</h3>
-                            <p class="text-slate-500 text-sm">Belum ada UMKM yang terdaftar di Kelurahan {{ $kelurahan }}.</p>
+                            <p class="text-slate-700 text-sm">Belum ada UMKM yang terdaftar di Kelurahan {{ $kelurahan }}.</p>
                         </div>
                     @else
                         {{-- Distribusi Kategori --}}
@@ -267,14 +267,14 @@
                         <div class="block md:hidden divide-y divide-slate-100">
                             @foreach ($umkmWilayah as $item)
                                 @php
-                                    $searchStringWil = strtolower($item->nama_usaha . ' ' . $item->no_pendaftaran . ' ' . ($item->pemilik->nama_lengkap ?? '') . ' ' . ($item->kategori->nama_kategori ?? ''));
+                                    $searchStringWil = strtolower($item->nama_usaha . ' ' . $item->no_pendaftaran . ' ' . ($item->pemilik?->nama_lengkap ?? '') . ' ' . ($item->kategori?->nama_kategori ?? ''));
                                 @endphp
                                 <article class="p-4 space-y-3" x-show="searchWilayah === '' || '{{ $searchStringWil }}'.includes(searchWilayah.toLowerCase())">
                                     <div class="flex items-start justify-between gap-3">
                                         <div class="min-w-0">
-                                            <p class="font-mono text-xs font-semibold text-slate-500">{{ $item->no_pendaftaran ?? '-' }}</p>
+                                            <p class="font-mono text-xs font-semibold text-slate-700">{{ $item->no_pendaftaran ?? '-' }}</p>
                                             <h3 class="text-base font-bold text-slate-800 leading-snug">{{ $item->nama_usaha }}</h3>
-                                            <p class="text-xs text-slate-500 mt-1">{{ $item->alamat_usaha }}</p>
+                                            <p class="text-xs text-slate-700 mt-1">{{ $item->alamat_usaha }}</p>
                                         </div>
                                         <div class="shrink-0">
                                             @include('petugas.umkm._status-badge', ['status' => $item->status_verifikasi])
@@ -284,13 +284,13 @@
                                     <div class="grid grid-cols-2 gap-3 text-sm">
                                         <div>
                                             <p class="text-xs font-semibold text-slate-400 uppercase">Pemilik</p>
-                                            <p class="font-medium text-slate-700">{{ $item->pemilik->nama_lengkap ?? '-' }}</p>
-                                            <p class="text-xs text-slate-500">RT {{ $item->pemilik->rt ?? '-' }} / RW {{ $item->pemilik->rw ?? '-' }}</p>
+                                            <p class="font-medium text-slate-700">{{ $item->pemilik?->nama_lengkap ?? '-' }}</p>
+                                            <p class="text-xs text-slate-700">RT {{ $item->pemilik?->rt ?? '-' }} / RW {{ $item->pemilik?->rw ?? '-' }}</p>
                                         </div>
                                         <div>
                                             <p class="text-xs font-semibold text-slate-400 uppercase">Kategori</p>
-                                            <p class="font-medium text-slate-700">{{ $item->kategori->nama_kategori ?? '-' }}</p>
-                                            <p class="text-xs text-slate-500">{{ $item->sektor->nama_sektor ?? '-' }}</p>
+                                            <p class="font-medium text-slate-700">{{ $item->kategori?->nama_kategori ?? '-' }}</p>
+                                            <p class="text-xs text-slate-700">{{ $item->sektor?->nama_sektor ?? '-' }}</p>
                                         </div>
                                     </div>
 
@@ -314,7 +314,7 @@
                         <div class="hidden md:block overflow-x-auto">
                             <table class="w-full text-left border-collapse">
                                 <thead>
-                                    <tr class="bg-slate-50 border-y border-slate-200 text-xs uppercase tracking-wider text-slate-500 font-semibold">
+                                    <tr class="bg-[#0f2e5c] text-white text-xs uppercase tracking-wider font-semibold">
                                         <th class="px-6 py-3">No. Pendaftaran</th>
                                         <th class="px-6 py-3">Nama Usaha</th>
                                         <th class="px-6 py-3">Pemilik</th>
@@ -326,7 +326,7 @@
                                 <tbody class="divide-y divide-slate-100">
                                     @foreach ($umkmWilayah as $item)
                                         @php
-                                            $searchStringWil = strtolower($item->nama_usaha . ' ' . $item->no_pendaftaran . ' ' . ($item->pemilik->nama_lengkap ?? '') . ' ' . ($item->kategori->nama_kategori ?? ''));
+                                            $searchStringWil = strtolower($item->nama_usaha . ' ' . $item->no_pendaftaran . ' ' . ($item->pemilik?->nama_lengkap ?? '') . ' ' . ($item->kategori?->nama_kategori ?? ''));
                                         @endphp
                                         <tr class="hover:bg-slate-50 transition-colors" x-show="searchWilayah === '' || '{{ $searchStringWil }}'.includes(searchWilayah.toLowerCase())">
                                             <td class="px-6 py-4">
@@ -334,16 +334,16 @@
                                             </td>
                                             <td class="px-6 py-4">
                                                 <p class="font-bold text-slate-800">{{ $item->nama_usaha }}</p>
-                                                <p class="text-xs text-slate-500 truncate max-w-[200px]">{{ $item->alamat_usaha }}</p>
+                                                <p class="text-xs text-slate-700 truncate max-w-[200px]">{{ $item->alamat_usaha }}</p>
                                             </td>
                                             <td class="px-6 py-4">
-                                                <p class="font-medium text-slate-700">{{ $item->pemilik->nama_lengkap ?? '-' }}</p>
-                                                <p class="text-xs text-slate-500">RT {{ $item->pemilik->rt ?? '-' }} / RW {{ $item->pemilik->rw ?? '-' }}</p>
+                                                <p class="font-medium text-slate-700">{{ $item->pemilik?->nama_lengkap ?? '-' }}</p>
+                                                <p class="text-xs text-slate-700">RT {{ $item->pemilik?->rt ?? '-' }} / RW {{ $item->pemilik?->rw ?? '-' }}</p>
                                             </td>
                                             <td class="px-6 py-4">
-                                                <span class="inline-flex items-center px-2 py-0.5 rounded-md text-xs font-medium bg-blue-50 text-blue-700 mb-1">{{ $item->kategori->nama_kategori ?? '-' }}</span>
+                                                <span class="inline-flex items-center px-2 py-0.5 rounded-md text-xs font-medium bg-blue-50 text-blue-700 mb-1">{{ $item->kategori?->nama_kategori ?? '-' }}</span>
                                                 <br>
-                                                <span class="inline-flex items-center px-2 py-0.5 rounded-md text-xs font-medium bg-purple-50 text-purple-700">{{ $item->sektor->nama_sektor ?? '-' }}</span>
+                                                <span class="inline-flex items-center px-2 py-0.5 rounded-md text-xs font-medium bg-purple-50 text-purple-700">{{ $item->sektor?->nama_sektor ?? '-' }}</span>
                                             </td>
                                             <td class="px-6 py-4">
                                                 @include('petugas.umkm._status-badge', ['status' => $item->status_verifikasi])
@@ -366,7 +366,7 @@
                                         </tr>
                                     @endforeach
                                     <tr x-cloak x-show="searchWilayah !== '' && !Array.from($el.closest('tbody').querySelectorAll('tr:not([x-cloak])')).some(tr => tr.style.display !== 'none')">
-                                        <td colspan="6" class="py-8 px-6 text-center text-slate-500">
+                                        <td colspan="6" class="py-8 px-6 text-center text-slate-700">
                                             Tidak ada UMKM yang cocok dengan pencarian "<span x-text="searchWilayah" class="font-bold"></span>".
                                         </td>
                                     </tr>
@@ -385,7 +385,7 @@
                                 <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
                             </div>
                             <h3 class="text-lg font-bold text-slate-800 mb-1">Belum ada data koordinat</h3>
-                            <p class="text-slate-500 text-sm">Belum ada UMKM di wilayah ini yang memiliki data GPS/koordinat.</p>
+                            <p class="text-slate-700 text-sm">Belum ada UMKM di wilayah ini yang memiliki data GPS/koordinat.</p>
                         </div>
                     @else
                         <div class="p-4">
@@ -422,7 +422,7 @@
             <div class="flex items-center justify-between px-6 py-4 border-b border-slate-100">
                 <div>
                     <h3 class="text-lg font-bold text-slate-800">📷 Scan QR Code UMKM</h3>
-                    <p class="text-xs text-slate-500 mt-0.5">Arahkan kamera ke QR Code UMKM</p>
+                    <p class="text-xs text-slate-700 mt-0.5">Arahkan kamera ke QR Code UMKM</p>
                 </div>
                 <button onclick="closeScanModal()" class="text-slate-400 hover:text-slate-600 bg-slate-50 hover:bg-slate-100 rounded-full p-2 transition-colors">
                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
@@ -430,7 +430,7 @@
             </div>
             <div class="p-6">
                 <div id="reader" class="w-full rounded-xl overflow-hidden bg-slate-900"></div>
-                <div id="scan-status" class="mt-4 text-center text-sm text-slate-500 hidden">
+                <div id="scan-status" class="mt-4 text-center text-sm text-slate-700 hidden">
                     <div class="flex items-center justify-center gap-2">
                         <svg class="w-4 h-4 animate-spin text-emerald-500" fill="none" viewBox="0 0 24 24">
                             <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
@@ -441,7 +441,7 @@
                 </div>
                 <p class="text-xs text-slate-400 text-center mt-3">QR Code akan terdeteksi secara otomatis. Pastikan cahaya cukup.</p>
                 <div class="mt-4 border-t border-slate-100 pt-4">
-                    <p class="text-xs text-center text-slate-500 mb-2">Kamera tidak muncul (akses via IP)?</p>
+                    <p class="text-xs text-center text-slate-700 mb-2">Kamera tidak muncul (akses via IP)?</p>
                     <label class="block w-full text-center px-4 py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 text-sm font-medium rounded-md cursor-pointer transition-colors">
                         <input type="file" id="qr-input-file" accept="image/*" class="hidden">
                         Upload / Ambil Foto QR Code

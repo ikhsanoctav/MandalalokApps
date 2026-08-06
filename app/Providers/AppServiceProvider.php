@@ -32,16 +32,23 @@ class AppServiceProvider extends ServiceProvider
             return Limit::perMinute(5)->by($request->ip());
         });
 
-        // Share jumlah pelatihan published ke semua view (untuk badge di sidebar)
+        // Share variables to all views (for badges in sidebar)
         View::composer('*', function ($view) {
             try {
                 $jumlah_pelatihan_tersedia = \App\Models\Pelatihan::where('status', 'published')
                     ->where('tanggal_selesai', '>=', now())
                     ->count();
+                
+                $pendingCount = \App\Models\UMKM::where('status_verifikasi', 'terkirim')->count();
+                $pendingAkunCount = \App\Models\Pemilik::where('status_verifikasi_ktp', 'pending')->count();
             } catch (\Exception $e) {
                 $jumlah_pelatihan_tersedia = 0;
+                $pendingCount = 0;
+                $pendingAkunCount = 0;
             }
             $view->with('jumlah_pelatihan_tersedia', $jumlah_pelatihan_tersedia);
+            $view->with('pendingCount', $pendingCount);
+            $view->with('pendingAkunCount', $pendingAkunCount);
         });
     }
 }

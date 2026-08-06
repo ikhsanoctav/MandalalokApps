@@ -8,7 +8,7 @@
         <div class="flex items-center justify-between">
             <div>
                 <h2 class="text-2xl font-bold text-slate-800">Verifikasi Lapangan</h2>
-                <p class="text-sm text-slate-500 mt-0.5">Kelurahan <span class="font-semibold text-slate-700">{{ $kelurahan ?: 'Belum Diatur' }}</span></p>
+                <p class="text-sm text-slate-700 mt-0.5">Kelurahan <span class="font-semibold text-slate-700">{{ $kelurahan ?: 'Belum Diatur' }}</span></p>
             </div>
             <a href="{{ route('operator.dashboard') }}" class="text-sm text-blue-600 hover:underline">Kembali ke Dashboard</a>
         </div>
@@ -44,7 +44,7 @@
             <div class="p-6 border-b border-slate-200 flex flex-col lg:flex-row lg:items-center justify-between gap-4">
                 <div>
                     <h3 class="text-lg font-bold text-slate-800">Daftar Kunjungan Lapangan</h3>
-                    <p class="text-sm text-slate-500">UMKM terverifikasi di wilayah Anda yang perlu dikunjungi.</p>
+                    <p class="text-sm text-slate-700">UMKM terverifikasi di wilayah Anda yang perlu dikunjungi.</p>
                 </div>
                 
                 <div class="flex flex-col sm:flex-row items-center gap-3">
@@ -55,7 +55,7 @@
                         <input type="text" x-model="searchVerif" placeholder="Cari UMKM / Pemilik..." 
                             class="w-full pl-10 pr-4 py-2 border border-slate-200 rounded-lg text-sm focus:border-blue-500 focus:ring-1 focus:ring-blue-500 outline-none transition-all">
                     </div>
-                    <div class="flex items-center gap-2 w-full sm:w-auto overflow-x-auto pb-1 sm:pb-0">
+                    <div class="flex flex-wrap items-center gap-2 w-full sm:w-auto pb-1 sm:pb-0">
                         <a href="{{ route('operator.verifikasi.index', ['filter' => 'semua']) }}" class="whitespace-nowrap px-3 py-1.5 rounded-lg text-sm font-medium transition-colors {{ $filter === 'semua' ? 'bg-slate-800 text-white' : 'bg-slate-100 text-slate-600 hover:bg-slate-200' }}">Semua (Aktif)</a>
                         <a href="{{ route('operator.verifikasi.index', ['filter' => 'belum']) }}" class="whitespace-nowrap px-3 py-1.5 rounded-lg text-sm font-medium transition-colors {{ $filter === 'belum' ? 'bg-red-600 text-white' : 'bg-slate-100 text-slate-600 hover:bg-slate-200' }}">Belum</a>
                         <a href="{{ route('operator.verifikasi.index', ['filter' => 'sudah']) }}" class="whitespace-nowrap px-3 py-1.5 rounded-lg text-sm font-medium transition-colors {{ $filter === 'sudah' ? 'bg-emerald-600 text-white' : 'bg-slate-100 text-slate-600 hover:bg-slate-200' }}">Sudah (Bermasalah)</a>
@@ -67,7 +67,7 @@
 
             @if(empty($kelurahan))
                 <div class="p-8 text-center">
-                    <p class="text-slate-500">Akun Anda belum memiliki pengaturan Kelurahan penugasan. Silakan hubungi Admin.</p>
+                    <p class="text-slate-700">Akun Anda belum memiliki pengaturan Kelurahan penugasan. Silakan hubungi Admin.</p>
                 </div>
             @elseif($umkms->isEmpty())
                 <div class="p-8 text-center">
@@ -75,34 +75,34 @@
                         <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"></path></svg>
                     </div>
                     <h3 class="text-lg font-bold text-slate-800 mb-1">Belum ada data</h3>
-                    <p class="text-slate-500 text-sm">Tidak ada data UMKM yang sesuai dengan filter saat ini.</p>
+                    <p class="text-slate-700 text-sm">Tidak ada data UMKM yang sesuai dengan filter saat ini.</p>
                 </div>
             @else
                 <div class="block md:hidden divide-y divide-slate-100">
                     @foreach ($umkms as $umkm)
                         @php
                             $latest = $umkm->latestVerifikasiLapangan;
-                            $searchString = strtolower($umkm->nama_usaha . ' ' . ($umkm->pemilik->nama_lengkap ?? '') . ' ' . ($umkm->pemilik->nik ?? ''));
+                            $searchString = strtolower($umkm->nama_usaha . ' ' . ($umkm->pemilik?->nama_lengkap ?? '') . ' ' . ($umkm->pemilik?->nik ?? ''));
                         @endphp
                         <article class="p-4 space-y-3" x-show="searchVerif === '' || '{{ $searchString }}'.includes(searchVerif.toLowerCase())">
                             <div class="flex items-start justify-between gap-3">
                                 <div class="min-w-0">
                                     <h3 class="text-base font-bold text-slate-800 leading-snug">{{ $umkm->nama_usaha }}</h3>
-                                    <p class="text-xs text-slate-500 mt-1">{{ $umkm->alamat_usaha }}</p>
+                                    <p class="text-xs text-slate-700 mt-1">{{ $umkm->alamat_usaha }}</p>
                                 </div>
                             </div>
 
                             <div class="grid grid-cols-2 gap-3 text-sm">
                                 <div>
                                     <p class="text-xs font-semibold text-slate-400 uppercase">Pemilik</p>
-                                    <p class="font-medium text-slate-700">{{ $umkm->pemilik->nama_lengkap ?? '-' }}</p>
-                                    <p class="text-xs text-slate-500">RT {{ $umkm->pemilik->rt ?? '-' }} / RW {{ $umkm->pemilik->rw ?? '-' }}</p>
+                                    <p class="font-medium text-slate-700">{{ $umkm->pemilik?->nama_lengkap ?? '-' }}</p>
+                                    <p class="text-xs text-slate-700">RT {{ $umkm->pemilik?->rt ?? '-' }} / RW {{ $umkm->pemilik?->rw ?? '-' }}</p>
                                 </div>
                                 <div>
                                     <p class="text-xs font-semibold text-slate-400 uppercase">Terakhir</p>
                                     @if($latest)
                                         <p class="font-medium text-slate-700">{{ $latest->tanggal_kunjungan->format('d M Y') }}</p>
-                                        <p class="text-xs text-slate-500">Oleh: {{ $latest->petugas->name ?? '-' }}</p>
+                                        <p class="text-xs text-slate-700">Oleh: {{ $latest->petugas?->name ?? '-' }}</p>
                                     @else
                                         <p class="font-medium text-slate-400">-</p>
                                     @endif
@@ -132,7 +132,7 @@
                 <div class="hidden md:block overflow-x-auto">
                     <table class="w-full text-left border-collapse">
                         <thead>
-                            <tr class="bg-slate-50 border-b border-slate-200 text-xs uppercase tracking-wider text-slate-500 font-semibold">
+                            <tr class="bg-[#0f2e5c] text-white text-xs uppercase tracking-wider font-semibold">
                                 <th class="px-6 py-4">UMKM & Lokasi</th>
                                 <th class="px-6 py-4">Pemilik</th>
                                 <th class="px-6 py-4">Status Kunjungan</th>
@@ -144,16 +144,16 @@
                             @foreach ($umkms as $umkm)
                                 @php
                                     $latest = $umkm->latestVerifikasiLapangan;
-                                    $searchString = strtolower($umkm->nama_usaha . ' ' . ($umkm->pemilik->nama_lengkap ?? '') . ' ' . ($umkm->pemilik->nik ?? ''));
+                                    $searchString = strtolower($umkm->nama_usaha . ' ' . ($umkm->pemilik?->nama_lengkap ?? '') . ' ' . ($umkm->pemilik?->nik ?? ''));
                                 @endphp
                                 <tr class="hover:bg-slate-50 transition-colors" x-show="searchVerif === '' || '{{ $searchString }}'.includes(searchVerif.toLowerCase())">
                                     <td class="px-6 py-4">
                                         <p class="font-bold text-slate-800">{{ $umkm->nama_usaha }}</p>
-                                        <p class="text-xs text-slate-500 truncate max-w-[250px]">{{ $umkm->alamat_usaha }}</p>
+                                        <p class="text-xs text-slate-700 truncate max-w-[250px]">{{ $umkm->alamat_usaha }}</p>
                                     </td>
                                     <td class="px-6 py-4">
-                                        <p class="font-medium text-slate-700">{{ $umkm->pemilik->nama_lengkap ?? '-' }}</p>
-                                        <p class="text-xs text-slate-500">RT {{ $umkm->pemilik->rt ?? '-' }} / RW {{ $umkm->pemilik->rw ?? '-' }}</p>
+                                        <p class="font-medium text-slate-700">{{ $umkm->pemilik?->nama_lengkap ?? '-' }}</p>
+                                        <p class="text-xs text-slate-700">RT {{ $umkm->pemilik?->rt ?? '-' }} / RW {{ $umkm->pemilik?->rw ?? '-' }}</p>
                                     </td>
                                     <td class="px-6 py-4">
                                         @if($latest)
@@ -172,7 +172,7 @@
                                     <td class="px-6 py-4">
                                         @if($latest)
                                             <p class="text-sm font-medium text-slate-700">{{ $latest->tanggal_kunjungan->format('d M Y') }}</p>
-                                            <p class="text-xs text-slate-500">Oleh: {{ $latest->petugas->name ?? '-' }}</p>
+                                            <p class="text-xs text-slate-700">Oleh: {{ $latest->petugas?->name ?? '-' }}</p>
                                         @else
                                             <span class="text-slate-400 text-sm">-</span>
                                         @endif
@@ -185,7 +185,7 @@
                                 </tr>
                             @endforeach
                             <tr x-cloak x-show="searchVerif !== '' && !Array.from($el.closest('tbody').querySelectorAll('tr:not([x-cloak])')).some(tr => tr.style.display !== 'none')">
-                                <td colspan="5" class="py-8 px-6 text-center text-slate-500">
+                                <td colspan="5" class="py-8 px-6 text-center text-slate-700">
                                     Tidak ada UMKM yang cocok dengan pencarian "<span x-text="searchVerif" class="font-bold"></span>".
                                 </td>
                             </tr>

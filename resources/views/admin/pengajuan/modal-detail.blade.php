@@ -171,7 +171,7 @@
                 </div>
                 <div>
                     <label class="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Sektor Usaha</label>
-                    <p class="text-sm text-slate-700 font-semibold mt-0.5">{{ $umkm->sektor->nama_sektor ?? '-' }}</p>
+                    <p class="text-sm text-slate-700 font-semibold mt-0.5">{{ $umkm->sektor?->nama_sektor ?? '-' }}</p>
                 </div>
                 <div>
                     <label class="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Bentuk Jualan</label>
@@ -179,7 +179,7 @@
                 </div>
                                 <div>
                                     <label class="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Perkiraan Omset</label>
-                                    <p class="text-sm text-slate-700 font-semibold mt-0.5">{{ $umkm->perkiraan_omset ?? '-' }}</p>
+                                    <p class="text-sm text-slate-700 font-semibold mt-0.5">{{ $umkm->perkiraan_omset ? 'Rp ' . number_format($umkm->perkiraan_omset, 0, ',', '.') : '-' }}</p>
                                 </div>
                 <div>
                     <label class="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Skala Usaha</label>

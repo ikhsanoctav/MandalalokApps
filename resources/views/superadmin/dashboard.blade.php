@@ -29,7 +29,7 @@
                 </div>
 
                 <div class="flex-shrink-0 text-right backdrop-blur-xl bg-white/90 rounded-xl p-4 border border-white shadow-sm">
-                    <p class="text-xs text-slate-500 uppercase tracking-widest font-bold mb-1">Hari Ini</p>
+                    <p class="text-xs text-slate-700 uppercase tracking-widest font-bold mb-1">Hari Ini</p>
                     <p class="text-xl font-black text-slate-800">{{ now()->translatedFormat('l, d F Y') }}</p>
                     <p class="text-sm text-slate-600 mt-1 flex items-center justify-end gap-1 font-semibold"><i class="mdi mdi-clock-outline text-blue-600"></i> <span id="realtimeClock">{{ now()->format('H:i') }}</span></p>
                 </div>
@@ -47,7 +47,7 @@
             }, 60000);
         </script>
 
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
             
             <div
                 class="bg-gradient-to-br from-blue-600 to-blue-800 rounded-3xl p-6 text-white shadow-[0_8px_30px_rgb(0,0,0,0.12)] hover:shadow-[0_8px_30px_rgba(37,99,235,0.4)] transition-all duration-300 hover:-translate-y-1.5 cursor-pointer relative overflow-hidden group">
@@ -146,6 +146,34 @@
                     </div>
                 </div>
             </div>
+            <a href="{{ route('superadmin.verifikasi_akun.index') }}"
+                class="bg-gradient-to-br from-amber-500 to-orange-500 rounded-3xl p-6 text-white shadow-[0_8px_30px_rgb(0,0,0,0.12)] hover:shadow-[0_8px_30px_rgba(245,158,11,0.4)] transition-all duration-300 hover:-translate-y-1.5 block relative overflow-hidden group">
+                <div
+                    class="absolute top-0 right-0 -mt-4 -mr-4 w-24 h-24 bg-white rounded-full mix-blend-overlay opacity-10 blur-xl group-hover:scale-150 transition-transform duration-700">
+                </div>
+                <div class="flex justify-between items-start relative z-10">
+                    <div>
+                        <p class="text-[11px] font-bold opacity-80 uppercase tracking-widest mb-1">AKUN PENDING</p>
+                        <p class="text-4xl font-black tracking-tight">{{ number_format($pendingAkunCount) }}</p>
+                        <div class="mt-3 flex items-center gap-1.5">
+                            <span
+                                class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-white/20 text-white border border-white/30 text-xs font-semibold backdrop-blur-sm shadow-sm">
+                                <i class="mdi mdi-account-clock"></i>
+                                Verifikasi KTP
+                            </span>
+                        </div>
+                    </div>
+                    <div
+                        class="w-14 h-14 bg-white/10 backdrop-blur-md rounded-2xl flex items-center justify-center border border-white/20 group-hover:bg-white/20 transition-colors shadow-inner">
+                        <i class="mdi mdi-card-account-details-outline text-2xl"></i>
+                    </div>
+                </div>
+                <div class="mt-4 pt-3 border-t border-white/20">
+                    <div class="flex justify-between text-xs">
+                        <span>Lihat detail antrean <i class="mdi mdi-arrow-right"></i></span>
+                    </div>
+                </div>
+            </a>
         </div>
 
         <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
@@ -159,7 +187,7 @@
                                 <i class="mdi mdi-chart-line text-blue-500 text-xl"></i>
                                 Tren Pendaftaran UMKM
                             </h3>
-                            <p class="text-xs md:text-sm text-slate-500 mt-1">Data statistik pendaftaran dan verifikasi UMKM
+                            <p class="text-xs md:text-sm text-slate-700 mt-1">Data statistik pendaftaran dan verifikasi UMKM
                                 per periode</p>
                         </div>
                         <div class="flex gap-4">
@@ -208,7 +236,6 @@
                         </div>
                     </div>
                 </div>
-
                 <div class="p-4 md:p-6">
                     <div class="relative w-full" style="min-height: 320px; height: auto;">
                         <canvas id="trendChart" style="max-height: 320px; width: 100%; height: auto;"></canvas>
@@ -217,14 +244,20 @@
             </div>
 
             <div class="space-y-6">
-                <!-- Sektor Chart Card -->
+                <!-- Distribusi Chart Card -->
                 <div class="bg-white rounded-2xl p-6 border border-slate-200 shadow-sm hover:shadow-md transition-all">
-                    <div class="flex justify-between items-center mb-4">
+                    <div class="flex justify-between items-start mb-4">
                         <div>
-                            <h3 class="text-base font-bold text-slate-800">Distribusi Sektor</h3>
-                            <p class="text-xs text-slate-500 mt-0.5">Per Sektor Usaha</p>
+                            <h3 class="text-base font-bold text-slate-800">Distribusi UMKM</h3>
+                            <p class="text-xs text-slate-500 mt-0.5">Proporsi Data UMKM</p>
                         </div>
-                        <i class="mdi mdi-chart-donut text-2xl text-slate-400"></i>
+                        <div class="flex items-center gap-2">
+                            <select id="chartTypeSelector" onchange="switchChartType()" class="text-xs border-slate-200 rounded-lg text-slate-600 focus:ring-blue-500 focus:border-blue-500 bg-slate-50">
+                                <option value="sektor">Berdasarkan Sektor</option>
+                                <option value="kategori">Berdasarkan Kategori</option>
+                            </select>
+                            <i class="mdi mdi-chart-donut text-2xl text-slate-400 hidden sm:block"></i>
+                        </div>
                     </div>
                     <div class="flex flex-col sm:flex-row items-center justify-between gap-4 sm:h-[160px]">
                         <div class="w-full sm:w-1/2 h-[160px] sm:h-full flex items-center justify-center">
@@ -286,7 +319,7 @@
                 <div class="px-6 py-4 border-b border-slate-200 flex justify-between items-center flex-wrap gap-4">
                     <div>
                         <h3 class="text-lg font-bold text-slate-800">UMKM Terbaru</h3>
-                        <p class="text-sm text-slate-500 mt-1">Data UMKM yang baru terdaftar</p>
+                        <p class="text-sm text-slate-700 mt-1">Data UMKM yang baru terdaftar</p>
                     </div>
                     <div class="flex gap-2">
                         <a href="{{ route('superadmin.umkm') }}"
@@ -295,7 +328,7 @@
                             <i class="mdi mdi-arrow-right text-sm"></i>
                         </a>
                         <button onclick="refreshTable()"
-                            class="p-1.5 text-slate-500 hover:text-blue-600 transition-all rounded-2xl hover:bg-slate-100">
+                            class="p-1.5 text-slate-700 hover:text-blue-600 transition-all rounded-2xl hover:bg-slate-100">
                             <i class="mdi mdi-refresh text-lg"></i>
                         </button>
                     </div>
@@ -304,11 +337,11 @@
                     <table class="w-full min-w-[600px]">
                         <thead class="bg-slate-50 border-b border-slate-200">
                             <tr>
-                                <th class="px-6 py-3 text-left text-xs font-semibold text-slate-500 uppercase">Nama Usaha
+                                <th class="px-6 py-3 text-left text-xs font-semibold text-slate-700 uppercase">Nama Usaha
                                 </th>
-                                <th class="px-6 py-3 text-left text-xs font-semibold text-slate-500 uppercase">Pemilik</th>
-                                <th class="px-6 py-3 text-left text-xs font-semibold text-slate-500 uppercase">Status</th>
-                                <th class="px-6 py-3 text-center text-xs font-semibold text-slate-500 uppercase">Aksi</th>
+                                <th class="px-6 py-3 text-left text-xs font-semibold text-slate-700 uppercase">Pemilik</th>
+                                <th class="px-6 py-3 text-left text-xs font-semibold text-slate-700 uppercase">Status</th>
+                                <th class="px-6 py-3 text-center text-xs font-semibold text-slate-700 uppercase">Aksi</th>
                             </tr>
                         </thead>
                         <tbody id="recentUmkmTable" class="divide-y divide-slate-100">
@@ -319,8 +352,8 @@
                                         <p class="text-xs text-slate-400 mt-0.5">{{ $umkm->no_pendaftaran ?? '-' }}</p>
                                     </td>
                                     <td class="px-6 py-4">
-                                        <p class="text-sm text-slate-600">{{ $umkm->pemilik->nama_lengkap ?? '-' }}</p>
-                                        <p class="text-xs text-slate-400">{{ $umkm->pemilik->kelurahan ?? '-' }}</p>
+                                        <p class="text-sm text-slate-600">{{ $umkm->pemilik?->nama_lengkap ?? '-' }}</p>
+                                        <p class="text-xs text-slate-400">{{ $umkm->pemilik?->kelurahan ?? '-' }}</p>
                                     </td>
                                     <td class="px-6 py-4">
                                         @if ($umkm->status_verifikasi == 'terverifikasi')
@@ -374,12 +407,12 @@
                 <div class="px-6 py-4 border-b border-slate-200 flex justify-between items-center">
                     <div>
                         <h3 class="text-lg font-bold text-slate-800">Aktivitas Terbaru</h3>
-                        <p class="text-sm text-slate-500 mt-1">Log aktivitas sistem</p>
+                        <p class="text-sm text-slate-700 mt-1">Log aktivitas sistem</p>
                     </div>
                     <div class="flex gap-2">
                         <i class="mdi mdi-bell-ring text-2xl text-slate-400"></i>
                         <button onclick="refreshActivity()"
-                            class="p-1.5 text-slate-500 hover:text-blue-600 transition-all rounded-2xl hover:bg-slate-100">
+                            class="p-1.5 text-slate-700 hover:text-blue-600 transition-all rounded-2xl hover:bg-slate-100">
                             <i class="mdi mdi-refresh text-lg"></i>
                         </button>
                     </div>
@@ -428,7 +461,7 @@
                     <span id="lastUpdate" class="text-xs text-slate-400">Update terakhir:
                         {{ now()->format('H:i:s') }}</span>
                     <button onclick="refreshSystemStatus()"
-                        class="p-1.5 text-slate-500 hover:text-blue-600 transition-all rounded-2xl hover:bg-slate-100">
+                        class="p-1.5 text-slate-700 hover:text-blue-600 transition-all rounded-2xl hover:bg-slate-100">
                         <i class="mdi mdi-refresh text-lg"></i>
                     </button>
                 </div>
@@ -436,7 +469,7 @@
 
             <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4">
                 <div class="text-center p-4 bg-slate-50 rounded-xl">
-                    <div class="text-xs text-slate-500 uppercase tracking-wider mb-2">DATABASE</div>
+                    <div class="text-xs text-slate-700 uppercase tracking-wider mb-2">DATABASE</div>
                     <div class="flex items-center justify-center gap-2">
                         <span id="dbIndicator"
                             class="w-2 h-2 rounded-full {{ $systemStatus['database']['status'] ? 'bg-emerald-500 animate-pulse' : 'bg-red-500' }}"></span>
@@ -452,7 +485,7 @@
                 </div>
 
                 <div class="text-center p-4 bg-slate-50 rounded-xl">
-                    <div class="text-xs text-slate-500 uppercase tracking-wider mb-2">BEBAN SERVER</div>
+                    <div class="text-xs text-slate-700 uppercase tracking-wider mb-2">BEBAN SERVER</div>
                     <div id="serverLoad"
                         class="text-lg font-bold {{ $systemStatus['server']['load'] < 1 ? 'text-emerald-600' : ($systemStatus['server']['load'] < 2 ? 'text-amber-600' : 'text-red-600') }}">
                         {{ $systemStatus['server']['load'] }}
@@ -462,7 +495,7 @@
                 </div>
 
                 <div class="text-center p-4 bg-slate-50 rounded-xl">
-                    <div class="text-xs text-slate-500 uppercase tracking-wider mb-2">CACHE</div>
+                    <div class="text-xs text-slate-700 uppercase tracking-wider mb-2">CACHE</div>
                     <div id="cacheStatus"
                         class="text-sm font-semibold {{ $systemStatus['cache']['working'] ? 'text-emerald-600' : 'text-red-600' }}">
                         {{ $systemStatus['cache']['working'] ? 'Berjalan' : 'Bermasalah' }}
@@ -472,7 +505,7 @@
                 </div>
 
                 <div class="text-center p-4 bg-slate-50 rounded-xl">
-                    <div class="text-xs text-slate-500 uppercase tracking-wider mb-2">SESI AKTIF</div>
+                    <div class="text-xs text-slate-700 uppercase tracking-wider mb-2">SESI AKTIF</div>
                     <div id="activeSessions" class="text-lg font-bold text-slate-800">
                         {{ $systemStatus['active_sessions'] }}</div>
                     <div id="uptime" class="text-xs text-slate-400 mt-1">Uptime: {{ $systemStatus['uptime'] }}</div>
@@ -480,7 +513,7 @@
             </div>
 
             <div
-                class="mt-4 pt-4 border-t border-slate-100 flex justify-between items-center flex-wrap gap-2 text-xs text-slate-500">
+                class="mt-4 pt-4 border-t border-slate-100 flex justify-between items-center flex-wrap gap-2 text-xs text-slate-700">
                 <span id="overallStatus"><i class="mdi mdi-check-circle text-emerald-500"></i> Semua sistem berjalan
                     normal</span>
             </div>
@@ -501,7 +534,7 @@
             <div id="modalContent" class="p-6">
                 <div class="text-center py-8">
                     <div class="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600 mx-auto"></div>
-                    <p class="mt-2 text-slate-500">Memuat data...</p>
+                    <p class="mt-2 text-slate-700">Memuat data...</p>
                 </div>
             </div>
             <div id="modalFooter" class="sticky bottom-0 bg-white border-t px-6 py-4 flex justify-end gap-3 z-10">
@@ -514,55 +547,60 @@
     </x-modal>
 
     <x-modal name="verifyModal" maxWidth="md">
-        <div class="relative bg-white rounded-2xl">
-            <div class="p-6 text-center">
-                <div class="w-16 h-16 mx-auto mb-4 rounded-full bg-emerald-100 flex items-center justify-center">
+        <div class="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4 rounded-t-2xl">
+            <div class="sm:flex sm:items-start">
+                <div class="mx-auto flex-shrink-0 flex items-center justify-center h-12 w-12 rounded-full bg-emerald-100 sm:mx-0 sm:h-10 sm:w-10">
                     <i class="mdi mdi-check-circle text-3xl text-emerald-600"></i>
                 </div>
-                <h3 class="text-xl font-bold text-slate-800 mb-2">Verifikasi UMKM</h3>
-                <p class="text-slate-500 mb-6">Apakah Anda yakin ingin memverifikasi UMKM ini?</p>
-                <div class="flex gap-3">
-                    <button onclick="closeVerifyModal()"
-                        class="flex-1 px-4 py-2 border border-slate-300 rounded-lg text-sm font-medium text-slate-700 hover:bg-slate-50 transition-all">
-                        Batal
-                    </button>
-                    <button onclick="confirmVerify()"
-                        class="flex-1 px-4 py-2 bg-emerald-600 text-white rounded-lg text-sm font-medium hover:bg-emerald-700 transition-all flex items-center justify-center gap-2">
-                        <i class="mdi mdi-check"></i> Ya, Verifikasi
-                    </button>
+                <div class="mt-3 text-center sm:mt-0 sm:ml-4 sm:text-left w-full">
+                    <h3 class="text-lg leading-6 font-bold text-slate-900" id="modal-title">Verifikasi UMKM</h3>
+                    <div class="mt-2">
+                        <p class="text-sm text-slate-500 font-medium">Apakah Anda yakin ingin memverifikasi UMKM ini?</p>
+                    </div>
                 </div>
             </div>
+        </div>
+        <div class="bg-slate-50 px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse border-t border-slate-100 rounded-b-2xl">
+            <button onclick="confirmVerify()"
+                class="w-full inline-flex justify-center rounded-xl border border-transparent shadow-sm px-4 py-2 bg-emerald-600 text-base font-semibold text-white hover:bg-emerald-700 focus:outline-none sm:ml-3 sm:w-auto sm:text-sm transition-colors">
+                Ya, Verifikasi
+            </button>
+            <button onclick="closeVerifyModal()"
+                class="mt-3 w-full inline-flex justify-center rounded-xl border border-slate-300 shadow-sm px-4 py-2 bg-white text-base font-semibold text-slate-700 hover:bg-slate-50 focus:outline-none sm:mt-0 sm:ml-3 sm:w-auto sm:text-sm transition-colors">
+                Batal
+            </button>
         </div>
     </x-modal>
 
     <x-modal name="rejectModal" maxWidth="md">
-        <div class="relative bg-white rounded-2xl">
-            <div class="p-6">
-                <div class="text-center mb-4">
-                    <div class="w-16 h-16 mx-auto mb-4 rounded-full bg-red-100 flex items-center justify-center">
-                        <i class="mdi mdi-close-circle text-3xl text-red-600"></i>
+        <div class="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4 rounded-t-2xl">
+            <div class="sm:flex sm:items-start">
+                <div class="mx-auto flex-shrink-0 flex items-center justify-center h-12 w-12 rounded-full bg-red-100 sm:mx-0 sm:h-10 sm:w-10">
+                    <i class="mdi mdi-close-circle text-3xl text-red-600"></i>
+                </div>
+                <div class="mt-3 text-center sm:mt-0 sm:ml-4 sm:text-left w-full">
+                    <h3 class="text-lg leading-6 font-bold text-slate-900" id="modal-title">Tolak UMKM</h3>
+                    <div class="mt-2">
+                        <p class="text-sm text-slate-500 font-medium mb-4">Silakan masukkan alasan penolakan.</p>
+                        <div class="text-left">
+                            <label class="block text-sm font-medium text-slate-700 mb-2">Alasan Penolakan <span class="text-red-500">*</span></label>
+                            <textarea id="rejectReason" rows="3"
+                                class="w-full border border-slate-300 rounded-xl px-4 py-2.5 text-sm focus:ring-2 focus:ring-red-500 focus:border-red-500 outline-none"
+                                placeholder="Masukkan alasan penolakan..."></textarea>
+                        </div>
                     </div>
-                    <h3 class="text-xl font-bold text-slate-800 mb-2">Tolak UMKM</h3>
-                    <p class="text-slate-500 mb-4">Silakan masukkan alasan penolakan.</p>
-                </div>
-                <div class="mb-4">
-                    <label class="block text-sm font-medium text-slate-700 mb-2">Alasan Penolakan <span
-                            class="text-red-500">*</span></label>
-                    <textarea id="rejectReason" rows="3"
-                        class="w-full border border-slate-300 rounded-xl px-4 py-2.5 text-sm focus:ring-2 focus:ring-red-500 focus:border-red-500 outline-none"
-                        placeholder="Masukkan alasan penolakan..."></textarea>
-                </div>
-                <div class="flex gap-3">
-                    <button onclick="closeRejectModal()"
-                        class="flex-1 px-4 py-2 border border-slate-300 rounded-lg text-sm font-medium text-slate-700 hover:bg-slate-50 transition-all">
-                        Batal
-                    </button>
-                    <button onclick="confirmReject()"
-                        class="flex-1 px-4 py-2 bg-red-600 text-white rounded-lg text-sm font-medium hover:bg-red-700 transition-all flex items-center justify-center gap-2">
-                        <i class="mdi mdi-close"></i> Ya, Tolak
-                    </button>
                 </div>
             </div>
+        </div>
+        <div class="bg-slate-50 px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse border-t border-slate-100 rounded-b-2xl">
+            <button onclick="confirmReject()"
+                class="w-full inline-flex justify-center rounded-xl border border-transparent shadow-sm px-4 py-2 bg-red-600 text-base font-semibold text-white hover:bg-red-700 focus:outline-none sm:ml-3 sm:w-auto sm:text-sm transition-colors">
+                Ya, Tolak
+            </button>
+            <button onclick="closeRejectModal()"
+                class="mt-3 w-full inline-flex justify-center rounded-xl border border-slate-300 shadow-sm px-4 py-2 bg-white text-base font-semibold text-slate-700 hover:bg-slate-50 focus:outline-none sm:mt-0 sm:ml-3 sm:w-auto sm:text-sm transition-colors">
+                Batal
+            </button>
         </div>
     </x-modal>
 
@@ -571,6 +609,49 @@
         let trendChart;
         let sektorChart;
         let initialSektorData = @json($distribusiSektor);
+        let initialWilayahData = @json($distribusiWilayah);
+        let initialKategoriData = @json($distribusiKategori);
+        let lastDistribusiSektor = initialSektorData;
+        let lastDistribusiWilayah = initialWilayahData;
+        let lastDistribusiKategori = initialKategoriData;
+        let currentPieChartType = 'sektor';
+
+        function switchChartType() {
+            const selector = document.getElementById('chartTypeSelector');
+            if (selector) {
+                currentPieChartType = selector.value;
+                renderPieChart();
+            }
+        }
+
+        function renderPieChart() {
+            if (!sektorChart) return;
+            
+            let dataToRender = [];
+            let labelKey = '';
+            
+            if (currentPieChartType === 'sektor') {
+                dataToRender = lastDistribusiSektor.filter(s => s.total > 0);
+                labelKey = 'nama_sektor';
+            } else if (currentPieChartType === 'kategori') {
+                dataToRender = lastDistribusiKategori.filter(k => k.total > 0);
+                labelKey = 'nama_kategori';
+            } else {
+                dataToRender = lastDistribusiWilayah.filter(w => w.total > 0);
+                labelKey = 'nama_kelurahan';
+            }
+            
+            const labels = dataToRender.map(item => item[labelKey]);
+            const totals = dataToRender.map(item => item.total);
+            const colors = dataToRender.map((_, i) => sectorColors[i % sectorColors.length]);
+
+            sektorChart.data.labels = labels;
+            sektorChart.data.datasets[0].data = totals;
+            sektorChart.data.datasets[0].backgroundColor = colors;
+            sektorChart.update();
+
+            updateSektorLegend(dataToRender, colors, labelKey);
+        }
         const sectorColors = [
             '#3b82f6', // blue
             '#10b981', // emerald
@@ -763,20 +844,15 @@
                 }
             });
 
-            // Sektor Chart
+            // Sektor Chart (Distribusi UMKM)
             const sektorCtx = document.getElementById('sektorChart').getContext('2d');
-            const filteredSektor = initialSektorData.filter(s => s.total > 0);
-            const sectorLabels = filteredSektor.map(s => s.nama_sektor);
-            const sectorTotals = filteredSektor.map(s => s.total);
-            const colors = filteredSektor.map((_, i) => sectorColors[i % sectorColors.length]);
-            
             sektorChart = new Chart(sektorCtx, {
                 type: 'doughnut',
                 data: {
-                    labels: sectorLabels,
+                    labels: [],
                     datasets: [{
-                        data: sectorTotals,
-                        backgroundColor: colors,
+                        data: [],
+                        backgroundColor: [],
                         borderWidth: 2,
                         borderColor: '#ffffff'
                     }]
@@ -794,7 +870,7 @@
             });
 
             // Render custom legend
-            updateSektorLegend(filteredSektor, colors);
+            renderPieChart();
         }
 
         function initChartFilter() {
@@ -850,21 +926,23 @@
                 loadChartData(filter);
             }
         }
-
         function startAutoRefresh() {
             autoRefreshInterval = setInterval(() => refreshAllData(), 10000); // 10 seconds for real-time feel
         }
 
-        function refreshAllData() {
-            fetch(`{{ route('superadmin.dashboard') }}?ajax=1&filter=${currentFilter}`, {
+        async function refreshAllData() {
+            try {
+                let url = `{{ route('superadmin.dashboard') }}?ajax=1&filter=${currentFilter}`;
+
+                const response = await fetch(url, {
                     headers: {
                         'X-Requested-With': 'XMLHttpRequest',
                         'Accept': 'application/json'
                     }
-                })
-                .then(response => response.json())
-                .then(data => {
-                    if (data.success) {
+                });
+                const data = await response.json();
+                
+                if (data.success) {
                         // Check for new pending UMKM
                         if (data.pendingCount > lastPendingCount) {
                             const selisih = data.pendingCount - lastPendingCount;
@@ -885,19 +963,16 @@
                         document.getElementById('totalAdmin').innerText = formatNumber(data.totalAdmin);
                         document.getElementById('totalOperator').innerText = formatNumber(data.totalOperator);
 
-                        if (data.distribusiWilayah) updateRegionalData(data.distribusiWilayah, data.totalUmkm);
+                        if (data.distribusiWilayah) {
+                            lastDistribusiWilayah = data.distribusiWilayah;
+                            updateRegionalData(data.distribusiWilayah, data.totalUmkm);
+                        }
+                        if (data.distribusiKategori) {
+                            lastDistribusiKategori = data.distribusiKategori;
+                        }
                         if (data.distribusiSektor && sektorChart) {
-                            const filteredSektor = data.distribusiSektor.filter(s => s.total > 0);
-                            const labels = filteredSektor.map(s => s.nama_sektor);
-                            const totals = filteredSektor.map(s => s.total);
-                            const colors = filteredSektor.map((_, i) => sectorColors[i % sectorColors.length]);
-
-                            sektorChart.data.labels = labels;
-                            sektorChart.data.datasets[0].data = totals;
-                            sektorChart.data.datasets[0].backgroundColor = colors;
-                            sektorChart.update();
-
-                            updateSektorLegend(filteredSektor, colors);
+                            lastDistribusiSektor = data.distribusiSektor;
+                            renderPieChart();
                         }
                         if (data.umkmTerbaru) updateRecentUmkmTable(data.umkmTerbaru);
                         if (data.systemStatus) updateSystemStatusUI(data.systemStatus);
@@ -917,11 +992,12 @@
                             `Update terakhir: ${now.toLocaleTimeString('id-ID')}`;
                         document.getElementById('lastChecked').innerHTML = now.toLocaleTimeString('id-ID');
                     }
-                })
-                .catch(error => console.error('Error refreshing data:', error));
+            } catch (error) {
+                console.error('Error refreshing data:', error);
+            }
         }
 
-        function updateSektorLegend(filteredData, colors) {
+        function updateSektorLegend(filteredData, colors, labelKey = 'nama_sektor') {
             const legendContainer = document.getElementById('sektorLegend');
             if (!legendContainer) return;
             
@@ -936,7 +1012,7 @@
                     <div class="flex items-center justify-between py-1 border-b border-slate-50 last:border-0">
                         <div class="flex items-center gap-2 min-w-0">
                             <span class="w-2 h-2 rounded-full shrink-0" style="background-color: ${color}"></span>
-                            <span class="text-slate-600 font-medium truncate">${s.nama_sektor}</span>
+                            <span class="text-slate-600 font-medium truncate">${s[labelKey]}</span>
                         </div>
                         <span class="text-slate-800 font-semibold ml-2 shrink-0">${s.total}</span>
                     </div>
@@ -1174,7 +1250,7 @@
 
             window.dispatchEvent(new CustomEvent('open-modal', { detail: 'detailModal' }));
             modalContent.innerHTML =
-                `<div class="text-center py-8"><div class="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600 mx-auto"></div><p class="mt-2 text-slate-500">Memuat data...</p></div>`;
+                `<div class="text-center py-8"><div class="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600 mx-auto"></div><p class="mt-2 text-slate-700">Memuat data...</p></div>`;
 
             fetch(`/superadmin/umkm/${id}/modal`, {
                     headers: {

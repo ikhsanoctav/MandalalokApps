@@ -2,8 +2,32 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Http\Request;
+
 class NotificationController extends Controller
 {
+    public function index(Request $request)
+    {
+        $filter = $request->get('filter');
+        $user = auth()->user();
+
+        $query = $user->notifications();
+        if ($filter === 'unread') {
+            $query = $user->unreadNotifications();
+        } elseif ($filter === 'read') {
+            $query = $user->readNotifications();
+        }
+
+        $notifications = $query->paginate(15);
+
+        return view('notifications.index', [
+            'notifications' => $notifications,
+            'filter' => $filter,
+            'totalCount' => $user->notifications()->count(),
+            'unreadCount' => $user->unreadNotifications()->count(),
+            'readCount' => $user->readNotifications()->count(),
+        ]);
+    }
     public function markAsRead($id)
     {
         $notification = auth()->user()->notifications()->find($id);

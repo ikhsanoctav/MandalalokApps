@@ -53,11 +53,28 @@ class KategoriController extends Controller
     {
         $kategori = KategoriUMKM::findOrFail($id);
 
-        $request->validate([
+        $rules = [
             'nama_kategori' => 'required|string|max:255|unique:kategori_umkms,nama_kategori,'.$id,
+        ];
+
+        $isMikro = str_contains(strtolower($kategori->nama_kategori), 'mikro');
+        $isKecil = str_contains(strtolower($kategori->nama_kategori), 'kecil');
+
+        if ($isMikro || $isKecil) {
+            $rules['max_omset'] = 'required|numeric|min:0';
+        }
+
+        $request->validate($rules);
+
+        $kategori->update([
+            'nama_kategori' => $request->nama_kategori,
         ]);
 
-        $kategori->update($request->all());
+        if ($isMikro) {
+            \App\Models\Setting::set('kategori_mikro_max_omset', $request->max_omset);
+        } elseif ($isKecil) {
+            \App\Models\Setting::set('kategori_kecil_max_omset', $request->max_omset);
+        }
 
         AktivitasLogger::log('Mengupdate Kategori UMKM: '.$kategori->nama_kategori, 'update', null);
 
@@ -74,6 +91,12 @@ class KategoriController extends Controller
         $nama = $kategori->nama_kategori;
 
         if ($kategori->umkms()->count() > 0) {
+            if (request()->wantsJson()) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Kategori ini sedang digunakan oleh data UMKM.'
+                ], 422);
+            }
             return redirect()->route('superadmin.kategori.index')->with('toast', [
                 'type' => 'error',
                 'title' => 'Gagal Menghapus!',
@@ -84,6 +107,13 @@ class KategoriController extends Controller
         $kategori->delete();
 
         AktivitasLogger::log('Menghapus Kategori UMKM: '.$nama, 'hapus', null);
+
+        if (request()->wantsJson()) {
+            return response()->json([
+                'success' => true,
+                'message' => 'Data Kategori UMKM berhasil dihapus.'
+            ]);
+        }
 
         return redirect()->route('superadmin.kategori.index')->with('toast', [
             'type' => 'success',

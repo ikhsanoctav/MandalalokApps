@@ -15,21 +15,43 @@ class UserController extends Controller
 {
     public function users(Request $request)
     {
-        $allUsers = User::with('roles')->latest()->get();
+        $search = $request->get('search');
 
-        // Pisahkan user pelaku umkm dan non-pelaku umkm
-        $pelakuUmkm = $allUsers->filter(function ($user) {
-            return $user->hasRole('pelaku_umkm');
-        });
+        $staffQuery = User::whereHas('roles', function ($q) {
+            $q->where('name', '!=', 'pelaku_umkm');
+        })->with('roles')->latest();
 
-        $nonPelakuUmkm = $allUsers->reject(function ($user) {
-            return $user->hasRole('pelaku_umkm');
-        });
+        $pelakuQuery = User::whereHas('roles', function ($q) {
+            $q->where('name', 'pelaku_umkm');
+        })->with('roles')->latest();
+
+        if ($search) {
+            $searchNikHash = strlen($search) === 16 && ctype_digit($search) ? hash('sha256', $search) : null;
+            $filterClosure = function ($q) use ($search, $searchNikHash) {
+                $q->where('name', 'like', "%{$search}%")
+                    ->orWhere('email', 'like', "%{$search}%")
+                    ->orWhere('jabatan', 'like', "%{$search}%");
+                if ($searchNikHash) {
+                    $q->orWhere('nik_hash', $searchNikHash);
+                }
+            };
+
+            $staffQuery->where($filterClosure);
+            $pelakuQuery->where($filterClosure);
+        }
+
+        $staffCount = User::whereHas('roles', fn($q) => $q->where('name', '!=', 'pelaku_umkm'))->count();
+        $pelakuCount = User::whereHas('roles', fn($q) => $q->where('name', 'pelaku_umkm'))->count();
+
+        $nonPelakuUmkm = $staffQuery->paginate(15, ['*'], 'staff_page');
+        $pelakuUmkm = $pelakuQuery->paginate(15, ['*'], 'pelaku_page');
 
         return view('superadmin.users.index', [
-            'users' => $allUsers, // Untuk keandalan mundur (backward-compatibility)
+            'users' => $nonPelakuUmkm,
             'pelakuUmkm' => $pelakuUmkm,
             'nonPelakuUmkm' => $nonPelakuUmkm,
+            'staffCount' => $staffCount,
+            'pelakuCount' => $pelakuCount,
         ]);
     }
 
@@ -346,7 +368,7 @@ class UserController extends Controller
     {
         $user = User::findOrFail($id);
 
-        $defaultPassword = 'password';
+        $defaultPassword = $user->nik ?? 'password';
         $user->update([
             'password' => Hash::make($defaultPassword),
             'password_reset_status' => 'approved',
@@ -355,7 +377,7 @@ class UserController extends Controller
 
         return response()->json([
             'success' => true,
-            'message' => 'Password user "'.$user->name.'" berhasil di-reset menjadi "'.$defaultPassword.'".',
+            'message' => 'Password user "'.$user->name.'" berhasil di-reset menjadi NIK ('.$defaultPassword.').',
         ]);
     }
 
@@ -375,6 +397,29 @@ class UserController extends Controller
         return response()->json([
             'success' => true,
             'message' => 'User "'.$user->name.'" berhasil dihapus.',
+        ]);
+    }
+
+    public function toggleActive($id)
+    {
+        $user = User::findOrFail($id);
+
+        if ($user->id === auth()->id()) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Anda tidak dapat menonaktifkan akun Anda sendiri!',
+            ], 400);
+        }
+
+        $user->is_active = !$user->is_active;
+        $user->save();
+
+        $statusName = $user->is_active ? 'diaktifkan' : 'dinonaktifkan';
+
+        return response()->json([
+            'success' => true,
+            'message' => 'User "'.$user->name.'" berhasil ' . $statusName . '.',
+            'is_active' => $user->is_active,
         ]);
     }
 

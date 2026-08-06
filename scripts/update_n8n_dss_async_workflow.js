@@ -1,4 +1,4 @@
-const fs = require('fs');
+import fs from 'node:fs';
 
 const input = process.argv[2] || '/tmp/workflow-current.json';
 const output = process.argv[3] || '/tmp/workflow-dss-async.json';

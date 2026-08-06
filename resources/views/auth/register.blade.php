@@ -302,7 +302,7 @@
                             <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none text-slate-400 group-focus-within:text-official-navy transition-colors">
                                 <i class="fas fa-phone text-lg"></i>
                             </div>
-                            <input id="no_hp" type="text" name="no_hp" value="{{ old('no_hp') }}" required autocomplete="tel" placeholder="08xxxxxxxxxx" class="w-full bg-white/90 border border-slate-200 focus:border-official-gold focus:ring-1 focus:ring-official-gold focus:outline-none rounded-lg py-3.5 pl-12 pr-4 text-sm transition-all placeholder:text-slate-300 shadow-sm">
+                            <input id="no_hp" type="text" name="no_hp" value="{{ old('no_hp') }}" required maxlength="15" autocomplete="tel" placeholder="08xxxxxxxxxx" class="w-full bg-white/90 border border-slate-200 focus:border-official-gold focus:ring-1 focus:ring-official-gold focus:outline-none rounded-lg py-3.5 pl-12 pr-4 text-sm transition-all placeholder:text-slate-300 shadow-sm">
                         </div>
                         @error('no_hp')
                             <p class="text-red-500 text-xs mt-1"><i class="fas fa-exclamation-circle mr-1"></i> {{ $message }}</p>

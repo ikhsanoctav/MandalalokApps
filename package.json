@@ -1,25 +1,47 @@
 {
-    "$schema": "https://www.schemastore.org/package.json",
-    "private": true,
-    "type": "module",
-    "scripts": {
-        "build": "vite build",
-        "dev": "vite"
-    },
-    "devDependencies": {
-        "@tailwindcss/forms": "^0.5.2",
-        "@tailwindcss/vite": "^4.0.0",
-        "alpinejs": "^3.4.2",
-        "autoprefixer": "^10.4.2",
-        "concurrently": "^9.0.1",
-        "laravel-echo": "^2.3.7",
-        "laravel-vite-plugin": "^3.1",
-        "postcss": "^8.4.31",
-        "pusher-js": "^8.5.0",
-        "tailwindcss": "^3.1.0",
-        "vite": "^8.0.0"
-    },
-    "dependencies": {
-        "axios": "^1.16.1"
-    }
+  "$schema": "https://www.schemastore.org/package.json",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "build": "vite build",
+    "dev": "vite"
+  },
+  "devDependencies": {
+    "@tailwindcss/forms": "^0.5.2",
+    "@tailwindcss/typography": "^0.5.20",
+    "@tailwindcss/vite": "^4.0.0",
+    "alpinejs": "^3.4.2",
+    "autoprefixer": "^10.4.2",
+    "concurrently": "^9.0.1",
+    "laravel-echo": "^2.3.7",
+    "laravel-vite-plugin": "^3.1",
+    "postcss": "^8.4.31",
+    "pusher-js": "^8.5.0",
+    "tailwindcss": "^3.1.0",
+    "vite": "^8.0.0"
+  },
+  "dependencies": {
+    "axios": "^1.16.1",
+    "chromedriver": "^151.0.0",
+    "selenium-webdriver": "^4.46.0"
+  },
+  "name": "mandalalokaapps",
+  "description": "<p align=\"center\"><a href=\"https://laravel.com\" target=\"_blank\"><img src=\"https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg\" width=\"400\" alt=\"Laravel Logo\"></a></p>",
+  "version": "1.0.0",
+  "main": "postcss.config.js",
+  "directories": {
+    "doc": "docs",
+    "test": "tests"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ikhsanoctav/MandalalokApps.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/ikhsanoctav/MandalalokApps/issues"
+  },
+  "homepage": "https://github.com/ikhsanoctav/MandalalokApps#readme"
 }

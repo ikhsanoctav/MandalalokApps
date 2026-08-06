@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\Superadmin;
+namespace App\Http\Controllers\SuperAdmin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Kelurahan;
@@ -45,7 +45,7 @@ class ExecutiveAssistantController extends Controller
         }
 
         if (!empty($intent['kelurahan'])) {
-            $umkmQuery->whereHas('pemilik.kelurahan', function($q) use ($intent) {
+            $umkmQuery->whereHas('pemilik.kelurahanRel', function($q) use ($intent) {
                 $q->where('nama_kelurahan', 'LIKE', '%' . $intent['kelurahan'] . '%');
             });
             $kelurahanFound = $intent['kelurahan'];

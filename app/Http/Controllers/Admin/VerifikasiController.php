@@ -11,6 +11,8 @@ use App\Notifications\SystemNotification;
 use App\Services\AktivitasLogger;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Mail;
+use App\Mail\UmkmVerificationMail;
 
 class VerifikasiController extends Controller
 {
@@ -48,7 +50,18 @@ class VerifikasiController extends Controller
             });
         }
 
-        $umkms = $query->orderBy('created_at', 'desc')->paginate($perPage);
+        $sort = $request->get('sort', 'terbaru');
+        if ($sort === 'terlama') {
+            $query->orderBy('created_at', 'asc');
+        } elseif ($sort === 'a-z') {
+            $query->orderBy('nama_usaha', 'asc');
+        } elseif ($sort === 'z-a') {
+            $query->orderBy('nama_usaha', 'desc');
+        } else {
+            $query->orderBy('created_at', 'desc');
+        }
+
+        $umkms = $query->paginate($perPage);
 
         $kelurahans = Kelurahan::pluck('nama_kelurahan')->toArray();
         $kategoris = KategoriUMKM::all();
@@ -122,6 +135,41 @@ class VerifikasiController extends Controller
                 ]);
             }
 
+            $incompleteFields = [];
+            
+            // Cek Data UMKM
+            if (empty($umkm->nama_usaha)) $incompleteFields[] = 'Nama Usaha';
+            if (empty($umkm->id_kategori)) $incompleteFields[] = 'Kategori Usaha';
+            if (empty($umkm->id_sektor)) $incompleteFields[] = 'Sektor Usaha';
+            if (empty($umkm->bentuk_jualan)) $incompleteFields[] = 'Bentuk Jualan';
+            if (empty($umkm->alamat_usaha)) $incompleteFields[] = 'Alamat Usaha';
+            if (empty($umkm->foto_utama)) $incompleteFields[] = 'Foto Utama';
+            if (empty($umkm->tahun_berdiri)) $incompleteFields[] = 'Tahun Berdiri';
+            
+            // Cek Data Pemilik
+            $pemilik = $umkm->pemilik;
+            if (!$pemilik) {
+                if (empty($umkm->dokumen_ktp) && !$umkm->id_petugas) $incompleteFields[] = 'Foto KTP / Dokumen Pemilik';
+            } else {
+                if (empty($pemilik->nik) && empty($pemilik->nik_hash)) $incompleteFields[] = 'NIK Pemilik';
+                if (empty($pemilik->nama_lengkap)) $incompleteFields[] = 'Nama Pemilik';
+                
+                // Jika didaftarkan oleh operator/admin (id_petugas tidak null), beberapa field mungkin kosong karena form pendaftaran mereka tidak mewajibkannya.
+                if (!$umkm->id_petugas) {
+                    if (empty($pemilik->no_hp)) $incompleteFields[] = 'No HP Pemilik';
+                    if (empty($pemilik->alamat)) $incompleteFields[] = 'Alamat Pemilik';
+                    if (empty($pemilik->foto_ktp)) $incompleteFields[] = 'Foto KTP Pemilik';
+                }
+            }
+
+            if (count($incompleteFields) > 0) {
+                return redirect()->route('admin.verifikasi.index')->with('toast', [
+                    'type' => 'error',
+                    'title' => 'Verifikasi Ditolak!',
+                    'message' => 'Data belum lengkap! Kolom yang masih kosong: ' . implode(', ', $incompleteFields) . '. Mohon lengkapi data terlebih dahulu.',
+                ]);
+            }
+
             $umkm->update([
                 'status_verifikasi' => 'terverifikasi',
                 'tanggal_verifikasi' => now(),
@@ -154,7 +202,7 @@ class VerifikasiController extends Controller
                     ));
                 }
             } else {
-                $kelurahan_id = $umkm->pemilik->id_kelurahan ?? null;
+                $kelurahan_id = $umkm->pemilik?->id_kelurahan ?? null;
                 $operators = User::role('operator_lapangan')->when($kelurahan_id, function($q) use ($kelurahan_id) {
                     $q->where('id_kelurahan', $kelurahan_id);
                 })->get();
@@ -179,6 +227,11 @@ class VerifikasiController extends Controller
                         'success',
                         route('pelaku.dashboard')
                     ));
+                    
+                    // Send Email Notification
+                    if ($pelaku->email) {
+                        Mail::to($pelaku->email)->send(new UmkmVerificationMail($umkm, 'terverifikasi'));
+                    }
                 }
             }
 
@@ -278,6 +331,19 @@ class VerifikasiController extends Controller
                         route('operator.umkm.show', $umkm->id_umkm)
                     ));
                 }
+            } else {
+                $kelurahan_id = $umkm->pemilik?->id_kelurahan ?? null;
+                $operators = User::role('operator_lapangan')->when($kelurahan_id, function($q) use ($kelurahan_id) {
+                    $q->where('id_kelurahan', $kelurahan_id);
+                })->get();
+                foreach ($operators as $operator) {
+                    $operator->notify(new SystemNotification(
+                        '❌ UMKM Ditolak',
+                        'UMKM "'.$umkm->nama_usaha.'" di wilayah Anda ditolak oleh Admin Kecamatan. Alasan: '.$reason,
+                        'danger',
+                        route('operator.umkm.show', $umkm->id_umkm)
+                    ));
+                }
             }
 
             // Notifikasi ke Pelaku UMKM
@@ -291,6 +357,11 @@ class VerifikasiController extends Controller
                         'danger',
                         route('pelaku.dashboard')
                     ));
+                    
+                    // Send Email Notification
+                    if ($pelaku->email) {
+                        Mail::to($pelaku->email)->send(new UmkmVerificationMail($umkm, 'ditolak', $reason));
+                    }
                 }
             }
 

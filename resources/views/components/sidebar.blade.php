@@ -120,7 +120,6 @@
                 </div>
                 <div x-cloak x-show="!sidebarOpen" class="tooltip-text">Data UMKM</div>
             </div>
-                {{-- 
             <a href="{{ route('superadmin.verifikasi_akun.index') }}"
                 class="menu-item flex items-center gap-3 px-3 py-2.5 rounded-full transition-all group relative hover:bg-white/5 {{ request()->routeIs('superadmin.verifikasi_akun.*') ? 'menu-item-active' : '' }}">
                 @if ($pendingAkunCount > 0)
@@ -133,34 +132,6 @@
                 <span x-cloak x-show="sidebarOpen" class="text-sm font-medium whitespace-nowrap">Verifikasi Akun</span>
                 <div x-cloak x-show="!sidebarOpen" class="tooltip-text">Verifikasi Akun</div>
             </a>
-            --}}
-
-            <div x-data="{ open: {{ request()->routeIs('superadmin.dss.saw.*') ? 'true' : 'false' }} }" class="relative">
-                <button @click="if(!sidebarOpen) { sidebarOpen = true; open = true; } else { open = !open; }"
-                    class="menu-item w-full flex items-center justify-between px-3 py-2.5 rounded-full transition-all hover:bg-white/5 {{ request()->routeIs('superadmin.dss.saw.*') ? 'menu-item-active' : '' }}">
-                    <div class="flex items-center gap-3">
-                        <svg class="w-5 h-5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path>
-                        </svg>
-                        <span x-cloak x-show="sidebarOpen" class="text-sm font-medium whitespace-nowrap">DSS Mandalaloka</span>
-                    </div>
-                    <svg x-cloak x-show="sidebarOpen" class="w-4 h-4 transition-transform"
-                        :class="{ 'rotate-180': open }" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
-                    </svg>
-                </button>
-                <div x-cloak x-show="sidebarOpen && open" class="pl-10 mt-1 space-y-1">
-                    <a href="{{ route('superadmin.dss.saw.index') }}"
-                        class="flex items-center gap-2 px-3 py-2 rounded-lg text-sm hover:bg-white/5 {{ request()->routeIs('superadmin.dss.saw.index') ? 'text-blue-400 font-bold bg-white/5/30' : '' }}">
-                        Papan Peringkat
-                    </a>
-                    <a href="{{ route('superadmin.dss.saw.kriteria') }}"
-                        class="flex items-center gap-2 px-3 py-2 rounded-lg text-sm hover:bg-white/5 {{ request()->routeIs('superadmin.dss.saw.kriteria') ? 'text-blue-400 font-bold bg-white/5/30' : '' }}">
-                        Pengaturan Bobot
-                    </a>
-                </div>
-                <div x-cloak x-show="!sidebarOpen" class="tooltip-text">DSS Mandalaloka</div>
-            </div>
 
 
             <div x-data="{ open: {{ request()->routeIs('superadmin.pengajuan*') ? 'true' : 'false' }} }" class="relative">
@@ -191,8 +162,8 @@
                 <div x-cloak x-show="!sidebarOpen" class="tooltip-text">Data Pengajuan</div>
             </div>
 
-            <a href="{{ route('admin.pelatihan.index') }}"
-                class="menu-item flex items-center gap-3 px-3 py-2.5 rounded-full transition-all group relative hover:bg-white/5 {{ request()->routeIs('admin.pelatihan.*') ? 'menu-item-active' : '' }}">
+            <a href="{{ route('superadmin.pelatihan.index') }}"
+                class="menu-item flex items-center gap-3 px-3 py-2.5 rounded-full transition-all group relative hover:bg-white/5 {{ request()->routeIs('superadmin.pelatihan.*') ? 'menu-item-active' : '' }}">
                 <svg class="w-5 h-5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                         d="M19 20H5a2 2 0 01-2-2V6a2 2 0 012-2h10a2 2 0 012 2v1m2 13a2 2 0 01-2-2V7m2 13a2 2 0 002-2V9a2 2 0 00-2-2h-2m-4-3H9M7 16h6M7 8h6v4H7V8z"></path>
@@ -250,6 +221,7 @@
                 <div x-cloak x-show="!sidebarOpen" class="tooltip-text">Laporan</div>
             </a>
 
+            @if(false)
             <a href="{{ route('dss.index') }}"
                 class="menu-item flex items-center gap-3 px-3 py-2.5 rounded-full transition-all group relative hover:bg-white/5 {{ request()->routeIs('dss.index') ? 'menu-item-active' : '' }}">
                 <svg class="w-5 h-5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -260,6 +232,7 @@
                 <span x-cloak x-show="sidebarOpen" class="text-sm font-medium whitespace-nowrap">Analisis AI (DSS)</span>
                 <div x-cloak x-show="!sidebarOpen" class="tooltip-text">Analisis AI (DSS)</div>
             </a>
+            @endif
 
             <div x-data="{ open: {{ request()->routeIs('superadmin.kategori*') || request()->routeIs('superadmin.sektor*') || request()->routeIs('superadmin.kelurahan*') || request()->routeIs('superadmin.rw*') || request()->routeIs('superadmin.berita*') || request()->routeIs('superadmin.flyer*') || request()->routeIs('superadmin.logs') ? 'true' : 'false' }} }" class="relative">
                 <button @click="if(!sidebarOpen) { sidebarOpen = true; open = true; } else { open = !open; }"
@@ -366,7 +339,6 @@
                 <div x-cloak x-show="!sidebarOpen" class="tooltip-text">Data UMKM</div>
             </div>
 
-            {{-- 
             <a href="{{ route('admin.verifikasi.index') }}"
                 class="menu-item flex items-center gap-3 px-3 py-2.5 rounded-full transition-all group relative hover:bg-white/5 {{ request()->routeIs('admin.verifikasi.*') ? 'menu-item-active' : '' }}">
                 @if ($pendingCount > 0)
@@ -392,7 +364,6 @@
                 <span x-cloak x-show="sidebarOpen" class="text-sm font-medium whitespace-nowrap">Verifikasi Akun</span>
                 <div x-cloak x-show="!sidebarOpen" class="tooltip-text">Verifikasi Akun</div>
             </a>
-            --}}
 
             <div x-data="{ open: {{ request()->routeIs('admin.pengajuan*') ? 'true' : 'false' }} }" class="relative">
                 <button @click="if(!sidebarOpen) { sidebarOpen = true; open = true; } else { open = !open; }"
@@ -447,6 +418,7 @@
                 <div x-cloak x-show="!sidebarOpen" class="tooltip-text">Rekap & Laporan</div>
             </a>
 
+            @if(false)
             <a href="{{ route('dss.index') }}"
                 class="menu-item flex items-center gap-3 px-3 py-2.5 rounded-full transition-all group relative hover:bg-white/5 {{ request()->routeIs('dss.index') ? 'menu-item-active' : '' }}">
                 <svg class="w-5 h-5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -457,6 +429,7 @@
                 <span x-cloak x-show="sidebarOpen" class="text-sm font-medium whitespace-nowrap">Analisis AI (DSS)</span>
                 <div x-cloak x-show="!sidebarOpen" class="tooltip-text">Analisis AI (DSS)</div>
             </a>
+            @endif
         @elseif($userRole === 'operator_lapangan')
 
             <p x-cloak x-show="sidebarOpen"

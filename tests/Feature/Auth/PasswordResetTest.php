@@ -28,7 +28,7 @@ class PasswordResetTest extends TestCase
         ]);
 
         $response->assertSessionHasNoErrors()
-            ->assertSessionHas('status', 'Permintaan reset password berhasil dikirim ke Super Admin. Silakan cek status Anda di halaman ini secara berkala.');
+            ->assertSessionHas('status', 'Permintaan reset password berhasil dikirim ke Admin. Silakan cek status Anda di halaman ini secara berkala.');
 
         $this->assertDatabaseHas('users', [
             'id' => $user->id,
@@ -68,6 +68,6 @@ class PasswordResetTest extends TestCase
         ]);
 
         $response->assertSessionHasNoErrors()
-            ->assertSessionHas('status', 'Permintaan Anda masih diproses oleh Super Admin. Silakan cek kembali nanti.');
+            ->assertSessionHas('status', 'Permintaan Anda masih diproses oleh Admin/Super Admin. Silakan cek kembali nanti.');
     }
 }

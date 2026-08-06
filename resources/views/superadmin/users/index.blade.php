@@ -5,16 +5,41 @@
 @section('content')
     <div class="space-y-6" x-data="{
         search: '',
-        activeTab: 'staff',
+        activeTab: sessionStorage.getItem('users_active_tab') || 'staff',
+        init() {
+            this.$watch('activeTab', (value) => {
+                sessionStorage.setItem('users_active_tab', value);
+            });
+        },
         isModalOpen: false,
         selectedUser: null,
+        confirmModal: {
+            title: '',
+            message: '',
+            confirmText: 'Ya, Lanjutkan',
+            type: 'danger',
+            action: null
+        },
+        openConfirm(title, message, confirmText, type, action) {
+            this.confirmModal.title = title;
+            this.confirmModal.message = message;
+            this.confirmModal.confirmText = confirmText;
+            this.confirmModal.type = type;
+            this.confirmModal.action = action;
+            this.$dispatch('open-modal', 'confirmModal');
+        },
         viewUser(user) {
             this.selectedUser = user;
             this.isModalOpen = true;
         },
         deleteUser(id, name) {
-            if (confirm('Apakah Anda yakin ingin menghapus user ' + name + '?')) {
-                fetch('/superadmin/users/' + id, {
+            this.openConfirm(
+                'Hapus User',
+                'Apakah Anda yakin ingin menghapus user ' + name + '?',
+                'Ya, Hapus',
+                'danger',
+                () => {
+                    fetch('/superadmin/users/' + id, {
                         method: 'DELETE',
                         headers: {
                             'X-CSRF-TOKEN': '{{ csrf_token() }}',
@@ -25,20 +50,36 @@
                     .then(response => response.json())
                     .then(data => {
                         if (data.success) {
-                            window.location.reload();
+                            window.showToast('success', 'Berhasil', 'Berhasil menghapus user ' + name);
+                            this.$dispatch('close-modal', 'confirmModal');
+                            
+                            // Smoothly remove row without reloading
+                            const row = document.getElementById('row-user-' + id);
+                            if (row) {
+                                row.style.transition = 'all 0.3s ease';
+                                row.style.opacity = '0';
+                                row.style.transform = 'translateX(-20px)';
+                                setTimeout(() => row.remove(), 300);
+                            }
                         } else {
-                            alert(data.message || 'Gagal menghapus user');
+                            window.showToast('error', 'Gagal', data.message || 'Gagal menghapus user');
                         }
                     })
                     .catch(error => {
                         console.error('Error:', error);
-                        alert('Terjadi kesalahan koneksi.');
+                        window.showToast('error', 'Gagal', 'Terjadi kesalahan koneksi.');
                     });
-            }
+                }
+            );
         },
         resetPassword(id, name) {
-            if (confirm('Apakah Anda yakin ingin mereset password user ' + name + ' menjadi default (password)?')) {
-                fetch('/superadmin/users/' + id + '/reset-password', {
+            this.openConfirm(
+                'Reset Password',
+                'Apakah Anda yakin ingin mereset password user ' + name + ' menjadi default (password)?',
+                'Ya, Reset',
+                'warning',
+                () => {
+                    fetch('/superadmin/users/' + id + '/reset-password', {
                         method: 'POST',
                         headers: {
                             'X-CSRF-TOKEN': '{{ csrf_token() }}',
@@ -49,30 +90,64 @@
                     .then(response => response.json())
                     .then(data => {
                         if (data.success) {
-                            alert(data.message);
+                            window.showToast('success', 'Berhasil', data.message);
+                            this.$dispatch('close-modal', 'confirmModal');
                         } else {
-                            alert(data.message || 'Gagal mereset password');
+                            window.showToast('error', 'Gagal', data.message || 'Gagal mereset password');
                         }
                     })
                     .catch(error => {
                         console.error('Error:', error);
-                        alert('Terjadi kesalahan koneksi.');
+                        window.showToast('error', 'Gagal', 'Terjadi kesalahan koneksi.');
                     });
-            }
-        }
+                }
+            );
+        },
+        toggleActive(id, name, actionName) {
+            this.openConfirm(
+                actionName === 'aktifkan' ? 'Aktifkan User' : 'Nonaktifkan User',
+                'Apakah Anda yakin ingin ' + actionName + ' user ' + name + '?',
+                'Ya, Lanjutkan',
+                actionName === 'aktifkan' ? 'success' : 'warning',
+                () => {
+                    fetch('/superadmin/users/' + id + '/toggle-active', {
+                        method: 'POST',
+                        headers: {
+                            'X-CSRF-TOKEN': '{{ csrf_token() }}',
+                            'Content-Type': 'application/json',
+                            'Accept': 'application/json'
+                        }
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.success) {
+                            window.showToast('success', 'Berhasil', data.message);
+                            this.$dispatch('close-modal', 'confirmModal');
+                            setTimeout(() => window.location.reload(), 1000); // Reload to reflect status
+                        } else {
+                            window.showToast('error', 'Gagal', data.message || 'Gagal mengubah status user');
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Error:', error);
+                        window.showToast('error', 'Gagal', 'Terjadi kesalahan koneksi.');
+                    });
+                }
+            );
+        },
     }">
         
         <div
             class="bg-white rounded-2xl p-4 shadow-sm border border-slate-200/60 flex flex-col sm:flex-row justify-between items-center gap-4">
             <div>
                 <h1 class="text-xl font-bold text-slate-800">Daftar Pengguna Sistem</h1>
-                <p class="text-xs text-slate-500 mt-0.5">Kelola seluruh pengguna, tipe hak akses, dan status profil mereka
+                <p class="text-xs text-slate-700 mt-0.5">Kelola seluruh pengguna, tipe hak akses, dan status profil mereka
                 </p>
             </div>
             <div class="flex items-center gap-3 w-full sm:w-auto">
                 <a href="{{ route('superadmin.users.roles') }}"
                     class="flex items-center justify-center gap-2 px-5 py-2.5 rounded-lg border border-slate-200 hover:bg-slate-50 font-semibold text-xs text-slate-700 shadow-sm transition-all w-full sm:w-auto">
-                    <svg class="w-4 h-4 text-slate-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <svg class="w-4 h-4 text-slate-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                             d="M8 11V7a4 4 0 118 0m-4 8v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2z">
                         </path>
@@ -102,29 +177,15 @@
                 <input x-model="search" type="text" placeholder="Cari nama, email, NIK, atau jabatan..."
                     class="pl-10 pr-4 py-2.5 w-full bg-slate-50 border border-slate-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all">
             </div>
-            <div class="flex items-center gap-4 text-xs font-medium text-slate-500 relative min-h-[1.5rem] overflow-hidden">
+            <div class="flex items-center gap-4 text-xs font-medium text-slate-700 min-h-[1.5rem]">
                 <!-- Staff Legend -->
-                <div x-show="activeTab === 'staff'" 
-                    x-transition:enter="transition ease-out duration-300"
-                    x-transition:enter-start="opacity-0 transform translate-x-4"
-                    x-transition:enter-end="opacity-100 transform translate-x-0"
-                    x-transition:leave="transition ease-in duration-200"
-                    x-transition:leave-start="opacity-100 transform translate-x-0"
-                    x-transition:leave-end="opacity-0 transform -translate-x-4"
-                    class="flex items-center gap-4">
+                <div x-show="activeTab === 'staff'" class="flex items-center gap-4">
                     <span class="flex items-center gap-1.5"><span class="w-2.5 h-2.5 bg-blue-500 rounded-full"></span> Super Admin</span>
                     <span class="flex items-center gap-1.5"><span class="w-2.5 h-2.5 bg-purple-500 rounded-full"></span> Admin Kecamatan</span>
                     <span class="flex items-center gap-1.5"><span class="w-2.5 h-2.5 bg-emerald-500 rounded-full"></span> Operator Lapangan</span>
                 </div>
                 <!-- Pelaku Legend -->
-                <div x-show="activeTab === 'pelaku'" 
-                    x-transition:enter="transition ease-out duration-300"
-                    x-transition:enter-start="opacity-0 transform translate-x-4"
-                    x-transition:enter-end="opacity-100 transform translate-x-0"
-                    x-transition:leave="transition ease-in duration-200"
-                    x-transition:leave-start="opacity-100 transform translate-x-0"
-                    x-transition:leave-end="opacity-0 transform -translate-x-4"
-                    class="flex items-center gap-1.5 absolute">
+                <div x-show="activeTab === 'pelaku'" class="flex items-center gap-1.5" x-cloak>
                     <span class="flex items-center gap-1.5"><span class="w-2.5 h-2.5 bg-blue-500 rounded-full"></span> Pelaku UMKM</span>
                 </div>
             </div>
@@ -135,18 +196,18 @@
             <div class="border-b border-slate-200/60">
                 <nav class="flex gap-6 -mb-px">
                     <button @click="activeTab = 'staff'" 
-                        :class="activeTab === 'staff' ? 'border-blue-600 text-blue-600' : 'border-transparent text-slate-500 hover:text-slate-700 hover:border-slate-300'"
+                        :class="activeTab === 'staff' ? 'border-blue-600 text-blue-600' : 'border-transparent text-slate-700 hover:text-slate-700 hover:border-slate-300'"
                         class="pb-4 px-1 border-b-2 font-semibold text-sm transition-all flex items-center gap-2 focus:outline-none">
                         Pengelola & Staf Sistem
                         <span :class="activeTab === 'staff' ? 'bg-blue-100 text-blue-600' : 'bg-slate-100 text-slate-600'" 
-                            class="px-2.5 py-0.5 rounded-full text-xs font-bold transition-colors">{{ $nonPelakuUmkm->count() }}</span>
+                            class="px-2.5 py-0.5 rounded-full text-xs font-bold transition-colors">{{ $staffCount ?? $nonPelakuUmkm->total() }}</span>
                     </button>
                     <button @click="activeTab = 'pelaku'" 
-                        :class="activeTab === 'pelaku' ? 'border-blue-600 text-blue-600' : 'border-transparent text-slate-500 hover:text-slate-700 hover:border-slate-300'"
+                        :class="activeTab === 'pelaku' ? 'border-blue-600 text-blue-600' : 'border-transparent text-slate-700 hover:text-slate-700 hover:border-slate-300'"
                         class="pb-4 px-1 border-b-2 font-semibold text-sm transition-all flex items-center gap-2 focus:outline-none">
                         Pelaku UMKM
                         <span :class="activeTab === 'pelaku' ? 'bg-blue-100 text-blue-600' : 'bg-slate-100 text-slate-600'" 
-                            class="px-2.5 py-0.5 rounded-full text-xs font-bold transition-colors">{{ $pelakuUmkm->count() }}</span>
+                            class="px-2.5 py-0.5 rounded-full text-xs font-bold transition-colors">{{ $pelakuCount ?? $pelakuUmkm->total() }}</span>
                     </button>
                 </nav>
             </div>
@@ -154,17 +215,11 @@
 
         <!-- Tabel Staff / Pengelola Sistem -->
         <div x-show="activeTab === 'staff'" 
-            x-transition:enter="transition ease-out duration-300"
-            x-transition:enter-start="opacity-0 transform translate-y-4"
-            x-transition:enter-end="opacity-100 transform translate-y-0"
-            x-transition:leave="transition ease-in duration-200"
-            x-transition:leave-start="opacity-100 transform translate-y-0"
-            x-transition:leave-end="opacity-0 transform translate-y-4"
             class="bg-white rounded-2xl shadow-sm border border-slate-200/60 overflow-hidden">
             <div class="overflow-x-auto">
                 <table class="w-full text-left border-collapse">
                     <thead>
-                        <tr class="bg-slate-50 border-b border-slate-200/60 text-xs font-semibold text-slate-500 uppercase tracking-wider">
+                        <tr class="bg-slate-50 border-b border-slate-200/60 text-xs font-semibold text-slate-700 uppercase tracking-wider">
                             <th class="py-4 px-6">User</th>
                             <th class="py-4 px-6">Kontak</th>
                             <th class="py-4 px-6">NIK</th>
@@ -208,7 +263,8 @@
                                     }
                                 }
                             @endphp
-                            <tr x-show="search === '' || $el.dataset.search.includes(search.toLowerCase())"
+                            <tr id="row-user-{{ $user->id }}" 
+                                x-show="search === '' || $el.dataset.search.includes(search.toLowerCase())"
                                 data-search="{{ e(strtolower($user->name . ' ' . $user->email . ' ' . ($user->jabatan ?? ''))) }}"
                                 class="hover:bg-slate-50/50 transition-colors">
                                 
@@ -256,7 +312,7 @@
                                     </div>
                                 </td>
                                 
-                                <td class="py-4 px-6 text-xs text-slate-500 max-w-[200px] truncate" title="{{ $user->alamat }}">
+                                <td class="py-4 px-6 text-xs text-slate-700 max-w-[200px] truncate" title="{{ $user->alamat }}">
                                     {{ $user->alamat ?? '-' }}
                                 </td>
                                 
@@ -278,12 +334,12 @@
                                             'kode_user' => $user->kode_user,
                                             'created_at' => $user->created_at ? $user->created_at->format('d M Y, H:i') : null,
                                         ], $pemilikData)) }})"
-                                            class="p-2 text-slate-400 hover:text-emerald-600 rounded-2xl hover:bg-emerald-50 transition-colors"
+                                            class="p-2 text-blue-600 hover:text-blue-700 rounded-2xl hover:bg-blue-50 transition-colors"
                                             title="Lihat Detail User">
                                             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" /><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" /></svg>
                                         </button>
                                         <a href="{{ route('superadmin.users.edit', $user->id) }}"
-                                            class="p-2 text-slate-400 hover:text-blue-600 rounded-2xl hover:bg-blue-50 transition-colors"
+                                            class="p-2 text-amber-500 hover:text-amber-600 rounded-2xl hover:bg-amber-50 transition-colors"
                                             title="Edit User">
                                             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -293,14 +349,26 @@
                                         </a>
                                         <button @click="resetPassword('{{ $user->id }}', $el.dataset.name)"
                                             data-name="{{ e($user->name) }}"
-                                            class="p-2 text-slate-400 hover:text-amber-600 rounded-2xl hover:bg-amber-50 transition-colors"
+                                            class="p-2 text-emerald-500 hover:text-emerald-600 rounded-2xl hover:bg-emerald-50 transition-colors"
                                             title="Reset Password">
                                             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.75 5.25a3 3 0 013 3m3 0a6 6 0 01-7.029 5.912c-.563-.097-1.159.026-1.563.43L10.5 17.25H8.25v2.25H6v2.25H2.25v-2.818c0-.597.237-1.17.659-1.591l6.499-6.499c.404-.404.527-1 .43-1.563A6 6 0 1121.75 8.25z"></path></svg>
                                         </button>
                                         @if ($user->id !== auth()->id())
+                                            <button @click="toggleActive('{{ $user->id }}', $el.dataset.name, '{{ $user->is_active ? 'nonaktifkan' : 'aktifkan' }}')"
+                                                data-name="{{ e($user->name) }}"
+                                                class="p-2 {{ $user->is_active ? 'text-slate-500 hover:text-slate-600 hover:bg-slate-100' : 'text-emerald-500 hover:text-emerald-600 hover:bg-emerald-50' }} rounded-2xl transition-colors"
+                                                title="{{ $user->is_active ? 'Nonaktifkan User' : 'Aktifkan User' }}">
+                                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                    @if ($user->is_active)
+                                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18.364 18.364A9 9 0 005.636 5.636m12.728 12.728A9 9 0 015.636 5.636m12.728 12.728L5.636 5.636"></path>
+                                                    @else
+                                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                                    @endif
+                                                </svg>
+                                            </button>
                                             <button @click="deleteUser('{{ $user->id }}', $el.dataset.name)"
                                                 data-name="{{ e($user->name) }}"
-                                                class="p-2 text-slate-400 hover:text-red-600 rounded-2xl hover:bg-red-50 transition-colors"
+                                                class="p-2 text-red-500 hover:text-red-600 rounded-2xl hover:bg-red-50 transition-colors"
                                                 title="Hapus User">
                                                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -320,21 +388,20 @@
                     </tbody>
                 </table>
             </div>
+            @if ($nonPelakuUmkm->hasPages())
+                <div class="px-6 py-4 border-t border-slate-100">
+                    {{ $nonPelakuUmkm->appends(request()->query())->links() }}
+                </div>
+            @endif
         </div>
 
         <!-- Tabel Pelaku UMKM -->
         <div x-show="activeTab === 'pelaku'" 
-            x-transition:enter="transition ease-out duration-300"
-            x-transition:enter-start="opacity-0 transform translate-y-4"
-            x-transition:enter-end="opacity-100 transform translate-y-0"
-            x-transition:leave="transition ease-in duration-200"
-            x-transition:leave-start="opacity-100 transform translate-y-0"
-            x-transition:leave-end="opacity-0 transform translate-y-4"
             class="bg-white rounded-2xl shadow-sm border border-slate-200/60 overflow-hidden">
             <div class="overflow-x-auto">
                 <table class="w-full text-left border-collapse">
                     <thead>
-                        <tr class="bg-slate-50 border-b border-slate-200/60 text-xs font-semibold text-slate-500 uppercase tracking-wider">
+                        <tr class="bg-slate-50 border-b border-slate-200/60 text-xs font-semibold text-slate-700 uppercase tracking-wider">
                             <th class="py-4 px-6">User Pelaku</th>
                             <th class="py-4 px-6">Kontak</th>
                             <th class="py-4 px-6">NIK</th>
@@ -370,7 +437,8 @@
                                     }
                                 }
                             @endphp
-                            <tr x-show="search === '' || $el.dataset.search.includes(search.toLowerCase())"
+                            <tr id="row-user-{{ $user->id }}" 
+                                x-show="search === '' || $el.dataset.search.includes(search.toLowerCase())"
                                 data-search="{{ e(strtolower($user->name . ' ' . $user->email)) }}"
                                 class="hover:bg-slate-50/50 transition-colors">
                                 
@@ -415,7 +483,7 @@
                                     </span>
                                 </td>
                                 
-                                <td class="py-4 px-6 text-xs text-slate-500 max-w-[200px] truncate" title="{{ $user->alamat }}">
+                                <td class="py-4 px-6 text-xs text-slate-700 max-w-[200px] truncate" title="{{ $user->alamat }}">
                                     {{ $user->alamat ?? '-' }}
                                 </td>
                                 
@@ -437,12 +505,12 @@
                                             'kode_user' => $user->kode_user,
                                             'created_at' => $user->created_at ? $user->created_at->format('d M Y, H:i') : null,
                                         ], $pemilikData)) }})"
-                                            class="p-2 text-slate-400 hover:text-emerald-600 rounded-2xl hover:bg-emerald-50 transition-colors"
+                                            class="p-2 text-blue-600 hover:text-blue-700 rounded-2xl hover:bg-blue-50 transition-colors"
                                             title="Lihat Detail User">
                                             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" /><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" /></svg>
                                         </button>
                                         <a href="{{ route('superadmin.users.edit', $user->id) }}"
-                                            class="p-2 text-slate-400 hover:text-blue-600 rounded-2xl hover:bg-blue-50 transition-colors"
+                                            class="p-2 text-amber-500 hover:text-amber-600 rounded-2xl hover:bg-amber-50 transition-colors"
                                             title="Edit User">
                                             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -452,14 +520,26 @@
                                         </a>
                                         <button @click="resetPassword('{{ $user->id }}', $el.dataset.name)"
                                             data-name="{{ e($user->name) }}"
-                                            class="p-2 text-slate-400 hover:text-amber-600 rounded-2xl hover:bg-amber-50 transition-colors"
+                                            class="p-2 text-emerald-500 hover:text-emerald-600 rounded-2xl hover:bg-emerald-50 transition-colors"
                                             title="Reset Password">
                                             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.75 5.25a3 3 0 013 3m3 0a6 6 0 01-7.029 5.912c-.563-.097-1.159.026-1.563.43L10.5 17.25H8.25v2.25H6v2.25H2.25v-2.818c0-.597.237-1.17.659-1.591l6.499-6.499c.404-.404.527-1 .43-1.563A6 6 0 1121.75 8.25z"></path></svg>
                                         </button>
                                         @if ($user->id !== auth()->id())
+                                            <button @click="toggleActive('{{ $user->id }}', $el.dataset.name, '{{ $user->is_active ? 'nonaktifkan' : 'aktifkan' }}')"
+                                                data-name="{{ e($user->name) }}"
+                                                class="p-2 {{ $user->is_active ? 'text-slate-500 hover:text-slate-600 hover:bg-slate-100' : 'text-emerald-500 hover:text-emerald-600 hover:bg-emerald-50' }} rounded-2xl transition-colors"
+                                                title="{{ $user->is_active ? 'Nonaktifkan User' : 'Aktifkan User' }}">
+                                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                    @if ($user->is_active)
+                                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18.364 18.364A9 9 0 005.636 5.636m12.728 12.728A9 9 0 015.636 5.636m12.728 12.728L5.636 5.636"></path>
+                                                    @else
+                                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                                    @endif
+                                                </svg>
+                                            </button>
                                             <button @click="deleteUser('{{ $user->id }}', $el.dataset.name)"
                                                 data-name="{{ e($user->name) }}"
-                                                class="p-2 text-slate-400 hover:text-red-600 rounded-2xl hover:bg-red-50 transition-colors"
+                                                class="p-2 text-red-500 hover:text-red-600 rounded-2xl hover:bg-red-50 transition-colors"
                                                 title="Hapus User">
                                                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -479,6 +559,11 @@
                     </tbody>
                 </table>
             </div>
+            @if ($pelakuUmkm->hasPages())
+                <div class="px-6 py-4 border-t border-slate-100">
+                    {{ $pelakuUmkm->appends(request()->query())->links() }}
+                </div>
+            @endif
         </div>
 
         <!-- Modal Detail User -->
@@ -528,7 +613,7 @@
                                     </div>
                                     <div class="flex-1 text-center sm:text-left mt-2 sm:mt-0">
                                         <h4 class="text-2xl font-black text-slate-800" x-text="selectedUser.name"></h4>
-                                        <p class="text-sm font-medium text-slate-500 mb-2" x-text="selectedUser.email"></p>
+                                        <p class="text-sm font-medium text-slate-700 mb-2" x-text="selectedUser.email"></p>
                                         <div class="flex flex-wrap items-center justify-center sm:justify-start gap-2">
                                             <span class="inline-flex items-center px-2.5 py-1 rounded-2xl text-[10px] font-bold bg-blue-50 text-blue-700 uppercase tracking-widest border border-blue-200/60" x-text="selectedUser.role"></span>
                                             <span class="px-2 py-1 rounded-md text-xs font-mono font-bold bg-slate-100 text-slate-600 border border-slate-200" x-text="selectedUser.kode_user || '-'"></span>
@@ -545,11 +630,11 @@
                                         </h5>
                                         <div class="grid grid-cols-1 sm:grid-cols-2 gap-y-4 gap-x-6">
                                             <div>
-                                                <p class="text-xs font-medium text-slate-500 mb-1">Nomor Induk Kependudukan</p>
+                                                <p class="text-xs font-medium text-slate-700 mb-1">Nomor Induk Kependudukan</p>
                                                 <p class="text-sm font-bold text-slate-800 font-mono" x-text="selectedUser.nik || '-'"></p>
                                             </div>
                                             <div>
-                                                <p class="text-xs font-medium text-slate-500 mb-1">Status Verifikasi KTP</p>
+                                                <p class="text-xs font-medium text-slate-700 mb-1">Status Verifikasi KTP</p>
                                                 <template x-if="selectedUser.status_verifikasi_ktp">
                                                     <span class="inline-flex px-2.5 py-1 rounded-2xl text-xs font-bold uppercase" 
                                                           :class="selectedUser.status_verifikasi_ktp == 'terverifikasi' ? 'bg-emerald-100 text-emerald-700' : (selectedUser.status_verifikasi_ktp == 'ditolak' ? 'bg-red-100 text-red-700' : 'bg-amber-100 text-amber-700')"
@@ -560,11 +645,11 @@
                                                 </template>
                                             </div>
                                             <div>
-                                                <p class="text-xs font-medium text-slate-500 mb-1">Jenis Kelamin</p>
+                                                <p class="text-xs font-medium text-slate-700 mb-1">Jenis Kelamin</p>
                                                 <p class="text-sm font-medium text-slate-800" x-text="selectedUser.jenis_kelamin || '-'"></p>
                                             </div>
                                             <div>
-                                                <p class="text-xs font-medium text-slate-500 mb-1">Tempat, Tanggal Lahir</p>
+                                                <p class="text-xs font-medium text-slate-700 mb-1">Tempat, Tanggal Lahir</p>
                                                 <p class="text-sm font-medium text-slate-800" x-text="(selectedUser.tempat_lahir || '-') + ', ' + (selectedUser.tanggal_lahir || '-')"></p>
                                             </div>
                                         </div>
@@ -577,19 +662,19 @@
                                         </h5>
                                         <div class="grid grid-cols-1 sm:grid-cols-2 gap-y-4 gap-x-6">
                                             <div>
-                                                <p class="text-xs font-medium text-slate-500 mb-1">No. HP / WhatsApp</p>
+                                                <p class="text-xs font-medium text-slate-700 mb-1">No. HP / WhatsApp</p>
                                                 <p class="text-sm font-medium text-slate-800" x-text="selectedUser.no_hp || '-'"></p>
                                             </div>
                                             <div>
-                                                <p class="text-xs font-medium text-slate-500 mb-1">Jabatan Kerja</p>
+                                                <p class="text-xs font-medium text-slate-700 mb-1">Jabatan Kerja</p>
                                                 <p class="text-sm font-medium text-slate-800" x-text="selectedUser.jabatan || '-'"></p>
                                             </div>
                                             <div class="sm:col-span-2">
-                                                <p class="text-xs font-medium text-slate-500 mb-1">Alamat Lengkap</p>
+                                                <p class="text-xs font-medium text-slate-700 mb-1">Alamat Lengkap</p>
                                                 <p class="text-sm font-medium text-slate-800 leading-relaxed" x-text="selectedUser.alamat || '-'"></p>
                                             </div>
                                             <div class="sm:col-span-2">
-                                                <p class="text-xs font-medium text-slate-500 mb-1">Wilayah / Kelurahan</p>
+                                                <p class="text-xs font-medium text-slate-700 mb-1">Wilayah / Kelurahan</p>
                                                 <div class="flex items-center gap-2 mt-1">
                                                     <span class="px-3 py-1 bg-white border border-slate-200 rounded-lg text-sm font-bold text-slate-700 shadow-sm" x-text="selectedUser.kelurahan || '-'"></span>
                                                     <template x-if="selectedUser.rw">
@@ -617,7 +702,7 @@
                                     <div class="flex items-center justify-between text-xs text-slate-400 pt-2">
                                         <span class="flex items-center gap-1.5">
                                             <i class="fa-regular fa-calendar"></i>
-                                            Terdaftar sejak: <span class="font-semibold text-slate-500" x-text="selectedUser.created_at || '-'"></span>
+                                            Terdaftar sejak: <span class="font-semibold text-slate-700" x-text="selectedUser.created_at || '-'"></span>
                                         </span>
                                     </div>
                                 </div>
@@ -643,5 +728,53 @@
                 </div>
             </div>
         </div>
+        
+        <!-- Standardized Confirmation Modal -->
+        <x-modal name="confirmModal" maxWidth="md">
+            <div class="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4 rounded-t-2xl">
+                <div class="sm:flex sm:items-start">
+                    <div class="mx-auto flex-shrink-0 flex items-center justify-center h-12 w-12 rounded-full sm:mx-0 sm:h-10 sm:w-10"
+                         :class="confirmModal.type === 'danger' ? 'bg-red-100' : (confirmModal.type === 'success' ? 'bg-emerald-100' : 'bg-amber-100')">
+                         
+                        <!-- Trash Icon for Danger -->
+                        <svg x-show="confirmModal.type === 'danger'" class="w-6 h-6 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16">
+                            </path>
+                        </svg>
+
+                        <!-- Key Icon for Warning/Reset -->
+                        <svg x-show="confirmModal.type === 'warning'" style="display:none;" class="w-6 h-6 text-amber-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
+                                d="M15.75 5.25a3 3 0 013 3m3 0a6 6 0 01-7.029 5.912c-.563-.097-1.159.026-1.563.43L10.5 17.25H8.25v2.25H6v2.25H2.25v-2.818c0-.597.237-1.17.659-1.591l6.499-6.499c.404-.404.527-1 .43-1.563A6 6 0 1121.75 8.25z">
+                            </path>
+                        </svg>
+
+                        <!-- Check Icon for Success -->
+                        <svg x-show="confirmModal.type === 'success'" style="display:none;" class="w-6 h-6 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                        </svg>
+                    </div>
+                    <div class="mt-3 text-center sm:mt-0 sm:ml-4 sm:text-left w-full">
+                        <h3 class="text-lg leading-6 font-bold text-slate-900" id="modal-title" x-text="confirmModal.title"></h3>
+                        <div class="mt-2">
+                            <p class="text-sm text-slate-500 font-medium" x-text="confirmModal.message"></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="bg-slate-50 px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse border-t border-slate-100 rounded-b-2xl">
+                <button type="button" @click="$dispatch('close'); if(confirmModal.action) confirmModal.action();" 
+                    class="w-full inline-flex justify-center rounded-xl border border-transparent shadow-sm px-4 py-2 text-base font-semibold text-white focus:outline-none sm:ml-3 sm:w-auto sm:text-sm transition-colors"
+                    :class="confirmModal.type === 'danger' ? 'bg-red-600 hover:bg-red-700' : (confirmModal.type === 'success' ? 'bg-emerald-600 hover:bg-emerald-700' : 'bg-amber-500 hover:bg-amber-600')"
+                    x-text="confirmModal.confirmText">
+                </button>
+                <button type="button" @click="$dispatch('close')" 
+                    class="mt-3 w-full inline-flex justify-center rounded-xl border border-slate-300 shadow-sm px-4 py-2 bg-white text-base font-semibold text-slate-700 hover:bg-slate-50 focus:outline-none sm:mt-0 sm:ml-3 sm:w-auto sm:text-sm transition-colors">
+                    Batal
+                </button>
+            </div>
+        </x-modal>
     </div>
 @endsection

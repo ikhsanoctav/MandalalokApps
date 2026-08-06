@@ -141,7 +141,7 @@ class PublicStatistikController extends Controller
                         'longitude' => (float) $item->longitude,
                         'foto' => $item->foto_utama 
                             ? asset('storage/' . $item->foto_utama) 
-                            : 'https://picsum.photos/seed/' . md5($item->id_umkm) . '/200/200',
+                            : asset('images/Logo_Mandalaloka.png'),
                         'status_usaha' => $item->status_usaha,
                     ];
                 });

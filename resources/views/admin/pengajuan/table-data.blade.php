@@ -18,7 +18,7 @@
                     <td class="px-6 py-4 text-sm text-slate-500">{{ $pengajuans->firstItem() + $index }}</td>
                     <td class="px-6 py-4">
                         <p class="font-bold text-slate-800">{{ $pengajuan->umkm->nama_usaha ?? '-' }}</p>
-                        <p class="text-xs text-slate-400 mt-0.5">{{ $pengajuan->umkm->pemilik->nama_lengkap ?? '-' }}
+                        <p class="text-xs text-slate-400 mt-0.5">{{ $pengajuan->umkm->pemilik?->nama_lengkap ?? '-' }}
                         </p>
                     </td>
                     <td class="px-6 py-4">

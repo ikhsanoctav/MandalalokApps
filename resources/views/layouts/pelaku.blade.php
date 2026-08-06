@@ -184,6 +184,7 @@
     @stack('scripts')
 
     @include('partials.toast-container')
+    @include('partials.confirm-modal')
     @include('partials.program-flyer-popup')
 
 </body>

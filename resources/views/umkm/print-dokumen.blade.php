@@ -33,26 +33,29 @@
         }
 
         /* KOP SURAT */
-        .kop-surat {
-            display: flex;
-            align-items: center;
-            justify-content: center;
+        .kop-surat-wrapper {
             border-bottom: 4px double #000;
             padding-bottom: 10px;
             margin-bottom: 20px;
-            position: relative;
+            text-align: center;
+            width: 100%;
+        }
+
+        .kop-surat {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto;
         }
 
         .kop-logo {
             width: 80px;
             height: auto;
-            position: absolute;
-            left: 0;
+            margin-right: 20px;
         }
 
         .kop-text {
             text-align: center;
-            width: 100%;
         }
 
         .kop-text h1 {
@@ -216,14 +219,22 @@
     <div class="document-container">
         
         <!-- KOP SURAT -->
-        <div class="kop-surat">
-            <!-- Asumsi Logo Pemerintah atau Mandalaloka -->
-            <img src="{{ asset('images/Logo_Mandalaloka.png') }}" alt="Logo" class="kop-logo">
-            <div class="kop-text">
-                <h1>PEMERINTAH KOTA BANDUNG</h1>
-                <h2>KECAMATAN MANDALAJATI</h2>
-                <p>Jl. Sindanglaya No.50, Sindangjaya, Kec. Mandalajati, Kota Bandung, Jawa Barat 40195</p>
-                <p>Telepon: (022) 7815252 | Email: mandalajati@bandung.go.id</p>
+        <div class="kop-surat-wrapper">
+            <div class="kop-surat">
+                @php
+                    $kopLogo = \App\Models\Setting::get('kop_logo_path');
+                @endphp
+                @if(!empty($kopLogo))
+                    <img src="{{ asset('storage/' . $kopLogo) }}" alt="Logo" class="kop-logo">
+                @else
+                    <img src="{{ asset('images/Logo_Mandalaloka.png') }}" alt="Logo" class="kop-logo">
+                @endif
+                <div class="kop-text">
+                    <h1 style="font-family: 'Times New Roman', Times, serif;">PEMERINTAH KOTA BANDUNG</h1>
+                    <h2 style="font-family: 'Times New Roman', Times, serif;">KECAMATAN MANDALAJATI</h2>
+                    <p>Jl. Pasir Impun No. 33A Bandung Telp.02263730954, Fax 02263730954</p>
+                    <p>e-mail : mandalajatiunik@gmail.com</p>
+                </div>
             </div>
         </div>
 
@@ -240,31 +251,31 @@
             </tr>
             <tr>
                 <th>Nama Lengkap</th>
-                <td>{{ $umkm->pemilik->nama_lengkap ?? '-' }}</td>
+                <td>{{ $umkm->pemilik?->nama_lengkap ?? '-' }}</td>
             </tr>
             <tr>
                 <th>Nomor Induk Kependudukan (NIK)</th>
-                <td>{{ $umkm->pemilik->nik ?? '-' }}</td>
+                <td>{{ $umkm->pemilik?->nik ?? '-' }}</td>
             </tr>
             <tr>
                 <th>Tempat, Tanggal Lahir</th>
-                <td>{{ $umkm->pemilik->tempat_lahir ?? '-' }}, {{ $umkm->pemilik->tanggal_lahir ? \Carbon\Carbon::parse($umkm->pemilik->tanggal_lahir)->format('d F Y') : '-' }}</td>
+                <td>{{ $umkm->pemilik?->tempat_lahir ?? '-' }}, {{ $umkm->pemilik?->tanggal_lahir ? \Carbon\Carbon::parse($umkm->pemilik?->tanggal_lahir)->format('d F Y') : '-' }}</td>
             </tr>
             <tr>
                 <th>Jenis Kelamin</th>
-                <td>{{ ($umkm->pemilik->jenis_kelamin ?? '') == 'L' ? 'Laki-Laki' : (($umkm->pemilik->jenis_kelamin ?? '') == 'P' ? 'Perempuan' : '-') }}</td>
+                <td>{{ ($umkm->pemilik?->jenis_kelamin ?? '') == 'L' ? 'Laki-Laki' : (($umkm->pemilik?->jenis_kelamin ?? '') == 'P' ? 'Perempuan' : '-') }}</td>
             </tr>
             <tr>
                 <th>Alamat Lengkap KTP</th>
                 <td>
-                    {{ $umkm->pemilik->alamat ?? '-' }}<br>
-                    RT {{ $umkm->pemilik->rt ?? '-' }} / RW {{ $umkm->pemilik->rw ?? '-' }},
-                    Kelurahan {{ $umkm->pemilik->kelurahan ?? '-' }}
+                    {{ $umkm->pemilik?->alamat ?? '-' }}<br>
+                    RT {{ $umkm->pemilik?->rt ?? '-' }} / RW {{ $umkm->pemilik?->rw ?? '-' }},
+                    Kelurahan {{ $umkm->pemilik?->kelurahan ?? '-' }}
                 </td>
             </tr>
             <tr>
                 <th>Nomor Telepon / HP</th>
-                <td>{{ $umkm->pemilik->no_telepon ?? ($umkm->pemilik->no_hp ?? '-') }}</td>
+                <td>{{ $umkm->pemilik?->no_telepon ?? ($umkm->pemilik?->no_hp ?? '-') }}</td>
             </tr>
 
             <tr>
@@ -276,11 +287,11 @@
             </tr>
             <tr>
                 <th>Kategori Usaha</th>
-                <td>{{ $umkm->kategori->nama_kategori ?? '-' }}</td>
+                <td>{{ $umkm->kategori?->nama_kategori ?? '-' }}</td>
             </tr>
             <tr>
                 <th>Sektor Usaha</th>
-                <td>{{ $umkm->sektor->nama_sektor ?? '-' }}</td>
+                <td>{{ $umkm->sektor?->nama_sektor ?? '-' }}</td>
             </tr>
             <tr>
                 <th>Tahun Berdiri</th>
@@ -328,13 +339,13 @@
         <div class="signature-section">
             <div class="signature-box">
                 <p>Petugas Pendata / Verifikator,</p>
-                <p class="signature-name">{{ $umkm->petugas->name ?? '.........................................' }}</p>
+                <p class="signature-name">{{ $umkm->petugas?->name ?? '.........................................' }}</p>
                 <p class="signature-nik">ID: {{ $umkm->id_petugas ?? '..............' }}</p>
             </div>
             <div class="signature-box">
                 <p>Bandung, {{ date('d F Y') }}<br>Pemilik Usaha,</p>
-                <p class="signature-name">{{ $umkm->pemilik->nama_lengkap ?? '.........................................' }}</p>
-                <p class="signature-nik">NIK: {{ $umkm->pemilik->nik ?? '..............' }}</p>
+                <p class="signature-name">{{ $umkm->pemilik?->nama_lengkap ?? '.........................................' }}</p>
+                <p class="signature-nik">NIK: {{ $umkm->pemilik?->nik ?? '..............' }}</p>
             </div>
         </div>
 

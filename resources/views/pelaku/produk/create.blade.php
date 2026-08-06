@@ -24,7 +24,7 @@
                     <option value="" disabled selected>-- Pilih UMKM --</option>
                     @foreach($umkms as $umkm)
                         <option value="{{ $umkm->id_umkm }}" {{ old('id_umkm') == $umkm->id_umkm ? 'selected' : '' }}>
-                            {{ $umkm->nama_usaha }} ({{ $umkm->kategori->nama_kategori ?? 'Umum' }})
+                            {{ $umkm->nama_usaha }} ({{ $umkm->kategori?->nama_kategori ?? 'Umum' }})
                         </option>
                     @endforeach
                 </select>

@@ -11,7 +11,7 @@ abstract class TestCase extends BaseTestCase
     {
         parent::setUp();
 
-        $storagePath = sys_get_temp_dir().'/mandalalokaapps-testing-storage';
+        $storagePath = storage_path('testing-storage');
         $this->app->useStoragePath($storagePath);
 
         foreach ([

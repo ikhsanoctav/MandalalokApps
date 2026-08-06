@@ -59,7 +59,7 @@
                     <p class="text-xl font-black text-blue-600 mt-0.5">Rp
                         {{ number_format($pengajuan->nominal, 0, ',', '.') }}</p>
                 @else
-                    <p class="text-sm font-semibold text-slate-500 mt-0.5">Tanpa Pengajuan Nominal</p>
+                    <p class="text-sm font-semibold text-slate-700 mt-0.5">Tanpa Pengajuan Nominal</p>
                 @endif
             </div>
             <div>
@@ -171,7 +171,7 @@
                 </div>
                 <div>
                     <label class="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Sektor Usaha</label>
-                    <p class="text-sm text-slate-700 font-semibold mt-0.5">{{ $umkm->sektor->nama_sektor ?? '-' }}</p>
+                    <p class="text-sm text-slate-700 font-semibold mt-0.5">{{ $umkm->sektor?->nama_sektor ?? '-' }}</p>
                 </div>
                 <div>
                     <label class="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Bentuk Jualan</label>
@@ -179,7 +179,7 @@
                 </div>
                                 <div>
                                     <label class="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Perkiraan Omset</label>
-                                    <p class="text-sm text-slate-700 font-semibold mt-0.5">{{ $umkm->perkiraan_omset ?? '-' }}</p>
+                                    <p class="text-sm text-slate-700 font-semibold mt-0.5">{{ $umkm->perkiraan_omset ? 'Rp ' . number_format($umkm->perkiraan_omset, 0, ',', '.') : '-' }}</p>
                                 </div>
                 <div>
                     <label class="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Skala Usaha</label>
@@ -262,15 +262,15 @@
                 <table class="w-full text-left border-collapse">
                     <thead class="bg-slate-50 border-b border-slate-200">
                         <tr>
-                            <th class="px-4 py-2.5 text-[10px] font-bold text-slate-500 uppercase tracking-wider">
+                            <th class="px-4 py-2.5 text-[10px] font-bold text-slate-700 uppercase tracking-wider">
                                 Tanggal</th>
-                            <th class="px-4 py-2.5 text-[10px] font-bold text-slate-500 uppercase tracking-wider">Jenis
+                            <th class="px-4 py-2.5 text-[10px] font-bold text-slate-700 uppercase tracking-wider">Jenis
                             </th>
-                            <th class="px-4 py-2.5 text-[10px] font-bold text-slate-500 uppercase tracking-wider">
+                            <th class="px-4 py-2.5 text-[10px] font-bold text-slate-700 uppercase tracking-wider">
                                 Nominal</th>
-                            <th class="px-4 py-2.5 text-[10px] font-bold text-slate-500 uppercase tracking-wider">Status
+                            <th class="px-4 py-2.5 text-[10px] font-bold text-slate-700 uppercase tracking-wider">Status
                             </th>
-                            <th class="px-4 py-2.5 text-[10px] font-bold text-slate-500 uppercase tracking-wider">
+                            <th class="px-4 py-2.5 text-[10px] font-bold text-slate-700 uppercase tracking-wider">
                                 Catatan</th>
                         </tr>
                     </thead>

@@ -23,7 +23,7 @@
                 <div class="min-w-0">
                     <p class="text-xs font-semibold text-slate-400">#{{ $umkms->firstItem() + $index }}</p>
                     <h3 class="text-base font-bold text-slate-800 leading-snug">{{ $umkm->nama_usaha }}</h3>
-                    <p class="text-xs text-slate-500 mt-1">{{ $umkm->no_pendaftaran ?? '-' }}</p>
+                    <p class="text-xs text-slate-700 mt-1">{{ $umkm->no_pendaftaran ?? '-' }}</p>
                 </div>
                 <span class="shrink-0 inline-flex px-2.5 py-1 rounded-full text-xs font-semibold {{ $statusVerifikasiBadge[$umkm->status_verifikasi] ?? 'bg-slate-100 text-slate-600' }}">
                     {{ $statusVerifikasiLabel[$umkm->status_verifikasi] ?? 'Draft' }}
@@ -33,8 +33,8 @@
             <div class="grid grid-cols-2 gap-3 text-sm">
                 <div>
                     <p class="text-xs font-semibold text-slate-400 uppercase">Pemilik</p>
-                    <p class="font-medium text-slate-700">{{ $umkm->pemilik->nama_lengkap ?? '-' }}</p>
-                    <p class="text-xs text-slate-500">{{ $umkm->pemilik->kelurahan ?? '-' }}</p>
+                    <p class="font-medium text-slate-700">{{ $umkm->pemilik?->nama_lengkap ?? '-' }}</p>
+                    <p class="text-xs text-slate-700">{{ $umkm->pemilik?->kelurahan ?? '-' }}</p>
                 </div>
                 <div>
                     <p class="text-xs font-semibold text-slate-400 uppercase">Tanggal</p>
@@ -86,27 +86,27 @@
     <table class="w-full">
         <thead class="bg-slate-50 border-b border-slate-200">
             <tr>
-                <th class="px-6 py-3 text-left text-xs font-semibold text-slate-500 uppercase">No</th>
-                <th class="px-6 py-3 text-left text-xs font-semibold text-slate-500 uppercase">Nama Usaha</th>
-                <th class="px-6 py-3 text-left text-xs font-semibold text-slate-500 uppercase">Pemilik</th>
+                <th class="px-6 py-3 text-left text-xs font-semibold text-slate-700 uppercase">No</th>
+                <th class="px-6 py-3 text-left text-xs font-semibold text-slate-700 uppercase">Nama Usaha</th>
+                <th class="px-6 py-3 text-left text-xs font-semibold text-slate-700 uppercase">Pemilik</th>
 
-                <th class="px-6 py-3 text-left text-xs font-semibold text-slate-500 uppercase">Status Verifikasi</th>
-                <th class="px-6 py-3 text-left text-xs font-semibold text-slate-500 uppercase">Status Usaha</th>
-                <th class="px-6 py-3 text-left text-xs font-semibold text-slate-500 uppercase">Tanggal Daftar</th>
-                <th class="px-6 py-3 text-center text-xs font-semibold text-slate-500 uppercase">Aksi</th>
+                <th class="px-6 py-3 text-left text-xs font-semibold text-slate-700 uppercase">Status Verifikasi</th>
+                <th class="px-6 py-3 text-left text-xs font-semibold text-slate-700 uppercase">Status Usaha</th>
+                <th class="px-6 py-3 text-left text-xs font-semibold text-slate-700 uppercase">Tanggal Daftar</th>
+                <th class="px-6 py-3 text-center text-xs font-semibold text-slate-700 uppercase">Aksi</th>
             </tr>
         </thead>
         <tbody class="divide-y divide-slate-100">
             @forelse($umkms as $index => $umkm)
                 <tr class="hover:bg-slate-50 transition-colors">
-                    <td class="px-6 py-4 text-sm text-slate-500">{{ $umkms->firstItem() + $index }}</td>
+                    <td class="px-6 py-4 text-sm text-slate-700">{{ $umkms->firstItem() + $index }}</td>
                     <td class="px-6 py-4">
                         <p class="font-medium text-slate-800">{{ $umkm->nama_usaha }}</p>
                         <p class="text-xs text-slate-400 mt-0.5">{{ $umkm->no_pendaftaran ?? '-' }}</p>
                     </td>
                     <td class="px-6 py-4">
-                        <p class="text-sm text-slate-600">{{ $umkm->pemilik->nama_lengkap ?? '-' }}</p>
-                        <p class="text-xs text-slate-400">{{ $umkm->pemilik->kelurahan ?? '-' }}</p>
+                        <p class="text-sm text-slate-600">{{ $umkm->pemilik?->nama_lengkap ?? '-' }}</p>
+                        <p class="text-xs text-slate-400">{{ $umkm->pemilik?->kelurahan ?? '-' }}</p>
                     </td>
 
                     <td class="px-6 py-4">
@@ -153,7 +153,7 @@
                             {{ ucfirst($umkm->status_usaha ?? '-') }}
                         </span>
                     </td>
-                    <td class="px-6 py-4 text-sm text-slate-500">
+                    <td class="px-6 py-4 text-sm text-slate-700">
                         {{ $umkm->created_at ? $umkm->created_at->format('d/m/Y') : '-' }}
                     </td>
                     <td class="px-6 py-4 text-center">

@@ -14,7 +14,7 @@
 @endpush
 
 @section('content')
-    <div class="max-w-5xl mx-auto space-y-8 pb-12">
+    <div class="w-full space-y-8 pb-12">
         
         <!-- Header Section -->
         <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
@@ -99,28 +99,21 @@
                     </div>
 
                     <div>
+                        <label class="block text-sm font-bold text-slate-700 mb-2">Perkiraan Omset Bulanan (Opsional)</label>
+                        <div class="relative">
+                            <div class="absolute inset-y-0 left-0 flex items-center pl-4 pointer-events-none text-slate-500 font-bold">
+                                Rp
+                            </div>
+                            <input type="number" name="perkiraan_omset" value="{{ old('perkiraan_omset', $umkm->perkiraan_omset ?? '') }}" placeholder="Contoh: 5000000" min="0" step="1000"
+                                class="w-full bg-slate-50 hover:bg-white border-2 border-slate-200 text-slate-700 font-medium text-base rounded-lg focus:ring-4 focus:ring-indigo-500/20 focus:border-indigo-500 block pl-12 p-4 transition-all">
+                        </div>
+                        @error('perkiraan_omset')
+                            <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
+                        @enderror
+                    </div>
+
+                    <div>
                         <label class="block text-sm font-bold text-slate-700 mb-2">Sektor Usaha <span class="text-rose-500">*</span></label>
-                                            <div>
-                                                <label class="block text-sm font-bold text-slate-700 mb-2">Perkiraan Omset Bulanan (Opsional)</label>
-                                                <div class="relative">
-                                                    <select name="perkiraan_omset"
-                                                        class="w-full bg-slate-50 hover:bg-white border-2 border-slate-200 text-slate-700 font-medium text-base rounded-lg focus:ring-4 focus:ring-indigo-500/20 focus:border-indigo-500 block p-4 appearance-none transition-all cursor-pointer">
-                                                        <option value="" selected>Pilih Perkiraan Omset...</option>
-                                                        <option value="< Rp 5 Juta" {{ old('perkiraan_omset', $umkm->perkiraan_omset ?? '') == '< Rp 5 Juta' ? 'selected' : '' }}>< Rp 5 Juta</option>
-                                                        <option value="Rp 5 Juta - Rp 10 Juta" {{ old('perkiraan_omset', $umkm->perkiraan_omset ?? '') == 'Rp 5 Juta - Rp 10 Juta' ? 'selected' : '' }}>Rp 5 Juta - Rp 10 Juta</option>
-                                                        <option value="Rp 10 Juta - Rp 50 Juta" {{ old('perkiraan_omset', $umkm->perkiraan_omset ?? '') == 'Rp 10 Juta - Rp 50 Juta' ? 'selected' : '' }}>Rp 10 Juta - Rp 50 Juta</option>
-                                                        <option value="Rp 50 Juta - Rp 100 Juta" {{ old('perkiraan_omset', $umkm->perkiraan_omset ?? '') == 'Rp 50 Juta - Rp 100 Juta' ? 'selected' : '' }}>Rp 50 Juta - Rp 100 Juta</option>
-                                                        <option value="> Rp 100 Juta" {{ old('perkiraan_omset', $umkm->perkiraan_omset ?? '') == '> Rp 100 Juta' ? 'selected' : '' }}>> Rp 100 Juta</option>
-                                                    </select>
-                                                    <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-4 text-slate-400">
-                                                        <i class="mdi mdi-chevron-down text-xl"></i>
-                                                    </div>
-                                                </div>
-                                                @error('perkiraan_omset')
-                                                    <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
-                                                @enderror
-                                            </div>
-                        
                         <div class="relative">
                             <select name="id_sektor" required
                                 class="w-full bg-slate-50 hover:bg-white border-2 border-slate-200 text-slate-700 font-medium text-base rounded-lg focus:ring-4 focus:ring-indigo-500/20 focus:border-indigo-500 block p-4 appearance-none transition-all cursor-pointer">

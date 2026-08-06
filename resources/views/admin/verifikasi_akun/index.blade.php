@@ -5,6 +5,53 @@
 @section('content')
     <div class="space-y-4 md:space-y-6">
 
+        <!-- Summary Cards -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+            <!-- Total Card -->
+            <div class="bg-gradient-to-br from-blue-500 to-blue-600 rounded-xl shadow-md border-0 p-5 flex items-center justify-between text-white">
+                <div>
+                    <p class="text-sm font-medium text-blue-100 mb-1">Total Akun</p>
+                    <h3 class="text-3xl font-bold">{{ $countTotal }}</h3>
+                </div>
+                <div class="w-12 h-12 rounded-full bg-white/20 flex items-center justify-center">
+                    <i class="mdi mdi-account-group text-2xl text-white"></i>
+                </div>
+            </div>
+
+            <!-- Pending Card -->
+            <div class="bg-gradient-to-br from-amber-500 to-amber-600 rounded-xl shadow-md border-0 p-5 flex items-center justify-between text-white">
+                <div>
+                    <p class="text-sm font-medium text-amber-100 mb-1">Menunggu Verifikasi</p>
+                    <h3 class="text-3xl font-bold">{{ $countPending }}</h3>
+                </div>
+                <div class="w-12 h-12 rounded-full bg-white/20 flex items-center justify-center">
+                    <i class="mdi mdi-clock-outline text-2xl text-white"></i>
+                </div>
+            </div>
+
+            <!-- Verified Card -->
+            <div class="bg-gradient-to-br from-emerald-500 to-emerald-600 rounded-xl shadow-md border-0 p-5 flex items-center justify-between text-white">
+                <div>
+                    <p class="text-sm font-medium text-emerald-100 mb-1">Terverifikasi</p>
+                    <h3 class="text-3xl font-bold">{{ $countTerverifikasi }}</h3>
+                </div>
+                <div class="w-12 h-12 rounded-full bg-white/20 flex items-center justify-center">
+                    <i class="mdi mdi-check-decagram text-2xl text-white"></i>
+                </div>
+            </div>
+
+            <!-- Rejected Card -->
+            <div class="bg-gradient-to-br from-rose-500 to-rose-600 rounded-xl shadow-md border-0 p-5 flex items-center justify-between text-white">
+                <div>
+                    <p class="text-sm font-medium text-rose-100 mb-1">Ditolak</p>
+                    <h3 class="text-3xl font-bold">{{ $countDitolak }}</h3>
+                </div>
+                <div class="w-12 h-12 rounded-full bg-white/20 flex items-center justify-center">
+                    <i class="mdi mdi-close-circle-outline text-2xl text-white"></i>
+                </div>
+            </div>
+        </div>
+
         <form method="GET" action="{{ route(auth()->user()->hasRole('super_admin') ? 'superadmin.verifikasi_akun.index' : 'admin.verifikasi_akun.index') }}" id="filterForm">
             <div class="bg-white rounded-xl md:rounded-2xl shadow-sm border border-slate-200 p-4 md:p-6">
                 <div class="flex justify-between items-center mb-3 md:mb-4">
@@ -22,13 +69,20 @@
                 </div>
 
                 <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 md:gap-4">
+                    <select name="status" class="w-full px-3 py-2 md:px-4 md:py-2.5 rounded-lg border border-slate-300 bg-white text-slate-700 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-200">
+                        <option value="semua" {{ $status === 'semua' ? 'selected' : '' }}>Semua Status</option>
+                        <option value="pending" {{ $status === 'pending' ? 'selected' : '' }}>Menunggu Verifikasi</option>
+                        <option value="terverifikasi" {{ $status === 'terverifikasi' ? 'selected' : '' }}>Terverifikasi</option>
+                        <option value="ditolak" {{ $status === 'ditolak' ? 'selected' : '' }}>Ditolak</option>
+                    </select>
+
                     <input type="text" name="search" placeholder="Cari nama lengkap..." value="{{ request('search') }}"
                         class="w-full px-3 py-2 md:px-4 md:py-2.5 rounded-lg border border-slate-300 bg-white text-slate-700 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-200">
 
-                    <div class="flex gap-2 lg:col-span-2">
+                    <div class="flex gap-2">
                         <button type="submit"
                             class="px-4 py-2 bg-blue-600 text-white rounded-lg text-sm font-medium hover:bg-blue-700 transition-all">
-                            Cari
+                            Terapkan Filter
                         </button>
                     </div>
                 </div>
@@ -48,6 +102,14 @@
             if (filterForm) {
                 let searchTimeout;
                 const searchInput = filterForm.querySelector('input[name="search"]');
+                const statusSelect = filterForm.querySelector('select[name="status"]');
+                
+                if (statusSelect) {
+                    statusSelect.addEventListener('change', function() {
+                        filterForm.submit();
+                    });
+                }
+                
                 if (searchInput) {
                     searchInput.addEventListener('input', function() {
                         clearTimeout(searchTimeout);

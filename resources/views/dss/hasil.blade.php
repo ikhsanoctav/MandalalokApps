@@ -8,7 +8,7 @@
     <div class="flex justify-between items-center flex-wrap gap-4">
         <div>
             <h2 class="text-2xl font-bold text-slate-800">Hasil Perankingan UMKM</h2>
-            <p class="text-sm text-slate-500">Rekomendasi prioritas berdasarkan algoritma AHP-SAW.</p>
+            <p class="text-sm text-slate-700">Rekomendasi prioritas berdasarkan algoritma AHP-SAW.</p>
         </div>
         
         <form action="{{ route('dss.saw.calculate') }}" method="POST">
@@ -51,7 +51,7 @@
                     <div>UMKM potensial lapis kedua yang dapat dijadikan daftar tunggu (<em>waiting list</em>) atau ditargetkan untuk program pengembangan skala menengah.</div>
                 </li>
                 <li class="flex items-start gap-2">
-                    <span class="text-slate-500 mt-0.5"><i class="mdi mdi-search"></i></span> 
+                    <span class="text-slate-700 mt-0.5"><i class="mdi mdi-search"></i></span> 
                     <div>Anda bisa mengeklik tombol <strong>"Lihat Rincian"</strong> pada tiap baris UMKM untuk membedah skor apa saja yang mendongkrak atau menjatuhkan peringkat mereka (Transparansi Hasil).</div>
                 </li>
             </ul>
@@ -62,7 +62,7 @@
         <div class="overflow-x-auto">
             <table class="w-full text-left text-sm border-collapse">
                 <thead>
-                    <tr class="bg-slate-50 border-b border-slate-200 text-slate-500">
+                    <tr class="bg-slate-50 border-b border-slate-200 text-slate-700">
                         <th class="p-4 font-medium w-16 text-center">Rank</th>
                         <th class="p-4 font-medium">UMKM & Pemilik</th>
                         <th class="p-4 font-medium text-center">Total Skor</th>
@@ -72,12 +72,12 @@
                 <tbody class="divide-y divide-slate-200">
                     @forelse($ranks as $r)
                     <tr class="hover:bg-slate-50">
-                        <td class="p-4 font-bold text-center {{ $r->ranking <= 3 ? 'text-indigo-600 text-lg' : 'text-slate-500' }}">
+                        <td class="p-4 font-bold text-center {{ $r->ranking <= 3 ? 'text-indigo-600 text-lg' : 'text-slate-700' }}">
                             #{{ $r->ranking }}
                         </td>
                         <td class="p-4">
                             <div class="font-semibold text-slate-800">{{ $r->umkm->nama_usaha ?? 'Unknown' }}</div>
-                            <div class="text-xs text-slate-500">{{ $r->umkm->pemilik->nama_lengkap ?? '' }}</div>
+                            <div class="text-xs text-slate-700">{{ $r->umkm->pemilik?->nama_lengkap ?? '' }}</div>
                         </td>
                         <td class="p-4 text-center">
                             <span class="inline-flex items-center px-2.5 py-1 rounded-2xl font-bold bg-indigo-50 text-indigo-700">
@@ -116,7 +116,7 @@
                     </tr>
                     @empty
                     <tr>
-                        <td colspan="4" class="p-8 text-center text-slate-500">Belum ada hasil perankingan. Silakan hitung ulang.</td>
+                        <td colspan="4" class="p-8 text-center text-slate-700">Belum ada hasil perankingan. Silakan hitung ulang.</td>
                     </tr>
                     @endforelse
                 </tbody>

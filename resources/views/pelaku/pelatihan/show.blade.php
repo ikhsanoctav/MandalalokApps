@@ -134,7 +134,7 @@
                         <p>Kuota pelatihan ini sudah penuh.</p>
                     </div>
                 @else
-                    <form action="{{ route('pelaku.pelatihan.daftar', $pelatihan->id) }}" method="POST" enctype="multipart/form-data">
+                    <form id="daftar-form" action="{{ route('pelaku.pelatihan.daftar', $pelatihan->id) }}" method="POST" enctype="multipart/form-data">
                         @csrf
                         
                         @if(!empty($pelatihan->syarat_dokumen) && is_array($pelatihan->syarat_dokumen))
@@ -155,7 +155,15 @@
                             </div>
                         @endif
 
-                        <button type="submit" onclick="return confirm('Apakah Anda yakin ingin mendaftar pelatihan ini?')" class="w-full btn-primary px-4 py-3 text-sm font-bold text-white rounded-xl transition-all shadow-md flex items-center justify-center gap-2">
+                        <button type="button" x-data @click="$dispatch('open-confirm-modal', {
+                            title: 'Daftar Pelatihan',
+                            message: 'Apakah Anda yakin ingin mendaftar pelatihan ini?',
+                            confirmText: 'Ya, Daftar',
+                            action: () => {
+                                document.getElementById('daftar-form').submit();
+                                return new Promise(() => {});
+                            }
+                        })" class="w-full btn-primary px-4 py-3 text-sm font-bold text-white rounded-xl transition-all shadow-md flex items-center justify-center gap-2">
                             <i class="fa-solid fa-clipboard-check"></i> Daftar Sekarang
                         </button>
                     </form>

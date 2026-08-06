@@ -44,7 +44,7 @@
                 <div class="p-6 border-b border-slate-100 flex justify-between items-center bg-slate-50/50">
                     <div>
                         <h2 class="text-2xl font-bold text-slate-800">Top 20 Rekomendasi Bantuan Modal</h2>
-                        <p class="text-slate-500 text-sm mt-1">Diprioritaskan untuk UMKM yang sudah legal, stabil, memiliki pekerja lokal, dan belum pernah dibantu.</p>
+                        <p class="text-slate-700 text-sm mt-1">Diprioritaskan untuk UMKM yang sudah legal, stabil, memiliki pekerja lokal, dan belum pernah dibantu.</p>
                     </div>
                     <div class="px-4 py-2 bg-indigo-100 text-indigo-700 rounded-lg font-bold text-sm">
                         <i class="mdi mdi-check-decagram mr-1"></i> Data Terverifikasi
@@ -54,7 +54,7 @@
                 <div class="overflow-x-auto">
                     <table class="w-full text-left border-collapse">
                         <thead>
-                            <tr class="bg-slate-50 text-slate-500 text-sm uppercase tracking-wider">
+                            <tr class="bg-slate-50 text-slate-700 text-sm uppercase tracking-wider">
                                 <th class="p-4 font-bold rounded-tl-3xl text-center w-20">Rank</th>
                                 <th class="p-4 font-bold">Pemilik & Usaha</th>
                                 <th class="p-4 font-bold text-center">Tahun Berdiri</th>
@@ -74,12 +74,12 @@
                                     @elseif($index == 2)
                                         <div class="w-10 h-10 mx-auto bg-orange-400 text-white rounded-full flex items-center justify-center font-black shadow-lg shadow-orange-400/30 text-lg border-2 border-white"><i class="mdi mdi-trophy"></i></div>
                                     @else
-                                        <div class="w-10 h-10 mx-auto bg-slate-100 text-slate-500 rounded-full flex items-center justify-center font-bold">{{ $index + 1 }}</div>
+                                        <div class="w-10 h-10 mx-auto bg-slate-100 text-slate-700 rounded-full flex items-center justify-center font-bold">{{ $index + 1 }}</div>
                                     @endif
                                 </td>
                                 <td class="p-4">
                                     <div class="font-bold text-slate-800 text-base">{{ $item['umkm']->nama_usaha }}</div>
-                                    <div class="text-sm text-slate-500">{{ $item['umkm']->pemilik->nama_lengkap }}</div>
+                                    <div class="text-sm text-slate-700">{{ $item['umkm']->pemilik?->nama_lengkap }}</div>
                                 </td>
                                 <td class="p-4 text-center">
                                     <span class="px-3 py-1 bg-slate-100 text-slate-700 rounded-lg text-sm font-medium">{{ $item['umkm']->tahun_berdiri ?? '-' }}</span>
@@ -107,7 +107,7 @@
                             </tr>
                             @empty
                             <tr>
-                                <td colspan="6" class="p-8 text-center text-slate-500">Belum ada data UMKM terverifikasi.</td>
+                                <td colspan="6" class="p-8 text-center text-slate-700">Belum ada data UMKM terverifikasi.</td>
                             </tr>
                             @endforelse
                         </tbody>
@@ -122,7 +122,7 @@
                 <div class="p-6 border-b border-slate-100 flex justify-between items-center bg-slate-50/50">
                     <div>
                         <h2 class="text-2xl font-bold text-slate-800">Top 20 Rekomendasi Pelatihan Digitalisasi & NIB</h2>
-                        <p class="text-slate-500 text-sm mt-1">Diprioritaskan untuk UMKM pemula (baru buka), belum punya izin (NIB), dan berjualan secara konvensional (Keliling/Rumahan).</p>
+                        <p class="text-slate-700 text-sm mt-1">Diprioritaskan untuk UMKM pemula (baru buka), belum punya izin (NIB), dan berjualan secara konvensional (Keliling/Rumahan).</p>
                     </div>
                     <div class="px-4 py-2 bg-emerald-100 text-emerald-700 rounded-lg font-bold text-sm">
                         <i class="mdi mdi-school mr-1"></i> Target Pembinaan
@@ -132,7 +132,7 @@
                 <div class="overflow-x-auto">
                     <table class="w-full text-left border-collapse">
                         <thead>
-                            <tr class="bg-slate-50 text-slate-500 text-sm uppercase tracking-wider">
+                            <tr class="bg-slate-50 text-slate-700 text-sm uppercase tracking-wider">
                                 <th class="p-4 font-bold rounded-tl-3xl text-center w-20">Rank</th>
                                 <th class="p-4 font-bold">Pemilik & Usaha</th>
                                 <th class="p-4 font-bold text-center">Bentuk Jualan</th>
@@ -144,11 +144,11 @@
                             @forelse($rankingPelatihan as $index => $item)
                             <tr class="hover:bg-slate-50/80 transition-colors {{ $index < 3 ? 'bg-emerald-50/30' : '' }}">
                                 <td class="p-4 text-center">
-                                    <div class="w-10 h-10 mx-auto {{ $index < 3 ? 'bg-emerald-500 text-white border-2 border-emerald-200' : 'bg-slate-100 text-slate-500' }} rounded-full flex items-center justify-center font-bold">{{ $index + 1 }}</div>
+                                    <div class="w-10 h-10 mx-auto {{ $index < 3 ? 'bg-emerald-500 text-white border-2 border-emerald-200' : 'bg-slate-100 text-slate-700' }} rounded-full flex items-center justify-center font-bold">{{ $index + 1 }}</div>
                                 </td>
                                 <td class="p-4">
                                     <div class="font-bold text-slate-800 text-base">{{ $item['umkm']->nama_usaha }}</div>
-                                    <div class="text-sm text-slate-500">{{ $item['umkm']->pemilik->nama_lengkap }} &bull; Est. {{ $item['umkm']->tahun_berdiri ?? '?' }}</div>
+                                    <div class="text-sm text-slate-700">{{ $item['umkm']->pemilik?->nama_lengkap }} &bull; Est. {{ $item['umkm']->tahun_berdiri ?? '?' }}</div>
                                 </td>
                                 <td class="p-4 text-center">
                                     <span class="px-3 py-1 bg-slate-100 text-slate-700 rounded-lg text-sm font-medium">{{ $item['umkm']->bentuk_jualan ?? '-' }}</span>
@@ -168,7 +168,7 @@
                             </tr>
                             @empty
                             <tr>
-                                <td colspan="5" class="p-8 text-center text-slate-500">Belum ada data UMKM terverifikasi.</td>
+                                <td colspan="5" class="p-8 text-center text-slate-700">Belum ada data UMKM terverifikasi.</td>
                             </tr>
                             @endforelse
                         </tbody>

@@ -151,7 +151,7 @@
                             </div>
                             <div class="bg-white/60 rounded-xl p-3 border border-indigo-100">
                                 <p class="text-[10px] font-bold text-indigo-400 uppercase tracking-wider mb-1">Petugas Pemeriksa</p>
-                                <p class="text-sm font-semibold text-indigo-900">{{ $umkm->latestVerifikasiLapangan->petugas->name ?? 'Petugas' }}</p>
+                                <p class="text-sm font-semibold text-indigo-900">{{ $umkm->latestVerifikasiLapangan->petugas?->name ?? 'Petugas' }}</p>
                             </div>
                         </div>
                         
@@ -281,38 +281,38 @@
                             class="flex justify-between items-center p-3 rounded-xl hover:bg-slate-50/80 transition-colors border-b border-slate-100/50 last:border-0">
                             <span class="text-sm text-slate-500">Nama Lengkap</span>
                             <span
-                                class="text-sm font-medium text-slate-800">{{ $umkm->pemilik->nama_lengkap ?? '-' }}</span>
+                                class="text-sm font-medium text-slate-800">{{ $umkm->pemilik?->nama_lengkap ?? '-' }}</span>
                         </div>
                         <div
                             class="flex justify-between items-center p-3 rounded-xl hover:bg-slate-50/80 transition-colors border-b border-slate-100/50 last:border-0">
                             <span class="text-sm text-slate-500">NIK</span>
-                            <span class="text-sm font-mono text-slate-800">{{ $umkm->pemilik->nik ?? '-' }}</span>
+                            <span class="text-sm font-mono text-slate-800">{{ $umkm->pemilik?->nik ?? '-' }}</span>
                         </div>
                         <div
                             class="flex justify-between items-center p-3 rounded-xl hover:bg-slate-50/80 transition-colors border-b border-slate-100/50 last:border-0">
                             <span class="text-sm text-slate-500">No. Telepon</span>
                             <span
-                                class="text-sm text-slate-800">{{ $umkm->pemilik->no_telepon ?? ($umkm->pemilik->no_hp ?? '-') }}</span>
+                                class="text-sm text-slate-800">{{ $umkm->pemilik?->no_telepon ?? ($umkm->pemilik?->no_hp ?? '-') }}</span>
                         </div>
                         <div
                             class="flex justify-between items-center p-3 rounded-xl hover:bg-slate-50/80 transition-colors border-b border-slate-100/50 last:border-0">
                             <span class="text-sm text-slate-500">Email</span>
-                            <span class="text-sm text-slate-800">{{ $umkm->pemilik->email ?? '-' }}</span>
+                            <span class="text-sm text-slate-800">{{ $umkm->pemilik?->email ?? '-' }}</span>
                         </div>
                         <div
                             class="flex justify-between items-center p-3 rounded-xl hover:bg-slate-50/80 transition-colors border-b border-slate-100/50 last:border-0">
                             <span class="text-sm text-slate-500">Kelurahan</span>
-                            <span class="text-sm text-slate-800">{{ $umkm->pemilik->kelurahan ?? '-' }}</span>
+                            <span class="text-sm text-slate-800">{{ $umkm->pemilik?->kelurahan ?? '-' }}</span>
                         </div>
                         <div
                             class="flex justify-between items-center p-3 rounded-xl hover:bg-slate-50/80 transition-colors border-b border-slate-100/50 last:border-0">
                             <span class="text-sm text-slate-500">RW / RT</span>
-                            <span class="text-sm text-slate-800">{{ $umkm->pemilik->rw ?? '-' }} /
-                                {{ $umkm->pemilik->rt ?? '-' }}</span>
+                            <span class="text-sm text-slate-800">{{ $umkm->pemilik?->rw ?? '-' }} /
+                                {{ $umkm->pemilik?->rt ?? '-' }}</span>
                         </div>
                         <div class="py-2">
                             <span class="text-sm text-slate-500 block mb-1">Alamat</span>
-                            <p class="text-sm text-slate-800">{{ $umkm->pemilik->alamat ?? '-' }}</p>
+                            <p class="text-sm text-slate-800">{{ $umkm->pemilik?->alamat ?? '-' }}</p>
                         </div>
                     </div>
                 </div>
@@ -357,7 +357,7 @@
                             <div
                                 class="bg-white/60 backdrop-blur-md rounded-2xl p-4 border border-slate-100 shadow-sm hover:shadow-md hover:bg-white/80 transition-all duration-300">
                                 <p class="text-xs text-slate-500">Sektor Usaha</p>
-                                <p class="text-sm text-slate-800 mt-1">{{ $umkm->sektor->nama_sektor ?? '-' }}</p>
+                                <p class="text-sm text-slate-800 mt-1">{{ $umkm->sektor?->nama_sektor ?? '-' }}</p>
                             </div>
                             <div
                                 class="bg-white/60 backdrop-blur-md rounded-2xl p-4 border border-slate-100 shadow-sm hover:shadow-md hover:bg-white/80 transition-all duration-300">
@@ -595,7 +595,7 @@
                                 class="bg-white/60 backdrop-blur-md rounded-2xl p-4 border border-slate-100 shadow-sm hover:shadow-md hover:bg-white/80 transition-all duration-300 text-center">
                                 <p class="text-xs text-slate-500">Petugas Pendata</p>
                                 <p class="text-sm font-medium text-slate-800 mt-1">
-                                    {{ $umkm->petugas ? $umkm->petugas->name : $umkm->id_petugas ?? '-' }}</p>
+                                    {{ $umkm->petugas ? $umkm->petugas?->name : $umkm->id_petugas ?? '-' }}</p>
                             </div>
                             <div
                                 class="bg-white/60 backdrop-blur-md rounded-2xl p-4 border border-slate-100 shadow-sm hover:shadow-md hover:bg-white/80 transition-all duration-300 text-center">

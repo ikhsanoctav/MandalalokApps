@@ -7,16 +7,72 @@ use Illuminate\Support\Collection;
 use Maatwebsite\Excel\Concerns\FromCollection;
 use Maatwebsite\Excel\Concerns\WithHeadings;
 use Maatwebsite\Excel\Concerns\WithMapping;
+use Maatwebsite\Excel\Concerns\WithCustomStartCell;
+use Maatwebsite\Excel\Concerns\WithEvents;
+use Maatwebsite\Excel\Events\AfterSheet;
+use PhpOffice\PhpSpreadsheet\Style\Alignment;
 
-class UmkmExport implements FromCollection, WithHeadings, WithMapping
+class UmkmExport implements FromCollection, WithHeadings, WithMapping, WithCustomStartCell, WithEvents
 {
     protected $filters;
     protected $selectedColumns;
+    protected $kop;
 
-    public function __construct(array $filters = [], array $selectedColumns = [])
+    public function __construct(array $filters = [], array $selectedColumns = [], array $kop = [])
     {
         $this->filters = $filters;
         $this->selectedColumns = $selectedColumns;
+        $this->kop = $kop;
+    }
+
+    public function startCell(): string
+    {
+        return 'A7';
+    }
+
+    public function registerEvents(): array
+    {
+        return [
+            AfterSheet::class => function(AfterSheet $event) {
+                $sheet = $event->sheet->getDelegate();
+                
+                $colCount = count($this->selectedColumns);
+                if ($colCount < 5) $colCount = 5; // Minimum merge width
+                $lastColumn = \PhpOffice\PhpSpreadsheet\Cell\Coordinate::stringFromColumnIndex($colCount);
+                
+                $namaInstansi = $this->kop['nama_instansi'] ?? '';
+                $namaUnit = $this->kop['nama_unit'] ?? '';
+                $alamat = $this->kop['alamat'] ?? '';
+                $telepon = $this->kop['telepon'] ?? '';
+                
+                $sheet->mergeCells("A1:{$lastColumn}1");
+                $sheet->setCellValue('A1', strtoupper($namaInstansi));
+                $sheet->getStyle('A1')->getFont()->setBold(true)->setSize(14);
+                $sheet->getStyle('A1')->getAlignment()->setHorizontal(Alignment::HORIZONTAL_CENTER);
+
+                $sheet->mergeCells("A2:{$lastColumn}2");
+                $sheet->setCellValue('A2', strtoupper($namaUnit));
+                $sheet->getStyle('A2')->getFont()->setBold(true)->setSize(16);
+                $sheet->getStyle('A2')->getAlignment()->setHorizontal(Alignment::HORIZONTAL_CENTER);
+
+                $sheet->mergeCells("A3:{$lastColumn}3");
+                $sheet->setCellValue('A3', $alamat);
+                $sheet->getStyle('A3')->getAlignment()->setHorizontal(Alignment::HORIZONTAL_CENTER);
+
+                $sheet->mergeCells("A4:{$lastColumn}4");
+                $sheet->setCellValue('A4', 'Telepon: ' . $telepon);
+                $sheet->getStyle('A4')->getAlignment()->setHorizontal(Alignment::HORIZONTAL_CENTER);
+
+                $sheet->mergeCells("A5:{$lastColumn}5");
+                $sheet->setCellValue('A5', 'LAPORAN DATA UMKM');
+                $sheet->getStyle('A5')->getFont()->setBold(true)->setSize(12);
+                $sheet->getStyle('A5')->getAlignment()->setHorizontal(Alignment::HORIZONTAL_CENTER);
+                
+                // Style for table header
+                $actualLastCol = \PhpOffice\PhpSpreadsheet\Cell\Coordinate::stringFromColumnIndex(count($this->selectedColumns));
+                $sheet->getStyle("A7:{$actualLastCol}7")->getFont()->setBold(true);
+            },
+        ];
     }
 
     /**

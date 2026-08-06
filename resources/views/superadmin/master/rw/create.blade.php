@@ -49,7 +49,7 @@
                         <input type="number" name="jumlah_rt" value="{{ old('jumlah_rt') }}" min="1" max="100"
                             class="w-full border-slate-300 rounded-lg p-2.5 focus:ring-blue-500 focus:border-blue-500"
                             placeholder="Biarkan kosong jika belum ada">
-                        <p class="text-[10px] text-slate-500 mt-1">*Sistem akan meng-generate nomor RT otomatis (001, 002,
+                        <p class="text-[10px] text-slate-700 mt-1">*Sistem akan meng-generate nomor RT otomatis (001, 002,
                             dst) sesuai jumlah yang Anda masukkan.</p>
                         @error('jumlah_rt')
                             <span class="text-red-500 text-xs mt-1">{{ $message }}</span>

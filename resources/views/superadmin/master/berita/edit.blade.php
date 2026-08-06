@@ -14,7 +14,7 @@
 @section('content')
     <div class="space-y-6">
         <div class="flex items-center gap-4">
-            <a href="{{ route('superadmin.berita.index') }}" class="text-slate-500 hover:text-slate-700">
+            <a href="{{ route('superadmin.berita.index') }}" class="text-slate-700 hover:text-slate-700">
                 <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18">
                     </path>
@@ -61,9 +61,9 @@
                             </div>
                         @endif
                         <input type="file" name="gambar"
-                            class="block w-full text-sm text-slate-500 file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100"
+                            class="block w-full text-sm text-slate-700 file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100"
                             accept="image/*">
-                        <p class="text-xs text-slate-500 mt-2">Maksimal 2MB. Kosongkan jika tidak ingin diubah.</p>
+                        <p class="text-xs text-slate-700 mt-2">Maksimal 2MB. Kosongkan jika tidak ingin diubah.</p>
                         @error('gambar')
                             <span class="text-xs text-red-500 mt-1">{{ $message }}</span>
                         @enderror

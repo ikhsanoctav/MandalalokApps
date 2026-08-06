@@ -47,9 +47,9 @@ class PasswordResetLinkController extends Controller
 
         // Cek status reset
         if ($user->password_reset_status === 'pending') {
-            return back()->with('status', 'Permintaan Anda masih diproses oleh Super Admin. Silakan cek kembali nanti.');
+            return back()->with('status', 'Permintaan Anda masih diproses oleh Admin/Super Admin. Silakan cek kembali nanti.');
         } elseif ($user->password_reset_status === 'approved') {
-            return back()->with('status', 'Permintaan disetujui. Password Anda telah di-reset menjadi "password". Silakan login dan ubah password Anda.');
+            return back()->with('status', 'Permintaan disetujui. Password Anda telah di-reset menjadi NIK Anda. Silakan login dan segera ubah password Anda.');
         }
 
         // Buat permintaan baru
@@ -58,6 +58,24 @@ class PasswordResetLinkController extends Controller
             'password_reset_requested_at' => now(),
         ]);
 
-        return back()->with('status', 'Permintaan reset password berhasil dikirim ke Super Admin. Silakan cek status Anda di halaman ini secara berkala.');
+        // Notifikasi ke Super Admin dan Admin Kecamatan
+        $admins = \App\Models\User::whereHas('roles', function ($query) {
+            $query->whereIn('name', ['super_admin', 'admin_kecamatan']);
+        })->get();
+        
+        if ($admins->isEmpty()) {
+            $admins = \App\Models\User::where('id', 1)->get(); // Fallback to first user
+        }
+
+        if ($admins->isNotEmpty()) {
+            \Illuminate\Support\Facades\Notification::send($admins, new \App\Notifications\SystemNotification(
+                'Permintaan Reset Password',
+                'Pengguna ' . $user->name . ' (' . $user->email . ') meminta reset password.',
+                'warning',
+                route('superadmin.users')
+            ));
+        }
+
+        return back()->with('status', 'Permintaan reset password berhasil dikirim ke Admin. Silakan cek status Anda di halaman ini secara berkala.');
     }
 }

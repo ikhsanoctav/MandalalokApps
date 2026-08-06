@@ -7,7 +7,7 @@
         * { box-sizing: border-box; margin: 0; padding: 0; }
 
         @page {
-            margin: 30px 40px;
+            margin: 80px 30px;
         }
 
         body {
@@ -16,15 +16,27 @@
             color: #000;
             background: #fff;
             line-height: 1.4;
+            margin-top: 50px;
+            margin-bottom: 50px;
+        }
+
+        .page-container {
+            padding-left: 80px;
+            padding-right: 80px;
         }
 
         /* ============ KOP SURAT ============ */
-        .kop-surat {
-            display: table;
-            width: 100%;
+        .kop-surat-wrapper {
             border-bottom: 3px double #000;
             padding-bottom: 8px;
-            margin-bottom: 14px;
+            margin-bottom: 25px;
+            text-align: center;
+            width: 100%;
+        }
+
+        .kop-surat {
+            display: inline-table;
+            margin: 0 auto;
         }
 
         .kop-logo-cell {
@@ -35,8 +47,8 @@
         }
 
         .kop-logo-cell img {
-            width: 60px;
-            height: 60px;
+            width: 75px;
+            height: 75px;
             object-fit: contain;
         }
 
@@ -48,14 +60,16 @@
         }
 
         .kop-instansi {
-            font-size: 10pt;
+            font-family: 'Times New Roman', Times, serif;
+            font-size: 12pt;
             font-weight: bold;
             text-transform: uppercase;
             letter-spacing: 0.5px;
         }
 
         .kop-unit {
-            font-size: 13pt;
+            font-family: 'Times New Roman', Times, serif;
+            font-size: 14pt;
             font-weight: bold;
             text-transform: uppercase;
             margin-top: 2px;
@@ -89,6 +103,7 @@
         .laporan-meta {
             font-size: 8.5pt;
             color: #444;
+            margin-bottom: 25px;
         }
 
         .laporan-meta table {
@@ -106,13 +121,13 @@
         .stats-table {
             width: 100%;
             border-collapse: collapse;
-            margin-bottom: 18px;
+            margin-bottom: 35px;
         }
 
         .stats-table th {
             border: 1px solid #000;
             background: #f1f5f9;
-            padding: 6px;
+            padding: 10px 8px;
             font-size: 8pt;
             font-weight: bold;
             text-transform: uppercase;
@@ -122,7 +137,7 @@
 
         .stats-table td {
             border: 1px solid #000;
-            padding: 8px;
+            padding: 14px 8px;
             font-size: 11pt;
             font-weight: bold;
             text-align: center;
@@ -137,21 +152,21 @@
         }
 
         .data-table thead th {
-            padding: 8px 4px;
+            padding: 10px 6px;
             text-align: center;
             vertical-align: middle;
             font-weight: bold;
-            font-size: 8pt;
+            font-size: 8.5pt;
             text-transform: uppercase;
             border: 1px solid #000;
             background: #f1f5f9;
         }
 
         .data-table tbody td {
-            padding: 6px 4px;
+            padding: 8px 6px;
             border: 1px solid #000;
-            vertical-align: top;
-            font-size: 8pt;
+            vertical-align: middle;
+            font-size: 8.5pt;
             color: #000;
         }
 
@@ -204,35 +219,48 @@
 
         /* ============ PAGE BREAK ============ */
         .page-break { page-break-after: always; }
+
+        /* ============ FOOTER / PAGE NUMBER ============ */
+        footer {
+            position: fixed;
+            bottom: 0px;
+            left: 0px;
+            right: 0px;
+            height: 20px;
+            font-size: 8pt;
+            text-align: center;
+            color: #666;
+            font-family: 'Arial', sans-serif;
+        }
+        .pagenum:before {
+            content: counter(page);
+        }
     </style>
 </head>
 <body>
+    <footer>
+        Halaman <span class="pagenum"></span>
+    </footer>
+<div class="page-container">
 
     {{-- ===================== KOP SURAT ===================== --}}
-    <div class="kop-surat">
-        @if(!empty($kop['logo_path']))
-            <div class="kop-logo-cell">
-                <img src="{{ public_path('storage/' . $kop['logo_path']) }}" alt="Logo">
-            </div>
-        @else
-            <div class="kop-logo-cell">
-                <img src="{{ public_path('images/Logo_Mandalaloka.png') }}" alt="Logo">
-            </div>
-        @endif
-        <div class="kop-text-cell">
-            <div class="kop-instansi">{{ $kop['nama_instansi'] }}</div>
-            <div class="kop-unit">{{ $kop['nama_unit'] }}</div>
-            @if(!empty($kop['alamat']))
-                <div class="kop-alamat">{{ $kop['alamat'] }}</div>
-            @endif
-            @if(!empty($kop['telepon']) || !empty($kop['email']))
-                <div class="kop-kontak">
-                    @if(!empty($kop['telepon']))Telepon: {{ $kop['telepon'] }}@endif
-                    @if(!empty($kop['telepon']) && !empty($kop['email'])) | @endif
-                    @if(!empty($kop['email']))Email: {{ $kop['email'] }}@endif
-                    @if(!empty($kop['website'])) | {{ $kop['website'] }}@endif
+    <div class="kop-surat-wrapper">
+        <div class="kop-surat">
+            @if(!empty($kop['logo_path']))
+                <div class="kop-logo-cell">
+                    <img src="{{ public_path('storage/' . $kop['logo_path']) }}" alt="Logo">
+                </div>
+            @else
+                <div class="kop-logo-cell">
+                    <img src="{{ public_path('images/Logo_Mandalaloka.png') }}" alt="Logo">
                 </div>
             @endif
+            <div class="kop-text-cell">
+                <div class="kop-instansi">PEMERINTAH KOTA BANDUNG</div>
+                <div class="kop-unit">KECAMATAN MANDALAJATI</div>
+                <div class="kop-alamat">Jl. Pasir Impun No. 33A Bandung Telp.02263730954, Fax 02263730954</div>
+                <div class="kop-kontak">e-mail : mandalajatiunik@gmail.com</div>
+            </div>
         </div>
     </div>
 
@@ -315,9 +343,9 @@
                 <td class="text-center">{{ $i + 1 }}</td>
                 @if(in_array('no_pendaftaran', $selectedColumns)) <td>{{ $umkm->no_pendaftaran ?? '-' }}</td> @endif
                 @if(in_array('nama_usaha', $selectedColumns)) <td><strong>{{ $umkm->nama_usaha ?? '-' }}</strong></td> @endif
-                @if(in_array('pemilik', $selectedColumns)) <td>{{ $umkm->pemilik->nama_lengkap ?? '-' }}</td> @endif
-                @if(in_array('kategori', $selectedColumns)) <td>{{ $umkm->kategori->nama_kategori ?? '-' }}</td> @endif
-                @if(in_array('sektor', $selectedColumns)) <td>{{ $umkm->sektor->nama_sektor ?? '-' }}</td> @endif
+                @if(in_array('pemilik', $selectedColumns)) <td>{{ $umkm->pemilik?->nama_lengkap ?? '-' }}</td> @endif
+                @if(in_array('kategori', $selectedColumns)) <td>{{ $umkm->kategori?->nama_kategori ?? '-' }}</td> @endif
+                @if(in_array('sektor', $selectedColumns)) <td>{{ $umkm->sektor?->nama_sektor ?? '-' }}</td> @endif
                 @if(in_array('status_usaha', $selectedColumns)) <td class="text-center">{{ ucfirst(str_replace('_', ' ', $umkm->status_usaha)) }}</td> @endif
                 @if(in_array('tahun_berdiri', $selectedColumns)) <td class="text-center">{{ $umkm->tahun_berdiri ?? '-' }}</td> @endif
                 @if(in_array('no_izin', $selectedColumns)) <td>{{ $umkm->no_izin_usaha ?? '-' }}</td> @endif
@@ -327,7 +355,7 @@
                 @if(in_array('email', $selectedColumns)) <td>{{ $umkm->email_usaha ?? '-' }}</td> @endif
                 @if(in_array('jumlah_tk', $selectedColumns)) <td class="text-center">{{ $umkm->jumlah_tenaga_kerja ?? 0 }}</td> @endif
                 @if(in_array('alamat', $selectedColumns)) <td>{{ $umkm->alamat_usaha ?? '-' }}</td> @endif
-                @if(in_array('petugas', $selectedColumns)) <td>{{ $umkm->petugas->name ?? '-' }}</td> @endif
+                @if(in_array('petugas', $selectedColumns)) <td>{{ $umkm->petugas?->name ?? '-' }}</td> @endif
                 @if(in_array('tgl_pendataan', $selectedColumns)) <td class="text-center">{{ $umkm->tanggal_pendataan ? $umkm->tanggal_pendataan->format('d/m/Y') : '-' }}</td> @endif
                 @if(in_array('status_verifikasi', $selectedColumns)) <td class="text-center">{{ ucfirst($umkm->status_verifikasi) }}</td> @endif
                 @if(in_array('alasan_penolakan', $selectedColumns)) <td>{{ $umkm->status_verifikasi === 'ditolak' ? ($umkm->catatan_penolakan ?? '-') : '-' }}</td> @endif
@@ -366,5 +394,6 @@
         </div>
     </div>
 
+    </div>
 </body>
 </html>

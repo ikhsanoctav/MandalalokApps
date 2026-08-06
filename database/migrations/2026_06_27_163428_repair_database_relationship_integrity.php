@@ -8,6 +8,9 @@ return new class extends Migration
 {
     public function up(): void
     {
+        if (DB::getDriverName() === 'sqlite') {
+            return;
+        }
         $this->repairKelurahanMaster();
         $this->repairKelurahanReferences();
         $this->repairUmkmRelationTypes();
@@ -16,6 +19,9 @@ return new class extends Migration
 
     public function down(): void
     {
+        if (DB::getDriverName() === 'sqlite') {
+            return;
+        }
         $this->dropForeignKeyIfExists('verifikasi_lapangan', 'verifikasi_lapangan_petugas_id_foreign');
         $this->dropForeignKeyIfExists('verifikasi_lapangan', 'verifikasi_lapangan_umkm_id_foreign');
         $this->dropForeignKeyIfExists('umkms', 'umkms_id_petugas_foreign');
@@ -57,7 +63,9 @@ return new class extends Migration
         }
 
         $maxId = DB::table('kelurahans')->max('id') ?: 1;
-        DB::statement('ALTER TABLE kelurahans AUTO_INCREMENT = '.($maxId + 1));
+        if (DB::getDriverName() !== 'sqlite') {
+            DB::statement('ALTER TABLE kelurahans AUTO_INCREMENT = '.($maxId + 1));
+        }
 
         $this->ensureRwRtForKelurahans();
     }

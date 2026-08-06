@@ -14,11 +14,11 @@
             class="bg-white rounded-2xl p-4 shadow-sm border border-slate-200/60 flex flex-col sm:flex-row justify-between items-center gap-4">
             <div>
                 <h1 class="text-xl font-bold text-slate-800">Edit Data Pengguna</h1>
-                <p class="text-xs text-slate-500 mt-0.5">Perbarui rincian akun, status profil, dan tipe hak akses user</p>
+                <p class="text-xs text-slate-700 mt-0.5">Perbarui rincian akun, status profil, dan tipe hak akses user</p>
             </div>
             <a href="{{ route('superadmin.users') }}"
                 class="flex items-center gap-2 px-4 py-2 rounded-lg border border-slate-200 hover:bg-slate-50 font-semibold text-xs text-slate-700 shadow-sm transition-all">
-                <svg class="w-4 h-4 text-slate-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <svg class="w-4 h-4 text-slate-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18">
                     </path>
                 </svg>
@@ -26,7 +26,7 @@
             </a>
         </div>
 
-        <div class="bg-white rounded-2xl shadow-sm border border-slate-200/60 p-6 max-w-4xl mx-auto">
+        <div class="bg-white rounded-2xl shadow-sm border border-slate-200/60 p-6 w-full">
             <form action="{{ route('superadmin.users.update', $user->id) }}" method="POST" enctype="multipart/form-data"
                 class="space-y-6">
                 @csrf
@@ -73,7 +73,7 @@
                         </div>
                         <div>
                             <h3 class="font-bold text-slate-800">Profil & Identitas</h3>
-                            <p class="text-xs text-slate-500">Informasi dasar dan kontak pengguna</p>
+                            <p class="text-xs text-slate-700">Informasi dasar dan kontak pengguna</p>
                         </div>
                     </div>
                     <div class="p-6 grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -184,7 +184,7 @@
                         </div>
                         <div>
                             <h3 class="font-bold text-slate-800">Hak Akses & Penugasan</h3>
-                            <p class="text-xs text-slate-500">Atur peran (*role*) dan cakupan wilayah</p>
+                            <p class="text-xs text-slate-700">Atur peran (*role*) dan cakupan wilayah</p>
                         </div>
                     </div>
                     <div class="p-6 space-y-6">
@@ -311,7 +311,7 @@
                             </div>
                             <div>
                                 <h3 class="font-bold text-slate-800">Keamanan (Password)</h3>
-                                <p class="text-xs text-slate-500">Abaikan jika tidak ingin mengubah password</p>
+                                <p class="text-xs text-slate-700">Abaikan jika tidak ingin mengubah password</p>
                             </div>
                         </div>
                     </div>

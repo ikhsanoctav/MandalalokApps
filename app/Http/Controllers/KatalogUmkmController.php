@@ -12,7 +12,7 @@ class KatalogUmkmController extends Controller
     public function index(Request $request)
     {
         $query = \App\Models\Produk::query()
-            ->with(['umkm.sektor', 'umkm.pemilik.kelurahanRel'])
+            ->with(['umkm.sektor', 'umkm.pemilik.kelurahanRel', 'umkm.ratings'])
             ->whereHas('umkm', function($q) {
                 $q->terverifikasi()->aktif();
             });

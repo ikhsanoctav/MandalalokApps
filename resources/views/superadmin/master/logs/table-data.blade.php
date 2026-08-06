@@ -2,21 +2,21 @@
     <table class="w-full">
         <thead class="bg-slate-50 border-b border-slate-200">
             <tr>
-                <th class="px-6 py-3.5 text-left text-xs font-semibold text-slate-500 uppercase tracking-wider">No</th>
-                <th class="px-6 py-3.5 text-left text-xs font-semibold text-slate-500 uppercase tracking-wider">Pengguna
+                <th class="px-6 py-3.5 text-left text-xs font-semibold text-slate-700 uppercase tracking-wider">No</th>
+                <th class="px-6 py-3.5 text-left text-xs font-semibold text-slate-700 uppercase tracking-wider">Pengguna
                 </th>
-                <th class="px-6 py-3.5 text-left text-xs font-semibold text-slate-500 uppercase tracking-wider">Aktivitas
+                <th class="px-6 py-3.5 text-left text-xs font-semibold text-slate-700 uppercase tracking-wider">Aktivitas
                     & Tindakan</th>
-                <th class="px-6 py-3.5 text-left text-xs font-semibold text-slate-500 uppercase tracking-wider">IP
+                <th class="px-6 py-3.5 text-left text-xs font-semibold text-slate-700 uppercase tracking-wider">IP
                     Address</th>
-                <th class="px-6 py-3.5 text-left text-xs font-semibold text-slate-500 uppercase tracking-wider">Waktu
+                <th class="px-6 py-3.5 text-left text-xs font-semibold text-slate-700 uppercase tracking-wider">Waktu
                     Kejadian</th>
             </tr>
         </thead>
         <tbody class="divide-y divide-slate-100 bg-white">
             @forelse($logs as $index => $log)
                 <tr class="hover:bg-slate-50/50 transition-colors">
-                    <td class="px-6 py-4 text-sm text-slate-500 font-medium">
+                    <td class="px-6 py-4 text-sm text-slate-700 font-medium">
                         {{ $logs->firstItem() + $index }}
                     </td>
                     <td class="px-6 py-4">
@@ -43,7 +43,7 @@
                     <td class="px-6 py-4 text-xs font-mono text-slate-400">
                         {{ $log->ip_address ?? '127.0.0.1' }}
                     </td>
-                    <td class="px-6 py-4 text-sm text-slate-500">
+                    <td class="px-6 py-4 text-sm text-slate-700">
                         <div class="flex flex-col">
                             <span
                                 class="font-semibold text-slate-700 text-xs">{{ $log->created_at ? $log->created_at->format('d M Y') : '-' }}</span>

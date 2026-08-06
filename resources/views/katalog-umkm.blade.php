@@ -72,7 +72,7 @@
             background: rgba(255, 255, 255, 0.98); box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
             border-left: none; border-right: none; border-top: none;
         }
-        .nav-container { padding: 10px 24px 10px 32px; display: flex; justify-content: space-between; align-items: center; }
+        .nav-container { padding: 10px 24px 10px 32px; display: flex; justify-content: space-between; align-items: center; gap: 24px; }
         .logo { display: flex; align-items: center; gap: 16px; }
         .logo img { height: 48px; width: auto; border-radius: var(--radius-sm); }
         .logo-text h4 { font-size: 18px; font-weight: 900; color: var(--primary); letter-spacing: 0.5px; line-height: 1.1; }
@@ -237,59 +237,116 @@
         @media (min-width: 768px) { .catalog-grid { grid-template-columns: repeat(2, 1fr); gap: 24px; } }
         @media (min-width: 1024px) { .catalog-grid { grid-template-columns: repeat(3, 1fr); gap: 24px; } }
         @media (min-width: 1280px) { .catalog-grid { grid-template-columns: repeat(4, 1fr); gap: 24px; } }
+        /* Premium UMKM Card Design */
         .umkm-card {
-            background: white; border-radius: 14px;
-            box-shadow: 0 8px 26px rgba(15, 46, 92, 0.07); transition: all 0.3s ease; border: 1px solid rgba(226,232,240,0.95);
-            display: flex; flex-direction: column; position: relative; overflow: hidden;
+            background: #ffffff;
+            border-radius: 20px;
+            box-shadow: 0 4px 20px rgba(15, 46, 92, 0.05), 0 1px 3px rgba(15, 46, 92, 0.02);
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            border: 1px solid rgba(226,232,240,0.8);
+            display: flex;
+            flex-direction: column;
+            position: relative;
+            overflow: hidden;
+            z-index: 1;
         }
-        .umkm-card:hover { transform: translateY(-6px); box-shadow: 0 20px 42px rgba(15, 46, 92, 0.13); border-color: rgba(26,73,139,.32); }
-        .umkm-img-wrap { position: relative; aspect-ratio: 4 / 3; overflow: hidden; background: linear-gradient(135deg, #e8eef7, #f8fafc); }
+        .umkm-card::after {
+            content: ''; position: absolute; inset: 0; border-radius: 20px;
+            box-shadow: inset 0 0 0 1px rgba(255,255,255,0.5); pointer-events: none; z-index: 2;
+        }
+        .umkm-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 24px 48px rgba(15, 46, 92, 0.12), 0 8px 16px rgba(15, 46, 92, 0.04);
+            border-color: rgba(26,73,139,0.15);
+        }
+        .umkm-img-wrap {
+            position: relative;
+            aspect-ratio: 4 / 3;
+            overflow: hidden;
+            background: linear-gradient(135deg, #f1f5f9, #f8fafc);
+        }
+        .umkm-img-wrap::after {
+            content: ''; position: absolute; inset: 0;
+            background: linear-gradient(to top, rgba(0,0,0,0.4) 0%, rgba(0,0,0,0) 40%);
+            opacity: 0; transition: opacity 0.4s ease; z-index: 1;
+        }
+        .umkm-card:hover .umkm-img-wrap::after { opacity: 1; }
         .umkm-img-wrap img {
-            position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover; transition: transform 0.5s;
+            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+            object-fit: cover; transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
         }
-        .umkm-card:hover .umkm-img-wrap img { transform: scale(1.05); }
+        .umkm-card:hover .umkm-img-wrap img { transform: scale(1.08); }
         .umkm-placeholder {
             position: absolute; inset: 0; display: flex; align-items: center; justify-content: center;
-            background: linear-gradient(135deg, rgba(15,46,92,.08), rgba(199,154,47,.12));
+            background: linear-gradient(135deg, rgba(15,46,92,.05), rgba(199,154,47,.08));
         }
-        .umkm-placeholder img { position: static; width: 78px; height: 78px; object-fit: contain; opacity: .78; transform: none !important; }
+        .umkm-placeholder img { position: static; width: 64px; height: 64px; object-fit: contain; opacity: 0.6; transform: none !important; filter: grayscale(100%); }
         .umkm-badge {
-            position: absolute; top: 10px; right: 10px; background: rgba(255, 255, 255, 0.95);
-            padding: 6px 10px; border-radius: 999px; font-size: 11px; font-weight: 800;
-            color: var(--primary); box-shadow: 0 8px 18px rgba(15,46,92,.12); max-width: calc(100% - 20px);
-            white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+            position: absolute; top: 12px; right: 12px;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(4px); -webkit-backdrop-filter: blur(4px);
+            padding: 6px 12px; border-radius: 999px;
+            font-size: 11px; font-weight: 800; letter-spacing: 0.3px;
+            color: var(--primary); box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+            max-width: calc(100% - 24px); white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+            z-index: 2; border: 1px solid rgba(255,255,255,0.4);
         }
-        .umkm-content { padding: 16px; flex-grow: 1; display: flex; flex-direction: column; }
-        .umkm-store { font-size: 12px; color: var(--gold-dark); font-weight: 800; margin-bottom: 4px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-        .umkm-title { font-size: 17px; font-weight: 800; color: var(--text-dark); margin-bottom: 10px; font-family: 'Inter', sans-serif; line-height: 1.38; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; min-height: 47px; }
-        .umkm-price { font-size: 16px; font-weight: 900; color: #d94b2b; margin-bottom: 11px; }
-        .umkm-category { font-size: 12px; color: var(--gold-dark); font-weight: 700; text-transform: uppercase; margin-bottom: 8px; display: inline-block; }
-        .umkm-desc { font-size: 13px; color: var(--text-muted); line-height: 1.5; margin-bottom: 12px; flex-grow: 1; display: none; }
+        .umkm-content { padding: 20px; flex-grow: 1; display: flex; flex-direction: column; position: relative; z-index: 2; background: white; }
+        .umkm-store {
+            font-size: 11px; color: var(--gold-dark); font-weight: 800; letter-spacing: 0.5px;
+            text-transform: uppercase; margin-bottom: 6px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+        }
+        .umkm-title {
+            font-size: 18px; font-weight: 800; color: #0f172a; margin-bottom: 8px;
+            font-family: 'Inter', sans-serif; line-height: 1.4;
+            display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; min-height: 50px;
+        }
+        .umkm-price {
+            font-size: 18px; font-weight: 900; color: #ef4444; margin-bottom: 16px;
+            display: flex; align-items: center; gap: 4px;
+        }
         
-        .umkm-meta { display: flex; align-items: center; gap: 7px; font-size: 12px; color: var(--text-muted); margin-bottom: 12px; margin-top: auto; min-width: 0; }
-        .umkm-meta i { color: var(--primary); font-size: 10px; }
-        .card-actions { display: grid; grid-template-columns: 1fr auto; gap: 8px; align-items: center; margin-bottom: 12px; }
+        .umkm-meta { display: flex; align-items: center; gap: 6px; font-size: 13px; color: #64748b; margin-bottom: 16px; margin-top: auto; min-width: 0; font-weight: 500; }
+        .umkm-meta i { color: var(--primary-light); font-size: 12px; }
+        .card-actions { display: grid; grid-template-columns: 1fr auto; gap: 10px; align-items: center; margin-bottom: 16px; padding-top: 16px; border-top: 1px solid #f1f5f9; }
         .review-trigger {
-            display: inline-flex; align-items: center; gap: 5px; font-size: 12px; font-weight: 800; color: #475569;
-            cursor: pointer; padding: 7px 9px; border-radius: 999px; transition: background .2s; min-width: 0;
+            display: inline-flex; align-items: center; gap: 6px; font-size: 13px; font-weight: 700; color: #475569;
+            cursor: pointer; padding: 8px 12px; border-radius: 999px; transition: all .25s ease; min-width: 0;
             border: 1px solid #e2e8f0; background: #f8fafc;
         }
-        .review-trigger:hover { background: #eef4fb; color: var(--primary); }
+        .review-trigger:hover { background: #e0e7ff; color: #4338ca; border-color: #c7d2fe; transform: scale(1.02); }
         .review-button {
-            background: white; border: 1px solid #dbe3ee; border-radius: 999px; padding: 7px 11px; font-size: 12px; font-weight: 800; color: var(--primary); cursor: pointer; transition: all .2s;
+            background: white; border: 1px solid #cbd5e1; border-radius: 999px; padding: 8px 14px; font-size: 12px; font-weight: 800; color: #334155; cursor: pointer; transition: all .2s ease;
         }
         .review-button:hover { background: #f8fafc; border-color: #b7c7da; }
+        
+        /* Premium Custom Pagination Styling */
+        .pagination-wrap { margin-top: 50px; display: flex; justify-content: center; }
+        .katalog-pagination { display: flex; flex-direction: column; align-items: center; gap: 16px; }
+        .katalog-pagination nav { display: flex; align-items: center; gap: 6px; background: white; padding: 6px; border-radius: 999px; box-shadow: 0 4px 20px rgba(15, 46, 92, 0.08); border: 1px solid rgba(226,232,240,0.8); }
+        .katalog-pagination .page-numbers { display: flex; align-items: center; gap: 4px; }
+        .katalog-pagination .page-link { display: inline-flex; align-items: center; justify-content: center; min-width: 42px; height: 42px; padding: 0 14px; border-radius: 999px; background: transparent; color: var(--text-muted); font-weight: 700; font-size: 0.95rem; text-decoration: none; border: none; transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1); }
+        .katalog-pagination .page-link i { font-size: 13px; }
+        .katalog-pagination .page-link:hover:not(.disabled):not(.active) { background: #f1f5f9; color: var(--primary); transform: translateY(-1px); }
+        .katalog-pagination .page-link.active { background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%); color: white; box-shadow: 0 4px 12px rgba(15, 46, 92, 0.25); }
+        .katalog-pagination .page-link.disabled { opacity: 0.4; cursor: not-allowed; }
+        .katalog-pagination .pagination-info { font-size: 0.85rem; color: var(--text-muted); letter-spacing: 0.3px; }
+        .katalog-pagination .pagination-info strong { color: var(--primary); font-weight: 800; }
+
+        /* Loader for Smooth Pagination */
+        .catalog-container { position: relative; }
+        .catalog-loader { position: absolute; inset: 0; background: rgba(255,255,255,0.6); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); display: flex; align-items: center; justify-content: center; z-index: 50; opacity: 0; pointer-events: none; transition: opacity 0.3s ease; border-radius: 20px; }
+        .catalog-loader.active { opacity: 1; pointer-events: auto; }
+        .catalog-spinner { width: 50px; height: 50px; border: 4px solid #e2e8f0; border-top-color: var(--primary); border-radius: 50%; animation: spin 1s cubic-bezier(0.4, 0, 0.2, 1) infinite; box-shadow: 0 4px 12px rgba(0,0,0,0.05); }
+        @keyframes spin { 100% { transform: rotate(360deg); } }
+
         .wa-button {
             display: flex; align-items: center; justify-content: center; gap: 8px; width: 100%;
-            background: #1da851; color: white; padding: 10px 12px; border-radius: 10px; text-decoration: none;
-            font-size: 13px; font-weight: 850; transition: all .25s ease;
+            background: linear-gradient(135deg, #1da851 0%, #168840 100%); color: white; padding: 12px; border-radius: 12px; text-decoration: none;
+            font-size: 14px; font-weight: 800; transition: all .3s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 0 4px 12px rgba(29, 168, 81, 0.2); border: 1px solid rgba(255,255,255,0.1);
         }
-        .wa-button:hover { background: #168941; transform: translateY(-1px); }
-        .review-popover {
-            position: absolute; bottom: 100%; right: 0; width: min(320px, calc(100vw - 32px)); background: white; border-radius: 14px; padding: 20px;
-            box-shadow: 0 24px 52px rgba(15,46,92,.18); z-index: 50; margin-bottom: 12px; border: 1px solid #e2e8f0;
-        }
-        
+        .wa-button:hover { transform: translateY(-2px); box-shadow: 0 6px 16px rgba(29, 168, 81, 0.3); background: linear-gradient(135deg, #1fae54 0%, #179344 100%); }
         /* Pagination */
         .pagination-wrap { margin-top: 48px; display: flex; justify-content: center; }
         .pagination { display: flex; gap: 8px; list-style: none; }
@@ -312,10 +369,21 @@
         .footer-about { color: rgba(255, 255, 255, 0.8); line-height: 1.8; font-size: 15px; max-width: 400px; }
         .footer-bottom { border-top: 1px solid rgba(255, 255, 255, 0.1); padding-top: 24px; text-align: center; color: rgba(255, 255, 255, 0.6); font-size: 14px; }
 
-        /* Mobile */
-        @media (max-width: 768px) {
+        /* Responsive */
+        @media (max-width: 1200px) {
+            .nav-menu { gap: 14px; }
+            .nav-link { font-size: 13px; }
+            .btn-login, .btn-register { padding: 10px 20px; font-size: 12px; }
+            .logo-text h4 { font-size: 16px; }
+        }
+        
+        @media (max-width: 1024px) {
             .nav-menu { display: none; }
             .mobile-menu-btn { display: block; }
+        }
+        
+        /* Mobile */
+        @media (max-width: 768px) {
             .hero h1 { font-size: 32px; }
             .filter-section { margin-left: 16px; margin-right: 16px; padding: 14px; }
             .filter-form { grid-template-columns: 1fr; }
@@ -445,13 +513,13 @@
                     <div class="umkm-card reveal">
                         <div class="umkm-img-wrap">
                             @if($produk->foto_produk && count($produk->foto_produk) > 0)
-                                <img src="{{ Storage::url($produk->foto_produk[0]) }}" alt="{{ $produk->nama_produk }}" loading="lazy">
+                                <img src="{{ Storage::url($produk->foto_produk[0]) }}" alt="{{ $produk->nama_produk }}" loading="lazy" onerror="this.onerror=null;this.src='https://placehold.co/600x400/e8f0fb/0f2e5c?text={{ urlencode($produk->nama_produk) }}';">
                             @else
                                 <div class="umkm-placeholder">
                                     <img src="{{ asset('images/Logo_Mandalaloka.png') }}" alt="Produk Mandalaloka" loading="lazy">
                                 </div>
                             @endif
-                            <div class="umkm-badge">{{ $produk->umkm->sektor->nama_sektor ?? 'Umum' }}</div>
+                            <div class="umkm-badge">{{ $produk->umkm->sektor?->nama_sektor ?? 'Umum' }}</div>
                         </div>
                         <div class="umkm-content">
                             <div class="umkm-store">{{ $produk->umkm->nama_usaha }}</div>
@@ -470,54 +538,12 @@
                                 <div class="review-trigger" x-data @click="$dispatch('view-reviews', { name: '{{ addslashes($produk->umkm->nama_usaha) }}', html: document.getElementById('reviews-{{ $produk->umkm->id_umkm }}').innerHTML })" title="Lihat Ulasan">
                                     <i class="fas fa-star" style="color: #fbbf24;"></i>
                                     <span>{{ $produk->umkm->average_rating > 0 ? $produk->umkm->average_rating : 'Baru' }}</span>
-                                    <span style="color: #94a3b8; font-weight: 700; font-size: 11px;">{{ $produk->umkm->ratings()->count() }} ulasan</span>
+                                    <span style="color: #94a3b8; font-weight: 700; font-size: 11px;">{{ $produk->umkm->ratings->count() }} ulasan</span>
                                 </div>
-                                <div x-data="{ showPopover: false, rating: 5, hoverRating: 0 }" style="position: relative;">
-                                    <button @click="showPopover = !showPopover" class="review-button">
+                                <div x-data>
+                                    <button @click="$dispatch('open-review-form', { id: '{{ $produk->umkm->id_umkm }}', name: '{{ addslashes($produk->umkm->nama_usaha) }}' })" class="review-button">
                                         <i class="far fa-comment-dots"></i> Ulas
                                     </button>
-                                    
-                                    <!-- Popover Rating -->
-                                    <div x-show="showPopover" @click.away="showPopover = false" x-transition.opacity class="review-popover" x-cloak>
-                                        <button @click="showPopover = false" style="position: absolute; top: 12px; right: 12px; background: none; border: none; font-size: 16px; color: #94a3b8; cursor: pointer;">
-                                            <i class="fas fa-times"></i>
-                                        </button>
-                                        
-                                        <h3 style="font-family: 'Inter', sans-serif; font-size: 16px; font-weight: 700; color: #1e293b; margin-bottom: 4px; text-align: center;">Berikan Ulasan</h3>
-                                        <p style="font-size: 11px; color: #64748b; text-align: center; margin-bottom: 16px;">{{ $produk->umkm->nama_usaha }}</p>
-
-                                        <form action="{{ url('katalog-umkm') }}/{{ $produk->umkm->id_umkm }}/rate" method="POST">
-                                            @csrf
-                                            <div style="display: flex; justify-content: center; gap: 6px; margin-bottom: 16px;">
-                                                <template x-for="i in 5">
-                                                    <i class="fa-star" 
-                                                       :class="(hoverRating ? hoverRating >= i : rating >= i) ? 'fas text-yellow-400' : 'far text-gray-300'"
-                                                       style="font-size: 24px; cursor: pointer; transition: all 0.2s;"
-                                                       :style="(hoverRating ? hoverRating >= i : rating >= i) ? 'color: #fbbf24; transform: scale(1.1);' : 'color: #cbd5e1; transform: scale(1);'"
-                                                       @mouseenter="hoverRating = i"
-                                                       @mouseleave="hoverRating = 0"
-                                                       @click="rating = i"
-                                                    ></i>
-                                                </template>
-                                            </div>
-                                            <input type="hidden" name="rating" x-model="rating">
-
-                                            <div style="margin-bottom: 12px;">
-                                                <input type="text" name="nama_reviewer" required placeholder="Nama Anda..." style="width: 100%; padding: 10px 14px; border: 1px solid #e2e8f0; border-radius: 8px; font-family: 'Inter', sans-serif; font-size: 12px; outline: none; transition: border-color 0.3s;" onfocus="this.style.borderColor='#0f2e5c'" onblur="this.style.borderColor='#e2e8f0'">
-                                            </div>
-
-                                            <div style="margin-bottom: 16px;">
-                                                <textarea name="ulasan" rows="2" placeholder="Komentar (Opsional)..." style="width: 100%; padding: 10px 14px; border: 1px solid #e2e8f0; border-radius: 8px; font-family: 'Inter', sans-serif; font-size: 12px; outline: none; resize: none; transition: border-color 0.3s;" onfocus="this.style.borderColor='#0f2e5c'" onblur="this.style.borderColor='#e2e8f0'"></textarea>
-                                            </div>
-
-                                            <button type="submit" style="width: 100%; background: #0f2e5c; color: white; border: none; padding: 10px; border-radius: 8px; font-weight: 600; font-size: 13px; cursor: pointer; transition: background 0.3s;" onmouseover="this.style.background='#1a498b'" onmouseout="this.style.background='#0f2e5c'">
-                                                Kirim Ulasan
-                                            </button>
-                                        </form>
-                                        
-                                        <!-- Arrow Pointer -->
-                                        <div style="position: absolute; bottom: -6px; right: 20px; width: 12px; height: 12px; background: white; border-bottom: 1px solid #f1f5f9; border-right: 1px solid #f1f5f9; transform: rotate(45deg);"></div>
-                                    </div>
                                 </div>
                             </div>
 
@@ -542,7 +568,7 @@
 
                             <!-- Template untuk list ulasan -->
                             <template id="reviews-{{ $produk->umkm->id_umkm }}">
-                                @php $ulasans = $produk->umkm->ratings()->where('is_hidden', false)->latest()->get(); @endphp
+                                @php $ulasans = $produk->umkm->ratings->where('is_hidden', false)->sortByDesc('created_at'); @endphp
                                 @if($ulasans->count() > 0)
                                     @foreach($ulasans as $ulasan)
                                         <div style="padding: 16px; border-bottom: 1px solid #f1f5f9;">
@@ -587,7 +613,7 @@
             </div>
             
             <div class="pagination-wrap reveal">
-                {{ $produks->links() }}
+                {{ $produks->links('pagination.katalog') }}
             </div>
         @else
             <div class="reveal" style="text-align: center; padding: 60px 20px;">
@@ -636,6 +662,84 @@
                     <!-- Reviews will be injected here -->
                 </div>
             </div>
+        </div>
+    </div>
+
+    <!-- Global Review Form Modal -->
+    <div x-data="{
+        showForm: false,
+        umkmId: '',
+        umkmName: '',
+        rating: 5,
+        hoverRating: 0,
+        closeForm() {
+            this.showForm = false;
+            document.body.style.overflow = '';
+        }
+    }" @open-review-form.window="umkmId = $event.detail.id; umkmName = $event.detail.name; rating = 5; showForm = true; document.body.style.overflow = 'hidden';">
+        
+        <!-- Overlay -->
+        <div x-show="showForm" 
+             x-transition.opacity.duration.300ms
+             style="position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(15, 23, 42, 0.7); backdrop-filter: blur(6px); z-index: 10000;" 
+             @click="closeForm()" x-cloak></div>
+        
+        <!-- Modal Content -->
+        <div x-show="showForm" 
+             x-transition:enter="transition ease-out duration-300"
+             x-transition:enter-start="opacity-0"
+             x-transition:enter-end="opacity-100"
+             x-transition:leave="transition ease-in duration-200"
+             x-transition:leave-start="opacity-100"
+             x-transition:leave-end="opacity-0"
+             style="position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); background: white; width: calc(100vw - 32px); max-width: 400px; border-radius: 24px; padding: 32px; box-shadow: 0 25px 50px -12px rgba(0,0,0,0.25); z-index: 10001; border: 1px solid rgba(226, 232, 240, 0.8); margin: 0;" x-cloak>
+            
+            <button type="button" @click="closeForm()" style="position: absolute; top: 16px; right: 16px; width: 32px; height: 32px; border-radius: 50%; background: #f1f5f9; border: none; font-size: 16px; color: #64748b; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: all 0.2s;" onmouseover="this.style.background='#e2e8f0'; this.style.color='#0f2e5c'" onmouseout="this.style.background='#f1f5f9'; this.style.color='#64748b'">
+                <i class="fas fa-times"></i>
+            </button>
+            
+            <div style="text-align: center; margin-bottom: 24px;">
+                <div style="width: 56px; height: 56px; background: #eff6ff; color: #3b82f6; border-radius: 16px; display: flex; align-items: center; justify-content: center; font-size: 24px; margin: 0 auto 16px;">
+                    <i class="far fa-star"></i>
+                </div>
+                <h3 style="font-family: 'Inter', sans-serif; font-size: 20px; font-weight: 800; color: #1e293b; margin-bottom: 6px;">Berikan Ulasan</h3>
+                <p style="font-size: 13px; color: #64748b; margin: 0; line-height: 1.5;">Bagaimana pengalaman Anda dengan <br><strong x-text="umkmName" style="color: #0f2e5c;"></strong>?</p>
+            </div>
+
+            <form :action="'{{ url('katalog-umkm') }}/' + umkmId + '/rate'" method="POST">
+                @csrf
+                <div style="display: flex; justify-content: center; gap: 8px; margin-bottom: 24px;">
+                    <template x-for="i in 5">
+                        <i class="fa-star" 
+                           :class="(hoverRating ? hoverRating >= i : rating >= i) ? 'fas text-yellow-400' : 'far text-gray-300'"
+                           style="font-size: 32px; cursor: pointer; transition: all 0.2s;"
+                           :style="(hoverRating ? hoverRating >= i : rating >= i) ? 'color: #fbbf24; transform: scale(1.15);' : 'color: #cbd5e1; transform: scale(1);'"
+                           @mouseenter="hoverRating = i"
+                           @mouseleave="hoverRating = 0"
+                           @click="rating = i"
+                        ></i>
+                    </template>
+                </div>
+                <input type="hidden" name="rating" x-model="rating">
+
+                <div style="margin-bottom: 16px;">
+                    <label style="display: block; font-size: 12px; font-weight: 700; color: #475569; margin-bottom: 6px;">Nama Anda</label>
+                    @auth
+                        <input type="text" name="nama_reviewer" value="{{ auth()->user()->name }}" readonly style="width: 100%; padding: 14px 16px; border: 2px solid #e2e8f0; border-radius: 12px; font-family: 'Inter', sans-serif; font-size: 14px; outline: none; background: #f1f5f9; color: #64748b; cursor: not-allowed;">
+                    @else
+                        <input type="text" name="nama_reviewer" required placeholder="Tuliskan nama Anda..." style="width: 100%; padding: 14px 16px; border: 2px solid #e2e8f0; border-radius: 12px; font-family: 'Inter', sans-serif; font-size: 14px; outline: none; transition: all 0.3s; background: #f8fafc;" onfocus="this.style.borderColor='#0f2e5c'; this.style.background='white';" onblur="this.style.borderColor='#e2e8f0'; this.style.background='#f8fafc';">
+                    @endauth
+                </div>
+
+                <div style="margin-bottom: 24px;">
+                    <label style="display: block; font-size: 12px; font-weight: 700; color: #475569; margin-bottom: 6px;">Komentar <span style="color: #94a3b8; font-weight: 500;">(Opsional)</span></label>
+                    <textarea name="ulasan" rows="3" placeholder="Ceritakan pengalaman Anda..." style="width: 100%; padding: 14px 16px; border: 2px solid #e2e8f0; border-radius: 12px; font-family: 'Inter', sans-serif; font-size: 14px; outline: none; resize: none; transition: all 0.3s; background: #f8fafc;" onfocus="this.style.borderColor='#0f2e5c'; this.style.background='white';" onblur="this.style.borderColor='#e2e8f0'; this.style.background='#f8fafc';"></textarea>
+                </div>
+
+                <button type="submit" style="width: 100%; background: linear-gradient(135deg, #0f2e5c 0%, #1a498b 100%); color: white; border: none; padding: 16px; border-radius: 12px; font-weight: 800; font-size: 15px; cursor: pointer; transition: all 0.3s; box-shadow: 0 4px 12px rgba(15, 46, 92, 0.2);" onmouseover="this.style.transform='translateY(-2px)'; this.style.boxShadow='0 8px 16px rgba(15, 46, 92, 0.3)';" onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 4px 12px rgba(15, 46, 92, 0.2)';">
+                    Kirim Ulasan Sekarang
+                </button>
+            </form>
         </div>
     </div>
 
@@ -759,6 +863,156 @@
             })
             .catch(error => console.error('Error:', error));
         }
+        // Unified AJAX Fetch & Render Function
+        function fetchCatalog(url, scrollToTop = false) {
+            const container = document.querySelector('.catalog-container');
+            if (!container) return;
+
+            // Buat loader overlay jika belum ada
+            let loader = document.querySelector('.catalog-loader');
+            if (!loader) {
+                loader = document.createElement('div');
+                loader.className = 'catalog-loader';
+                loader.innerHTML = '<div class="catalog-spinner"></div>';
+                container.appendChild(loader);
+            }
+            
+            // Tampilkan loader
+            loader.classList.add('active');
+            container.style.pointerEvents = 'none';
+            
+            fetch(url, {
+                headers: {
+                    'X-Requested-With': 'XMLHttpRequest'
+                }
+            })
+            .then(res => res.text())
+            .then(html => {
+                const parser = new DOMParser();
+                const doc = parser.parseFromString(html, 'text/html');
+                const newContainer = doc.querySelector('.catalog-container');
+                const newFilterSection = doc.querySelector('.filter-section');
+                
+                if (newContainer) {
+                    // Ganti konten container
+                    container.innerHTML = newContainer.innerHTML;
+                    
+                    // Inisialisasi ulang IntersectionObserver untuk elemen baru
+                    const newElements = container.querySelectorAll('.reveal');
+                    newElements.forEach((el, index) => {
+                        if(el.classList.contains('umkm-card')) {
+                             el.style.transitionDelay = `${(index % 4) * 0.15}s`;
+                        }
+                        observer.observe(el);
+                    });
+                    
+                    if (scrollToTop) {
+                        window.scrollTo({
+                            top: container.offsetTop - 80,
+                            behavior: 'smooth'
+                        });
+                    }
+                }
+
+                // Update tombol reset filter secara dinamis
+                const filterSection = document.querySelector('.filter-section');
+                if (filterSection && newFilterSection) {
+                    const oldReset = filterSection.querySelector('.filter-reset');
+                    const newReset = newFilterSection.querySelector('.filter-reset');
+                    
+                    if (oldReset) oldReset.remove();
+                    if (newReset) {
+                        const form = filterSection.querySelector('.filter-form');
+                        if (form) {
+                            form.appendChild(newReset);
+                            // Bind klik pada tombol reset baru
+                            newReset.addEventListener('click', function(e) {
+                                e.preventDefault();
+                                const searchInput = form.querySelector('input[name="search"]');
+                                const sektorSelect = form.querySelector('select[name="sektor"]');
+                                if (searchInput) searchInput.value = '';
+                                if (sektorSelect) sektorSelect.value = '';
+                                triggerFilter();
+                            });
+                        }
+                    }
+                }
+                
+                // Perbarui URL browser tanpa reload
+                window.history.pushState({}, '', url);
+            })
+            .catch(err => {
+                console.error('Error fetching catalog:', err);
+                if (!scrollToTop) {
+                    window.location.href = url; // Fallback
+                }
+            })
+            .finally(() => {
+                const activeLoader = document.querySelector('.catalog-loader');
+                if (activeLoader) activeLoader.classList.remove('active');
+                container.style.pointerEvents = 'auto';
+            });
+        }
+
+        // AJAX Filtering Handlers untuk input & select
+        const filterForm = document.querySelector('.filter-form');
+        if (filterForm) {
+            const searchInput = filterForm.querySelector('input[name="search"]');
+            const sektorSelect = filterForm.querySelector('select[name="sektor"]');
+            const resetButton = filterForm.querySelector('.filter-reset');
+
+            let debounceTimer;
+
+            function triggerFilter() {
+                const searchVal = searchInput ? searchInput.value : '';
+                const sektorVal = sektorSelect ? sektorSelect.value : '';
+                
+                const params = new URLSearchParams();
+                if (searchVal) params.set('search', searchVal);
+                if (sektorVal) params.set('sektor', sektorVal);
+                
+                const url = `{{ route('katalog.umkm') }}?${params.toString()}`;
+                fetchCatalog(url, false);
+            }
+
+            if (searchInput) {
+                searchInput.addEventListener('input', function() {
+                    clearTimeout(debounceTimer);
+                    debounceTimer = setTimeout(triggerFilter, 400); // 400ms debounce
+                });
+            }
+
+            if (sektorSelect) {
+                sektorSelect.addEventListener('change', triggerFilter);
+            }
+
+            filterForm.addEventListener('submit', function(e) {
+                e.preventDefault();
+                clearTimeout(debounceTimer);
+                triggerFilter();
+            });
+
+            if (resetButton) {
+                resetButton.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    if (searchInput) searchInput.value = '';
+                    if (sektorSelect) sektorSelect.value = '';
+                    triggerFilter();
+                });
+            }
+        }
+
+        // Smooth Pagination Event Listener
+        document.addEventListener('click', function(e) {
+            const link = e.target.closest('.katalog-pagination .page-link:not(.disabled)');
+            if (link) {
+                e.preventDefault();
+                const url = link.href;
+                if (url) {
+                    fetchCatalog(url, true);
+                }
+            }
+        });
     </script>
 </body>
 </html>

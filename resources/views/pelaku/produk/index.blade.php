@@ -15,12 +15,12 @@
 </div>
 
 @if($produks->count() > 0)
-<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6" x-data="produkIndex()">
     @foreach($produks as $produk)
     <div class="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden flex flex-col hover:shadow-md transition-shadow">
         <div class="aspect-video bg-slate-100 relative overflow-hidden group">
             @if($produk->foto_produk && count($produk->foto_produk) > 0)
-                <img src="{{ Storage::url($produk->foto_produk[0]) }}" alt="{{ $produk->nama_produk }}" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110">
+                <img src="{{ Storage::url($produk->foto_produk[0]) }}" alt="{{ $produk->nama_produk }}" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110" onerror="this.onerror=null;this.src='https://placehold.co/600x400/e8f0fb/0f2e5c?text={{ urlencode($produk->nama_produk) }}';">
                 @if(count($produk->foto_produk) > 1)
                 <div class="absolute bottom-2 right-2 bg-black/60 text-white text-xs px-2 py-1 rounded-md backdrop-blur-sm">
                     +{{ count($produk->foto_produk) - 1 }} Foto
@@ -47,13 +47,9 @@
                 <a href="{{ route('pelaku.produk.edit', $produk->id) }}" class="flex-1 text-center bg-blue-50 text-blue-600 hover:bg-blue-600 hover:text-white px-3 py-2 rounded-lg text-sm font-medium transition-colors">
                     Edit
                 </a>
-                <form action="{{ route('pelaku.produk.destroy', $produk->id) }}" method="POST" class="flex-1" onsubmit="return confirm('Apakah Anda yakin ingin menghapus produk ini?');">
-                    @csrf
-                    @method('DELETE')
-                    <button type="submit" class="w-full text-center bg-red-50 text-red-600 hover:bg-red-600 hover:text-white px-3 py-2 rounded-lg text-sm font-medium transition-colors">
-                        Hapus
-                    </button>
-                </form>
+                <button type="button" @click="deleteData('{{ $produk->id }}', '{{ e($produk->nama_produk) }}', $event)" class="flex-1 text-center bg-red-50 text-red-600 hover:bg-red-600 hover:text-white px-3 py-2 rounded-lg text-sm font-medium transition-colors">
+                    Hapus
+                </button>
             </div>
         </div>
     </div>
@@ -76,5 +72,48 @@
     </a>
 </div>
 @endif
+
+@push('scripts')
+<script>
+    function produkIndex() {
+        return {
+            deleteData(id, name, event) {
+                const card = event.target.closest('.bg-white.rounded-2xl');
+                this.$dispatch('open-confirm-modal', {
+                    title: 'Hapus Produk',
+                    message: `Apakah Anda yakin ingin menghapus produk "${name}"?`,
+                    confirmText: 'Ya, Hapus',
+                    action: () => {
+                        return fetch(`/pelaku/produk/${id}`, {
+                            method: 'DELETE',
+                            headers: {
+                                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content,
+                                'Accept': 'application/json'
+                            }
+                        })
+                        .then(res => res.json())
+                        .then(data => {
+                            if (data.success) {
+                                window.showToast(data.message, 'success');
+                                if (card) {
+                                    card.style.transition = 'all 0.3s ease';
+                                    card.style.opacity = '0';
+                                    card.style.transform = 'scale(0.9)';
+                                    setTimeout(() => card.remove(), 300);
+                                }
+                            } else {
+                                window.showToast(data.message || 'Gagal menghapus data.', 'error');
+                            }
+                        })
+                        .catch(() => {
+                            window.showToast('Terjadi kesalahan jaringan.', 'error');
+                        });
+                    }
+                });
+            }
+        }
+    }
+</script>
+@endpush
 
 @endsection

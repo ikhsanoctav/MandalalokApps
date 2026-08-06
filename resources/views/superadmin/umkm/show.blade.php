@@ -160,7 +160,7 @@
                             </div>
                             <div class="bg-white/60 rounded-xl p-3 border border-indigo-100">
                                 <p class="text-[10px] font-bold text-indigo-400 uppercase tracking-wider mb-1">Petugas Pemeriksa</p>
-                                <p class="text-sm font-semibold text-indigo-900">{{ $verifikasiLapangan->petugas->name ?? 'Petugas' }}</p>
+                                <p class="text-sm font-semibold text-indigo-900">{{ $verifikasiLapangan->petugas?->name ?? 'Petugas' }}</p>
                             </div>
                             <div class="bg-white/60 rounded-xl p-3 border border-indigo-100">
                                 <p class="text-[10px] font-bold text-indigo-400 uppercase tracking-wider mb-1">Koordinat Kunjungan</p>
@@ -215,7 +215,7 @@
                     <div class="space-y-6">
                         @if ($umkm->foto_utama)
                             <div>
-                                <label class="text-xs text-slate-500 uppercase tracking-wider block mb-2">Foto Utama</label>
+                                <label class="text-xs text-slate-700 uppercase tracking-wider block mb-2">Foto Utama</label>
                                 <div class="relative inline-block">
                                     <img src="{{ Storage::url($umkm->foto_utama) }}"
                                         alt="Foto Utama {{ $umkm->nama_usaha }}"
@@ -239,7 +239,7 @@
                             @php $galleries = is_string($umkm->foto_gallery) ? json_decode($umkm->foto_gallery, true) : (array) $umkm->foto_gallery; @endphp
                             @if (is_array($galleries) && count($galleries) > 0)
                                 <div>
-                                    <label class="text-xs text-slate-500 uppercase tracking-wider block mb-2">Gallery
+                                    <label class="text-xs text-slate-700 uppercase tracking-wider block mb-2">Gallery
                                         Foto</label>
                                     <div class="flex flex-wrap gap-3">
                                         @foreach ($galleries as $gallery)
@@ -285,35 +285,35 @@
                     </div>
                     <div class="p-5 space-y-3">
                         <div class="flex justify-between items-center py-2 border-b border-slate-100">
-                            <span class="text-sm text-slate-500">Nama Lengkap</span>
+                            <span class="text-sm text-slate-700">Nama Lengkap</span>
                             <span
-                                class="text-sm font-medium text-slate-800">{{ $umkm->pemilik->nama_lengkap ?? '-' }}</span>
+                                class="text-sm font-medium text-slate-800">{{ $umkm->pemilik?->nama_lengkap ?? '-' }}</span>
                         </div>
                         <div class="flex justify-between items-center py-2 border-b border-slate-100">
-                            <span class="text-sm text-slate-500">NIK</span>
-                            <span class="text-sm font-mono text-slate-800">{{ $umkm->pemilik->nik ?? '-' }}</span>
+                            <span class="text-sm text-slate-700">NIK</span>
+                            <span class="text-sm font-mono text-slate-800">{{ $umkm->pemilik?->nik ?? '-' }}</span>
                         </div>
                         <div class="flex justify-between items-center py-2 border-b border-slate-100">
-                            <span class="text-sm text-slate-500">No. Telepon</span>
+                            <span class="text-sm text-slate-700">No. Telepon</span>
                             <span
-                                class="text-sm text-slate-800">{{ $umkm->pemilik->no_telepon ?? ($umkm->pemilik->no_hp ?? '-') }}</span>
+                                class="text-sm text-slate-800">{{ $umkm->pemilik?->no_telepon ?? ($umkm->pemilik?->no_hp ?? '-') }}</span>
                         </div>
                         <div class="flex justify-between items-center py-2 border-b border-slate-100">
-                            <span class="text-sm text-slate-500">Email</span>
-                            <span class="text-sm text-slate-800">{{ $umkm->pemilik->email ?? '-' }}</span>
+                            <span class="text-sm text-slate-700">Email</span>
+                            <span class="text-sm text-slate-800">{{ $umkm->pemilik?->email ?? '-' }}</span>
                         </div>
                         <div class="flex justify-between items-center py-2 border-b border-slate-100">
-                            <span class="text-sm text-slate-500">Kelurahan</span>
-                            <span class="text-sm text-slate-800">{{ $umkm->pemilik->kelurahan ?? '-' }}</span>
+                            <span class="text-sm text-slate-700">Kelurahan</span>
+                            <span class="text-sm text-slate-800">{{ $umkm->pemilik?->kelurahan ?? '-' }}</span>
                         </div>
                         <div class="flex justify-between items-center py-2 border-b border-slate-100">
-                            <span class="text-sm text-slate-500">RW / RT</span>
-                            <span class="text-sm text-slate-800">{{ $umkm->pemilik->rw ?? '-' }} /
-                                {{ $umkm->pemilik->rt ?? '-' }}</span>
+                            <span class="text-sm text-slate-700">RW / RT</span>
+                            <span class="text-sm text-slate-800">{{ $umkm->pemilik?->rw ?? '-' }} /
+                                {{ $umkm->pemilik?->rt ?? '-' }}</span>
                         </div>
                         <div class="py-2">
-                            <span class="text-sm text-slate-500 block mb-1">Alamat</span>
-                            <p class="text-sm text-slate-800">{{ $umkm->pemilik->alamat ?? '-' }}</p>
+                            <span class="text-sm text-slate-700 block mb-1">Alamat</span>
+                            <p class="text-sm text-slate-800">{{ $umkm->pemilik?->alamat ?? '-' }}</p>
                         </div>
                     </div>
                 </div>
@@ -335,11 +335,11 @@
                     <div class="p-5">
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                             <div class="bg-slate-50 rounded-xl p-3">
-                                <p class="text-xs text-slate-500">Nama Usaha</p>
+                                <p class="text-xs text-slate-700">Nama Usaha</p>
                                 <p class="text-base font-semibold text-slate-800 mt-1">{{ $umkm->nama_usaha ?? '-' }}</p>
                             </div>
                             <div class="bg-slate-50 rounded-xl p-3">
-                                <p class="text-xs text-slate-500">No. Pendaftaran</p>
+                                <p class="text-xs text-slate-700">No. Pendaftaran</p>
                                 <p class="text-sm font-mono text-slate-800 mt-1">{{ $umkm->no_pendaftaran ?? '-' }}</p>
                                 @if(!empty($umkm->no_pendaftaran))
                                     <div class="mt-3 bg-white p-2.5 rounded-xl border border-slate-200 inline-block cursor-pointer hover:shadow-md transition-shadow" onclick="openQrModal()">
@@ -349,7 +349,7 @@
                                 @endif
                             </div>
                             <div class="bg-slate-50 rounded-xl p-3">
-                                <p class="text-xs text-slate-500">Skala Usaha</p>
+                                <p class="text-xs text-slate-700">Skala Usaha</p>
                                 <p class="mt-1">
                                     <span
                                         class="inline-flex px-2 py-1 rounded-md text-xs font-medium bg-blue-100 text-blue-700">
@@ -357,20 +357,20 @@
                                 </p>
                             </div>
                             <div class="bg-slate-50 rounded-xl p-3">
-                                <p class="text-xs text-slate-500">Sektor Usaha</p>
-                                <p class="text-sm text-slate-800 mt-1">{{ $umkm->sektor->nama_sektor ?? '-' }}</p>
+                                <p class="text-xs text-slate-700">Sektor Usaha</p>
+                                <p class="text-sm text-slate-800 mt-1">{{ $umkm->sektor?->nama_sektor ?? '-' }}</p>
                             </div>
                             <div class="bg-slate-50 rounded-xl p-3">
-                                <p class="text-xs text-slate-500">Bentuk Jualan</p>
+                                <p class="text-xs text-slate-700">Bentuk Jualan</p>
                                 <p class="text-sm text-slate-800 mt-1">{{ $umkm->bentuk_jualan ?? '-' }}</p>
                             </div>
                                                         <div
                                                             class="bg-white/60 backdrop-blur-md rounded-2xl p-4 border border-slate-100 shadow-sm hover:shadow-md hover:bg-white/80 transition-all duration-300">
-                                                            <p class="text-xs text-slate-500">Perkiraan Omset</p>
-                                                            <p class="text-sm text-slate-800 mt-1">{{ $umkm->perkiraan_omset ?? '-' }}</p>
+                                                            <p class="text-xs text-slate-700">Perkiraan Omset</p>
+                                                            <p class="text-sm text-slate-800 mt-1">{{ $umkm->perkiraan_omset ? 'Rp ' . number_format($umkm->perkiraan_omset, 0, ',', '.') : '-' }}</p>
                                                         </div>
                             <div class="bg-slate-50 rounded-xl p-3">
-                                <p class="text-xs text-slate-500">Status Usaha</p>
+                                <p class="text-xs text-slate-700">Status Usaha</p>
                                 <p class="mt-1">
                                     <span
                                         class="inline-flex items-center gap-1 px-2 py-1 rounded-full text-xs font-medium {{ $umkm->status_usaha == 'aktif' ? 'bg-emerald-100 text-emerald-700' : 'bg-red-100 text-red-700' }}">
@@ -381,15 +381,15 @@
                                 </p>
                             </div>
                             <div class="bg-slate-50 rounded-xl p-3">
-                                <p class="text-xs text-slate-500">Tahun Berdiri</p>
+                                <p class="text-xs text-slate-700">Tahun Berdiri</p>
                                 <p class="text-sm text-slate-800 mt-1">{{ $umkm->tahun_berdiri ?? '-' }}</p>
                             </div>
                             <div class="bg-slate-50 rounded-xl p-3">
-                                <p class="text-xs text-slate-500">Email Usaha</p>
+                                <p class="text-xs text-slate-700">Email Usaha</p>
                                 <p class="text-sm text-slate-800 mt-1">{{ $umkm->email_usaha ?? '-' }}</p>
                             </div>
                             <div class="bg-slate-50 rounded-xl p-3">
-                                <p class="text-xs text-slate-500">Telepon Usaha</p>
+                                <p class="text-xs text-slate-700">Telepon Usaha</p>
                                 <p class="text-sm text-slate-800 mt-1">{{ $umkm->telp_usaha ?? '-' }}</p>
                             </div>
                         </div>
@@ -412,13 +412,13 @@
                     <div class="p-5 space-y-4">
                         <div
                             class="bg-white/60 backdrop-blur-md rounded-2xl p-4 border border-slate-100 shadow-sm hover:shadow-md hover:bg-white/80 transition-all duration-300">
-                            <p class="text-xs text-slate-500 mb-1">Alamat Usaha</p>
+                            <p class="text-xs text-slate-700 mb-1">Alamat Usaha</p>
                             <p class="text-sm text-slate-800">{{ $umkm->alamat_usaha ?? '-' }}</p>
                         </div>
                         
                         @if($umkm->latitude && $umkm->longitude)
                         <div class="bg-white/60 backdrop-blur-md rounded-2xl p-4 border border-slate-100 shadow-sm hover:shadow-md hover:bg-white/80 transition-all duration-300">
-                            <p class="text-xs text-slate-500 mb-2 flex justify-between items-center">
+                            <p class="text-xs text-slate-700 mb-2 flex justify-between items-center">
                                 Peta Lokasi Usaha
                                 <a href="https://www.google.com/maps/search/?api=1&query={{ $umkm->latitude }},{{ $umkm->longitude }}" target="_blank" class="text-blue-600 hover:text-blue-800 text-xs flex items-center gap-1">
                                     <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"></path></svg> Buka di Google Maps
@@ -428,7 +428,7 @@
                         </div>
                         @endif
                         <div class="bg-slate-50 rounded-xl p-3">
-                            <p class="text-xs text-slate-500 mb-1">Deskripsi Usaha</p>
+                            <p class="text-xs text-slate-700 mb-1">Deskripsi Usaha</p>
                             <p class="text-sm text-slate-800">{{ $umkm->deskripsi ?? '-' }}</p>
                         </div>
                     </div>
@@ -449,15 +449,15 @@
                         <div class="grid grid-cols-3 gap-4">
                             <div class="text-center p-4 bg-slate-50 rounded-xl">
                                 <p class="text-2xl font-bold text-blue-600">{{ $umkm->jumlah_tenaga_kerja ?? 0 }}</p>
-                                <p class="text-xs text-slate-500 mt-1">Total</p>
+                                <p class="text-xs text-slate-700 mt-1">Total</p>
                             </div>
                             <div class="text-center p-4 bg-slate-50 rounded-xl">
                                 <p class="text-2xl font-bold text-blue-600">{{ $umkm->tenaga_kerja_laki ?? 0 }}</p>
-                                <p class="text-xs text-slate-500 mt-1">Laki-laki</p>
+                                <p class="text-xs text-slate-700 mt-1">Laki-laki</p>
                             </div>
                             <div class="text-center p-4 bg-slate-50 rounded-xl">
                                 <p class="text-2xl font-bold text-blue-600">{{ $umkm->tenaga_kerja_perempuan ?? 0 }}</p>
-                                <p class="text-xs text-slate-500 mt-1">Perempuan</p>
+                                <p class="text-xs text-slate-700 mt-1">Perempuan</p>
                             </div>
                         </div>
                     </div>
@@ -477,7 +477,7 @@
                         @if (!empty($umkm->riwayat_bantuan))
                             <p class="text-sm text-slate-700 whitespace-pre-wrap">{{ $umkm->riwayat_bantuan }}</p>
                         @else
-                            <p class="text-sm text-slate-500 italic">Belum ada riwayat bantuan yang diajukan/diterima.</p>
+                            <p class="text-sm text-slate-700 italic">Belum ada riwayat bantuan yang diajukan/diterima.</p>
                         @endif
                     </div>
                 </div>
@@ -513,7 +513,7 @@
                                     </svg>
                                 </div>
                                 <div class="flex-1">
-                                    <p class="text-xs text-slate-500">Facebook</p>
+                                    <p class="text-xs text-slate-700">Facebook</p>
                                     <p class="text-xs text-slate-700 truncate">{{ $mediaSosial['facebook'] ?? '-' }}</p>
                                 </div>
                             </div>
@@ -529,7 +529,7 @@
                                     </svg>
                                 </div>
                                 <div class="flex-1">
-                                    <p class="text-xs text-slate-500">Instagram</p>
+                                    <p class="text-xs text-slate-700">Instagram</p>
                                     <p class="text-xs text-slate-700 truncate">{{ $mediaSosial['instagram'] ?? '-' }}</p>
                                 </div>
                             </div>
@@ -551,20 +551,103 @@
                     <div class="p-5">
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                             <div class="bg-slate-50 rounded-xl p-3">
-                                <p class="text-xs text-slate-500">NIB / Izin Usaha</p>
+                                <p class="text-xs text-slate-700">NIB / Izin Usaha</p>
                                 <p class="text-sm text-slate-800 mt-1">{{ $umkm->no_izin_usaha ?? '-' }}</p>
                             </div>
                             <div class="bg-slate-50 rounded-xl p-3">
-                                <p class="text-xs text-slate-500">Jenis Izin</p>
+                                <p class="text-xs text-slate-700">Jenis Izin</p>
                                 <p class="text-sm text-slate-800 mt-1">{{ $umkm->jenis_izin ?? '-' }}</p>
                             </div>
                             <div class="bg-slate-50 rounded-xl p-3">
-                                <p class="text-xs text-slate-500">NPWP</p>
+                                <p class="text-xs text-slate-700">NPWP</p>
                                 <p class="text-sm text-slate-800 mt-1">{{ $umkm->npwp_usaha ?? '-' }}</p>
                             </div>
                             <div class="bg-slate-50 rounded-xl p-3">
-                                <p class="text-xs text-slate-500">Website</p>
+                                <p class="text-xs text-slate-700">Website</p>
                                 <p class="text-sm text-slate-800 mt-1">{{ $umkm->website ?? '-' }}</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden mt-6 mb-6">
+                    <div class="px-5 py-4 border-b border-slate-100 bg-gradient-to-r from-slate-50 to-white">
+                        <h3 class="font-semibold text-slate-800 flex items-center gap-2">
+                            <svg class="w-5 h-5 text-indigo-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z">
+                                </path>
+                            </svg>
+                            Dokumen Pendukung
+                        </h3>
+                    </div>
+                    <div class="p-5">
+                        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                            <!-- KTP Pemilik -->
+                            <div class="bg-slate-50 rounded-xl p-4 border border-slate-100">
+                                <p class="text-xs font-bold text-slate-700 mb-3 uppercase tracking-wider">KTP Pemilik</p>
+                                @if($umkm->pemilik && $umkm->pemilik?->foto_ktp)
+                                    <div class="relative group">
+                                        <img src="{{ Storage::url($umkm->pemilik?->foto_ktp) }}" class="w-full h-32 object-cover rounded-lg border border-slate-200 shadow-sm cursor-pointer hover:scale-105 transition-transform" onclick="openImageModal('{{ Storage::url($umkm->pemilik?->foto_ktp) }}')">
+                                    </div>
+                                    <a href="{{ Storage::url($umkm->pemilik?->foto_ktp) }}" target="_blank" class="mt-3 w-full inline-flex justify-center items-center gap-1 px-3 py-1.5 bg-indigo-50 text-indigo-600 rounded-lg text-xs font-semibold hover:bg-indigo-100 transition-colors">
+                                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path></svg> Download KTP
+                                    </a>
+                                @else
+                                    <div class="h-32 flex items-center justify-center bg-white rounded-lg border border-dashed border-slate-300">
+                                        <span class="text-xs text-slate-400">Belum diunggah</span>
+                                    </div>
+                                @endif
+                            </div>
+
+                            <!-- Dokumen NIB -->
+                            <div class="bg-slate-50 rounded-xl p-4 border border-slate-100">
+                                <p class="text-xs font-bold text-slate-700 mb-3 uppercase tracking-wider">Dokumen Izin / NIB</p>
+                                @if($umkm->dokumen_nib)
+                                    @php $ext = pathinfo($umkm->dokumen_nib, PATHINFO_EXTENSION); @endphp
+                                    @if(in_array(strtolower($ext), ['jpg', 'jpeg', 'png', 'webp']))
+                                        <div class="relative group">
+                                            <img src="{{ Storage::url($umkm->dokumen_nib) }}" class="w-full h-32 object-cover rounded-lg border border-slate-200 shadow-sm cursor-pointer hover:scale-105 transition-transform" onclick="openImageModal('{{ Storage::url($umkm->dokumen_nib) }}')">
+                                        </div>
+                                    @else
+                                        <div class="h-32 flex flex-col items-center justify-center bg-white rounded-lg border border-slate-200 shadow-sm">
+                                            <svg class="w-10 h-10 text-red-400 mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z"></path></svg>
+                                            <span class="text-xs font-bold text-slate-600">Dokumen Terlampir</span>
+                                        </div>
+                                    @endif
+                                    <a href="{{ Storage::url($umkm->dokumen_nib) }}" target="_blank" class="mt-3 w-full inline-flex justify-center items-center gap-1 px-3 py-1.5 bg-indigo-50 text-indigo-600 rounded-lg text-xs font-semibold hover:bg-indigo-100 transition-colors">
+                                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path></svg> Lihat / Unduh
+                                    </a>
+                                @else
+                                    <div class="h-32 flex items-center justify-center bg-white rounded-lg border border-dashed border-slate-300">
+                                        <span class="text-xs text-slate-400">Belum diunggah</span>
+                                    </div>
+                                @endif
+                            </div>
+
+                            <!-- Dokumen Lainnya -->
+                            <div class="bg-slate-50 rounded-xl p-4 border border-slate-100">
+                                <p class="text-xs font-bold text-slate-700 mb-3 uppercase tracking-wider">Dokumen Tambahan</p>
+                                @if($umkm->dokumen_lainnya)
+                                    @php $ext = pathinfo($umkm->dokumen_lainnya, PATHINFO_EXTENSION); @endphp
+                                    @if(in_array(strtolower($ext), ['jpg', 'jpeg', 'png', 'webp']))
+                                        <div class="relative group">
+                                            <img src="{{ Storage::url($umkm->dokumen_lainnya) }}" class="w-full h-32 object-cover rounded-lg border border-slate-200 shadow-sm cursor-pointer hover:scale-105 transition-transform" onclick="openImageModal('{{ Storage::url($umkm->dokumen_lainnya) }}')">
+                                        </div>
+                                    @else
+                                        <div class="h-32 flex flex-col items-center justify-center bg-white rounded-lg border border-slate-200 shadow-sm">
+                                            <svg class="w-10 h-10 text-slate-400 mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z"></path></svg>
+                                            <span class="text-xs font-bold text-slate-600">Dokumen Terlampir</span>
+                                        </div>
+                                    @endif
+                                    <a href="{{ Storage::url($umkm->dokumen_lainnya) }}" target="_blank" class="mt-3 w-full inline-flex justify-center items-center gap-1 px-3 py-1.5 bg-indigo-50 text-indigo-600 rounded-lg text-xs font-semibold hover:bg-indigo-100 transition-colors">
+                                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path></svg> Lihat / Unduh
+                                    </a>
+                                @else
+                                    <div class="h-32 flex items-center justify-center bg-white rounded-lg border border-dashed border-slate-300">
+                                        <span class="text-xs text-slate-400">Belum diunggah</span>
+                                    </div>
+                                @endif
                             </div>
                         </div>
                     </div>
@@ -583,18 +666,18 @@
                     <div class="p-5">
                         <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
                             <div class="bg-slate-50 rounded-xl p-3 text-center">
-                                <p class="text-xs text-slate-500">Tanggal Pendataan</p>
+                                <p class="text-xs text-slate-700">Tanggal Pendataan</p>
                                 <p class="text-sm font-medium text-slate-800 mt-1">
                                     {{ $umkm->tanggal_pendataan ? \Carbon\Carbon::parse($umkm->tanggal_pendataan)->format('d/m/Y') : '-' }}
                                 </p>
                             </div>
                             <div class="bg-slate-50 rounded-xl p-3 text-center">
-                                <p class="text-xs text-slate-500">Petugas Pendata</p>
+                                <p class="text-xs text-slate-700">Petugas Pendata</p>
                                 <p class="text-sm font-medium text-slate-800 mt-1">
-                                    {{ $umkm->petugas ? $umkm->petugas->name : $umkm->id_petugas ?? '-' }}</p>
+                                    {{ $umkm->petugas ? $umkm->petugas?->name : $umkm->id_petugas ?? '-' }}</p>
                             </div>
                             <div class="bg-slate-50 rounded-xl p-3 text-center">
-                                <p class="text-xs text-slate-500">Tanggal Daftar</p>
+                                <p class="text-xs text-slate-700">Tanggal Daftar</p>
                                 <p class="text-sm font-medium text-slate-800 mt-1">
                                     {{ $umkm->created_at ? $umkm->created_at->format('d/m/Y H:i') : '-' }}</p>
                             </div>
@@ -620,15 +703,15 @@
                         <table class="w-full text-left border-collapse min-w-[700px]">
                             <thead class="bg-slate-50 border-b border-slate-200">
                                 <tr>
-                                    <th class="px-5 py-3 text-[10px] font-bold text-slate-500 uppercase tracking-wider">
+                                    <th class="px-5 py-3 text-[10px] font-bold text-slate-700 uppercase tracking-wider">
                                         Tanggal Pengajuan</th>
-                                    <th class="px-5 py-3 text-[10px] font-bold text-slate-500 uppercase tracking-wider">
+                                    <th class="px-5 py-3 text-[10px] font-bold text-slate-700 uppercase tracking-wider">
                                         Jenis Pengajuan</th>
-                                    <th class="px-5 py-3 text-[10px] font-bold text-slate-500 uppercase tracking-wider">
+                                    <th class="px-5 py-3 text-[10px] font-bold text-slate-700 uppercase tracking-wider">
                                         Nominal Bantuan</th>
-                                    <th class="px-5 py-3 text-[10px] font-bold text-slate-500 uppercase tracking-wider">
+                                    <th class="px-5 py-3 text-[10px] font-bold text-slate-700 uppercase tracking-wider">
                                         Status Verifikasi</th>
-                                    <th class="px-5 py-3 text-[10px] font-bold text-slate-500 uppercase tracking-wider">
+                                    <th class="px-5 py-3 text-[10px] font-bold text-slate-700 uppercase tracking-wider">
                                         Catatan</th>
                                 </tr>
                             </thead>
@@ -755,13 +838,13 @@
             <p class="mt-6 font-mono text-slate-600 font-bold text-xl tracking-widest">{{ $umkm->no_pendaftaran }}</p>
             <p class="mt-1 text-sm text-slate-400">{{ $umkm->nama_usaha }}</p>
             <div class="mt-8">
-                <a href="{{ route('superadmin.umkm.print-qr', $umkm->id_umkm) }}" target="_blank"
+                <button onclick="printQrDirect('{{ route('superadmin.umkm.print-qr', $umkm->id_umkm) }}', this)"
                    class="inline-flex items-center gap-2 px-6 py-3 bg-blue-600 text-white font-semibold rounded-xl hover:bg-blue-700 transition-all shadow-md hover:shadow-lg w-full justify-center">
                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z"></path>
                     </svg>
                     Cetak QR Code
-                </a>
+                </button>
             </div>
         </div>
     </div>
@@ -783,7 +866,7 @@
                             </svg>
                         </div>
                         <h3 class="text-xl font-bold text-slate-800 mb-2">Tangguhkan UMKM</h3>
-                        <p class="text-slate-500 mb-4">Apakah Anda yakin ingin menangguhkan UMKM <strong
+                        <p class="text-slate-700 mb-4">Apakah Anda yakin ingin menangguhkan UMKM <strong
                                 class="text-slate-800">{{ $umkm->nama_usaha }}</strong>?</p>
                     </div>
                     <div class="mb-4">
@@ -813,6 +896,30 @@
     </div>
 
     <script>
+        function printQrDirect(url, btn) {
+            let printFrame = document.getElementById('qrPrintFrame');
+            if (!printFrame) {
+                printFrame = document.createElement('iframe');
+                printFrame.id = 'qrPrintFrame';
+                printFrame.style.position = 'absolute';
+                printFrame.style.top = '-9999px';
+                printFrame.style.left = '-9999px';
+                document.body.appendChild(printFrame);
+            }
+            
+            const originalText = btn.innerHTML;
+            btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Mempersiapkan...';
+            btn.disabled = true;
+
+            printFrame.onload = function() {
+                printFrame.contentWindow.print();
+                btn.innerHTML = originalText;
+                btn.disabled = false;
+            };
+            
+            printFrame.src = url;
+        }
+
         // ============ MODAL QR CODE ============
         function openQrModal() {
             document.getElementById('qrModal').classList.remove('hidden');

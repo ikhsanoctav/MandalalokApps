@@ -8,9 +8,9 @@
         <div class="flex items-center justify-between">
             <div>
                 <h2 class="text-2xl font-bold text-slate-800">Catat Kunjungan Lapangan</h2>
-                <p class="text-sm text-slate-500 mt-0.5">Formulir hasil verifikasi fisik UMKM di lapangan.</p>
+                <p class="text-sm text-slate-700 mt-0.5">Formulir hasil verifikasi fisik UMKM di lapangan.</p>
             </div>
-            <a href="{{ route('operator.verifikasi.show', $umkm->id_umkm) }}" class="text-sm text-slate-500 hover:text-slate-700 flex items-center gap-1">
+            <a href="{{ route('operator.verifikasi.show', $umkm->id_umkm) }}" class="text-sm text-slate-700 hover:text-slate-700 flex items-center gap-1">
                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path></svg>
                 Batal & Kembali
             </a>
@@ -23,7 +23,7 @@
             <div>
                 <p class="text-xs font-semibold text-indigo-400 uppercase tracking-wider mb-1">Target Verifikasi</p>
                 <h3 class="font-bold text-indigo-900 text-lg">{{ $umkm->nama_usaha }}</h3>
-                <p class="text-sm text-indigo-700">Milik: {{ $umkm->pemilik->nama_lengkap ?? '-' }} • Kategori: {{ $umkm->kategori->nama_kategori ?? '-' }}</p>
+                <p class="text-sm text-indigo-700">Milik: {{ $umkm->pemilik?->nama_lengkap ?? '-' }} • Kategori: {{ $umkm->kategori?->nama_kategori ?? '-' }}</p>
             </div>
         </div>
 
@@ -101,7 +101,7 @@
                             <label class="block text-sm font-semibold text-slate-700 mb-2">Catatan Kunjungan</label>
                             <textarea name="catatan_kunjungan" rows="4" placeholder="Tuliskan temuan atau observasi di lapangan..."
                                 class="w-full bg-slate-50 border border-slate-200 text-slate-800 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all p-3">{{ old('catatan_kunjungan') }}</textarea>
-                            <p class="text-xs text-slate-500 mt-1">Sangat disarankan untuk diisi jika kondisi 'Tidak Sesuai' atau 'Butuh Tindak Lanjut'.</p>
+                            <p class="text-xs text-slate-700 mt-1">Sangat disarankan untuk diisi jika kondisi 'Tidak Sesuai' atau 'Butuh Tindak Lanjut'.</p>
                         </div>
                     </div>
                 </div>
@@ -127,7 +127,7 @@
                                             <input id="foto_kunjungan" name="foto_kunjungan[]" type="file" class="sr-only" multiple accept="image/*" onchange="updateFileList(this)">
                                         </span>
                                     </div>
-                                    <p class="text-xs text-slate-500">Bisa pilih lebih dari satu foto (Max 5MB/foto)</p>
+                                    <p class="text-xs text-slate-700">Bisa pilih lebih dari satu foto (Max 5MB/foto)</p>
                                 </div>
                             </div>
                             <div id="file-list" class="mt-2 flex flex-wrap gap-2 text-xs text-slate-600"></div>
@@ -141,15 +141,15 @@
                                         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
                                         Ambil Lokasi Saat Ini
                                     </button>
-                                    <span x-text="gpsStatus" class="text-xs font-medium" :class="{'text-emerald-600': lat !== '', 'text-slate-500': lat === ''}"></span>
+                                    <span x-text="gpsStatus" class="text-xs font-medium" :class="{'text-emerald-600': lat !== '', 'text-slate-700': lat === ''}"></span>
                                 </div>
                                 <div class="grid grid-cols-2 gap-3">
                                     <div>
-                                        <span class="block text-[10px] uppercase text-slate-500 font-bold mb-1">Latitude</span>
+                                        <span class="block text-[10px] uppercase text-slate-700 font-bold mb-1">Latitude</span>
                                         <input type="text" name="latitude_kunjungan" x-model="lat" class="w-full bg-white border border-slate-200 rounded-lg p-1.5 text-sm text-slate-600 font-mono" readonly placeholder="-">
                                     </div>
                                     <div>
-                                        <span class="block text-[10px] uppercase text-slate-500 font-bold mb-1">Longitude</span>
+                                        <span class="block text-[10px] uppercase text-slate-700 font-bold mb-1">Longitude</span>
                                         <input type="text" name="longitude_kunjungan" x-model="lng" class="w-full bg-white border border-slate-200 rounded-lg p-1.5 text-sm text-slate-600 font-mono" readonly placeholder="-">
                                     </div>
                                 </div>

@@ -62,7 +62,7 @@
                     <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-4">
                         @foreach($produk->foto_produk as $index => $foto)
                         <div class="relative aspect-square rounded-2xl overflow-hidden border border-slate-200 bg-white group">
-                            <img src="{{ Storage::url($foto) }}" class="w-full h-full object-cover">
+                            <img src="{{ Storage::url($foto) }}" class="w-full h-full object-cover" onerror="this.onerror=null;this.src='https://placehold.co/600x400/e8f0fb/0f2e5c?text={{ urlencode($produk->nama_produk) }}';">
                             
                             <label class="absolute top-2 right-2 bg-white/90 p-1.5 rounded-xl shadow-sm cursor-pointer hover:bg-red-50 transition-colors z-10 flex items-center justify-center">
                                 <input type="checkbox" name="hapus_foto[{{$index}}]" value="1" class="w-4 h-4 text-red-600 border-gray-300 rounded-lg focus:ring-red-500">

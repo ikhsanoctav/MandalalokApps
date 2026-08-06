@@ -199,33 +199,33 @@
                         <div class="flex justify-between items-center py-2 border-b border-slate-100">
                             <span class="text-sm text-slate-500">Nama Lengkap</span>
                             <span
-                                class="text-sm font-medium text-slate-800">{{ $umkm->pemilik->nama_lengkap ?? '-' }}</span>
+                                class="text-sm font-medium text-slate-800">{{ $umkm->pemilik?->nama_lengkap ?? '-' }}</span>
                         </div>
                         <div class="flex justify-between items-center py-2 border-b border-slate-100">
                             <span class="text-sm text-slate-500">NIK</span>
-                            <span class="text-sm font-mono text-slate-800">{{ $umkm->pemilik->nik ?? '-' }}</span>
+                            <span class="text-sm font-mono text-slate-800">{{ $umkm->pemilik?->nik ?? '-' }}</span>
                         </div>
                         <div class="flex justify-between items-center py-2 border-b border-slate-100">
                             <span class="text-sm text-slate-500">No. Telepon</span>
                             <span
-                                class="text-sm text-slate-800">{{ $umkm->pemilik->no_telepon ?? ($umkm->pemilik->no_hp ?? '-') }}</span>
+                                class="text-sm text-slate-800">{{ $umkm->pemilik?->no_telepon ?? ($umkm->pemilik?->no_hp ?? '-') }}</span>
                         </div>
                         <div class="flex justify-between items-center py-2 border-b border-slate-100">
                             <span class="text-sm text-slate-500">Email</span>
-                            <span class="text-sm text-slate-800">{{ $umkm->pemilik->email ?? '-' }}</span>
+                            <span class="text-sm text-slate-800">{{ $umkm->pemilik?->email ?? '-' }}</span>
                         </div>
                         <div class="flex justify-between items-center py-2 border-b border-slate-100">
                             <span class="text-sm text-slate-500">Kelurahan</span>
-                            <span class="text-sm text-slate-800">{{ $umkm->pemilik->kelurahan ?? '-' }}</span>
+                            <span class="text-sm text-slate-800">{{ $umkm->pemilik?->kelurahan ?? '-' }}</span>
                         </div>
                         <div class="flex justify-between items-center py-2 border-b border-slate-100">
                             <span class="text-sm text-slate-500">RW / RT</span>
-                            <span class="text-sm text-slate-800">{{ $umkm->pemilik->rw ?? '-' }} /
-                                {{ $umkm->pemilik->rt ?? '-' }}</span>
+                            <span class="text-sm text-slate-800">{{ $umkm->pemilik?->rw ?? '-' }} /
+                                {{ $umkm->pemilik?->rt ?? '-' }}</span>
                         </div>
                         <div class="py-2">
                             <span class="text-sm text-slate-500 block mb-1">Alamat</span>
-                            <p class="text-sm text-slate-800">{{ $umkm->pemilik->alamat ?? '-' }}</p>
+                            <p class="text-sm text-slate-800">{{ $umkm->pemilik?->alamat ?? '-' }}</p>
                         </div>
                     </div>
                 </div>
@@ -270,7 +270,7 @@
                             </div>
                             <div class="bg-slate-50 rounded-xl p-3">
                                 <p class="text-xs text-slate-500">Sektor Usaha</p>
-                                <p class="text-sm text-slate-800 mt-1">{{ $umkm->sektor->nama_sektor ?? '-' }}</p>
+                                <p class="text-sm text-slate-800 mt-1">{{ $umkm->sektor?->nama_sektor ?? '-' }}</p>
                             </div>
                             <div class="bg-slate-50 rounded-xl p-3">
                                 <p class="text-xs text-slate-500">Bentuk Jualan</p>
@@ -279,7 +279,7 @@
                                                         <div
                                                             class="bg-white/60 backdrop-blur-md rounded-2xl p-4 border border-slate-100 shadow-sm hover:shadow-md hover:bg-white/80 transition-all duration-300">
                                                             <p class="text-xs text-slate-500">Perkiraan Omset</p>
-                                                            <p class="text-sm text-slate-800 mt-1">{{ $umkm->perkiraan_omset ?? '-' }}</p>
+                                                            <p class="text-sm text-slate-800 mt-1">{{ $umkm->perkiraan_omset ? 'Rp ' . number_format($umkm->perkiraan_omset, 0, ',', '.') : '-' }}</p>
                                                         </div>
                             <div class="bg-slate-50 rounded-xl p-3">
                                 <p class="text-xs text-slate-500">Status Usaha</p>
@@ -485,6 +485,89 @@
                 <div class="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden">
                     <div class="px-5 py-4 border-b border-slate-100 bg-gradient-to-r from-slate-50 to-white">
                         <h3 class="font-semibold text-slate-800 flex items-center gap-2">
+                            <svg class="w-5 h-5 text-indigo-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z">
+                                </path>
+                            </svg>
+                            Dokumen Pendukung
+                        </h3>
+                    </div>
+                    <div class="p-5">
+                        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                            <!-- KTP Pemilik -->
+                            <div class="bg-slate-50 rounded-xl p-4 border border-slate-100">
+                                <p class="text-xs font-bold text-slate-500 mb-3 uppercase tracking-wider">KTP Pemilik</p>
+                                @if($umkm->pemilik && $umkm->pemilik?->foto_ktp)
+                                    <div class="relative group">
+                                        <img src="{{ Storage::url($umkm->pemilik?->foto_ktp) }}" class="w-full h-32 object-cover rounded-lg border border-slate-200 shadow-sm cursor-pointer hover:scale-105 transition-transform" onclick="openImageModal('{{ Storage::url($umkm->pemilik?->foto_ktp) }}')">
+                                    </div>
+                                    <a href="{{ Storage::url($umkm->pemilik?->foto_ktp) }}" target="_blank" class="mt-3 w-full inline-flex justify-center items-center gap-1 px-3 py-1.5 bg-indigo-50 text-indigo-600 rounded-lg text-xs font-semibold hover:bg-indigo-100 transition-colors">
+                                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path></svg> Download KTP
+                                    </a>
+                                @else
+                                    <div class="h-32 flex items-center justify-center bg-white rounded-lg border border-dashed border-slate-300">
+                                        <span class="text-xs text-slate-400">Belum diunggah</span>
+                                    </div>
+                                @endif
+                            </div>
+
+                            <!-- Dokumen NIB -->
+                            <div class="bg-slate-50 rounded-xl p-4 border border-slate-100">
+                                <p class="text-xs font-bold text-slate-500 mb-3 uppercase tracking-wider">Dokumen Izin / NIB</p>
+                                @if($umkm->dokumen_nib)
+                                    @php $ext = pathinfo($umkm->dokumen_nib, PATHINFO_EXTENSION); @endphp
+                                    @if(in_array(strtolower($ext), ['jpg', 'jpeg', 'png', 'webp']))
+                                        <div class="relative group">
+                                            <img src="{{ Storage::url($umkm->dokumen_nib) }}" class="w-full h-32 object-cover rounded-lg border border-slate-200 shadow-sm cursor-pointer hover:scale-105 transition-transform" onclick="openImageModal('{{ Storage::url($umkm->dokumen_nib) }}')">
+                                        </div>
+                                    @else
+                                        <div class="h-32 flex flex-col items-center justify-center bg-white rounded-lg border border-slate-200 shadow-sm">
+                                            <svg class="w-10 h-10 text-red-400 mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z"></path></svg>
+                                            <span class="text-xs font-bold text-slate-600">Dokumen Terlampir</span>
+                                        </div>
+                                    @endif
+                                    <a href="{{ Storage::url($umkm->dokumen_nib) }}" target="_blank" class="mt-3 w-full inline-flex justify-center items-center gap-1 px-3 py-1.5 bg-indigo-50 text-indigo-600 rounded-lg text-xs font-semibold hover:bg-indigo-100 transition-colors">
+                                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path></svg> Lihat / Unduh
+                                    </a>
+                                @else
+                                    <div class="h-32 flex items-center justify-center bg-white rounded-lg border border-dashed border-slate-300">
+                                        <span class="text-xs text-slate-400">Belum diunggah</span>
+                                    </div>
+                                @endif
+                            </div>
+
+                            <!-- Dokumen Lainnya -->
+                            <div class="bg-slate-50 rounded-xl p-4 border border-slate-100">
+                                <p class="text-xs font-bold text-slate-500 mb-3 uppercase tracking-wider">Dokumen Tambahan</p>
+                                @if($umkm->dokumen_lainnya)
+                                    @php $ext = pathinfo($umkm->dokumen_lainnya, PATHINFO_EXTENSION); @endphp
+                                    @if(in_array(strtolower($ext), ['jpg', 'jpeg', 'png', 'webp']))
+                                        <div class="relative group">
+                                            <img src="{{ Storage::url($umkm->dokumen_lainnya) }}" class="w-full h-32 object-cover rounded-lg border border-slate-200 shadow-sm cursor-pointer hover:scale-105 transition-transform" onclick="openImageModal('{{ Storage::url($umkm->dokumen_lainnya) }}')">
+                                        </div>
+                                    @else
+                                        <div class="h-32 flex flex-col items-center justify-center bg-white rounded-lg border border-slate-200 shadow-sm">
+                                            <svg class="w-10 h-10 text-slate-400 mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z"></path></svg>
+                                            <span class="text-xs font-bold text-slate-600">Dokumen Terlampir</span>
+                                        </div>
+                                    @endif
+                                    <a href="{{ Storage::url($umkm->dokumen_lainnya) }}" target="_blank" class="mt-3 w-full inline-flex justify-center items-center gap-1 px-3 py-1.5 bg-indigo-50 text-indigo-600 rounded-lg text-xs font-semibold hover:bg-indigo-100 transition-colors">
+                                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path></svg> Lihat / Unduh
+                                    </a>
+                                @else
+                                    <div class="h-32 flex items-center justify-center bg-white rounded-lg border border-dashed border-slate-300">
+                                        <span class="text-xs text-slate-400">Belum diunggah</span>
+                                    </div>
+                                @endif
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden">
+                    <div class="px-5 py-4 border-b border-slate-100 bg-gradient-to-r from-slate-50 to-white">
+                        <h3 class="font-semibold text-slate-800 flex items-center gap-2">
                             <svg class="w-5 h-5 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                     d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
@@ -503,7 +586,7 @@
                             <div class="bg-slate-50 rounded-xl p-3 text-center">
                                 <p class="text-xs text-slate-500">Petugas Pendata</p>
                                 <p class="text-sm font-medium text-slate-800 mt-1">
-                                    {{ $umkm->petugas ? $umkm->petugas->name : $umkm->id_petugas ?? '-' }}</p>
+                                    {{ $umkm->petugas ? $umkm->petugas?->name : $umkm->id_petugas ?? '-' }}</p>
                             </div>
                             <div class="bg-slate-50 rounded-xl p-3 text-center">
                                 <p class="text-xs text-slate-500">Tanggal Daftar</p>
@@ -667,19 +750,43 @@
             <p class="mt-6 font-mono text-slate-600 font-bold text-xl tracking-widest">{{ $umkm->no_pendaftaran }}</p>
             <p class="mt-1 text-sm text-slate-400">{{ $umkm->nama_usaha }}</p>
             <div class="mt-8">
-                <a href="{{ route('admin.umkm.print-qr', $umkm->id_umkm) }}" target="_blank"
+                <button onclick="printQrDirect('{{ route('admin.umkm.print-qr', $umkm->id_umkm) }}', this)"
                    class="inline-flex items-center gap-2 px-6 py-3 bg-blue-600 text-white font-semibold rounded-xl hover:bg-blue-700 transition-all shadow-md hover:shadow-lg w-full justify-center">
                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z"></path>
                     </svg>
                     Cetak QR Code
-                </a>
+                </button>
             </div>
         </div>
     </div>
     @endif
 
     <script>
+        function printQrDirect(url, btn) {
+            let printFrame = document.getElementById('qrPrintFrame');
+            if (!printFrame) {
+                printFrame = document.createElement('iframe');
+                printFrame.id = 'qrPrintFrame';
+                printFrame.style.position = 'absolute';
+                printFrame.style.top = '-9999px';
+                printFrame.style.left = '-9999px';
+                document.body.appendChild(printFrame);
+            }
+            
+            const originalText = btn.innerHTML;
+            btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Mempersiapkan...';
+            btn.disabled = true;
+
+            printFrame.onload = function() {
+                printFrame.contentWindow.print();
+                btn.innerHTML = originalText;
+                btn.disabled = false;
+            };
+            
+            printFrame.src = url;
+        }
+
         // ============ FUNGSI PREVIEW GAMBAR ============
         function openImageModal(imageUrl) {
             const modal = document.getElementById('imageModal');

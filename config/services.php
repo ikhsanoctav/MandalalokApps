@@ -27,10 +27,12 @@ return [
         'webhook_url' => env('N8N_WEBHOOK_URL', 'http://n8n:5678/webhook/chat-api'),
         'dss_webhook_url' => env('N8N_DSS_WEBHOOK_URL', 'http://n8n:5678/webhook/dss-api'),
         'dss_callback_url' => env('N8N_DSS_CALLBACK_URL', 'http://laravel.test/api/dss/callback'),
-        'dss_async' => env('N8N_DSS_ASYNC', true),
+        'dss_async' => filter_var(env('N8N_DSS_ASYNC', true), FILTER_VALIDATE_BOOLEAN),
         'sentiment_webhook_url' => env('N8N_SENTIMENT_WEBHOOK_URL', 'http://n8n:5678/webhook/sentiment-api'),
         'assistant_webhook_url' => env('N8N_ASSISTANT_WEBHOOK_URL', 'http://n8n:5678/webhook/assistant-api'),
         'api_key' => env('N8N_API_KEY'),
+        'chat_timeout' => (int) env('N8N_CHAT_TIMEOUT', 45),
+        'dss_dispatch_timeout' => (int) env('N8N_DSS_DISPATCH_TIMEOUT', 20),
     ],
 
     'ollama' => [

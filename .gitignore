@@ -73,4 +73,13 @@ Desktop.ini
 npm-debug.log
 yarn-error.log
 pnpm-debug.log
-lerna-debug.logbrain/
+lerna-debug.log
+brain/
+*.php_temp
+dump_sheet*.php
+fix_chart*.php
+fix_kelurahan*.php
+import_*.php
+selenium/
+storage/testing-storage/
+

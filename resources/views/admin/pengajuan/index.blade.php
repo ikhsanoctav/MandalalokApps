@@ -303,7 +303,7 @@
                             <select id="createUmkmId" required class="w-full border border-slate-300 rounded-lg px-4 py-2.5 text-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all">
                                 <option value="">-- Pilih UMKM --</option>
                                 @foreach($umkms as $umkm)
-                                    <option value="{{ $umkm->id_umkm }}">{{ $umkm->nama_usaha }} ({{ $umkm->pemilik->nama_lengkap ?? 'Pemilik' }})</option>
+                                    <option value="{{ $umkm->id_umkm }}">{{ $umkm->nama_usaha }} ({{ $umkm->pemilik?->nama_lengkap ?? 'Pemilik' }})</option>
                                 @endforeach
                             </select>
                         </div>

@@ -36,9 +36,12 @@ class DashboardController extends Controller
                 ->count();
         }
 
-        $distribusiWilayah = $this->getDistribusiWilayah();
-        $distribusiSektor = $this->getDistribusiSektor();
+        $distribusiWilayah = $this->getDistribusiWilayah(request('filter_sektor'));
+        $distribusiSektor = $this->getDistribusiSektor(request('filter_kelurahan'));
+        $distribusiKategori = $this->getDistribusiKategori();
         $umkmTerbaru = $this->getUmkmTerbaru(5);
+        $sektors = \App\Models\SektorUmkm::all();
+        $kelurahans = \App\Models\Kelurahan::all();
 
         $aktivitasTerbaru = Aktivitas::with('user')
             ->orderBy('created_at', 'desc')
@@ -49,11 +52,14 @@ class DashboardController extends Controller
         $menungguVerifikasi = $stats['menungguVerifikasi'];
         $umkmAktif = $stats['umkmAktif'];
         $pendingCount = $stats['pendingCount'];
+        
+        $pendingAkunCount = \App\Models\Pemilik::where('status_verifikasi_ktp', 'pending')->count();
 
         return view('admin.dashboard', compact(
             'totalUmkm', 'menungguVerifikasi', 'umkmAktif',
             'growthUmkm', 'chartLabels', 'chartPendaftaran', 'chartVerifikasi',
-            'distribusiWilayah', 'distribusiSektor', 'umkmTerbaru', 'aktivitasTerbaru', 'pendingCount'
+            'distribusiWilayah', 'distribusiSektor', 'distribusiKategori', 'umkmTerbaru', 'aktivitasTerbaru', 'pendingCount', 'pendingAkunCount',
+            'sektors', 'kelurahans'
         ));
     }
 
@@ -79,9 +85,12 @@ class DashboardController extends Controller
         $stats = $this->getUmkmStatistics();
         $growthUmkm = $this->calculateGrowth();
         $chartData = $this->getChartDataByFilter($filter);
-        $distribusiWilayah = $this->getDistribusiWilayah();
-        $distribusiSektor = $this->getDistribusiSektor();
+        $distribusiWilayah = $this->getDistribusiWilayah(request('filter_sektor'));
+        $distribusiSektor = $this->getDistribusiSektor(request('filter_kelurahan'));
+        $distribusiKategori = $this->getDistribusiKategori();
         $umkmTerbaru = $this->mapUmkmForJson($this->getUmkmTerbaru(5));
+        $sektors = \App\Models\SektorUmkm::all();
+        $kelurahans = \App\Models\Kelurahan::all();
 
         return response()->json([
             'success' => true,
@@ -94,6 +103,7 @@ class DashboardController extends Controller
             'verifikasi' => $chartData['verifikasi'],
             'distribusiWilayah' => $distribusiWilayah,
             'distribusiSektor' => $distribusiSektor,
+            'distribusiKategori' => $distribusiKategori,
             'umkmTerbaru' => $umkmTerbaru,
             'pendingCount' => $stats['pendingCount'],
         ]);

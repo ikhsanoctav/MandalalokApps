@@ -9,8 +9,8 @@
         <div class="flex items-center justify-between">
             <div>
                 <h2 class="text-xl font-bold text-slate-800">📸 Upload Foto UMKM</h2>
-                <p class="text-sm text-slate-500 mt-0.5">{{ $umkm->nama_usaha }} &mdash;
-                    {{ $umkm->pemilik->nama_lengkap ?? '-' }}</p>
+                <p class="text-sm text-slate-700 mt-0.5">{{ $umkm->nama_usaha }} &mdash;
+                    {{ $umkm->pemilik?->nama_lengkap ?? '-' }}</p>
             </div>
             <a href="{{ route('operator.umkm.index') }}"
                 class="text-sm text-blue-600 hover:underline flex items-center gap-1">
@@ -53,7 +53,7 @@
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-6 items-start">
                         
                         <div>
-                            <p class="text-xs font-semibold text-slate-500 uppercase tracking-wide mb-2">Foto Saat Ini</p>
+                            <p class="text-xs font-semibold text-slate-700 uppercase tracking-wide mb-2">Foto Saat Ini</p>
                             @if ($umkm->foto_utama)
                                 <div class="relative group">
                                     <img src="{{ asset('storage/' . $umkm->foto_utama) }}" alt="Foto Utama"
@@ -76,7 +76,7 @@
                         </div>
 
                         <div>
-                            <p class="text-xs font-semibold text-slate-500 uppercase tracking-wide mb-2">Upload Foto Baru
+                            <p class="text-xs font-semibold text-slate-700 uppercase tracking-wide mb-2">Upload Foto Baru
                             </p>
                             <label for="foto_utama" id="labelFotoUtama"
                                 class="flex flex-col items-center justify-center w-full h-48 border-2 border-pink-300 border-dashed rounded-xl cursor-pointer hover:border-pink-500 hover:bg-pink-50 transition-all">
@@ -138,7 +138,7 @@
                     @php $gallery = $umkm->foto_gallery ? json_decode($umkm->foto_gallery, true) : []; @endphp
                     @if (count($gallery) > 0)
                         <div class="mb-5">
-                            <p class="text-xs font-semibold text-slate-500 uppercase tracking-wide mb-3">Foto Gallery Saat
+                            <p class="text-xs font-semibold text-slate-700 uppercase tracking-wide mb-3">Foto Gallery Saat
                                 Ini ({{ count($gallery) }} foto)</p>
                             <div class="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 gap-3" id="galleryContainer">
                                 @foreach ($gallery as $idx => $foto)
@@ -159,7 +159,7 @@
                     @endif
 
                     <div>
-                        <p class="text-xs font-semibold text-slate-500 uppercase tracking-wide mb-2">Tambah Foto Gallery
+                        <p class="text-xs font-semibold text-slate-700 uppercase tracking-wide mb-2">Tambah Foto Gallery
                             Baru</p>
                         <label for="foto_gallery"
                             class="flex flex-col items-center justify-center w-full h-32 border-2 border-blue-300 border-dashed rounded-xl cursor-pointer hover:border-blue-500 hover:bg-blue-50 transition-all">
@@ -276,7 +276,7 @@
             if (files.length > 8) {
                 const more = document.createElement('div');
                 more.className =
-                    'w-16 h-16 rounded-xl bg-slate-100 flex items-center justify-center text-xs text-slate-500 font-bold';
+                    'w-16 h-16 rounded-xl bg-slate-100 flex items-center justify-center text-xs text-slate-700 font-bold';
                 more.textContent = '+' + (files.length - 8);
                 container.appendChild(more);
             }
@@ -284,34 +284,41 @@
 
         // Hapus foto gallery via AJAX
         function hapusGallery(umkmId, index, btn) {
-            if (!confirm('Hapus foto ini dari gallery?')) return;
-            const item = document.getElementById('gallery-item-' + index);
-            btn.disabled = true;
-            btn.textContent = '...';
+            window.dispatchEvent(new CustomEvent('open-confirm-modal', {
+                detail: {
+                    title: 'Hapus Foto',
+                    message: 'Apakah Anda yakin ingin menghapus foto ini dari gallery?',
+                    confirmText: 'Ya, Hapus',
+                    action: () => {
+                        const item = document.getElementById('gallery-item-' + index);
+                        btn.disabled = true;
+                        btn.textContent = '...';
 
-            fetch(`/operator/umkm/${umkmId}/foto-gallery/${index}`, {
-                    method: 'DELETE',
-                    headers: {
-                        'X-CSRF-TOKEN': '{{ csrf_token() }}',
-                        'Accept': 'application/json'
+                        return fetch(`/operator/umkm/${umkmId}/foto-gallery/${index}`, {
+                                method: 'DELETE',
+                                headers: {
+                                    'X-CSRF-TOKEN': '{{ csrf_token() }}',
+                                    'Accept': 'application/json'
+                                }
+                            })
+                            .then(r => r.json())
+                            .then(data => {
+                                if (data.success) {
+                                    item.style.transition = 'opacity 0.3s';
+                                    item.style.opacity = '0';
+                                    setTimeout(() => {
+                                        item.remove();
+                                        if (window.showToast) window.showToast('success', 'Berhasil!', 'Foto gallery berhasil dihapus.');
+                                    }, 300);
+                                }
+                            })
+                            .catch(() => {
+                                btn.disabled = false;
+                                btn.textContent = '✕';
+                            });
                     }
-                })
-                .then(r => r.json())
-                .then(data => {
-                    if (data.success) {
-                        item.style.transition = 'opacity 0.3s';
-                        item.style.opacity = '0';
-                        setTimeout(() => {
-                            item.remove();
-                            if (window.showToast) window.showToast('success', 'Berhasil!',
-                                'Foto gallery berhasil dihapus.');
-                        }, 300);
-                    }
-                })
-                .catch(() => {
-                    btn.disabled = false;
-                    btn.textContent = '✕';
-                });
+                }
+            }));
         }
     </script>
 @endpush

@@ -27,10 +27,10 @@ trait DashboardChartTrait
 
         switch ($filter) {
             case 'daily':
-                $end = $endDate ? Carbon::parse($endDate) : now();
-                $start = $startDate ? Carbon::parse($startDate) : now()->subDays(29);
+                $end = $endDate ? Carbon::parse($endDate)->endOfDay() : now()->endOfDay();
+                $start = $startDate ? Carbon::parse($startDate)->startOfDay() : now()->subDays(29)->startOfDay();
 
-                for ($date = clone $start; $date <= $end; $date->addDay()) {
+                for ($date = clone $start; $date->startOfDay() <= $end; $date->addDay()) {
                     $labels[] = $date->format('d M');
                     $pendaftaran[] = UMKM::whereDate('created_at', $date)->count();
                     $verifikasi[] = UMKM::whereDate('tanggal_verifikasi', $date)->count();
@@ -116,15 +116,18 @@ trait DashboardChartTrait
      * Uses id_kelurahan FK for reliable join, falls back to string match for un-backfilled records.
      * Only counts verified UMKM.
      */
-    protected function getDistribusiWilayah()
+    protected function getDistribusiWilayah($sektorId = null)
     {
         // Query 1: pemilik with valid id_kelurahan FK
         $byFK = DB::table('kelurahans')
             ->select('kelurahans.nama_kelurahan', DB::raw('COUNT(umkms.id_umkm) as total'))
             ->join('pemiliks', 'kelurahans.id', '=', 'pemiliks.id_kelurahan')
-            ->leftJoin('umkms', function ($join) {
+            ->leftJoin('umkms', function ($join) use ($sektorId) {
                 $join->on('pemiliks.id_pemilik', '=', 'umkms.id_pemilik')
                      ->where('umkms.status_verifikasi', '=', 'terverifikasi');
+                if ($sektorId) {
+                    $join->where('umkms.id_sektor', '=', $sektorId);
+                }
             })
             ->groupBy('kelurahans.nama_kelurahan');
 
@@ -135,9 +138,12 @@ trait DashboardChartTrait
                 $join->on('kelurahans.nama_kelurahan', '=', 'pemiliks.kelurahan')
                      ->whereNull('pemiliks.id_kelurahan');
             })
-            ->leftJoin('umkms', function ($join) {
+            ->leftJoin('umkms', function ($join) use ($sektorId) {
                 $join->on('pemiliks.id_pemilik', '=', 'umkms.id_pemilik')
                      ->where('umkms.status_verifikasi', '=', 'terverifikasi');
+                if ($sektorId) {
+                    $join->where('umkms.id_sektor', '=', $sektorId);
+                }
             })
             ->groupBy('kelurahans.nama_kelurahan');
 
@@ -158,18 +164,45 @@ trait DashboardChartTrait
      * Get sector distribution data (UMKM count per sektor usaha).
      * Only counts verified UMKM.
      */
-    protected function getDistribusiSektor()
+    protected function getDistribusiSektor($kelurahanId = null)
     {
         return SektorUmkm::select('sektor_umkms.nama_sektor', DB::raw('COUNT(umkms.id_umkm) as total'))
-            ->leftJoin('umkms', function ($join) {
+            ->leftJoin('umkms', function ($join) use ($kelurahanId) {
                 $join->on('sektor_umkms.id', '=', 'umkms.id_sektor')
                      ->where('umkms.status_verifikasi', '=', 'terverifikasi');
+            })
+            ->leftJoin('pemiliks', 'umkms.id_pemilik', '=', 'pemiliks.id_pemilik')
+            ->when($kelurahanId, function ($query) use ($kelurahanId) {
+                $query->where(function ($q) use ($kelurahanId) {
+                    $q->where('pemiliks.id_kelurahan', $kelurahanId)
+                      ->orWhere(function ($q2) use ($kelurahanId) {
+                          $kelurahan = Kelurahan::find($kelurahanId);
+                          if ($kelurahan) {
+                              $q2->whereNull('pemiliks.id_kelurahan')
+                                 ->where('pemiliks.kelurahan', $kelurahan->nama_kelurahan);
+                          }
+                      });
+                });
             })
             ->groupBy('sektor_umkms.id', 'sektor_umkms.nama_sektor')
             ->orderBy('total', 'desc')
             ->get();
     }
-
+    /**
+     * Get category distribution data (UMKM count per kategori usaha).
+     * Only counts verified UMKM.
+     */
+    protected function getDistribusiKategori()
+    {
+        return \App\Models\KategoriUMKM::select('kategori_umkms.nama_kategori', DB::raw('COUNT(umkms.id_umkm) as total'))
+            ->leftJoin('umkms', function ($join) {
+                $join->on('kategori_umkms.id', '=', 'umkms.id_kategori')
+                     ->where('umkms.status_verifikasi', '=', 'terverifikasi');
+            })
+            ->groupBy('kategori_umkms.id', 'kategori_umkms.nama_kategori')
+            ->orderBy('total', 'desc')
+            ->get();
+    }
     /**
      * Get recent UMKM entries.
      */

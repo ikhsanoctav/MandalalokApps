@@ -2,7 +2,7 @@
 
 namespace Tests\Feature;
 
-use App\Services\OllamaService;
+use Illuminate\Support\Facades\Http;
 use Tests\TestCase;
 
 class ChatbotTest extends TestCase
@@ -17,17 +17,13 @@ class ChatbotTest extends TestCase
 
     public function test_chatbot_successful_response(): void
     {
-        $this->mock(OllamaService::class, function ($mock) {
-            $mock->shouldReceive('generateChatResponse')
-                ->once()
-                ->withArgs(fn ($systemContext, $message, $history) => is_string($systemContext)
-                    && $message === 'Halo Ollama'
-                    && $history === [])
-                ->andReturn('Halo! Ini adalah respons dari AI Ollama.');
-        });
+        config(['services.n8n.webhook_url' => 'https://n8n.test/webhook/chat-api']);
+        Http::fake(['https://n8n.test/webhook/chat-api' => Http::response([
+            'output' => 'Halo! Ini adalah respons dari n8n.',
+        ])]);
 
         $response = $this->postJson(route('api.chat'), [
-            'message' => 'Halo Ollama',
+            'message' => 'Halo n8n',
             'name' => 'Budi',
             'kelurahan' => 'Pasirlayung',
             'phone' => '08123456789'
@@ -36,23 +32,24 @@ class ChatbotTest extends TestCase
         $response->assertStatus(200)
             ->assertJson([
                 'success' => true,
-                'reply' => 'Halo! Ini adalah respons dari AI Ollama.'
+                'reply' => 'Halo! Ini adalah respons dari n8n.'
             ]);
+
+        Http::assertSent(fn ($request) => $request->url() === 'https://n8n.test/webhook/chat-api'
+            && $request['message'] === 'Halo n8n'
+            && is_string($request['systemContext']));
     }
 
-    public function test_chatbot_handles_ollama_failure_gracefully(): void
+    public function test_chatbot_handles_n8n_failure_gracefully(): void
     {
-        $this->mock(OllamaService::class, function ($mock) {
-            $mock->shouldReceive('generateChatResponse')
-                ->once()
-                ->andReturn(null);
-        });
+        config(['services.n8n.webhook_url' => 'https://n8n.test/webhook/chat-api']);
+        Http::fake(['https://n8n.test/webhook/chat-api' => Http::response([], 502)]);
 
         $response = $this->postJson(route('api.chat'), [
             'message' => 'Halo Ollama'
         ]);
 
-        $response->assertStatus(200)
+        $response->assertStatus(503)
             ->assertJson([
                 'success' => false
             ]);

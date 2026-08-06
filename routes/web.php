@@ -83,6 +83,7 @@ Route::middleware('auth')->group(function () {
     Route::delete('/berita/{id}', [BeritaController::class, 'destroy'])->name('berita.destroy');
 
     // Notifications
+    Route::get('/notifications', [NotificationController::class, 'index'])->name('notifications.index');
     Route::get('/notifications/unread', [NotificationController::class, 'getUnread'])->name('notifications.unread');
     Route::post('/notifications/read-all', [NotificationController::class, 'markAllAsRead'])->name('notifications.readAll');
     Route::post('/notifications/{id}/read', [NotificationController::class, 'markAsRead'])->name('notifications.read');
@@ -95,6 +96,12 @@ Route::middleware(['auth', RoleMiddleware::class.':super_admin,admin_kecamatan']
     Route::get('/dss/status', [DssController::class, 'checkStatus'])->name('dss.status');
     Route::get('/dss/history/{id}', [DssController::class, 'loadHistory'])->name('dss.history.show');
     Route::delete('/dss/history/{id}', [DssController::class, 'deleteHistory'])->name('dss.history.destroy');
+
+    // Adaptive DSS
+    Route::get('/dss/adaptive', [\App\Http\Controllers\AdaptiveDssController::class, 'index'])->name('dss.adaptive.index');
+    Route::post('/api/dss/adaptive/indicators', [\App\Http\Controllers\AdaptiveDssController::class, 'getIndicators'])->name('dss.adaptive.indicators');
+    Route::post('/api/dss/adaptive/score', [\App\Http\Controllers\AdaptiveDssController::class, 'scoreAndRank'])->name('dss.adaptive.score');
+    Route::post('/api/dss/adaptive/explain', [\App\Http\Controllers\AdaptiveDssController::class, 'explainRecommendation'])->name('dss.adaptive.explain');
 
     // AHP-SAW Routes
     Route::get('/dss/kriteria', [\App\Http\Controllers\DssAhpController::class, 'kriteriaIndex'])->name('dss.kriteria.index');
@@ -200,7 +207,7 @@ Route::middleware(['auth', RoleMiddleware::class.':operator_lapangan'])->prefix(
 | Route Pelaku UMKM
 |--------------------------------------------------------------------------
 */
-Route::middleware(['auth', RoleMiddleware::class.':pelaku_umkm'])->prefix('pelaku')->name('pelaku.')->group(function () {
+Route::middleware(['auth', RoleMiddleware::class.':pelaku_umkm', 'profil.completed'])->prefix('pelaku')->name('pelaku.')->group(function () {
     Route::get('/dashboard', [App\Http\Controllers\Pelaku\DashboardController::class, 'dashboard'])->name('dashboard');
 
     // Profil
@@ -217,11 +224,11 @@ Route::middleware(['auth', RoleMiddleware::class.':pelaku_umkm'])->prefix('pelak
 
     // UMKM
     Route::get('/umkm/create', [App\Http\Controllers\Pelaku\UmkmController::class, 'create'])->name('umkm.create');
-    Route::post('/umkm', [App\Http\Controllers\Pelaku\UmkmController::class, 'store'])->name('umkm.store');
+    Route::post('/umkm', [App\Http\Controllers\Pelaku\UmkmController::class, 'store'])->name('umkm.store')->middleware('throttle:10,1');
     Route::get('/umkm/{id}/edit', [App\Http\Controllers\Pelaku\UmkmController::class, 'edit'])->name('umkm.edit');
     Route::get('/umkm/{id}/print-qr', [App\Http\Controllers\Pelaku\UmkmController::class, 'printQr'])->name('umkm.print-qr');
     Route::get('/umkm/{id}/print-dokumen', [App\Http\Controllers\Pelaku\UmkmController::class, 'printDokumen'])->name('umkm.print-dokumen');
-    Route::put('/umkm/{id}', [App\Http\Controllers\Pelaku\UmkmController::class, 'update'])->name('umkm.update');
+    Route::put('/umkm/{id}', [App\Http\Controllers\Pelaku\UmkmController::class, 'update'])->name('umkm.update')->middleware('throttle:10,1');
 
     // Pengajuan Bantuan
     Route::get('/pengajuan', [App\Http\Controllers\Pelaku\PengajuanController::class, 'index'])->name('pengajuan.index');

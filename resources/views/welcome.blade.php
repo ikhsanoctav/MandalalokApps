@@ -129,6 +129,7 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
+            gap: 24px;
         }
         .logo {
             display: flex;
@@ -309,7 +310,7 @@
             100% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(16, 185, 129, 0); }
         }
 
-        .hero-content .badge { animation: fadeInUpHero 0.8s cubic-bezier(0.2, 0.8, 0.2, 1) forwards 0.1s; opacity: 0; }
+        .hero-content .official-tag { animation: fadeInUpHero 0.8s cubic-bezier(0.2, 0.8, 0.2, 1) forwards 0.1s; opacity: 0; }
         .hero-content h1 { animation: fadeInUpHero 0.8s cubic-bezier(0.2, 0.8, 0.2, 1) forwards 0.2s; opacity: 0; }
         .hero-content h2 { animation: fadeInUpHero 0.8s cubic-bezier(0.2, 0.8, 0.2, 1) forwards 0.3s; opacity: 0; }
         .hero-content p { animation: fadeInUpHero 0.8s cubic-bezier(0.2, 0.8, 0.2, 1) forwards 0.4s; opacity: 0; }
@@ -339,7 +340,7 @@
             inset: 0;
             background-image: var(--batik-jabar);
             background-size: 80px 80px;
-            opacity: 0.34;
+            opacity: 0.8;
             pointer-events: none;
         }
         /* Gradient fade agar teks tetap terbaca jelas */
@@ -348,8 +349,8 @@
             position: absolute;
             inset: 0;
             background:
-                linear-gradient(90deg, rgba(255,255,255,0.96) 0%, rgba(255,255,255,0.74) 48%, rgba(255,255,255,0.42) 100%),
-                linear-gradient(180deg, transparent 0%, rgba(248,250,252,0.88) 100%);
+                linear-gradient(90deg, rgba(255,255,255,0.98) 0%, rgba(255,255,255,0.85) 45%, rgba(255,255,255,0.15) 100%),
+                linear-gradient(180deg, transparent 0%, rgba(248,250,252,0.7) 100%);
             pointer-events: none;
         }
 
@@ -363,23 +364,23 @@
             position: relative;
             z-index: 2;
         }
-        .hero-content .badge {
-            background: rgba(212, 175, 55, 0.1);
-            color: var(--gold-dark);
-            padding: 9px 18px;
-            border: 1px solid rgba(212, 175, 55, 0.3);
-            border-radius: var(--radius-pill);
-            font-size: 12px;
-            font-weight: 700;
+        .hero-content .official-tag {
             display: inline-flex;
             align-items: center;
-            gap: 8px;
-            margin-bottom: 24px;
+            gap: 16px;
+            margin-bottom: 32px;
+        }
+        .official-tag .accent-line {
+            width: 48px;
+            height: 2px;
+            background: var(--gold);
+        }
+        .official-tag span {
+            font-size: 11px;
+            font-weight: 800;
+            color: var(--primary-color);
+            letter-spacing: 4px;
             text-transform: uppercase;
-            letter-spacing: 1px;
-            box-shadow: 0 10px 24px rgba(212, 175, 55, 0.12);
-            background-image: linear-gradient(to right, rgba(255,255,255,0.94), rgba(255,255,255,0.9)), var(--batik-jabar);
-            background-size: 40px 40px;
         }
         .hero-content h1 {
             font-size: 64px;
@@ -547,51 +548,85 @@
         }
 
         /* Product Showcase Carousel */
+        /* Product Showcase Carousel */
         .product-showcase {
-            padding: 40px 24px 24px;
-            background:
-                linear-gradient(180deg, rgba(248,250,252,0.35) 0%, var(--bg-light) 100%);
+            padding: 60px 24px 40px;
+            background: linear-gradient(135deg, rgba(248,250,252,1) 0%, rgba(255,255,255,1) 100%);
+            position: relative;
+            overflow: hidden;
+            border-top: 1px solid rgba(212, 175, 55, 0.2);
+            border-bottom: 1px solid rgba(212, 175, 55, 0.2);
+        }
+        .product-showcase::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background-image: var(--batik-jabar);
+            opacity: 0.05; /* Very subtle */
+            z-index: 0;
+            pointer-events: none;
+        }
+        .product-showcase::after {
+            content: '';
+            position: absolute;
+            top: -50%; left: -20%;
+            width: 70%; height: 200%;
+            background: radial-gradient(circle, rgba(212, 175, 55, 0.08) 0%, transparent 60%);
+            z-index: 0;
+            pointer-events: none;
         }
         .product-showcase-container {
             max-width: 1280px;
             margin: 0 auto;
-            padding: 40px 0 56px;
+            padding: 0 0 56px;
+            position: relative;
+            z-index: 1;
         }
         .product-showcase-header {
             display: flex;
             align-items: flex-end;
             justify-content: space-between;
             gap: 24px;
-            margin-bottom: 24px;
+            margin-bottom: 32px;
         }
         .product-showcase-eyebrow {
-            font-size: 13px;
+            font-size: 14px;
             font-weight: 800;
-            letter-spacing: 2px;
+            letter-spacing: 3px;
             text-transform: uppercase;
             color: var(--gold-dark);
-            margin-bottom: 10px;
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .product-showcase-eyebrow::before {
+            content: '';
+            display: block;
+            width: 24px;
+            height: 2px;
+            background: var(--gold);
         }
         .product-showcase-title {
-            font-size: 34px;
+            font-size: 38px;
             line-height: 1.2;
             color: var(--primary);
-            margin-bottom: 10px;
+            margin-bottom: 16px;
         }
         .product-showcase-copy {
             color: var(--text-muted);
             line-height: 1.7;
             max-width: 680px;
-            font-size: 15px;
+            font-size: 16px;
         }
         .product-showcase-actions {
             display: flex;
-            gap: 10px;
+            gap: 12px;
             flex-shrink: 0;
         }
         .carousel-btn {
-            width: 42px;
-            height: 42px;
+            width: 48px;
+            height: 48px;
             border-radius: var(--radius-pill);
             border: 1px solid var(--border-color);
             background: white;
@@ -601,124 +636,132 @@
             align-items: center;
             justify-content: center;
             box-shadow: 0 10px 22px rgba(15, 46, 92, 0.08);
-            transition: all 0.25s ease;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         }
         .carousel-btn:hover {
             background: var(--primary);
+            border-color: var(--primary);
             color: white;
             transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(15, 46, 92, 0.2);
         }
         .product-carousel {
             display: grid;
             grid-auto-flow: column;
-            grid-auto-columns: calc((100% - 64px) / 5);
-            gap: 16px;
+            grid-auto-columns: calc((100% - 80px) / 5);
+            gap: 20px;
             overflow-x: auto;
             scroll-snap-type: x mandatory;
             scroll-behavior: smooth;
-            padding: 4px 2px 18px;
+            padding: 10px 40px 32px;
+            margin: 0 -40px;
             scrollbar-width: thin;
-            scrollbar-color: rgba(15, 46, 92, 0.28) transparent;
+            scrollbar-color: rgba(15, 46, 92, 0.2) transparent;
+            -webkit-mask-image: linear-gradient(to right, transparent, black 40px, black calc(100% - 40px), transparent);
+            mask-image: linear-gradient(to right, transparent, black 40px, black calc(100% - 40px), transparent);
         }
         .product-carousel::-webkit-scrollbar { height: 8px; }
         .product-carousel::-webkit-scrollbar-track { background: transparent; }
         .product-carousel::-webkit-scrollbar-thumb {
-            background: rgba(15, 46, 92, 0.24);
+            background: rgba(15, 46, 92, 0.2);
             border-radius: var(--radius-pill);
         }
         .home-product-card {
             scroll-snap-align: start;
-            background: white;
-            border: 1px solid var(--border-color);
+            background: #ffffff;
+            border: 1px solid rgba(226,232,240,0.8);
             border-radius: 20px;
             overflow: hidden;
             text-decoration: none;
             color: inherit;
-            box-shadow: var(--shadow-subtle);
-            transition: all 0.3s ease;
+            box-shadow: 0 4px 20px rgba(15, 46, 92, 0.05), 0 1px 3px rgba(15, 46, 92, 0.02);
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
             min-width: 0;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+        }
+        .home-product-card::after {
+            content: ''; position: absolute; inset: 0; border-radius: 20px;
+            box-shadow: inset 0 0 0 1px rgba(255,255,255,0.5); pointer-events: none; z-index: 2;
         }
         .home-product-card:hover {
-            transform: translateY(-6px);
-            box-shadow: var(--shadow-hover);
-            border-color: rgba(26, 73, 139, 0.28);
+            transform: translateY(-8px);
+            box-shadow: 0 24px 48px rgba(15, 46, 92, 0.12), 0 8px 16px rgba(15, 46, 92, 0.04);
+            border-color: rgba(212, 175, 55, 0.3); /* gold subtle border */
         }
         .home-product-media {
             aspect-ratio: 4 / 3;
             position: relative;
             overflow: hidden;
-            background: linear-gradient(135deg, rgba(15, 46, 92, 0.08), rgba(212, 175, 55, 0.14));
+            background: linear-gradient(135deg, #f1f5f9, #f8fafc);
         }
+        .home-product-media::after {
+            content: ''; position: absolute; inset: 0;
+            background: linear-gradient(to top, rgba(0,0,0,0.3) 0%, rgba(0,0,0,0) 40%);
+            opacity: 0; transition: opacity 0.4s ease; z-index: 1;
+        }
+        .home-product-card:hover .home-product-media::after { opacity: 1; }
         .home-product-media img {
             width: 100%;
             height: 100%;
             object-fit: cover;
             display: block;
-            transition: transform 0.45s ease;
+            transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            z-index: 0;
         }
-        .home-product-card:hover .home-product-media img { transform: scale(1.05); }
+        .home-product-card:hover .home-product-media img { transform: scale(1.08); }
         .home-product-placeholder {
-            width: 76px !important;
-            height: 76px !important;
+            width: 64px !important;
+            height: 64px !important;
             object-fit: contain !important;
-            opacity: 0.78;
+            opacity: 0.6;
             position: absolute;
             inset: 0;
             margin: auto;
             transform: none !important;
+            filter: grayscale(100%);
+            z-index: 0;
         }
         .home-product-badge {
             position: absolute;
-            top: 10px;
-            right: 10px;
-            max-width: calc(100% - 20px);
-            padding: 6px 10px;
-            border-radius: var(--radius-pill);
-            background: rgba(255, 255, 255, 0.94);
+            top: 12px;
+            right: 12px;
+            max-width: calc(100% - 24px);
+            padding: 6px 12px;
+            border-radius: 999px;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(4px); -webkit-backdrop-filter: blur(4px);
             color: var(--primary);
             font-size: 11px;
             font-weight: 800;
+            letter-spacing: 0.3px;
             white-space: nowrap;
             overflow: hidden;
             text-overflow: ellipsis;
-            box-shadow: 0 8px 18px rgba(15, 46, 92, 0.12);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+            border: 1px solid rgba(255,255,255,0.4);
+            z-index: 2;
         }
-        .home-product-body { padding: 14px; }
+        .home-product-body { padding: 20px; flex-grow: 1; display: flex; flex-direction: column; position: relative; z-index: 2; background: white; }
         .home-product-store {
-            color: var(--gold-dark);
-            font-size: 12px;
-            font-weight: 800;
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
-            margin-bottom: 5px;
+            font-size: 11px; color: var(--gold-dark); font-weight: 800; letter-spacing: 0.5px;
+            text-transform: uppercase; margin-bottom: 6px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
         }
         .home-product-name {
-            font-family: 'Inter', sans-serif;
-            color: var(--text-dark);
-            font-size: 16px;
-            line-height: 1.35;
-            min-height: 43px;
-            margin-bottom: 10px;
-            display: -webkit-box;
-            -webkit-line-clamp: 2;
-            -webkit-box-orient: vertical;
-            overflow: hidden;
+            font-size: 18px; font-weight: 800; color: #0f172a; margin-bottom: 8px;
+            font-family: 'Inter', sans-serif; line-height: 1.4;
+            display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; min-height: 50px;
         }
         .home-product-price {
-            color: #d94b2b;
-            font-size: 15px;
-            font-weight: 900;
-            margin-bottom: 10px;
+            font-size: 18px; font-weight: 900; color: #ef4444; margin-bottom: 16px;
+            display: flex; align-items: center; gap: 4px;
         }
         .home-product-location {
-            display: flex;
-            align-items: center;
-            gap: 6px;
-            color: var(--text-muted);
-            font-size: 12px;
-            min-width: 0;
+            display: flex; align-items: center; gap: 6px; font-size: 13px; color: #64748b; margin-top: auto; min-width: 0; font-weight: 500;
         }
+        .home-product-location i { color: var(--primary-light); font-size: 12px; }
         .home-product-location span {
             white-space: nowrap;
             overflow: hidden;
@@ -733,18 +776,20 @@
             display: inline-flex;
             align-items: center;
             gap: 10px;
-            background: var(--primary);
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%);
             color: white;
             text-decoration: none;
-            padding: 13px 22px;
+            padding: 16px 36px;
             border-radius: var(--radius-pill);
-            font-size: 14px;
+            font-size: 15px;
             font-weight: 800;
-            transition: all 0.25s ease;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 0 8px 20px rgba(15, 46, 92, 0.15);
         }
         .product-showcase-link:hover {
-            background: var(--primary-light);
-            transform: translateY(-2px);
+            transform: translateY(-3px);
+            box-shadow: 0 12px 28px rgba(15, 46, 92, 0.25);
+            background: linear-gradient(135deg, var(--primary-light) 0%, var(--primary) 100%);
         }
 
         /* Stats Section */
@@ -842,7 +887,9 @@
             background: white;
             width: 72px;
             height: 72px;
-            line-height: 72px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
             border-radius: 50%;
             box-shadow: 0 8px 16px rgba(0,0,0,0.06);
             position: relative;
@@ -966,8 +1013,8 @@
             background: #94a3b8; 
         }
         .news-card {
-            flex: 0 0 calc(33.333% - 22px);
-            min-width: 300px;
+            flex: 1 1 calc(25% - 24px);
+            min-width: 280px;
             scroll-snap-align: start;
             background: white;
             border-radius: 22px;
@@ -1342,7 +1389,16 @@
         }
 
         /* Responsive Design */
+        @media (max-width: 1200px) {
+            .nav-menu { gap: 14px; }
+            .nav-link { font-size: 13px; }
+            .btn-login, .btn-register { padding: 10px 20px; font-size: 12px; }
+            .logo-text h4 { font-size: 16px; }
+        }
+        
         @media (max-width: 1024px) {
+            .nav-menu { display: none; }
+            .mobile-menu-btn { display: block; }
             .hero-container { grid-template-columns: 1fr; text-align: center; gap: 48px; }
             .hero-content h1 { font-size: 52px; }
             .hero-content p { margin: 0 auto 40px; }
@@ -1357,8 +1413,6 @@
             .why-data, .quote-section { margin: 24px; padding: 60px 32px; }
         }
         @media (max-width: 768px) {
-            .nav-menu { display: none; }
-            .mobile-menu-btn { display: block; }
             .product-showcase { padding: 48px 16px; }
             .product-showcase-header { flex-direction: column; align-items: flex-start; gap: 20px; }
             .product-showcase-actions { width: 100%; justify-content: flex-end; }
@@ -2269,7 +2323,7 @@
                 max-width: 100vw;
             }
 
-            .hero-content .badge {
+            .hero-content .official-tag {
                 font-size: 10px;
                 letter-spacing: 0.6px;
                 padding: 8px 12px;
@@ -2356,11 +2410,11 @@
 <section class="hero" id="home">
     <div class="hero-container">
         <div class="hero-content stagger">
-            <div class="badge">
-                <i class="fas fa-shield-alt"></i> Portal Resmi Kecamatan Mandalajati
+            <div class="official-tag">
+                <div class="accent-line"></div>
+                <span>Portal Resmi Kecamatan Mandalajati</span>
             </div>
             <h1>Mandalaloka:<br><span>Portal Pendataan UMKM</span></h1>
-            <h2>Kecamatan Mandalajati</h2>
             <p>Sistem basis data dan informasi kelola UMKM terintegrasi di lingkungan Kecamatan Mandalajati. Daftarkan usaha Anda untuk mendapatkan fasilitas dan pembinaan program pemerintah secara tepat sasaran.</p>
             <div class="hero-buttons">
                 <a href="{{ route('register') }}" class="btn-register">
@@ -2428,19 +2482,31 @@
         
         <div class="stats-grid">
             <div class="stat-card">
-                <i class="fas fa-chart-line"></i>
+                <i class="stat-icon">
+                    <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" style="width: 32px; height: 32px;">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"></path>
+                    </svg>
+                </i>
                 <div class="stat-value" id="growthValue">--</div>
                 <div class="stat-label">Bina Usaha Baru</div>
                 <div class="stat-change"><i class="fas fa-arrow-up"></i> Data Bulan Terakhir</div>
             </div>
             <div class="stat-card primary">
-                <i class="fas fa-building"></i>
+                <i class="stat-icon">
+                    <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" style="width: 32px; height: 32px;">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"></path>
+                    </svg>
+                </i>
                 <div class="stat-value" id="totalUmkmValue">--</div>
                 <div class="stat-label">Total UMKM Terdaftar</div>
                 <div class="stat-change"><i class="fas fa-check-circle"></i> Data Tervalidasi</div>
             </div>
             <div class="stat-card">
-                <i class="fas fa-tags"></i>
+                <i class="stat-icon">
+                    <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" style="width: 32px; height: 32px;">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.5 14.5a1.5 1.5 0 11-3 0 1.5 1.5 0 013 0zm5.622-10.439l6.32 6.32a1.5 1.5 0 010 2.122l-8.485 8.485a1.5 1.5 0 01-2.122 0l-6.32-6.32a1.5 1.5 0 010-2.122l8.485-8.485a1.5 1.5 0 012.122 0z"></path>
+                    </svg>
+                </i>
                 <div class="stat-value" id="totalSektorValue">--</div>
                 <div class="stat-label">Sektor Usaha</div>
                 <div class="stat-change"><i class="fas fa-list-ul"></i> Klasifikasi Aktif</div>
@@ -2467,7 +2533,7 @@
                 <div style="margin-top: 24px; padding-top: 20px; border-top: 1px dashed var(--border-color);">
                     <p style="font-size: 13px; color: var(--text-muted); background: var(--bg-light); padding: 12px 16px; border-radius: var(--radius-sm); border: 1px solid var(--border-color);">
                         <i class="fas fa-info-circle" style="color: var(--primary); margin-right: 6px;"></i> 
-                        Sektor dominan: <strong id="topKategori" style="color: var(--text-dark);">-</strong> 
+                        Kategori dominan: <strong id="topKategori" style="color: var(--text-dark);">-</strong> 
                         (<span id="topKategoriTotal">0</span> entitas terdaftar)
                     </p>
                 </div>
@@ -2515,11 +2581,11 @@
                 <a href="{{ route('katalog.umkm', ['search' => $produk->nama_produk]) }}" class="home-product-card">
                     <div class="home-product-media">
                         @if($produk->foto_produk && count($produk->foto_produk) > 0)
-                            <img src="{{ Storage::url($produk->foto_produk[0]) }}" alt="{{ $produk->nama_produk }}" loading="lazy">
+                            <img src="{{ Storage::url($produk->foto_produk[0]) }}" alt="{{ $produk->nama_produk }}" loading="lazy" onerror="this.onerror=null;this.src='https://placehold.co/600x400/e8f0fb/0f2e5c?text={{ urlencode($produk->nama_produk) }}';">
                         @else
                             <img src="{{ asset('images/Logo_Mandalaloka.png') }}" alt="Produk Mandalaloka" class="home-product-placeholder" loading="lazy">
                         @endif
-                        <div class="home-product-badge">{{ $produk->umkm->sektor->nama_sektor ?? 'UMKM' }}</div>
+                        <div class="home-product-badge">{{ $produk->umkm->sektor?->nama_sektor ?? 'UMKM' }}</div>
                     </div>
                     <div class="home-product-body">
                         <div class="home-product-store">{{ $produk->umkm->nama_usaha ?? 'UMKM Mandalajati' }}</div>
@@ -2597,14 +2663,14 @@
     <div class="stats-container">
         <h2 class="section-title">Warta Dinas & Informasi Publik</h2>
         
-        @php $berita = \App\Models\Berita::where('status', 'published')->where('published_at', '<=', now())->latest('published_at')->take(10)->get(); @endphp
+        @php $berita = \App\Models\Berita::where('status', 'published')->where('published_at', '<=', now())->latest('published_at')->take(4)->get(); @endphp
         
         @if(isset($berita) && $berita->count() > 0)
             <div class="news-grid">
                 @foreach($berita as $b)
                 <a href="{{ route('warta.show', $b->id) }}" class="news-card">
                     <div class="news-img-wrapper">
-                        <div class="news-img" style="background-image: url('{{ $b->gambar == 'news_default.jpg' ? 'https://picsum.photos/seed/'.$b->id.'/600/400' : Storage::url($b->gambar) }}');"></div>
+                        <div class="news-img" style="background-image: url('{{ ($b->gambar == 'news_default.jpg' || empty($b->gambar)) ? asset('images/Logo_Mandalaloka.png') : Storage::url($b->gambar) }}');"></div>
                         <span class="news-category">{{ $b->penulis }}</span>
                     </div>
                     <div class="news-content">
@@ -2625,7 +2691,7 @@
             <div class="news-grid">
                 <a href="#" class="news-card">
                     <div class="news-img-wrapper">
-                        <div class="news-img" style="background-image: url('https://picsum.photos/seed/default1/600/400');"></div>
+                        <div class="news-img" style="background-image: url('{{ asset('images/Logo_Mandalaloka.png') }}');"></div>
                         <span class="news-category">Program Pemerintah</span>
                     </div>
                     <div class="news-content">
@@ -2639,7 +2705,7 @@
                 </a>
                 <a href="#" class="news-card">
                     <div class="news-img-wrapper">
-                        <div class="news-img" style="background-image: url('https://picsum.photos/seed/default2/600/400');"></div>
+                        <div class="news-img" style="background-image: url('{{ asset('images/Logo_Mandalaloka.png') }}');"></div>
                         <span class="news-category">Rilis Publikasi</span>
                     </div>
                     <div class="news-content">
@@ -2653,7 +2719,7 @@
                 </a>
                 <a href="#" class="news-card">
                     <div class="news-img-wrapper">
-                        <div class="news-img" style="background-image: url('https://picsum.photos/seed/default3/600/400');"></div>
+                        <div class="news-img" style="background-image: url('{{ asset('images/Logo_Mandalaloka.png') }}');"></div>
                         <span class="news-category">Bimbingan Teknis</span>
                     </div>
                     <div class="news-content">
@@ -2661,6 +2727,20 @@
                         <p class="news-excerpt">Penyelenggaraan bimbingan teknis bagi pemilik usaha terkait legalitas, standarisasi produk, dan integrasi teknologi pasar digital.</p>
                         <div class="news-meta">
                             <div class="news-date"><i class="fas fa-calendar-alt"></i> 05 Mar 2026</div>
+                            <span class="news-readmore">Baca <i class="fas fa-arrow-right"></i></span>
+                        </div>
+                    </div>
+                </a>
+                <a href="#" class="news-card">
+                    <div class="news-img-wrapper">
+                        <div class="news-img" style="background-image: url('{{ asset('images/Logo_Mandalaloka.png') }}');"></div>
+                        <span class="news-category">Informasi Publik</span>
+                    </div>
+                    <div class="news-content">
+                        <h3 class="news-title">Fasilitasi Sertifikasi Halal Gratis 2026</h3>
+                        <p class="news-excerpt">Pemerintah memberikan fasilitas sertifikasi halal gratis untuk pelaku usaha mikro sektor kuliner dan minuman di seluruh kecamatan.</p>
+                        <div class="news-meta">
+                            <div class="news-date"><i class="fas fa-calendar-alt"></i> 01 Mar 2026</div>
                             <span class="news-readmore">Baca <i class="fas fa-arrow-right"></i></span>
                         </div>
                     </div>
@@ -3027,12 +3107,16 @@
                     <div><i class="fas fa-user"></i> ${umkm.pemilik}</div>
                     <div><i class="fas fa-map-pin"></i> ${umkm.kelurahan}</div>
                     <div><i class="fas fa-location-dot"></i> ${umkm.alamat}</div>
-                    ${umkm.telp && umkm.telp !== '-' ? `<div><i class="fas fa-phone"></i> ${umkm.telp}</div>` : ''}
                 </div>
-                <div style="margin-top: 12px; border-top: 1px solid #f1f5f9; padding-top: 12px; text-align: center;">
-                    <a href="https://www.google.com/maps/search/?api=1&query=${umkm.latitude},${umkm.longitude}" target="_blank" style="display: inline-block; background: #0f2e5c; color: white; text-decoration: none; padding: 6px 12px; border-radius: 6px; font-size: 12px; font-weight: 600; width: 100%;">
+                <div style="margin-top: 12px; border-top: 1px solid #f1f5f9; padding-top: 12px; text-align: center; display: flex; flex-direction: column; gap: 8px;">
+                    <a href="https://www.google.com/maps/search/?api=1&query=${umkm.latitude},${umkm.longitude}" target="_blank" style="display: inline-block; background: #0f2e5c; color: white; text-decoration: none; padding: 6px 12px; border-radius: 6px; font-size: 12px; font-weight: 600; width: 100%; transition: background-color 0.2s;" onmouseover="this.style.backgroundColor='#1a4382'" onmouseout="this.style.backgroundColor='#0f2e5c'">
                         <i class="fas fa-map-marked-alt" style="margin-right: 4px;"></i> Buka di Google Maps
                     </a>
+                    ${umkm.telp && umkm.telp !== '-' ? `
+                    <a href="https://wa.me/${umkm.telp.replace(/\D/g, '').replace(/^0/, '62')}?text=Halo%20${encodeURIComponent(umkm.nama_usaha)},%20saya%20melihat%20UMKM%20Anda%20di%20Mandalaloka." target="_blank" style="display: inline-block; background: #25D366; color: white; text-decoration: none; padding: 6px 12px; border-radius: 6px; font-size: 12px; font-weight: 600; width: 100%; transition: background-color 0.2s;" onmouseover="this.style.backgroundColor='#20ba59'" onmouseout="this.style.backgroundColor='#25D366'">
+                        <i class="fab fa-whatsapp" style="margin-right: 4px;"></i> Hubungi via WhatsApp
+                    </a>
+                    ` : ''}
                 </div>
             </div>
         `;
@@ -3641,6 +3725,98 @@
             behavior: 'smooth'
         });
     }
+
+    // Fitur Drag to Scroll untuk Carousel Produk
+    document.addEventListener('DOMContentLoaded', () => {
+        const slider = document.getElementById('homeProductCarousel');
+        if (!slider) return;
+
+        let isDown = false;
+        let isDragging = false;
+        let startX;
+        let scrollLeft;
+
+        slider.style.cursor = 'grab';
+
+        slider.addEventListener('mousedown', (e) => {
+            isDown = true;
+            isDragging = false; // Reset drag state
+            slider.style.cursor = 'grabbing';
+            slider.style.scrollSnapType = 'none'; 
+            slider.style.scrollBehavior = 'auto'; 
+            startX = e.pageX - slider.offsetLeft;
+            scrollLeft = slider.scrollLeft;
+        });
+
+        slider.addEventListener('mouseleave', () => {
+            if (!isDown) return;
+            isDown = false;
+            slider.style.cursor = 'grab';
+            slider.style.scrollSnapType = 'x mandatory';
+            slider.style.scrollBehavior = 'smooth';
+        });
+
+        slider.addEventListener('mouseup', () => {
+            if (!isDown) return;
+            isDown = false;
+            slider.style.cursor = 'grab';
+            slider.style.scrollSnapType = 'x mandatory';
+            slider.style.scrollBehavior = 'smooth';
+        });
+
+        slider.addEventListener('mousemove', (e) => {
+            if (!isDown) return;
+            e.preventDefault();
+            const x = e.pageX - slider.offsetLeft;
+            const walk = (x - startX) * 2; // Kecepatan drag
+            
+            if (Math.abs(walk) > 5) {
+                isDragging = true; // Tandai bahwa user benar-benar sedang nge-drag (bukan sekadar klik)
+            }
+            
+            slider.scrollLeft = scrollLeft - walk;
+        });
+        
+        // Mencegah link di-klik saat sedang nge-drag
+        slider.querySelectorAll('a').forEach(link => {
+            link.addEventListener('click', (e) => {
+                if (isDragging) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                }
+            });
+        });
+
+        // Auto-scroll Carousel
+        let autoScrollInterval;
+        const startAutoScroll = () => {
+            autoScrollInterval = setInterval(() => {
+                if (!isDown && !isDragging) {
+                    // Cek jika sudah mencapai ujung kanan (toleransi 10px)
+                    if (slider.scrollLeft + slider.clientWidth >= slider.scrollWidth - 10) {
+                        slider.scrollTo({ left: 0, behavior: 'smooth' });
+                    } else {
+                        scrollProductCarousel(1);
+                    }
+                }
+            }, 3000); // Geser setiap 3 detik
+        };
+
+        const stopAutoScroll = () => {
+            clearInterval(autoScrollInterval);
+        };
+
+        // Mulai auto-scroll saat halaman dimuat
+        startAutoScroll();
+
+        // Hentikan auto-scroll saat kursor berada di atas carousel, lanjutkan saat keluar
+        slider.addEventListener('mouseenter', stopAutoScroll);
+        slider.addEventListener('mouseleave', () => {
+            if (!isDown) {
+                startAutoScroll();
+            }
+        });
+    });
 </script>
 @include('partials.program-flyer-popup')
 </body>

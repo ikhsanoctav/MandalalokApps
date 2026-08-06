@@ -3,7 +3,7 @@
 @section('breadcrumb', 'Pengaturan / Backup & Restore')
 
 @section('content')
-    <div class="space-y-6">
+    <div class="space-y-6" x-data="backupIndex()">
         <div class="flex justify-between items-center">
             <h2 class="text-2xl font-bold text-slate-800">Manajemen Backup Database</h2>
             <form action="{{ route('superadmin.backup.create') }}" method="POST">
@@ -35,14 +35,14 @@
                     <tbody class="divide-y divide-slate-100">
                         @forelse($backups as $backup)
                             <tr class="hover:bg-slate-50/80 transition-colors">
-                                <td class="py-3 px-4 text-slate-500 text-center">{{ $loop->iteration }}</td>
+                                <td class="py-3 px-4 text-slate-700 text-center">{{ $loop->iteration }}</td>
                                 <td class="py-3 px-4 font-mono text-slate-600">{{ $backup['file_name'] }}</td>
                                 <td class="py-3 px-4 font-medium text-slate-800">{{ $backup['file_size'] }}</td>
                                 <td class="py-3 px-4 text-slate-600">{{ $backup['last_modified'] }}</td>
                                 <td class="py-3 px-4 text-center">
                                     <div class="flex items-center justify-center gap-2">
                                         <a href="{{ route('superadmin.backup.download', $backup['file_name']) }}"
-                                            class="p-1.5 bg-green-100 text-green-600 rounded-2xl hover:bg-green-200"
+                                            class="p-2 text-green-500 hover:text-green-600 rounded-2xl hover:bg-green-50 transition-colors"
                                             title="Download">
                                             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -50,22 +50,15 @@
                                                 </path>
                                             </svg>
                                         </a>
-                                        <form action="{{ route('superadmin.backup.delete', $backup['file_name']) }}"
-                                            method="POST" class="inline-block"
-                                            onsubmit="return confirm('Yakin ingin menghapus file backup ini?');">
-                                            @csrf
-                                            @method('DELETE')
-                                            <button type="submit"
-                                                class="p-1.5 bg-red-100 text-red-600 rounded-2xl hover:bg-red-200"
-                                                title="Hapus">
-                                                <svg class="w-4 h-4" fill="none" stroke="currentColor"
-                                                    viewBox="0 0 24 24">
-                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                                        d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16">
-                                                    </path>
-                                                </svg>
-                                            </button>
-                                        </form>
+                                        <button @click="deleteData('{{ $backup['file_name'] }}', $event)"
+                                            class="p-2 text-red-500 hover:text-red-600 rounded-2xl hover:bg-red-50 transition-colors"
+                                            title="Hapus">
+                                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                    d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16">
+                                                </path>
+                                            </svg>
+                                        </button>
                                     </div>
                                 </td>
                             </tr>
@@ -79,4 +72,47 @@
             </div>
         </x-card>
     </div>
+
+    @push('scripts')
+    <script>
+        function backupIndex() {
+            return {
+                deleteData(fileName, event) {
+                    const row = event.target.closest('tr');
+                    this.$dispatch('open-confirm-modal', {
+                        title: 'Hapus Backup',
+                        message: `Apakah Anda yakin ingin menghapus file backup "${fileName}"?`,
+                        confirmText: 'Ya, Hapus',
+                        action: () => {
+                            return fetch(`/superadmin/pengaturan/backup/delete/${fileName}`, {
+                                method: 'DELETE',
+                                headers: {
+                                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content,
+                                    'Accept': 'application/json'
+                                }
+                            })
+                            .then(res => res.json())
+                            .then(data => {
+                                if (data.success) {
+                                    window.showToast('success', 'Berhasil!', data.message);
+                                    if (row) {
+                                        row.style.transition = 'all 0.3s ease';
+                                        row.style.opacity = '0';
+                                        row.style.transform = 'translateX(-20px)';
+                                        setTimeout(() => row.remove(), 300);
+                                    }
+                                } else {
+                                    window.showToast('error', 'Gagal!', data.message || 'Gagal menghapus data.');
+                                }
+                            })
+                            .catch(() => {
+                                window.showToast('error', 'Gagal!', 'Terjadi kesalahan jaringan.');
+                            });
+                        }
+                    });
+                }
+            }
+        }
+    </script>
+    @endpush
 @endsection

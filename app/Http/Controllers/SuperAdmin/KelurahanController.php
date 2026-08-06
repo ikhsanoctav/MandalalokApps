@@ -101,17 +101,22 @@ class KelurahanController extends Controller
         $kelurahan = Kelurahan::findOrFail($id);
         $nama = $kelurahan->nama_kelurahan;
 
-        if ($kelurahan->rws()->count() > 0) {
-            return redirect()->route('superadmin.kelurahan.index')->with('toast', [
-                'type' => 'error',
-                'title' => 'Gagal Menghapus!',
-                'message' => 'Kelurahan ini memiliki data RW yang terhubung.',
-            ]);
+        // Hapus paksa semua RW dan RT yang terkait dengan kelurahan ini
+        foreach ($kelurahan->rws as $rw) {
+            $rw->rts()->delete(); // hapus semua RT di dalam RW ini
+            $rw->delete();        // hapus RW ini
         }
 
         $kelurahan->delete();
 
         AktivitasLogger::log('Menghapus Kelurahan: '.$nama, 'hapus', null);
+
+        if (request()->wantsJson()) {
+            return response()->json([
+                'success' => true,
+                'message' => 'Data Kelurahan berhasil dihapus.'
+            ]);
+        }
 
         return redirect()->route('superadmin.kelurahan.index')->with('toast', [
             'type' => 'success',

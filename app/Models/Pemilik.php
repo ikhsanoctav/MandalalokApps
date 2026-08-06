@@ -72,6 +72,12 @@ class Pemilik extends Model
 
     protected static function booted()
     {
+        static::creating(function ($model) {
+            if (empty($model->id_pemilik)) {
+                $model->id_pemilik = (string) Str::uuid();
+            }
+        });
+
         static::saving(function ($pemilik) {
             // Only hash NIK if it was actually changed
             if ($pemilik->isDirty('nik') && $pemilik->getAttributes()['nik'] ?? null) {
@@ -107,17 +113,6 @@ class Pemilik extends Model
         return substr($this->nik, 0, 4).str_repeat('*', $length - 8).substr($this->nik, -4);
     }
 
-    protected static function boot()
-    {
-        parent::boot();
-
-        static::creating(function ($model) {
-            if (empty($model->id_pemilik)) {
-                $model->id_pemilik = (string) Str::uuid();
-            }
-        });
-    }
-
     // Relasi ke UMKM
     public function umkm()
     {
@@ -144,19 +139,22 @@ class Pemilik extends Model
     {
         return Attribute::make(
             get: function ($value) {
-                // Jika kelurahanRel sudah di-load dari FK, ambil nama_kelurahan-nya
                 if ($this->relationLoaded('kelurahanRel') && $this->kelurahanRel) {
                     return $this->kelurahanRel->nama_kelurahan;
                 }
-                // Jika id_kelurahan ada, lazy-load dari tabel kelurahans
+                if ($value) {
+                    return $value;
+                }
                 if ($this->id_kelurahan) {
-                    $kel = \App\Models\Kelurahan::find($this->id_kelurahan);
-                    if ($kel) {
-                        return $kel->nama_kelurahan;
+                    static $cache = [];
+                    if (!array_key_exists($this->id_kelurahan, $cache)) {
+                        $cache[$this->id_kelurahan] = \App\Models\Kelurahan::find($this->id_kelurahan)?->nama_kelurahan;
+                    }
+                    if ($cache[$this->id_kelurahan]) {
+                        return $cache[$this->id_kelurahan];
                     }
                 }
-                // Fallback: raw string dari kolom kelurahan
-                return $value ?: '-';
+                return '-';
             },
             set: fn ($value) => $value,
         );

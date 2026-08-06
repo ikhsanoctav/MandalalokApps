@@ -51,7 +51,7 @@
                             min="1" max="100"
                             class="w-full border-slate-300 rounded-2xl p-2.5 focus:ring-blue-500 focus:border-blue-500"
                             placeholder="Biarkan kosong jika belum ada">
-                        <p class="text-[10px] text-slate-500 mt-1">*Ubah angka ini jika Anda ingin sistem otomatis
+                        <p class="text-[10px] text-slate-700 mt-1">*Ubah angka ini jika Anda ingin sistem otomatis
                             menambahkan RT baru untuk RW ini.</p>
                         @error('jumlah_rt')
                             <span class="text-red-500 text-xs mt-1">{{ $message }}</span>

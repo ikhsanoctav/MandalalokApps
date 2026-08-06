@@ -158,22 +158,7 @@
 
     <div class="top-ribbon"></div>
 
-    @if (session('status'))
-        <div id="login-error-modal" class="fixed top-20 right-6 z-50 w-full max-w-md modal-fade-in">
-            <div class="rounded-3xl border border-blue-200 bg-white shadow-2xl ring-1 ring-blue-400/20">
-                <div class="flex items-start justify-between gap-4 p-6">
-                    <div>
-                        <p class="text-xs font-semibold uppercase tracking-[0.2em] text-blue-700">Informasi Status</p>
-                        <p class="mt-3 text-sm leading-relaxed text-slate-700">{{ session('status') }}</p>
-                    </div>
-                    <button id="login-error-modal-close" type="button"
-                        class="inline-flex h-10 w-10 items-center justify-center rounded-full bg-slate-100 text-slate-700 transition hover:bg-slate-200">
-                        <span aria-hidden="true" class="text-xl">×</span>
-                    </button>
-                </div>
-            </div>
-        </div>
-    @endif
+    @include('partials.toast-container')
 
     <div class="min-h-screen flex flex-col lg:flex-row">
         
@@ -332,15 +317,7 @@
                 slides[currentSlide].style.opacity = '1';
             };
 
-            const errorModalClose = document.getElementById('login-error-modal-close');
-            const errorModal = document.getElementById('login-error-modal');
-            if (errorModalClose && errorModal) {
-                errorModalClose.addEventListener('click', () => {
-                    errorModal.classList.remove('modal-fade-in');
-                    errorModal.classList.add('modal-fade-out');
-                    setTimeout(() => errorModal.remove(), 240);
-                });
-            }
+
 
             if (slides.length > 1) {
                 setInterval(nextSlide, 5000);

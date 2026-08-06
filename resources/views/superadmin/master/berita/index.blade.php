@@ -3,7 +3,7 @@
 @section('breadcrumb', 'Master Data / Manajemen Warta')
 
 @section('content')
-    <div class="space-y-6">
+    <div class="space-y-6" x-data="beritaIndex()">
         <div class="flex justify-between items-center">
             <h2 class="text-2xl font-bold text-slate-800">Manajemen Warta</h2>
             <a href="{{ route('superadmin.berita.create') }}"
@@ -29,7 +29,7 @@
                     <tbody class="divide-y divide-slate-100">
                         @forelse($berita as $item)
                             <tr class="hover:bg-slate-50/80 transition-colors">
-                                <td class="py-3 px-4 text-slate-500 text-center">
+                                <td class="py-3 px-4 text-slate-700 text-center">
                                     {{ $loop->iteration + ($berita->currentPage() - 1) * $berita->perPage() }}</td>
                                 <td class="py-3 px-4">
                                     <div class="flex items-center gap-3">
@@ -49,7 +49,7 @@
                                         @endif
                                         <div>
                                             <p class="font-medium text-slate-800">{{ Str::limit($item->judul, 40) }}</p>
-                                            <p class="text-xs text-slate-500">
+                                            <p class="text-xs text-slate-700">
                                                 {{ Str::limit(strip_tags($item->konten), 40) }}</p>
                                         </div>
                                     </div>
@@ -77,7 +77,7 @@
                                 <td class="py-3 px-4 text-center">
                                     <div class="flex items-center justify-center gap-2">
                                         <a href="{{ route('superadmin.berita.edit', $item->id) }}"
-                                            class="p-1.5 bg-amber-100 text-amber-600 rounded-2xl hover:bg-amber-200"
+                                            class="p-2 text-amber-500 hover:text-amber-600 rounded-2xl hover:bg-amber-50 transition-colors"
                                             title="Edit">
                                             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -85,22 +85,15 @@
                                                 </path>
                                             </svg>
                                         </a>
-                                        <form action="{{ route('superadmin.berita.destroy', $item->id) }}" method="POST"
-                                            class="inline-block"
-                                            onsubmit="return confirm('Yakin ingin menghapus warta ini?');">
-                                            @csrf
-                                            @method('DELETE')
-                                            <button type="submit"
-                                                class="p-1.5 bg-red-100 text-red-600 rounded-2xl hover:bg-red-200"
-                                                title="Hapus">
-                                                <svg class="w-4 h-4" fill="none" stroke="currentColor"
-                                                    viewBox="0 0 24 24">
-                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                                        d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16">
-                                                    </path>
-                                                </svg>
-                                            </button>
-                                        </form>
+                                        <button @click="deleteData('{{ $item->id }}', '{{ e($item->judul) }}', $event)"
+                                            class="p-2 text-red-500 hover:text-red-600 rounded-2xl hover:bg-red-50 transition-colors"
+                                            title="Hapus">
+                                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                    d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16">
+                                                </path>
+                                            </svg>
+                                        </button>
                                     </div>
                                 </td>
                             </tr>
@@ -120,4 +113,47 @@
             @endif
         </x-card>
     </div>
+
+    @push('scripts')
+    <script>
+        function beritaIndex() {
+            return {
+                deleteData(id, title, event) {
+                    const row = event.target.closest('tr');
+                    this.$dispatch('open-confirm-modal', {
+                        title: 'Hapus Warta',
+                        message: `Apakah Anda yakin ingin menghapus warta "${title}"?`,
+                        confirmText: 'Ya, Hapus',
+                        action: () => {
+                            return fetch(`/superadmin/berita/${id}`, {
+                                method: 'DELETE',
+                                headers: {
+                                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content,
+                                    'Accept': 'application/json'
+                                }
+                            })
+                            .then(res => res.json())
+                            .then(data => {
+                                if (data.success) {
+                                    window.showToast('success', 'Berhasil!', data.message);
+                                    if (row) {
+                                        row.style.transition = 'all 0.3s ease';
+                                        row.style.opacity = '0';
+                                        row.style.transform = 'translateX(-20px)';
+                                        setTimeout(() => row.remove(), 300);
+                                    }
+                                } else {
+                                    window.showToast('error', 'Gagal!', data.message || 'Gagal menghapus data.');
+                                }
+                            })
+                            .catch(() => {
+                                window.showToast('error', 'Gagal!', 'Terjadi kesalahan jaringan.');
+                            });
+                        }
+                    });
+                }
+            }
+        }
+    </script>
+    @endpush
 @endsection

@@ -4,7 +4,7 @@
 <div class="flex items-center justify-between">
     <div>
         <h1 class="text-2xl font-bold text-slate-800">Laporan Masyarakat (AI Sentiment)</h1>
-        <p class="text-sm text-slate-500">Daftar pengaduan warga beserta analisis sentimen otomatis dari Ollama AI.</p>
+        <p class="text-sm text-slate-700">Daftar pengaduan warga beserta analisis sentimen otomatis dari Ollama AI.</p>
     </div>
 </div>
 @endsection
@@ -33,7 +33,7 @@
                 <tr class="hover:bg-slate-50 transition-colors">
                     <td class="px-6 py-4">
                         <div class="font-medium text-slate-800">{{ $laporan->nama_pelapor }}</div>
-                        <div class="text-xs text-slate-500">{{ $laporan->no_hp ?? '-' }}</div>
+                        <div class="text-xs text-slate-700">{{ $laporan->no_hp ?? '-' }}</div>
                         <div class="text-xs text-slate-400 mt-1">{{ $laporan->created_at->diffForHumans() }}</div>
                     </td>
                     <td class="px-6 py-4">
@@ -83,7 +83,7 @@
                 </tr>
                 @empty
                 <tr>
-                    <td colspan="6" class="px-6 py-12 text-center text-slate-500">
+                    <td colspan="6" class="px-6 py-12 text-center text-slate-700">
                         <div class="mb-3 text-slate-300">
                             <i class="fas fa-inbox text-4xl"></i>
                         </div>

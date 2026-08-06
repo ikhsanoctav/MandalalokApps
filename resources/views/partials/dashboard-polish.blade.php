@@ -109,6 +109,10 @@
         background: linear-gradient(135deg, var(--ml-primary-2), var(--ml-primary));
     }
 
+    thead tr {
+        background: transparent !important;
+    }
+
     th {
         color: #ffffff !important;
         font-size: 0.72rem;
@@ -210,3 +214,43 @@
         }
     }
 </style>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const tables = document.querySelectorAll('table');
+        tables.forEach(table => {
+            const parent = table.parentElement;
+            let needsWrapper = true;
+            
+            // Cek apakah tabel sudah berada di dalam container yang bisa scroll horizontal
+            if (parent && (parent.classList.contains('overflow-x-auto') || window.getComputedStyle(parent).overflowX === 'auto')) {
+                needsWrapper = false;
+            }
+
+            // Jika belum ada wrapper, kita bungkus otomatis
+            if (needsWrapper) {
+                const wrapper = document.createElement('div');
+                wrapper.className = 'overflow-x-auto w-full';
+                wrapper.style.WebkitOverflowScrolling = 'touch'; // Support untuk smooth scrolling di Safari/iOS
+                parent.insertBefore(wrapper, table);
+                wrapper.appendChild(table);
+            }
+            
+            // Tambahkan class min-w-max agar tabel selalu menyesuaikan lebar konten aslinya (tidak bertumpuk/squished)
+            if (!table.classList.contains('min-w-max') && !table.classList.contains('min-w-full')) {
+                table.classList.add('min-w-max');
+            }
+            
+            // Pastikan semua header kolom (TH) dan isi (TD) tidak terpotong atau wrap ke bawah jika layarnya kecil
+            const headers = table.querySelectorAll('th');
+            headers.forEach(th => th.classList.add('whitespace-nowrap'));
+            
+            const cells = table.querySelectorAll('td');
+            cells.forEach(td => {
+                // Beri whitespace-nowrap kecuali untuk kolom yang biasanya butuh wrap panjang (seperti deskripsi/alamat)
+                // Kita asumsikan defaultnya nowrap agar rapi
+                td.classList.add('whitespace-nowrap');
+            });
+        });
+    });
+</script>

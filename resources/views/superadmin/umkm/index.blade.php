@@ -21,11 +21,12 @@
                         Filter</a>
                 </div>
 
-                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6 gap-3 md:gap-4">
+                <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-7 gap-3 md:gap-4">
                     <input type="text" name="search" placeholder="Cari nama usaha..." value="{{ request('search') }}"
+                        oninput="clearTimeout(window.searchDebounceTimer); window.searchDebounceTimer = setTimeout(() => window.triggerFilter && window.triggerFilter(), 250)"
                         class="border border-slate-300 rounded-lg px-3 py-2 md:px-4 md:py-2.5 text-sm focus:ring-2 focus:ring-blue-500 outline-none">
 
-                    <select name="kelurahan"
+                    <select name="kelurahan" onchange="window.triggerFilter && window.triggerFilter()"
                         class="border border-slate-300 rounded-lg px-3 py-2 md:px-4 md:py-2.5 text-sm focus:ring-2 focus:ring-blue-500 outline-none">
                         <option value="">Semua Kelurahan</option>
                         @foreach ($kelurahans as $kelurahanItem)
@@ -36,7 +37,7 @@
                         @endforeach
                     </select>
 
-                    <select name="kategori"
+                    <select name="kategori" onchange="window.triggerFilter && window.triggerFilter()"
                         class="border border-slate-300 rounded-lg px-3 py-2 md:px-4 md:py-2.5 text-sm focus:ring-2 focus:ring-blue-500 outline-none">
                         <option value="">Semua Kategori</option>
                         @foreach ($kategoris as $kategoriItem)
@@ -47,7 +48,7 @@
                         @endforeach
                     </select>
 
-                    <select name="sektor"
+                    <select name="sektor" onchange="window.triggerFilter && window.triggerFilter()"
                         class="border border-slate-300 rounded-lg px-3 py-2 md:px-4 md:py-2.5 text-sm focus:ring-2 focus:ring-blue-500 outline-none">
                         <option value="">Semua Sektor</option>
                         @foreach ($sektors as $sektorItem)
@@ -58,7 +59,7 @@
                         @endforeach
                     </select>
 
-                    <select name="status_verifikasi"
+                    <select name="status_verifikasi" onchange="window.triggerFilter && window.triggerFilter()"
                         class="border border-slate-300 rounded-lg px-3 py-2 md:px-4 md:py-2.5 text-sm focus:ring-2 focus:ring-blue-500 outline-none">
                         <option value="">Semua Status</option>
                         <option value="terverifikasi"
@@ -69,8 +70,16 @@
                         </option>
                     </select>
 
+                    <select name="sort" onchange="window.triggerFilter && window.triggerFilter()"
+                        class="border border-slate-300 rounded-lg px-3 py-2 md:px-4 md:py-2.5 text-sm focus:ring-2 focus:ring-blue-500 outline-none">
+                        <option value="terbaru" {{ request('sort') == 'terbaru' ? 'selected' : '' }}>Terbaru</option>
+                        <option value="terlama" {{ request('sort') == 'terlama' ? 'selected' : '' }}>Terlama</option>
+                        <option value="a-z" {{ request('sort') == 'a-z' ? 'selected' : '' }}>Nama A-Z</option>
+                        <option value="z-a" {{ request('sort') == 'z-a' ? 'selected' : '' }}>Nama Z-A</option>
+                    </select>
+
                     <div class="flex gap-2">
-                        <select name="per_page"
+                        <select name="per_page" onchange="window.triggerFilter && window.triggerFilter()"
                             class="flex-1 border border-slate-300 rounded-lg px-3 py-2 md:px-4 md:py-2.5 text-sm focus:ring-2 focus:ring-blue-500 outline-none">
                             <option value="10" {{ request('per_page') == 10 ? 'selected' : '' }}>10</option>
                             <option value="25" {{ request('per_page') == 25 ? 'selected' : '' }}>25</option>
@@ -111,7 +120,7 @@
             </a>
         </div>
 
-        <div class="bg-white rounded-xl md:rounded-2xl shadow-sm border border-slate-200 overflow-hidden">
+        <div class="bg-white rounded-xl md:rounded-2xl shadow-sm border border-slate-200 overflow-hidden" id="umkmTableContainer" style="transition: opacity 0.25s ease-in-out, filter 0.25s ease-in-out;">
 
             <div class="block md:hidden divide-y divide-slate-100">
                 @forelse($umkms as $umkm)
@@ -148,16 +157,16 @@
 
                         <div class="grid grid-cols-2 gap-2 text-xs">
                             <div>
-                                <p class="text-slate-500">Pemilik</p>
-                                <p class="font-medium text-slate-700">{{ $umkm->pemilik->nama_lengkap ?? '-' }}</p>
+                                <p class="text-slate-700">Pemilik</p>
+                                <p class="font-medium text-slate-700">{{ $umkm->pemilik?->nama_lengkap ?? '-' }}</p>
                             </div>
                             <div>
-                                <p class="text-slate-500">Kelurahan</p>
-                                <p class="font-medium text-slate-700">{{ $umkm->pemilik->kelurahan ?? '-' }}</p>
+                                <p class="text-slate-700">Kelurahan</p>
+                                <p class="font-medium text-slate-700">{{ $umkm->pemilik?->kelurahan ?? '-' }}</p>
                             </div>
 
                             <div>
-                                <p class="text-slate-500">Tanggal Daftar</p>
+                                <p class="text-slate-700">Tanggal Daftar</p>
                                 <p class="font-medium text-slate-700">
                                     {{ $umkm->created_at ? $umkm->created_at->format('d/m/Y') : '-' }}</p>
                             </div>
@@ -209,26 +218,26 @@
                 <table class="w-full">
                     <thead class="bg-slate-50 border-b border-slate-200">
                         <tr>
-                            <th class="px-4 py-3 text-left text-xs font-semibold text-slate-500 uppercase">No</th>
-                            <th class="px-4 py-3 text-left text-xs font-semibold text-slate-500 uppercase">Nama Usaha</th>
-                            <th class="px-4 py-3 text-left text-xs font-semibold text-slate-500 uppercase">Pemilik</th>
+                            <th class="px-4 py-3 text-left text-xs font-semibold text-slate-700 uppercase">No</th>
+                            <th class="px-4 py-3 text-left text-xs font-semibold text-slate-700 uppercase">Nama Usaha</th>
+                            <th class="px-4 py-3 text-left text-xs font-semibold text-slate-700 uppercase">Pemilik</th>
 
-                            <th class="px-4 py-3 text-left text-xs font-semibold text-slate-500 uppercase">Status</th>
-                            <th class="px-4 py-3 text-left text-xs font-semibold text-slate-500 uppercase">Tgl Daftar</th>
-                            <th class="px-4 py-3 text-center text-xs font-semibold text-slate-500 uppercase">Aksi</th>
+                            <th class="px-4 py-3 text-left text-xs font-semibold text-slate-700 uppercase">Status</th>
+                            <th class="px-4 py-3 text-left text-xs font-semibold text-slate-700 uppercase">Tgl Daftar</th>
+                            <th class="px-4 py-3 text-center text-xs font-semibold text-slate-700 uppercase">Aksi</th>
                         </tr>
                     </thead>
                     <tbody class="divide-y divide-slate-100">
                         @forelse($umkms as $index => $umkm)
                             <tr class="hover:bg-slate-50 transition-colors">
-                                <td class="px-4 py-3 text-sm text-slate-500">{{ $umkms->firstItem() + $index }}</td>
+                                <td class="px-4 py-3 text-sm text-slate-700">{{ $umkms->firstItem() + $index }}</td>
                                 <td class="px-4 py-3">
                                     <p class="font-medium text-slate-800">{{ $umkm->nama_usaha }}</p>
                                     <p class="text-xs text-slate-400">{{ $umkm->no_pendaftaran ?? '-' }}</p>
                                 </td>
                                 <td class="px-4 py-3">
-                                    <p class="text-sm text-slate-600">{{ $umkm->pemilik->nama_lengkap ?? '-' }}</p>
-                                    <p class="text-xs text-slate-400">{{ $umkm->pemilik->kelurahan ?? '-' }}</p>
+                                    <p class="text-sm text-slate-600">{{ $umkm->pemilik?->nama_lengkap ?? '-' }}</p>
+                                    <p class="text-xs text-slate-400">{{ $umkm->pemilik?->kelurahan ?? '-' }}</p>
                                 </td>
 
                                 <td class="px-4 py-3">
@@ -258,7 +267,7 @@
                                         </span>
                                     @endif
                                 </td>
-                                <td class="px-4 py-3 text-sm text-slate-500">
+                                <td class="px-4 py-3 text-sm text-slate-700">
                                     {{ $umkm->created_at ? $umkm->created_at->format('d/m/Y') : '-' }}
                                 </td>
                                 <td class="px-4 py-3 text-center">
@@ -363,13 +372,13 @@
                                         <ul class="list-disc ml-4 space-y-0.5">
                                             <li><strong>sektor</strong>: Isi sesuai nama sektor yang ada di sistem (misal: Kuliner, Fashion, Jasa, dll).</li>
                                             <li><strong>bentuk_jualan</strong>: Contoh: Online, Offline, Online & Offline.</li>
-                                            <li><strong>perkiraan_omset</strong>: Contoh: < 5 Juta, 5-15 Juta, > 15 Juta.</li>
+                                            <li><strong>perkiraan_omset</strong>: Contoh: 5000000, 15000000.</li>
                                             <li><strong>jenis_kelamin</strong>: L / P</li>
                                         </ul>
                                     </div>
 
                                     <input type="file" name="file_excel" accept=".xlsx, .csv, .xls" required
-                                        class="block w-full text-sm text-slate-500 file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:text-sm file:font-semibold file:bg-emerald-50 file:text-emerald-700 hover:file:bg-emerald-100 border border-slate-200 rounded-md">
+                                        class="block w-full text-sm text-slate-700 file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:text-sm file:font-semibold file:bg-emerald-50 file:text-emerald-700 hover:file:bg-emerald-100 border border-slate-200 rounded-md">
                                 </div>
                             </div>
                         </div>
@@ -517,73 +526,190 @@
         }
 
         function confirmDelete(id, nama) {
-            if (confirm(`Apakah Anda yakin ingin menghapus UMKM "${nama}"?`)) {
-                const token = document.querySelector('meta[name="csrf-token"]')?.content || '{{ csrf_token() }}';
+            const event = window.event;
+            const target = event ? event.target : null;
+            // Temukan baris (tr) atau card grid
+            const cardOrRow = target ? target.closest('.bg-white.rounded-3xl, tr') : null;
+            
+            window.dispatchEvent(new CustomEvent('open-confirm-modal', {
+                detail: {
+                    title: 'Hapus UMKM',
+                    message: `Apakah Anda yakin ingin menghapus UMKM "${nama}"? Semua data produk dan file akan ikut terhapus.`,
+                    confirmText: 'Ya, Hapus',
+                    action: () => {
+                        const token = document.querySelector('meta[name="csrf-token"]')?.content || '{{ csrf_token() }}';
 
-                fetch(`/superadmin/umkm/${id}`, {
-                        method: 'DELETE',
-                        headers: {
-                            'X-CSRF-TOKEN': token,
-                            'Content-Type': 'application/json',
-                            'Accept': 'application/json'
-                        }
-                    })
-                    .then(response => response.json())
-                    .then(data => {
-                        if (data.success) {
-                            if (window.showToast) {
-                                window.showToast('success', 'Berhasil!', `UMKM "${nama}" berhasil dihapus`);
+                        return fetch(`/superadmin/umkm/${id}`, {
+                            method: 'DELETE',
+                            headers: {
+                                'X-CSRF-TOKEN': token,
+                                'Content-Type': 'application/json',
+                                'Accept': 'application/json'
                             }
-                            setTimeout(() => {
-                                location.reload();
-                            }, 1500);
-                        } else {
-                            if (window.showToast) {
-                                window.showToast('error', 'Gagal!', data.message || 'Gagal menghapus UMKM');
+                        })
+                        .then(response => response.json())
+                        .then(data => {
+                            if (data.success) {
+                                if (window.showToast) {
+                                    window.showToast(data.message || `UMKM "${nama}" berhasil dihapus`, 'success');
+                                }
+                                if (cardOrRow) {
+                                    cardOrRow.style.transition = 'all 0.3s ease';
+                                    cardOrRow.style.opacity = '0';
+                                    cardOrRow.style.transform = 'scale(0.9)';
+                                    setTimeout(() => cardOrRow.remove(), 300);
+                                } else {
+                                    setTimeout(() => location.reload(), 1500);
+                                }
                             } else {
-                                alert('Gagal menghapus: ' + data.message);
+                                if (window.showToast) {
+                                    window.showToast(data.message || 'Gagal menghapus UMKM', 'error');
+                                } else {
+                                    alert('Gagal menghapus: ' + data.message);
+                                }
                             }
-                        }
-                    })
-                    .catch(error => {
-                        console.error('Error:', error);
-                        if (window.showToast) {
-                            window.showToast('error', 'Error!', 'Terjadi kesalahan saat menghapus');
-                        } else {
-                            alert('Terjadi kesalahan saat menghapus');
-                        }
-                    });
-            }
-        }
-
-        // Auto submit and responsive filter behaviors
-        document.addEventListener('DOMContentLoaded', function() {
-            const filterForm = document.getElementById('filterForm');
-            if (filterForm) {
-                // Auto submit on selects change
-                filterForm.querySelectorAll('select').forEach(select => {
-                    select.addEventListener('change', () => filterForm.submit());
-                });
-
-                // Auto submit on typing search with a debounce of 600ms
-                let searchTimeout;
-                const searchInput = filterForm.querySelector('input[name="search"]');
-                if (searchInput) {
-                    searchInput.addEventListener('input', function() {
-                        clearTimeout(searchTimeout);
-                        searchTimeout = setTimeout(() => {
-                            filterForm.submit();
-                        }, 600);
-                    });
-
-                    // Focus and put cursor at the end of text when search is already active
-                    if (searchInput.value.length > 0) {
-                        searchInput.focus();
-                        const len = searchInput.value.length;
-                        searchInput.setSelectionRange(len, len);
+                        })
+                        .catch(error => {
+                            console.error('Error:', error);
+                            if (window.showToast) {
+                                window.showToast('Terjadi kesalahan saat menghapus', 'error');
+                            }
+                        });
                     }
                 }
+            }));
+        }
+
+        // Smooth AJAX search and responsive filter behaviors
+        (function() {
+            let isFetching = false;
+
+            window.performAjaxFetch = function(url) {
+                const tableContainer = document.getElementById('umkmTableContainer');
+                const filterForm = document.getElementById('filterForm');
+                if (!tableContainer || isFetching) return;
+                isFetching = true;
+
+                tableContainer.style.opacity = '0.4';
+                tableContainer.style.filter = 'blur(1px)';
+                tableContainer.style.pointerEvents = 'none';
+
+                fetch(url, {
+                    headers: {
+                        'X-Requested-With': 'XMLHttpRequest',
+                        'Accept': 'application/json, text/html'
+                    }
+                })
+                .then(response => {
+                    const contentType = response.headers.get('content-type') || '';
+                    if (contentType.includes('application/json')) {
+                        return response.json().then(data => ({ type: 'json', data }));
+                    } else {
+                        return response.text().then(html => ({ type: 'html', html }));
+                    }
+                })
+                .then(result => {
+                    let newHtml = '';
+                    if (result.type === 'json' && result.data && result.data.html) {
+                        newHtml = result.data.html;
+                    } else if (result.type === 'html' && result.html) {
+                        const parser = new DOMParser();
+                        const doc = parser.parseFromString(result.html, 'text/html');
+                        const containerInDoc = doc.getElementById('umkmTableContainer');
+                        newHtml = containerInDoc ? containerInDoc.innerHTML : result.html;
+                    }
+
+                    if (newHtml) {
+                        tableContainer.innerHTML = newHtml;
+                        if (window.Alpine) {
+                            window.Alpine.initTree(tableContainer);
+                        }
+                    }
+
+                    const exportForm = document.querySelector('#exportModal form');
+                    if (exportForm) {
+                        const currentUrlParams = new URLSearchParams(new URL(url).search);
+                        ['search', 'kelurahan', 'kategori', 'sektor', 'status_verifikasi'].forEach(field => {
+                            const input = exportForm.querySelector(`input[name="${field}"]`);
+                            if (input) input.value = currentUrlParams.get(field) || '';
+                        });
+                    }
+
+                    window.history.pushState({}, '', url);
+                })
+                .catch(err => {
+                    console.error('AJAX Filter error:', err);
+                })
+                .finally(() => {
+                    tableContainer.style.opacity = '1';
+                    tableContainer.style.filter = 'none';
+                    tableContainer.style.pointerEvents = 'auto';
+                    isFetching = false;
+
+                    if (filterForm) {
+                        const searchInput = filterForm.querySelector('input[name="search"]');
+                        if (searchInput && document.activeElement === searchInput) {
+                            const valLen = searchInput.value.length;
+                            searchInput.setSelectionRange(valLen, valLen);
+                        }
+                    }
+                });
+            };
+
+            window.triggerFilter = function() {
+                const filterForm = document.getElementById('filterForm');
+                if (!filterForm) return;
+
+                const formData = new FormData(filterForm);
+                const params = new URLSearchParams();
+                for (const [key, val] of formData.entries()) {
+                    if (val !== null && val !== undefined && val.toString().trim() !== '') {
+                        params.append(key, val);
+                    }
+                }
+                const actionUrl = filterForm.action.split('?')[0];
+                const fullUrl = actionUrl + (params.toString() ? '?' + params.toString() : '');
+                window.performAjaxFetch(fullUrl);
+            };
+
+            function setupListeners() {
+                const filterForm = document.getElementById('filterForm');
+                const tableContainer = document.getElementById('umkmTableContainer');
+                if (!filterForm || !tableContainer) return;
+
+                filterForm.addEventListener('submit', function(e) {
+                    e.preventDefault();
+                    window.triggerFilter();
+                });
+
+                const resetLink = filterForm.querySelector('a[href*="superadmin/umkm"]');
+                if (resetLink) {
+                    resetLink.addEventListener('click', function(e) {
+                        e.preventDefault();
+                        filterForm.querySelectorAll('input[type="text"]').forEach(i => i.value = '');
+                        filterForm.querySelectorAll('select').forEach(s => s.selectedIndex = 0);
+                        window.triggerFilter();
+                    });
+                }
+
+                tableContainer.addEventListener('click', function(e) {
+                    const link = e.target.closest('a');
+                    if (link && link.href && tableContainer.contains(link) && !link.hasAttribute('data-no-ajax')) {
+                        e.preventDefault();
+                        window.performAjaxFetch(link.href);
+                    }
+                });
+
+                window.addEventListener('popstate', function() {
+                    window.performAjaxFetch(window.location.href);
+                });
             }
-        });
+
+            if (document.readyState === 'loading') {
+                document.addEventListener('DOMContentLoaded', setupListeners);
+            } else {
+                setupListeners();
+            }
+        })();
     </script>
 @endsection

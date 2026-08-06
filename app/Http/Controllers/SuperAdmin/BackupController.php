@@ -78,6 +78,13 @@ class BackupController extends Controller
             $disk->delete($file);
             AktivitasLogger::log('Menghapus file backup: '.$file_name, 'hapus', null);
 
+            if (request()->wantsJson()) {
+                return response()->json([
+                    'success' => true,
+                    'message' => 'File backup berhasil dihapus.'
+                ]);
+            }
+
             return redirect()->route('superadmin.backup.index')->with('toast', [
                 'type' => 'success',
                 'title' => 'Berhasil!',

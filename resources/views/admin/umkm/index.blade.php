@@ -1,3 +1,4 @@
+
 @extends('layouts.admin')
 @section('title', 'Daftar UMKM')
 @section('breadcrumb', 'Master Data UMKM / Daftar UMKM')
@@ -100,11 +101,12 @@
                         Filter</a>
                 </div>
 
-                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6 gap-3 md:gap-4">
+                <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-7 gap-3 md:gap-4">
                     <input type="text" name="search" placeholder="Cari nama usaha..." value="{{ request('search') }}"
+                        oninput="clearTimeout(window.searchDebounceTimer); window.searchDebounceTimer = setTimeout(() => window.triggerFilter && window.triggerFilter(), 250)"
                         class="w-full px-3 py-2 md:px-4 md:py-2.5 rounded-lg border border-slate-300 bg-white text-slate-700 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-200">
 
-                    <select name="kelurahan"
+                    <select name="kelurahan" onchange="window.triggerFilter && window.triggerFilter()"
                         class="w-full px-3 py-2 md:px-4 md:py-2.5 rounded-lg border border-slate-300 bg-white text-slate-700 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-200">
                         <option value="">Semua Kelurahan</option>
                         @foreach ($kelurahans as $kelurahanItem)
@@ -115,7 +117,7 @@
                         @endforeach
                     </select>
 
-                    <select name="kategori"
+                    <select name="kategori" onchange="window.triggerFilter && window.triggerFilter()"
                         class="w-full px-3 py-2 md:px-4 md:py-2.5 rounded-lg border border-slate-300 bg-white text-slate-700 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-200">
                         <option value="">Semua Kategori</option>
                         @foreach ($kategoris as $kategoriItem)
@@ -126,7 +128,7 @@
                         @endforeach
                     </select>
 
-                    <select name="sektor"
+                    <select name="sektor" onchange="window.triggerFilter && window.triggerFilter()"
                         class="w-full px-3 py-2 md:px-4 md:py-2.5 rounded-lg border border-slate-300 bg-white text-slate-700 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-200">
                         <option value="">Semua Sektor</option>
                         @foreach ($sektors as $sektorItem)
@@ -137,7 +139,7 @@
                         @endforeach
                     </select>
 
-                    <select name="status_verifikasi"
+                    <select name="status_verifikasi" onchange="window.triggerFilter && window.triggerFilter()"
                         class="w-full px-3 py-2 md:px-4 md:py-2.5 rounded-lg border border-slate-300 bg-white text-slate-700 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-200">
                         <option value="">Semua Status</option>
                         <option value="terverifikasi"
@@ -148,8 +150,16 @@
                         </option>
                     </select>
 
+                    <select name="sort" onchange="window.triggerFilter && window.triggerFilter()"
+                        class="w-full px-3 py-2 md:px-4 md:py-2.5 rounded-lg border border-slate-300 bg-white text-slate-700 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-200">
+                        <option value="terbaru" {{ request('sort') == 'terbaru' ? 'selected' : '' }}>Terbaru</option>
+                        <option value="terlama" {{ request('sort') == 'terlama' ? 'selected' : '' }}>Terlama</option>
+                        <option value="a-z" {{ request('sort') == 'a-z' ? 'selected' : '' }}>Nama A-Z</option>
+                        <option value="z-a" {{ request('sort') == 'z-a' ? 'selected' : '' }}>Nama Z-A</option>
+                    </select>
+
                     <div class="flex gap-2">
-                        <select name="per_page"
+                        <select name="per_page" onchange="window.triggerFilter && window.triggerFilter()"
                             class="flex-1 px-3 py-2 md:px-4 md:py-2.5 rounded-lg border border-slate-300 bg-white text-slate-700 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-200">
                             <option value="10" {{ request('per_page') == 10 ? 'selected' : '' }}>10</option>
                             <option value="25" {{ request('per_page') == 25 ? 'selected' : '' }}>25</option>
@@ -190,7 +200,7 @@
             </a>
         </div>
 
-        <div class="bg-white rounded-xl md:rounded-2xl shadow-sm border border-slate-200 overflow-hidden">
+        <div class="bg-white rounded-xl md:rounded-2xl shadow-sm border border-slate-200 overflow-hidden" id="umkmTableContainer" style="transition: opacity 0.25s ease-in-out, filter 0.25s ease-in-out;">
 
             <div class="block md:hidden divide-y divide-slate-100">
                 @forelse($umkms as $umkm)
@@ -228,11 +238,11 @@
                         <div class="grid grid-cols-2 gap-2 text-xs">
                             <div>
                                 <p class="text-slate-500">Pemilik</p>
-                                <p class="font-medium text-slate-700">{{ $umkm->pemilik->nama_lengkap ?? '-' }}</p>
+                                <p class="font-medium text-slate-700">{{ $umkm->pemilik?->nama_lengkap ?? '-' }}</p>
                             </div>
                             <div>
                                 <p class="text-slate-500">Kelurahan</p>
-                                <p class="font-medium text-slate-700">{{ $umkm->pemilik->kelurahan ?? '-' }}</p>
+                                <p class="font-medium text-slate-700">{{ $umkm->pemilik?->kelurahan ?? '-' }}</p>
                             </div>
 
                             <div>
@@ -298,8 +308,8 @@
                                     <p class="text-xs text-slate-400">{{ $umkm->no_pendaftaran ?? '-' }}</p>
                                 </td>
                                 <td class="px-4 py-3">
-                                    <p class="text-sm text-slate-600">{{ $umkm->pemilik->nama_lengkap ?? '-' }}</p>
-                                    <p class="text-xs text-slate-400">{{ $umkm->pemilik->kelurahan ?? '-' }}</p>
+                                    <p class="text-sm text-slate-600">{{ $umkm->pemilik?->nama_lengkap ?? '-' }}</p>
+                                    <p class="text-xs text-slate-400">{{ $umkm->pemilik?->kelurahan ?? '-' }}</p>
                                 </td>
 
                                 <td class="px-4 py-3">
@@ -571,35 +581,137 @@
             alert('Fitur export sedang dalam pengembangan');
         }
 
-        // Auto submit and responsive filter behaviors
-        document.addEventListener('DOMContentLoaded', function() {
-            const filterForm = document.getElementById('filterForm');
-            if (filterForm) {
-                // Auto submit on selects change
-                filterForm.querySelectorAll('select').forEach(select => {
-                    select.addEventListener('change', () => filterForm.submit());
+        // Smooth AJAX search and responsive filter behaviors
+        (function() {
+            let isFetching = false;
+
+            window.performAjaxFetch = function(url) {
+                const tableContainer = document.getElementById('umkmTableContainer');
+                const filterForm = document.getElementById('filterForm');
+                if (!tableContainer || isFetching) return;
+                isFetching = true;
+
+                tableContainer.style.opacity = '0.4';
+                tableContainer.style.filter = 'blur(1px)';
+                tableContainer.style.pointerEvents = 'none';
+
+                fetch(url, {
+                    headers: {
+                        'X-Requested-With': 'XMLHttpRequest',
+                        'Accept': 'application/json, text/html'
+                    }
+                })
+                .then(response => {
+                    const contentType = response.headers.get('content-type') || '';
+                    if (contentType.includes('application/json')) {
+                        return response.json().then(data => ({ type: 'json', data }));
+                    } else {
+                        return response.text().then(html => ({ type: 'html', html }));
+                    }
+                })
+                .then(result => {
+                    let newHtml = '';
+                    if (result.type === 'json' && result.data && result.data.html) {
+                        newHtml = result.data.html;
+                    } else if (result.type === 'html' && result.html) {
+                        const parser = new DOMParser();
+                        const doc = parser.parseFromString(result.html, 'text/html');
+                        const containerInDoc = doc.getElementById('umkmTableContainer');
+                        newHtml = containerInDoc ? containerInDoc.innerHTML : result.html;
+                    }
+
+                    if (newHtml) {
+                        tableContainer.innerHTML = newHtml;
+                        if (window.Alpine) {
+                            window.Alpine.initTree(tableContainer);
+                        }
+                    }
+
+                    const exportForm = document.querySelector('#exportModal form');
+                    if (exportForm) {
+                        const currentUrlParams = new URLSearchParams(new URL(url).search);
+                        ['search', 'kelurahan', 'kategori', 'sektor', 'status_verifikasi'].forEach(field => {
+                            const input = exportForm.querySelector(`input[name="${field}"]`);
+                            if (input) input.value = currentUrlParams.get(field) || '';
+                        });
+                    }
+
+                    window.history.pushState({}, '', url);
+                })
+                .catch(err => {
+                    console.error('AJAX Filter error:', err);
+                })
+                .finally(() => {
+                    tableContainer.style.opacity = '1';
+                    tableContainer.style.filter = 'none';
+                    tableContainer.style.pointerEvents = 'auto';
+                    isFetching = false;
+
+                    if (filterForm) {
+                        const searchInput = filterForm.querySelector('input[name="search"]');
+                        if (searchInput && document.activeElement === searchInput) {
+                            const valLen = searchInput.value.length;
+                            searchInput.setSelectionRange(valLen, valLen);
+                        }
+                    }
                 });
+            };
 
-                // Auto submit on typing search with a debounce of 600ms
-                let searchTimeout;
-                const searchInput = filterForm.querySelector('input[name="search"]');
-                if (searchInput) {
-                    searchInput.addEventListener('input', function() {
-                        clearTimeout(searchTimeout);
-                        searchTimeout = setTimeout(() => {
-                            filterForm.submit();
-                        }, 600);
-                    });
+            window.triggerFilter = function() {
+                const filterForm = document.getElementById('filterForm');
+                if (!filterForm) return;
 
-                    // Focus and put cursor at the end of text when search is already active
-                    if (searchInput.value.length > 0) {
-                        searchInput.focus();
-                        const len = searchInput.value.length;
-                        searchInput.setSelectionRange(len, len);
+                const formData = new FormData(filterForm);
+                const params = new URLSearchParams();
+                for (const [key, val] of formData.entries()) {
+                    if (val !== null && val !== undefined && val.toString().trim() !== '') {
+                        params.append(key, val);
                     }
                 }
+                const actionUrl = filterForm.action.split('?')[0];
+                const fullUrl = actionUrl + (params.toString() ? '?' + params.toString() : '');
+                window.performAjaxFetch(fullUrl);
+            };
+
+            function setupListeners() {
+                const filterForm = document.getElementById('filterForm');
+                const tableContainer = document.getElementById('umkmTableContainer');
+                if (!filterForm || !tableContainer) return;
+
+                filterForm.addEventListener('submit', function(e) {
+                    e.preventDefault();
+                    window.triggerFilter();
+                });
+
+                const resetLink = filterForm.querySelector('a[href*="admin/umkm"]');
+                if (resetLink) {
+                    resetLink.addEventListener('click', function(e) {
+                        e.preventDefault();
+                        filterForm.querySelectorAll('input[type="text"]').forEach(i => i.value = '');
+                        filterForm.querySelectorAll('select').forEach(s => s.selectedIndex = 0);
+                        window.triggerFilter();
+                    });
+                }
+
+                tableContainer.addEventListener('click', function(e) {
+                    const link = e.target.closest('a');
+                    if (link && link.href && tableContainer.contains(link) && !link.hasAttribute('data-no-ajax')) {
+                        e.preventDefault();
+                        window.performAjaxFetch(link.href);
+                    }
+                });
+
+                window.addEventListener('popstate', function() {
+                    window.performAjaxFetch(window.location.href);
+                });
             }
-        });
+
+            if (document.readyState === 'loading') {
+                document.addEventListener('DOMContentLoaded', setupListeners);
+            } else {
+                setupListeners();
+            }
+        })();
 
         // Barcode Scanner Logic
         let html5QrCode = null;

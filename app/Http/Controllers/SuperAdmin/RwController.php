@@ -101,17 +101,19 @@ class RwController extends Controller
         $rw = Rw::findOrFail($id);
         $nama = $rw->nomor_rw;
 
-        if ($rw->rts()->count() > 0) {
-            return redirect()->route('superadmin.rw.index')->with('toast', [
-                'type' => 'error',
-                'title' => 'Gagal Menghapus!',
-                'message' => 'RW ini memiliki data RT yang terhubung.',
-            ]);
-        }
+        // Hapus paksa semua RT yang terkait dengan RW ini
+        $rw->rts()->delete();
 
         $rw->delete();
 
         AktivitasLogger::log('Menghapus RW: '.$nama, 'hapus', null);
+
+        if (request()->wantsJson()) {
+            return response()->json([
+                'success' => true,
+                'message' => 'Data RW berhasil dihapus.'
+            ]);
+        }
 
         return redirect()->route('superadmin.rw.index')->with('toast', [
             'type' => 'success',

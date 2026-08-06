@@ -16,12 +16,6 @@ class DashboardController extends Controller
         $pemilik = null;
         if ($user->nik_hash) {
             $pemilik = Pemilik::where('nik_hash', $user->nik_hash)->first();
-            if ($pemilik && $pemilik->status_verifikasi_ktp !== 'terverifikasi') {
-                $pemilik->forceFill([
-                    'status_verifikasi_ktp' => 'terverifikasi',
-                    'catatan' => null,
-                ])->save();
-            }
         }
 
         $umkms = collect();

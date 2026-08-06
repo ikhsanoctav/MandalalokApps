@@ -76,6 +76,12 @@ class SektorController extends Controller
         $nama = $sektor->nama_sektor;
 
         if ($sektor->umkms()->count() > 0) {
+            if (request()->wantsJson()) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Sektor ini sedang digunakan oleh data UMKM.'
+                ], 422);
+            }
             return redirect()->route('superadmin.sektor.index')->with('toast', [
                 'type' => 'error',
                 'title' => 'Gagal Menghapus!',
@@ -86,6 +92,13 @@ class SektorController extends Controller
         $sektor->delete();
 
         AktivitasLogger::log('Menghapus Sektor UMKM: '.$nama, 'hapus', null);
+
+        if (request()->wantsJson()) {
+            return response()->json([
+                'success' => true,
+                'message' => 'Data Sektor UMKM berhasil dihapus.'
+            ]);
+        }
 
         return redirect()->route('superadmin.sektor.index')->with('toast', [
             'type' => 'success',

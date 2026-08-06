@@ -44,6 +44,8 @@ return new class extends Migration
                 ->nullable();
 
             $table->string('password');
+            
+            $table->boolean('is_active')->default(true);
 
             $table->rememberToken();
 

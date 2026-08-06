@@ -40,12 +40,22 @@ class ReportGenerator
             'sektor', 'tahun_berdiri', 'no_izin', 'jumlah_tk', 'status_verifikasi'
         ];
 
+        $kop = [
+            'nama_instansi' => \App\Models\Setting::get('kop_nama_instansi', 'PEMERINTAH KOTA BANDUNG'),
+            'nama_unit'     => \App\Models\Setting::get('kop_nama_unit', 'KECAMATAN MANDALAJATI'),
+            'alamat'        => \App\Models\Setting::get('kop_alamat', 'Jl. Pasir Impun No. 33A Bandung Telp.02263730954, Fax 02263730954'),
+            'telepon'       => \App\Models\Setting::get('kop_telepon', ''),
+            'email'         => \App\Models\Setting::get('kop_email', 'e-mail : mandalajatiunik@gmail.com'),
+            'website'       => \App\Models\Setting::get('kop_website', ''),
+            'logo_path'     => \App\Models\Setting::get('kop_logo_path', ''),
+        ];
+
         if ($format === 'excel') {
-            return Excel::download(new UmkmExport($filters, $selectedColumns), "{$filename}.xlsx");
+            return Excel::download(new UmkmExport($filters, $selectedColumns, $kop), "{$filename}.xlsx");
         }
 
         if ($format === 'csv') {
-            return Excel::download(new UmkmExport($filters, $selectedColumns), "{$filename}.csv", \Maatwebsite\Excel\Excel::CSV);
+            return Excel::download(new UmkmExport($filters, $selectedColumns, $kop), "{$filename}.csv", \Maatwebsite\Excel\Excel::CSV);
         }
 
         if ($format === 'pdf') {
@@ -70,15 +80,7 @@ class ReportGenerator
 
             $umkms = $query->latest()->get();
 
-            $kop = [
-                'nama_instansi' => \App\Models\Setting::get('kop_nama_instansi', 'Pemerintah Kabupaten/Kota'),
-                'nama_unit'     => \App\Models\Setting::get('kop_nama_unit', 'Dinas Koperasi dan UKM'),
-                'alamat'        => \App\Models\Setting::get('kop_alamat', ''),
-                'telepon'       => \App\Models\Setting::get('kop_telepon', ''),
-                'email'         => \App\Models\Setting::get('kop_email', ''),
-                'website'       => \App\Models\Setting::get('kop_website', ''),
-                'logo_path'     => \App\Models\Setting::get('kop_logo_path', ''),
-            ];
+
 
             $pdf = Pdf::loadView('admin.laporan.pdf.umkm', [
                 'umkms' => $umkms,
@@ -88,7 +90,7 @@ class ReportGenerator
                 'tanggal_cetak' => now()->format('d F Y H:i'),
             ])->setPaper('a4', 'landscape');
 
-            return $pdf->download("{$filename}.pdf");
+            return $pdf->stream("{$filename}.pdf");
         }
 
         abort(400, 'Format file tidak didukung.');

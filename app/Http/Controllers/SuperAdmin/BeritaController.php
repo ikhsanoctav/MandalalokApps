@@ -94,6 +94,13 @@ class BeritaController extends Controller
         }
         $berita->delete();
 
+        if (request()->wantsJson()) {
+            return response()->json([
+                'success' => true,
+                'message' => 'Warta berhasil dihapus.'
+            ]);
+        }
+
         return redirect()->route('superadmin.berita.index')->with('success', 'Warta berhasil dihapus.');
     }
 }

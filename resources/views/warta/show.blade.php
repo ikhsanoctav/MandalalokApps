@@ -378,7 +378,7 @@
             <!-- Beautiful Featured Image -->
             @if (!empty($berita->gambar))
                 @php 
-                    $bgImage = $berita->gambar == 'news_default.jpg' ? 'https://picsum.photos/seed/'.$berita->id.'/1920/1080' : Storage::url($berita->gambar);
+                    $bgImage = ($berita->gambar == 'news_default.jpg' || empty($berita->gambar)) ? asset('images/Logo_Mandalaloka.png') : Storage::url($berita->gambar);
                 @endphp
                 <div class="featured-image-container">
                     <img src="{{ $bgImage }}" alt="{{ $berita->judul }}">
@@ -390,7 +390,7 @@
 
             <!-- Article Body -->
             <article class="article-content mt-8">
-                {!! $berita->konten !!}
+                {!! strip_tags($berita->konten, '<p><br><b><i><u><strong><em><ul><ol><li><h1><h2><h3><h4><h5><h6><table><thead><tbody><tr><th><td><span><div><a><img><iframe><blockquote><hr>') !!}
             </article>
 
             <!-- Interactive Footer / Share -->

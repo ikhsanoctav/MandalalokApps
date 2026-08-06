@@ -8,7 +8,7 @@
         <div class="flex flex-col gap-1 md:flex-row md:items-center md:justify-between">
             <div>
                 <h2 class="text-xl md:text-2xl font-bold text-slate-800 tracking-tight">Pengaturan Sistem</h2>
-                <p class="text-xs md:text-sm text-slate-500 font-medium">Ubah parameter global, kontak dinas, kop surat, serta status
+                <p class="text-xs md:text-sm text-slate-700 font-medium">Ubah parameter global, kontak dinas, kop surat, serta status
                     pendaftaran sistem secara instan.</p>
             </div>
         </div>
@@ -17,7 +17,7 @@
             <template x-for="tab in tabs" :key="tab.id">
                 <button @click="activeTab = tab.id"
                     class="px-4 py-2 rounded-lg text-xs md:text-sm font-bold transition-all focus:outline-none"
-                    :class="activeTab === tab.id ? 'bg-white text-blue-600 shadow-sm' : 'text-slate-500 hover:text-slate-800'">
+                    :class="activeTab === tab.id ? 'bg-white text-blue-600 shadow-sm' : 'text-slate-700 hover:text-slate-800'">
                     <span class="flex items-center gap-1.5">
                         <span class="mdi" :class="tab.icon"></span>
                         <span x-text="tab.label"></span>
@@ -68,7 +68,7 @@
                                         class="pointer-events-none inline-block h-5 w-5 transform rounded-full bg-white shadow ring-0 transition duration-200 ease-in-out"
                                         :class="open ? 'translate-x-5' : 'translate-x-0'"></span>
                                 </button>
-                                <span class="text-xs font-bold" :class="open ? 'text-emerald-600' : 'text-slate-500'"
+                                <span class="text-xs font-bold" :class="open ? 'text-emerald-600' : 'text-slate-700'"
                                     x-text="open ? 'Pendaftaran Buka (Aktif)' : 'Pendaftaran Tutup (Nonaktif)'"></span>
                                 <input type="hidden" name="registration_open" :value="open ? 'true' : 'false'">
                             </div>
@@ -94,7 +94,7 @@
                                         class="pointer-events-none inline-block h-5 w-5 transform rounded-full bg-white shadow ring-0 transition duration-200 ease-in-out"
                                         :class="open ? 'translate-x-5' : 'translate-x-0'"></span>
                                 </button>
-                                <span class="text-xs font-bold" :class="open ? 'text-emerald-600' : 'text-slate-500'"
+                                <span class="text-xs font-bold" :class="open ? 'text-emerald-600' : 'text-slate-700'"
                                     x-text="open ? 'Fitur Aktif' : 'Fitur Nonaktif (Hanya Admin)'"></span>
                                 <input type="hidden" name="pelaku_submission_active" :value="open ? 'true' : 'false'">
                             </div>
@@ -116,10 +116,56 @@
                             <div class="mt-4">
                                 <div class="relative rounded-xl shadow-sm">
                                     <div class="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
-                                        <span class="text-slate-500 text-sm font-bold">Rp</span>
+                                        <span class="text-slate-700 text-sm font-bold">Rp</span>
                                     </div>
                                     <input type="number" name="max_financing_limit" id="max_financing_limit"
                                         value="{{ $limitVal }}"
+                                        class="w-full pl-10 pr-4 py-2.5 rounded-lg border border-slate-250 bg-white text-sm text-slate-700 font-bold focus:outline-none focus:ring-2 focus:ring-blue-100 focus:border-blue-500 transition-all">
+                                </div>
+                            </div>
+                        </div>
+
+                        @php
+                            $mikroMaxVal = \App\Models\Setting::get('kategori_mikro_max_omset', 10000000);
+                            $kecilMaxVal = \App\Models\Setting::get('kategori_kecil_max_omset', 50000000);
+                        @endphp
+                        <div class="flex flex-col justify-between p-4 rounded-xl border border-slate-150/70 bg-slate-50/20">
+                            <div>
+                                <span class="text-xs font-bold text-slate-400 uppercase tracking-wider">Aturan Kategori</span>
+                                <h4 class="font-bold text-slate-800 text-sm mt-1">Batas Omset Maksimal Mikro (Bulanan)</h4>
+                                <p class="text-xs text-slate-450 mt-1 leading-relaxed">
+                                    Batas omset bulanan maksimal agar usaha dimasukkan ke kategori <strong>Mikro</strong>.
+                                </p>
+                            </div>
+
+                            <div class="mt-4">
+                                <div class="relative rounded-xl shadow-sm">
+                                    <div class="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
+                                        <span class="text-slate-700 text-sm font-bold">Rp</span>
+                                    </div>
+                                    <input type="number" name="kategori_mikro_max_omset" id="kategori_mikro_max_omset"
+                                        value="{{ $mikroMaxVal }}"
+                                        class="w-full pl-10 pr-4 py-2.5 rounded-lg border border-slate-250 bg-white text-sm text-slate-700 font-bold focus:outline-none focus:ring-2 focus:ring-blue-100 focus:border-blue-500 transition-all">
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="flex flex-col justify-between p-4 rounded-xl border border-slate-150/70 bg-slate-50/20">
+                            <div>
+                                <span class="text-xs font-bold text-slate-400 uppercase tracking-wider">Aturan Kategori</span>
+                                <h4 class="font-bold text-slate-800 text-sm mt-1">Batas Omset Maksimal Kecil (Bulanan)</h4>
+                                <p class="text-xs text-slate-450 mt-1 leading-relaxed">
+                                    Batas omset bulanan maksimal agar usaha dimasukkan ke kategori <strong>Kecil</strong>. Di atas ini dikelompokkan ke <strong>Menengah</strong>.
+                                </p>
+                            </div>
+
+                            <div class="mt-4">
+                                <div class="relative rounded-xl shadow-sm">
+                                    <div class="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
+                                        <span class="text-slate-700 text-sm font-bold">Rp</span>
+                                    </div>
+                                    <input type="number" name="kategori_kecil_max_omset" id="kategori_kecil_max_omset"
+                                        value="{{ $kecilMaxVal }}"
                                         class="w-full pl-10 pr-4 py-2.5 rounded-lg border border-slate-250 bg-white text-sm text-slate-700 font-bold focus:outline-none focus:ring-2 focus:ring-blue-100 focus:border-blue-500 transition-all">
                                 </div>
                             </div>
@@ -163,7 +209,7 @@
                         @endphp
                         <div class="space-y-2">
                             <label for="app_name"
-                                class="block text-xs font-bold text-slate-500 uppercase tracking-wider">Nama Aplikasi
+                                class="block text-xs font-bold text-slate-700 uppercase tracking-wider">Nama Aplikasi
                                 Portal</label>
                             <input type="text" name="app_name" id="app_name" value="{{ $appName }}"
                                 class="w-full px-4 py-2.5 rounded-lg border border-slate-250 bg-slate-50/20 text-sm text-slate-750 font-semibold focus:outline-none focus:ring-2 focus:ring-blue-100 focus:border-blue-500 transition-all">
@@ -190,7 +236,7 @@
                         @endphp
                         <div class="space-y-2">
                             <label for="support_phone"
-                                class="block text-xs font-bold text-slate-500 uppercase tracking-wider">Nomor WhatsApp
+                                class="block text-xs font-bold text-slate-700 uppercase tracking-wider">Nomor WhatsApp
                                 Bantuan Dinas</label>
                             <input type="text" name="support_phone" id="support_phone" value="{{ $phone }}"
                                 class="w-full px-4 py-2.5 rounded-lg border border-slate-250 bg-slate-50/20 text-sm text-slate-750 font-semibold focus:outline-none focus:ring-2 focus:ring-blue-100 focus:border-blue-500 transition-all">
@@ -203,7 +249,7 @@
                         @endphp
                         <div class="space-y-2">
                             <label for="support_email"
-                                class="block text-xs font-bold text-slate-500 uppercase tracking-wider">Email Layanan
+                                class="block text-xs font-bold text-slate-700 uppercase tracking-wider">Email Layanan
                                 Pengaduan</label>
                             <input type="email" name="support_email" id="support_email" value="{{ $email }}"
                                 class="w-full px-4 py-2.5 rounded-lg border border-slate-250 bg-slate-50/20 text-sm text-slate-750 font-semibold focus:outline-none focus:ring-2 focus:ring-blue-100 focus:border-blue-500 transition-all">
@@ -287,7 +333,7 @@
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                     {{-- Logo Upload --}}
                     <div class="md:col-span-2">
-                        <label class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">Logo Instansi</label>
+                        <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-2">Logo Instansi</label>
                         <div class="flex items-start gap-4">
                             <div class="flex-shrink-0">
                                 <img id="logo-thumb"
@@ -299,7 +345,7 @@
                                 <label for="kop_logo"
                                     class="flex flex-col items-center justify-center w-full h-28 border-2 border-dashed border-slate-300 rounded-xl cursor-pointer bg-slate-50 hover:bg-blue-50 hover:border-blue-400 transition-all group">
                                     <span class="mdi mdi-cloud-upload-outline text-3xl text-slate-400 group-hover:text-blue-500 transition-colors"></span>
-                                    <span class="text-xs font-bold text-slate-500 group-hover:text-blue-600 mt-1">Klik untuk upload logo baru</span>
+                                    <span class="text-xs font-bold text-slate-700 group-hover:text-blue-600 mt-1">Klik untuk upload logo baru</span>
                                     <span class="text-[10px] text-slate-400 mt-0.5">PNG, JPG, JPEG – Maks. 2MB</span>
                                     <input id="kop_logo" name="kop_logo" type="file" accept="image/png,image/jpg,image/jpeg" class="hidden"
                                         onchange="previewLogo(this)">
@@ -311,7 +357,7 @@
 
                     {{-- Nama Instansi --}}
                     <div class="space-y-2">
-                        <label for="kop_nama_instansi" class="block text-xs font-bold text-slate-500 uppercase tracking-wider">Nama Instansi / Pemerintah</label>
+                        <label for="kop_nama_instansi" class="block text-xs font-bold text-slate-700 uppercase tracking-wider">Nama Instansi / Pemerintah</label>
                         <input type="text" name="kop_nama_instansi" id="kop_nama_instansi"
                             value="{{ $kopNamaInstansi }}"
                             placeholder="Contoh: PEMERINTAH KOTA BANDUNG"
@@ -322,7 +368,7 @@
 
                     {{-- Nama Unit --}}
                     <div class="space-y-2">
-                        <label for="kop_nama_unit" class="block text-xs font-bold text-slate-500 uppercase tracking-wider">Nama Unit / Dinas / Kecamatan</label>
+                        <label for="kop_nama_unit" class="block text-xs font-bold text-slate-700 uppercase tracking-wider">Nama Unit / Dinas / Kecamatan</label>
                         <input type="text" name="kop_nama_unit" id="kop_nama_unit"
                             value="{{ $kopNamaUnit }}"
                             placeholder="Contoh: KECAMATAN MANDALAJATI"
@@ -333,7 +379,7 @@
 
                     {{-- Alamat --}}
                     <div class="space-y-2 md:col-span-2">
-                        <label for="kop_alamat" class="block text-xs font-bold text-slate-500 uppercase tracking-wider">Alamat Lengkap</label>
+                        <label for="kop_alamat" class="block text-xs font-bold text-slate-700 uppercase tracking-wider">Alamat Lengkap</label>
                         <input type="text" name="kop_alamat" id="kop_alamat"
                             value="{{ $kopAlamat }}"
                             placeholder="Contoh: Jl. Sindanglaya No.50, Sindangjaya, Kec. Mandalajati, Kota Bandung, Jawa Barat 40195"
@@ -343,7 +389,7 @@
 
                     {{-- Telepon --}}
                     <div class="space-y-2">
-                        <label for="kop_telepon" class="block text-xs font-bold text-slate-500 uppercase tracking-wider">Nomor Telepon</label>
+                        <label for="kop_telepon" class="block text-xs font-bold text-slate-700 uppercase tracking-wider">Nomor Telepon</label>
                         <input type="text" name="kop_telepon" id="kop_telepon"
                             value="{{ $kopTelepon }}"
                             placeholder="Contoh: (022) 7815252"
@@ -353,7 +399,7 @@
 
                     {{-- Email --}}
                     <div class="space-y-2">
-                        <label for="kop_email" class="block text-xs font-bold text-slate-500 uppercase tracking-wider">Email Resmi</label>
+                        <label for="kop_email" class="block text-xs font-bold text-slate-700 uppercase tracking-wider">Email Resmi</label>
                         <input type="email" name="kop_email" id="kop_email"
                             value="{{ $kopEmail }}"
                             placeholder="Contoh: kecamatan@bandung.go.id"
@@ -363,7 +409,7 @@
 
                     {{-- Website --}}
                     <div class="space-y-2 md:col-span-2">
-                        <label for="kop_website" class="block text-xs font-bold text-slate-500 uppercase tracking-wider">Website <span class="text-slate-400 font-normal normal-case">(opsional)</span></label>
+                        <label for="kop_website" class="block text-xs font-bold text-slate-700 uppercase tracking-wider">Website <span class="text-slate-400 font-normal normal-case">(opsional)</span></label>
                         <input type="text" name="kop_website" id="kop_website"
                             value="{{ $kopWebsite }}"
                             placeholder="Contoh: https://mandalajati.bandung.go.id"

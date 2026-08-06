@@ -8,6 +8,7 @@ use App\Models\PesertaPelatihan;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
+use Illuminate\Support\Facades\DB;
 
 class PelatihanController extends Controller
 {
@@ -16,6 +17,7 @@ class PelatihanController extends Controller
         $user = auth()->user();
         
         $pelatihans = Pelatihan::where('status', 'published')
+            ->where('tanggal_selesai', '>=', now()->subDays(7))
             ->orderBy('tanggal_mulai', 'asc')
             ->get();
             
@@ -43,19 +45,11 @@ class PelatihanController extends Controller
         $user = auth()->user();
         $pelatihan = Pelatihan::findOrFail($id);
 
-        if ($pelatihan->status !== 'published') {
+        if ($pelatihan->status !== 'published' || $pelatihan->tanggal_selesai < now()->subDays(7)) {
             return back()->with('error', 'Pelatihan ini tidak tersedia untuk pendaftaran.');
         }
 
-        if (PesertaPelatihan::where('pelatihan_id', $id)->where('user_id', $user->id)->exists()) {
-            return back()->with('error', 'Anda sudah terdaftar di pelatihan ini.');
-        }
-
-        if ($pelatihan->peserta()->count() >= $pelatihan->kuota) {
-            return back()->with('error', 'Mohon maaf, kuota pelatihan ini sudah penuh.');
-        }
-
-        // Cek syarat dokumen
+        // Cek syarat dokumen (validasi input sebelum mengunci DB)
         $dokumenPaths = [];
         if (!empty($pelatihan->syarat_dokumen) && is_array($pelatihan->syarat_dokumen)) {
             $request->validate([
@@ -78,15 +72,37 @@ class PelatihanController extends Controller
             }
         }
 
-        $kode_tiket = 'TRN-' . date('Y') . '-' . strtoupper(substr(uniqid(), -6));
+        $error = DB::transaction(function () use ($user, $id, $dokumenPaths) {
+            $pelatihanLocked = Pelatihan::where('id', $id)->lockForUpdate()->firstOrFail();
 
-        PesertaPelatihan::create([
-            'pelatihan_id' => $id,
-            'user_id' => $user->id,
-            'dokumen_syarat' => !empty($dokumenPaths) ? $dokumenPaths : null,
-            'kode_tiket' => $kode_tiket,
-            'status_kehadiran' => 'terdaftar',
-        ]);
+            if ($pelatihanLocked->status !== 'published' || $pelatihanLocked->tanggal_selesai < now()->subDays(7)) {
+                return 'Pelatihan ini tidak tersedia untuk pendaftaran.';
+            }
+
+            if (PesertaPelatihan::where('pelatihan_id', $id)->where('user_id', $user->id)->exists()) {
+                return 'Anda sudah terdaftar di pelatihan ini.';
+            }
+
+            if ($pelatihanLocked->peserta()->count() >= $pelatihanLocked->kuota) {
+                return 'Mohon maaf, kuota pelatihan ini sudah penuh.';
+            }
+
+            $kode_tiket = 'TRN-' . date('Y') . '-' . strtoupper(substr(uniqid(), -6));
+
+            PesertaPelatihan::create([
+                'pelatihan_id' => $id,
+                'user_id' => $user->id,
+                'dokumen_syarat' => !empty($dokumenPaths) ? $dokumenPaths : null,
+                'kode_tiket' => $kode_tiket,
+                'status_kehadiran' => 'terdaftar',
+            ]);
+
+            return null;
+        });
+
+        if ($error) {
+            return back()->with('error', $error);
+        }
 
         return redirect()->route('pelaku.pelatihan.show', $id)->with('success', 'Berhasil mendaftar pelatihan! Ini adalah tiket Anda.');
     }

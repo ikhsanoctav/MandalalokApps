@@ -13,8 +13,13 @@ class VerifikasiAkunController extends Controller
     public function index(Request $request)
     {
         $search = $request->get('search');
+        $status = $request->get('status', 'pending'); // Default to pending
         
-        $query = Pemilik::where('status_verifikasi_ktp', 'pending');
+        $query = Pemilik::query();
+
+        if ($status && $status !== 'semua') {
+            $query->where('status_verifikasi_ktp', $status);
+        }
 
         if ($search) {
             $nikHash = hash('sha256', $search);
@@ -25,7 +30,15 @@ class VerifikasiAkunController extends Controller
         }
 
         $pemiliks = $query->orderBy('created_at', 'desc')->paginate(10);
-        $pendingCount = Pemilik::where('status_verifikasi_ktp', 'pending')->count();
+        
+        // Counts for cards
+        $countPending = Pemilik::where('status_verifikasi_ktp', 'pending')->count();
+        $countTerverifikasi = Pemilik::where('status_verifikasi_ktp', 'terverifikasi')->count();
+        $countDitolak = Pemilik::where('status_verifikasi_ktp', 'ditolak')->count();
+        $countTotal = Pemilik::count();
+
+        // Keep this for backwards compatibility with the layout sidebar if needed
+        $pendingCount = $countPending; 
 
         if ($request->ajax() || $request->has('ajax')) {
             $html = view('admin.verifikasi_akun.table-data', compact('pemiliks', 'pendingCount'))->render();
@@ -36,7 +49,7 @@ class VerifikasiAkunController extends Controller
             ]);
         }
 
-        return view('admin.verifikasi_akun.index', compact('pemiliks', 'pendingCount'));
+        return view('admin.verifikasi_akun.index', compact('pemiliks', 'pendingCount', 'countPending', 'countTerverifikasi', 'countDitolak', 'countTotal', 'status'));
     }
 
     public function show($id)
@@ -155,16 +168,22 @@ class VerifikasiAkunController extends Controller
             abort(404, 'Foto KTP tidak ditemukan.');
         }
 
-        if (!\Illuminate\Support\Facades\Storage::disk('local')->exists($pemilik->foto_ktp)) {
+        if (\Illuminate\Support\Facades\Storage::disk('public')->exists($pemilik->foto_ktp)) {
+            $path = \Illuminate\Support\Facades\Storage::disk('public')->path($pemilik->foto_ktp);
+        } elseif (\Illuminate\Support\Facades\Storage::disk('local')->exists($pemilik->foto_ktp)) {
+            $path = \Illuminate\Support\Facades\Storage::disk('local')->path($pemilik->foto_ktp);
+        } else {
             // Fallback for files placed under storage/app/
             $pathFallback = storage_path('app/' . $pemilik->foto_ktp);
-            if (file_exists($pathFallback)) {
+            $pathPublicFallback = storage_path('app/public/' . $pemilik->foto_ktp);
+            
+            if (file_exists($pathPublicFallback)) {
+                $path = $pathPublicFallback;
+            } elseif (file_exists($pathFallback)) {
                 $path = $pathFallback;
             } else {
                 abort(404, 'File KTP tidak ditemukan di server.');
             }
-        } else {
-            $path = \Illuminate\Support\Facades\Storage::disk('local')->path($pemilik->foto_ktp);
         }
 
         return response()->file($path);

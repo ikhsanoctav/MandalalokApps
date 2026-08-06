@@ -266,7 +266,7 @@
                     <div class="flex flex-col items-center justify-center py-10 space-y-3">
                         <div class="w-10 h-10 border-4 border-blue-500 border-t-transparent rounded-full animate-spin">
                         </div>
-                        <p class="text-sm font-semibold text-slate-500">Memuat data pengajuan...</p>
+                        <p class="text-sm font-semibold text-slate-700">Memuat data pengajuan...</p>
                     </div>
                 </div>
                 <div class="bg-slate-50 px-6 py-4 border-t border-slate-100 flex justify-end gap-3"
@@ -299,17 +299,17 @@
                 <form id="formCreate" onsubmit="submitCreate(event)">
                     <div class="p-6 space-y-4">
                         <div>
-                            <label class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">Pilih UMKM Terverifikasi</label>
+                            <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-2">Pilih UMKM Terverifikasi</label>
                             <select id="createUmkmId" required class="w-full border border-slate-300 rounded-lg px-4 py-2.5 text-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all">
                                 <option value="">-- Pilih UMKM --</option>
                                 @foreach($umkms as $umkm)
-                                    <option value="{{ $umkm->id_umkm }}">{{ $umkm->nama_usaha }} ({{ $umkm->pemilik->nama_lengkap ?? 'Pemilik' }})</option>
+                                    <option value="{{ $umkm->id_umkm }}">{{ $umkm->nama_usaha }} ({{ $umkm->pemilik?->nama_lengkap ?? 'Pemilik' }})</option>
                                 @endforeach
                             </select>
                         </div>
                         <div class="grid grid-cols-2 gap-4">
                             <div>
-                                <label class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">Jenis Pengajuan</label>
+                                <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-2">Jenis Pengajuan</label>
                                 <select id="createJenisPengajuan" required onchange="toggleNominalField()" class="w-full border border-slate-300 rounded-lg px-4 py-2.5 text-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all">
                                     <option value="pembiayaan">Pembiayaan</option>
                                     <option value="bantuan">Bantuan</option>
@@ -318,7 +318,7 @@
                                 </select>
                             </div>
                             <div>
-                                <label class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">Tanggal Pengajuan</label>
+                                <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-2">Tanggal Pengajuan</label>
                                 <input type="date" id="createTanggalPengajuan" required value="{{ date('Y-m-d') }}" class="w-full border border-slate-300 rounded-lg px-4 py-2.5 text-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all">
                             </div>
                         </div>
@@ -326,7 +326,7 @@
                             $activePrograms = array_filter(array_map('trim', explode("\n", \App\Models\Setting::get('program_bantuan_list', ''))));
                         @endphp
                         <div id="fieldProgramBantuan" class="hidden">
-                            <label class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">Program Bantuan Aktif</label>
+                            <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-2">Program Bantuan Aktif</label>
                             <select id="createNamaProgram" class="w-full border border-slate-300 rounded-lg px-4 py-2.5 text-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all">
                                 <option value="">-- Pilih Program Bantuan --</option>
                                 @foreach($activePrograms as $prog)
@@ -335,11 +335,11 @@
                             </select>
                         </div>
                         <div id="fieldNominal">
-                            <label class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">Nominal Pembiayaan (Rp)</label>
+                            <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-2">Nominal Pembiayaan (Rp)</label>
                             <input type="number" id="createNominal" min="0" placeholder="Contoh: 10000000" class="w-full border border-slate-300 rounded-lg px-4 py-2.5 text-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all">
                         </div>
                         <div>
-                            <label class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">Keterangan / Keperluan</label>
+                            <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-2">Keterangan / Keperluan</label>
                             <textarea id="createKeterangan" rows="3" placeholder="Tulis rincian permohonan bantuan..." class="w-full border border-slate-300 rounded-xl px-4 py-2.5 text-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all"></textarea>
                         </div>
                         <div class="border-t border-slate-100 pt-4 mt-2">
@@ -351,32 +351,32 @@
                             </h4>
                             <div class="space-y-3 max-h-48 overflow-y-auto pr-1">
                                 <div>
-                                    <label class="block text-[10px] font-bold text-slate-500 uppercase mb-1">KTP Pemilik</label>
-                                    <input type="file" id="createBerkasKtp" accept=".pdf,.jpg,.jpeg,.png" class="w-full text-xs text-slate-500 file:mr-3 file:py-1.5 file:px-3 file:rounded-md file:border-0 file:text-xs file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100 border border-slate-200 rounded-md p-1 bg-slate-50/50">
+                                    <label class="block text-[10px] font-bold text-slate-700 uppercase mb-1">KTP Pemilik</label>
+                                    <input type="file" id="createBerkasKtp" accept=".pdf,.jpg,.jpeg,.png" class="w-full text-xs text-slate-700 file:mr-3 file:py-1.5 file:px-3 file:rounded-md file:border-0 file:text-xs file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100 border border-slate-200 rounded-md p-1 bg-slate-50/50">
                                 </div>
                                 <div>
-                                    <label class="block text-[10px] font-bold text-slate-500 uppercase mb-1">Kartu Keluarga</label>
-                                    <input type="file" id="createBerkasKk" accept=".pdf,.jpg,.jpeg,.png" class="w-full text-xs text-slate-500 file:mr-3 file:py-1.5 file:px-3 file:rounded-md file:border-0 file:text-xs file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100 border border-slate-200 rounded-md p-1 bg-slate-50/50">
+                                    <label class="block text-[10px] font-bold text-slate-700 uppercase mb-1">Kartu Keluarga</label>
+                                    <input type="file" id="createBerkasKk" accept=".pdf,.jpg,.jpeg,.png" class="w-full text-xs text-slate-700 file:mr-3 file:py-1.5 file:px-3 file:rounded-md file:border-0 file:text-xs file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100 border border-slate-200 rounded-md p-1 bg-slate-50/50">
                                 </div>
                                 <div>
-                                    <label class="block text-[10px] font-bold text-slate-500 uppercase mb-1">Foto Tempat Usaha</label>
-                                    <input type="file" id="createBerkasFotoUsaha" accept=".pdf,.jpg,.jpeg,.png" class="w-full text-xs text-slate-500 file:mr-3 file:py-1.5 file:px-3 file:rounded-md file:border-0 file:text-xs file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100 border border-slate-200 rounded-md p-1 bg-slate-50/50">
+                                    <label class="block text-[10px] font-bold text-slate-700 uppercase mb-1">Foto Tempat Usaha</label>
+                                    <input type="file" id="createBerkasFotoUsaha" accept=".pdf,.jpg,.jpeg,.png" class="w-full text-xs text-slate-700 file:mr-3 file:py-1.5 file:px-3 file:rounded-md file:border-0 file:text-xs file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100 border border-slate-200 rounded-md p-1 bg-slate-50/50">
                                 </div>
                                 <div>
-                                    <label class="block text-[10px] font-bold text-slate-500 uppercase mb-1">Izin Usaha / NIB / SKU</label>
-                                    <input type="file" id="createBerkasNibSku" accept=".pdf,.jpg,.jpeg,.png" class="w-full text-xs text-slate-500 file:mr-3 file:py-1.5 file:px-3 file:rounded-md file:border-0 file:text-xs file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100 border border-slate-200 rounded-md p-1 bg-slate-50/50">
+                                    <label class="block text-[10px] font-bold text-slate-700 uppercase mb-1">Izin Usaha / NIB / SKU</label>
+                                    <input type="file" id="createBerkasNibSku" accept=".pdf,.jpg,.jpeg,.png" class="w-full text-xs text-slate-700 file:mr-3 file:py-1.5 file:px-3 file:rounded-md file:border-0 file:text-xs file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100 border border-slate-200 rounded-md p-1 bg-slate-50/50">
                                 </div>
                                 <div>
-                                    <label class="block text-[10px] font-bold text-slate-500 uppercase mb-1">Laporan Keuangan</label>
-                                    <input type="file" id="createBerkasLaporanKeuangan" accept=".pdf,.jpg,.jpeg,.png" class="w-full text-xs text-slate-500 file:mr-3 file:py-1.5 file:px-3 file:rounded-md file:border-0 file:text-xs file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100 border border-slate-200 rounded-md p-1 bg-slate-50/50">
+                                    <label class="block text-[10px] font-bold text-slate-700 uppercase mb-1">Laporan Keuangan</label>
+                                    <input type="file" id="createBerkasLaporanKeuangan" accept=".pdf,.jpg,.jpeg,.png" class="w-full text-xs text-slate-700 file:mr-3 file:py-1.5 file:px-3 file:rounded-md file:border-0 file:text-xs file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100 border border-slate-200 rounded-md p-1 bg-slate-50/50">
                                 </div>
                                 <div>
-                                    <label class="block text-[10px] font-bold text-slate-500 uppercase mb-1">Rencana Anggaran Biaya (RAB)</label>
-                                    <input type="file" id="createBerkasRab" accept=".pdf,.jpg,.jpeg,.png" class="w-full text-xs text-slate-500 file:mr-3 file:py-1.5 file:px-3 file:rounded-md file:border-0 file:text-xs file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100 border border-slate-200 rounded-md p-1 bg-slate-50/50">
+                                    <label class="block text-[10px] font-bold text-slate-700 uppercase mb-1">Rencana Anggaran Biaya (RAB)</label>
+                                    <input type="file" id="createBerkasRab" accept=".pdf,.jpg,.jpeg,.png" class="w-full text-xs text-slate-700 file:mr-3 file:py-1.5 file:px-3 file:rounded-md file:border-0 file:text-xs file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100 border border-slate-200 rounded-md p-1 bg-slate-50/50">
                                 </div>
                                 <div>
-                                    <label class="block text-[10px] font-bold text-slate-500 uppercase mb-1">Foto Produk</label>
-                                    <input type="file" id="createBerkasFotoProduk" accept=".pdf,.jpg,.jpeg,.png" class="w-full text-xs text-slate-500 file:mr-3 file:py-1.5 file:px-3 file:rounded-md file:border-0 file:text-xs file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100 border border-slate-200 rounded-md p-1 bg-slate-50/50">
+                                    <label class="block text-[10px] font-bold text-slate-700 uppercase mb-1">Foto Produk</label>
+                                    <input type="file" id="createBerkasFotoProduk" accept=".pdf,.jpg,.jpeg,.png" class="w-full text-xs text-slate-700 file:mr-3 file:py-1.5 file:px-3 file:rounded-md file:border-0 file:text-xs file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100 border border-slate-200 rounded-md p-1 bg-slate-50/50">
                                 </div>
                             </div>
                         </div>
@@ -406,7 +406,7 @@
                     </div>
                     <div class="space-y-1">
                         <h3 class="text-xl font-bold text-slate-800" id="verifyTitle">Update Status Pengajuan</h3>
-                        <p class="text-sm text-slate-500" id="verifyUmkmName">Apakah Anda yakin ingin memproses pengajuan
+                        <p class="text-sm text-slate-700" id="verifyUmkmName">Apakah Anda yakin ingin memproses pengajuan
                             ini?</p>
                     </div>
                 </div>
@@ -440,12 +440,12 @@
                     </div>
                     <div class="text-center space-y-1">
                         <h3 class="text-xl font-bold text-slate-800">Tolak Pengajuan Bantuan</h3>
-                        <p class="text-sm text-slate-500" id="rejectUmkmName">Mohon berikan alasan penolakan untuk
+                        <p class="text-sm text-slate-700" id="rejectUmkmName">Mohon berikan alasan penolakan untuk
                             permohonan ini.</p>
                     </div>
 
                     <div class="space-y-1">
-                        <label class="text-xs font-bold text-slate-500 uppercase tracking-wider">Alasan Penolakan</label>
+                        <label class="text-xs font-bold text-slate-700 uppercase tracking-wider">Alasan Penolakan</label>
                         <textarea id="rejectReason" rows="3"
                             class="w-full border border-slate-300 rounded-xl px-3 py-2 text-sm focus:ring-2 focus:ring-rose-500 focus:border-rose-500 outline-none transition-all"
                             placeholder="Contoh: Dokumen NIB kurang jelas atau tidak sesuai."></textarea>
@@ -547,7 +547,7 @@
             container.innerHTML = `
             <div class="flex flex-col items-center justify-center py-20 space-y-3">
                 <div class="w-10 h-10 border-4 border-blue-500 border-t-transparent rounded-full animate-spin"></div>
-                <p class="text-sm font-semibold text-slate-500">Mencari data pengajuan...</p>
+                <p class="text-sm font-semibold text-slate-700">Mencari data pengajuan...</p>
             </div>
         `;
 
@@ -585,7 +585,7 @@
             content.innerHTML = `
             <div class="flex flex-col items-center justify-center py-20 space-y-3">
                 <div class="w-10 h-10 border-4 border-blue-500 border-t-transparent rounded-full animate-spin"></div>
-                <p class="text-sm font-semibold text-slate-500">Memuat berkas pengajuan...</p>
+                <p class="text-sm font-semibold text-slate-700">Memuat berkas pengajuan...</p>
             </div>
         `;
 

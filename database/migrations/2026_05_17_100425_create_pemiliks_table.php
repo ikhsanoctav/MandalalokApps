@@ -15,13 +15,13 @@ return new class extends Migration
             $table->string('nama_lengkap', 100);
             $table->string('tempat_lahir', 50)->nullable();
             $table->date('tanggal_lahir')->nullable();
-            $table->enum('jenis_kelamin', ['L', 'P']);
+            $table->enum('jenis_kelamin', ['L', 'P'])->nullable();
             $table->string('no_hp', 15)->nullable();
             $table->string('email', 100)->nullable();
             $table->text('alamat')->nullable();
             $table->string('rt', 5)->nullable();
             $table->string('rw', 5)->nullable();
-            $table->string('kelurahan', 50);
+            $table->string('kelurahan', 50)->nullable();
             $table->unsignedBigInteger('id_kelurahan')->nullable();
             $table->string('kecamatan', 50);
             $table->string('kota_kab', 50);

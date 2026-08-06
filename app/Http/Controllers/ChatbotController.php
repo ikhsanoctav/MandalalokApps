@@ -100,13 +100,16 @@ CONTEXT;
         return $days[$now->dayOfWeek] . ', ' . $now->day . ' ' . $months[$now->month] . ' ' . $now->year;
     }
 
-    public function sendMessage(Request $request, \App\Services\OllamaService $ollamaService)
+    public function sendMessage(Request $request)
     {
         $validator = Validator::make($request->all(), [
             'message'   => 'required|string|max:2000',
             'name'      => 'nullable|string|max:100',
             'kelurahan' => 'nullable|string|max:100',
             'phone'     => 'nullable|string|max:20',
+            'history'   => 'nullable|array|max:12',
+            'history.*.role' => 'nullable|in:user,assistant',
+            'history.*.content' => 'nullable|string|max:2000',
         ]);
 
         if ($validator->fails()) {
@@ -148,12 +151,41 @@ CONTEXT;
             $chatHistory = $request->input('history', []);
             $systemContext = $this->buildSystemContext($relevantUmkms, $chatHistory);
 
-            // Directly call Ollama instead of n8n webhook
-            $reply = $ollamaService->generateChatResponse($systemContext, $message, $chatHistory);
+            $webhookUrl = config('services.n8n.webhook_url');
+            $http = Http::acceptJson()->timeout(config('services.n8n.chat_timeout', 45));
 
-            if (is_null($reply) || empty(trim($reply))) {
-                Log::warning('ChatbotController: Empty reply from OllamaService.');
-                return response()->json(['success' => false]);
+            if ($apiKey = config('services.n8n.api_key')) {
+                $http = $http->withHeaders(['X-N8N-API-KEY' => $apiKey]);
+            }
+
+            $response = $http->post($webhookUrl, [
+                'message' => $message,
+                'history' => $chatHistory,
+                'systemContext' => $systemContext,
+            ]);
+
+            if (!$response->successful()) {
+                Log::warning('ChatbotController: n8n webhook returned an error.', [
+                    'status' => $response->status(),
+                ]);
+
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Asisten sedang tidak tersedia. Silakan coba beberapa saat lagi.',
+                ], 503);
+            }
+
+            $data = $response->json();
+            $reply = is_array($data)
+                ? ($data['output'] ?? $data['reply'] ?? $data['text'] ?? $data['response'] ?? null)
+                : $response->body();
+
+            if (!is_string($reply) || empty(trim($reply))) {
+                Log::warning('ChatbotController: n8n returned an empty or invalid reply.');
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Asisten mengirim respons yang tidak dapat diproses. Silakan ulangi.',
+                ], 503);
             }
 
             // Parse basic markdown: bold and italic
@@ -168,11 +200,14 @@ CONTEXT;
                 'reply'   => $reply
             ]);
 
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             Log::error('ChatbotController: Exception occurred: ' . $e->getMessage(), [
                 'exception' => $e
             ]);
-            return response()->json(['success' => false]);
+            return response()->json([
+                'success' => false,
+                'message' => 'Asisten sedang tidak tersedia. Silakan coba beberapa saat lagi.',
+            ], 503);
         }
     }
 

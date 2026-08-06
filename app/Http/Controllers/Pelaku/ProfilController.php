@@ -18,12 +18,7 @@ class ProfilController extends Controller
         if ($user->nik_hash) {
             $pemilik = Pemilik::where('nik_hash', $user->nik_hash)->first();
             if ($pemilik) {
-                if ($pemilik->status_verifikasi_ktp !== 'terverifikasi') {
-                    $pemilik->forceFill([
-                        'status_verifikasi_ktp' => 'terverifikasi',
-                        'catatan' => null,
-                    ])->save();
-                }
+                // KTP validation requires admin verification now.
                 app(\App\Services\UmkmService::class)->syncPemilikWilayah($pemilik);
             }
         }
@@ -62,12 +57,12 @@ class ProfilController extends Controller
         $needsVerification = false;
 
         if ($request->hasFile('foto_ktp')) {
-            if ($pemilik && $pemilik->foto_ktp && \Illuminate\Support\Facades\Storage::disk('local')->exists($pemilik->foto_ktp)) {
-                \Illuminate\Support\Facades\Storage::disk('local')->delete($pemilik->foto_ktp);
+            if ($pemilik && $pemilik->foto_ktp && \Illuminate\Support\Facades\Storage::disk('public')->exists($pemilik->foto_ktp)) {
+                \Illuminate\Support\Facades\Storage::disk('public')->delete($pemilik->foto_ktp);
             }
             $file = $request->file('foto_ktp');
             $filename = time() . '_ktp_' . $user->id . '.' . $file->getClientOriginalExtension();
-            $fotoKtpPath = $file->storeAs('pemilik/ktp', $filename, 'local');
+            $fotoKtpPath = $file->storeAs('pemilik/ktp', $filename, 'public');
             $needsVerification = true;
         }
 
@@ -75,7 +70,13 @@ class ProfilController extends Controller
             $needsVerification = true;
         }
 
-        $statusVerifikasi = 'terverifikasi';
+        $statusVerifikasi = $pemilik ? $pemilik->status_verifikasi_ktp : 'pending';
+        $catatan = $pemilik ? $pemilik->catatan : null;
+
+        if ($needsVerification) {
+            $statusVerifikasi = 'pending';
+            $catatan = null;
+        }
 
         if ($pemilik) {
             $pemilik->update([
@@ -93,6 +94,7 @@ class ProfilController extends Controller
                 'provinsi' => $kelurahan?->provinsi ?? 'Jawa Barat',
                 'foto_ktp' => $fotoKtpPath,
                 'status_verifikasi_ktp' => $statusVerifikasi,
+                'catatan' => $catatan,
             ]);
         } else {
             // Create new Pemilik
@@ -115,6 +117,7 @@ class ProfilController extends Controller
                 'kode_pos' => '40285',
                 'foto_ktp' => $fotoKtpPath,
                 'status_verifikasi_ktp' => $statusVerifikasi,
+                'catatan' => $catatan,
             ]);
         }
 

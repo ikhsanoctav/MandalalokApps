@@ -75,6 +75,7 @@ class PengajuanBantuanToggleTest extends TestCase
             'provinsi' => 'Jawa Barat',
             'kode_pos' => '40181',
             'status_verifikasi_ktp' => 'terverifikasi',
+            'foto_ktp' => 'ktp_dummy.jpg',
         ]);
 
         $this->umkm = UMKM::create([

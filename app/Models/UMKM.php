@@ -180,26 +180,47 @@ class UMKM extends Model
 
     public function getStatusVerifikasiBadgeAttribute()
     {
-        $badges = [
-            'draft' => 'secondary',
-            'terkirim' => 'warning',
-            'terverifikasi' => 'success',
-            'ditolak' => 'danger',
+        $styles = [
+            'draft' => 'bg-slate-100 text-slate-700 border-slate-200',
+            'terkirim' => 'bg-amber-100 text-amber-700 border-amber-200',
+            'terverifikasi' => 'bg-emerald-100 text-emerald-700 border-emerald-200',
+            'ditolak' => 'bg-rose-100 text-rose-700 border-rose-200',
+        ];
+        
+        $icons = [
+            'draft' => 'mdi-file-document-edit-outline',
+            'terkirim' => 'mdi-clock-outline',
+            'terverifikasi' => 'mdi-check-decagram',
+            'ditolak' => 'mdi-close-octagon-outline',
         ];
 
-        return '<span class="badge bg-'.($badges[$this->status_verifikasi] ?? 'secondary').'">'.ucfirst($this->status_verifikasi).'</span>';
+        $style = $styles[$this->status_verifikasi] ?? $styles['draft'];
+        $icon = $icons[$this->status_verifikasi] ?? $icons['draft'];
+
+        return '<span class="px-2.5 py-1 text-[10px] font-bold uppercase tracking-wider rounded-md border flex items-center gap-1 shadow-sm backdrop-blur-md bg-opacity-90 ' . $style . '"><i class="mdi ' . $icon . ' text-sm"></i>' . ucfirst($this->status_verifikasi) . '</span>';
     }
 
     public function getStatusUsahaBadgeAttribute()
     {
-        $badges = [
-            'aktif' => 'success',
-            'non_aktif' => 'danger',
-            'tutup' => 'secondary',
-            'pindah' => 'warning',
+        $styles = [
+            'aktif' => 'bg-blue-100 text-blue-700 border-blue-200',
+            'non_aktif' => 'bg-rose-100 text-rose-700 border-rose-200',
+            'tutup' => 'bg-slate-100 text-slate-700 border-slate-200',
+            'pindah' => 'bg-amber-100 text-amber-700 border-amber-200',
+        ];
+        
+        $icons = [
+            'aktif' => 'mdi-store-check-outline',
+            'non_aktif' => 'mdi-store-off-outline',
+            'tutup' => 'mdi-store-remove-outline',
+            'pindah' => 'mdi-truck-fast-outline',
         ];
 
-        return '<span class="badge bg-'.($badges[$this->status_usaha] ?? 'secondary').'">'.ucfirst($this->status_usaha).'</span>';
+        $statusStr = str_replace('_', ' ', $this->status_usaha);
+        $style = $styles[$this->status_usaha] ?? $styles['tutup'];
+        $icon = $icons[$this->status_usaha] ?? $icons['tutup'];
+
+        return '<span class="px-2.5 py-1 text-[10px] font-bold uppercase tracking-wider rounded-md border flex items-center gap-1 shadow-sm backdrop-blur-md bg-opacity-90 ' . $style . '"><i class="mdi ' . $icon . ' text-sm"></i>' . ucwords($statusStr) . '</span>';
     }
 
     public function produks()

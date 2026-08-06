@@ -14,7 +14,7 @@
                 <div class="flex flex-col md:flex-row md:items-center justify-between mb-8">
                     <div>
                         <h2 class="text-2xl font-bold text-slate-800 tracking-tight">Laporan & Analitik</h2>
-                        <p class="text-slate-500 text-sm mt-1">Saring dan pantau perkembangan UMKM secara real-time</p>
+                        <p class="text-slate-700 text-sm mt-1">Saring dan pantau perkembangan UMKM secara real-time</p>
                     </div>
                 </div>
 
@@ -22,7 +22,7 @@
                     <div class="grid grid-cols-1 md:grid-cols-4 gap-5 bg-slate-50/50 p-5 rounded-2xl border border-slate-100/60 backdrop-blur-sm">
                         
                         <div class="group">
-                            <label for="periode_awal" class="block text-xs font-bold tracking-wide text-slate-500 uppercase mb-2 ml-1">Periode Awal</label>
+                            <label for="periode_awal" class="block text-xs font-bold tracking-wide text-slate-700 uppercase mb-2 ml-1">Periode Awal</label>
                             <div class="relative">
                                 <input type="date" id="periode_awal" name="periode_awal" value="{{ request('periode_awal') }}" 
                                     class="w-full pl-4 pr-10 py-3 rounded-lg border-slate-200 bg-white focus:bg-white focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10 shadow-sm transition-all duration-300 text-sm font-medium text-slate-700" 
@@ -31,7 +31,7 @@
                         </div>
                         
                         <div class="group">
-                            <label for="periode_akhir" class="block text-xs font-bold tracking-wide text-slate-500 uppercase mb-2 ml-1">Periode Akhir</label>
+                            <label for="periode_akhir" class="block text-xs font-bold tracking-wide text-slate-700 uppercase mb-2 ml-1">Periode Akhir</label>
                             <div class="relative">
                                 <input type="date" id="periode_akhir" name="periode_akhir" value="{{ request('periode_akhir') }}" 
                                     class="w-full pl-4 pr-10 py-3 rounded-lg border-slate-200 bg-white focus:bg-white focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10 shadow-sm transition-all duration-300 text-sm font-medium text-slate-700" 
@@ -40,7 +40,7 @@
                         </div>
                         
                         <div class="group">
-                            <label for="kategori" class="block text-xs font-bold tracking-wide text-slate-500 uppercase mb-2 ml-1">Kategori Usaha</label>
+                            <label for="kategori" class="block text-xs font-bold tracking-wide text-slate-700 uppercase mb-2 ml-1">Kategori Usaha</label>
                             <div class="relative">
                                 <select id="kategori" name="kategori" 
                                     class="w-full pl-4 pr-10 py-3 rounded-lg border-slate-200 bg-white focus:bg-white focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10 shadow-sm transition-all duration-300 text-sm font-medium text-slate-700 appearance-none" 
@@ -56,7 +56,7 @@
                         </div>
                         
                         <div class="group">
-                            <label for="status_verifikasi" class="block text-xs font-bold tracking-wide text-slate-500 uppercase mb-2 ml-1">Status Verifikasi</label>
+                            <label for="status_verifikasi" class="block text-xs font-bold tracking-wide text-slate-700 uppercase mb-2 ml-1">Status Verifikasi</label>
                             <div class="relative">
                                 <select id="status_verifikasi" name="status_verifikasi" 
                                     class="w-full pl-4 pr-10 py-3 rounded-lg border-slate-200 bg-white focus:bg-white focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10 shadow-sm transition-all duration-300 text-sm font-medium text-slate-700 appearance-none" 
@@ -110,7 +110,7 @@
                 <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-8 gap-4 border-b border-slate-100 pb-5">
                     <div>
                         <h3 class="text-lg font-bold text-slate-800">Tren Pendaftaran Periode Ini</h3>
-                        <p class="text-xs text-slate-500 mt-1">Visualisasi data pertumbuhan UMKM</p>
+                        <p class="text-xs text-slate-700 mt-1">Visualisasi data pertumbuhan UMKM</p>
                     </div>
 
                     <div class="flex gap-2">
@@ -131,33 +131,80 @@
             <div class="px-6 py-5 border-b border-slate-100 bg-slate-50/50 flex justify-between items-center">
                 <h3 class="text-lg font-bold text-slate-800">Detail Data UMKM</h3>
             </div>
-            <div class="overflow-x-auto">
+            <div class="block md:hidden divide-y divide-slate-100">
+                @forelse($umkms as $umkm)
+                    <div class="p-4 space-y-3">
+                        <div class="flex justify-between items-start">
+                            <div>
+                                <h4 class="font-semibold text-slate-800">{{ $umkm->nama_usaha }}</h4>
+                                <p class="text-xs text-slate-400">{{ $umkm->no_pendaftaran ?? '-' }}</p>
+                            </div>
+                            <div>
+                                @if ($umkm->status_verifikasi == 'terverifikasi')
+                                    <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-xs font-semibold bg-emerald-100 text-emerald-700">Terverifikasi</span>
+                                @elseif($umkm->status_verifikasi == 'terkirim')
+                                    <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-xs font-semibold bg-amber-100 text-amber-700">Menunggu</span>
+                                @elseif($umkm->status_verifikasi == 'ditolak')
+                                    <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-xs font-semibold bg-red-100 text-red-700">Ditolak</span>
+                                @else
+                                    <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-xs font-semibold bg-slate-100 text-slate-600">Draft</span>
+                                @endif
+                            </div>
+                        </div>
+
+                        <div class="grid grid-cols-2 gap-2 text-xs">
+                            <div>
+                                <p class="text-slate-500">Pemilik</p>
+                                <p class="font-medium text-slate-700">{{ $umkm->pemilik?->nama_lengkap ?? '-' }}</p>
+                                <p class="text-[10px] text-slate-400">{{ $umkm->pemilik?->kelurahan ?? '-' }}</p>
+                            </div>
+                            <div>
+                                <p class="text-slate-500">Kategori</p>
+                                <p class="font-medium text-slate-700">{{ $umkm->kategori?->nama_kategori ?? '-' }}</p>
+                                <p class="text-[10px] text-slate-400">{{ $umkm->sektor?->nama_sektor ?? '-' }}</p>
+                            </div>
+                            <div class="col-span-2 mt-1">
+                                <p class="text-slate-500">Tgl Daftar</p>
+                                <p class="font-medium text-slate-700">{{ $umkm->tanggal_pendataan ? \Carbon\Carbon::parse($umkm->tanggal_pendataan)->format('d/m/Y') : '-' }}</p>
+                            </div>
+                        </div>
+                    </div>
+                @empty
+                    <div class="p-8 text-center text-slate-400">
+                        <svg class="w-12 h-12 mx-auto mb-3 text-slate-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 13V6a2 2 0 00-2-2H6a2 2 0 00-2-2v7m16 0v5a2 2 0 01-2 2H6a2 2 0 01-2-2v-5m16 0h-2.586a1 1 0 00-.707.293l-2.414 2.414a1 1 0 01-.707.293h-3.172a1 1 0 01-.707-.293l-2.414-2.414A1 1 0 006.586 13H4"></path>
+                        </svg>
+                        <p>Tidak ada data UMKM yang sesuai dengan filter.</p>
+                    </div>
+                @endforelse
+            </div>
+            <div class="hidden md:block overflow-x-auto">
                 <table class="w-full">
                     <thead class="bg-slate-50 border-b border-slate-200">
                         <tr>
-                            <th class="px-4 py-3 text-left text-xs font-semibold text-slate-500 uppercase">No</th>
-                            <th class="px-4 py-3 text-left text-xs font-semibold text-slate-500 uppercase">Nama Usaha</th>
-                            <th class="px-4 py-3 text-left text-xs font-semibold text-slate-500 uppercase">Pemilik</th>
-                            <th class="px-4 py-3 text-left text-xs font-semibold text-slate-500 uppercase">Kategori & Sektor</th>
-                            <th class="px-4 py-3 text-left text-xs font-semibold text-slate-500 uppercase">Status</th>
-                            <th class="px-4 py-3 text-left text-xs font-semibold text-slate-500 uppercase">Tgl Daftar</th>
+                            <th class="px-4 py-3 text-left text-xs font-semibold text-slate-700 uppercase">No</th>
+                            <th class="px-4 py-3 text-left text-xs font-semibold text-slate-700 uppercase">Nama Usaha</th>
+                            <th class="px-4 py-3 text-left text-xs font-semibold text-slate-700 uppercase">Pemilik</th>
+                            <th class="px-4 py-3 text-left text-xs font-semibold text-slate-700 uppercase">Kategori & Sektor</th>
+                            <th class="px-4 py-3 text-left text-xs font-semibold text-slate-700 uppercase">Status</th>
+                            <th class="px-4 py-3 text-left text-xs font-semibold text-slate-700 uppercase">Tgl Daftar</th>
                         </tr>
                     </thead>
                     <tbody class="divide-y divide-slate-100">
                         @forelse($umkms as $index => $umkm)
                             <tr class="hover:bg-slate-50 transition-colors">
-                                <td class="px-4 py-3 text-sm text-slate-500">{{ $umkms->firstItem() + $index }}</td>
+                                <td class="px-4 py-3 text-sm text-slate-700">{{ $umkms->firstItem() + $index }}</td>
                                 <td class="px-4 py-3">
                                     <p class="font-medium text-slate-800">{{ $umkm->nama_usaha }}</p>
                                     <p class="text-xs text-slate-400">{{ $umkm->no_pendaftaran ?? '-' }}</p>
                                 </td>
                                 <td class="px-4 py-3">
-                                    <p class="text-sm text-slate-600">{{ $umkm->pemilik->nama_lengkap ?? '-' }}</p>
-                                    <p class="text-xs text-slate-400">{{ $umkm->pemilik->kelurahan ?? '-' }}</p>
+                                    <p class="text-sm text-slate-600">{{ $umkm->pemilik?->nama_lengkap ?? '-' }}</p>
+                                    <p class="text-xs text-slate-400">{{ $umkm->pemilik?->kelurahan ?? '-' }}</p>
                                 </td>
                                 <td class="px-4 py-3">
-                                    <p class="text-sm text-slate-600">{{ $umkm->kategori->nama_kategori ?? '-' }}</p>
-                                    <p class="text-xs text-slate-400">{{ $umkm->sektor->nama_sektor ?? '-' }}</p>
+                                    <p class="text-sm text-slate-600">{{ $umkm->kategori?->nama_kategori ?? '-' }}</p>
+                                    <p class="text-xs text-slate-400">{{ $umkm->sektor?->nama_sektor ?? '-' }}</p>
                                 </td>
                                 <td class="px-4 py-3">
                                     @if ($umkm->status_verifikasi == 'terverifikasi')
@@ -187,13 +234,13 @@
                                         </span>
                                     @endif
                                 </td>
-                                <td class="px-4 py-3 text-sm text-slate-500">
+                                <td class="px-4 py-3 text-sm text-slate-700">
                                     {{ $umkm->tanggal_pendataan ? \Carbon\Carbon::parse($umkm->tanggal_pendataan)->format('d/m/Y') : '-' }}
                                 </td>
                             </tr>
                         @empty
                             <tr>
-                                <td colspan="6" class="px-4 py-8 text-center text-slate-500">
+                                <td colspan="6" class="px-4 py-8 text-center text-slate-700">
                                     Tidak ada data UMKM yang sesuai dengan filter.
                                 </td>
                             </tr>
@@ -215,7 +262,7 @@
             <div class="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity" aria-hidden="true" onclick="document.getElementById('exportModal').classList.add('hidden')"></div>
             <span class="hidden sm:inline-block sm:align-middle sm:h-screen" aria-hidden="true">&#8203;</span>
             <div class="inline-block align-bottom bg-white rounded-2xl text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-md sm:w-full">
-                <form action="{{ route('superadmin.laporan.export') }}" method="POST">
+                <form action="{{ route('superadmin.laporan.export') }}" method="POST" target="_blank" onsubmit="setTimeout(() => document.getElementById('exportModal').classList.add('hidden'), 500);">
                     @csrf
                     <input type="hidden" name="periode_awal" value="{{ request('periode_awal') }}">
                     <input type="hidden" name="periode_akhir" value="{{ request('periode_akhir') }}">

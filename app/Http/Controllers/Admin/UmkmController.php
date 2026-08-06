@@ -66,7 +66,18 @@ class UmkmController extends Controller
             });
         }
 
-        $umkms = $query->orderBy('created_at', 'desc')->paginate($perPage);
+        $sort = $request->get('sort', 'terbaru');
+        if ($sort === 'terlama') {
+            $query->orderBy('created_at', 'asc');
+        } elseif ($sort === 'a-z') {
+            $query->orderBy('nama_usaha', 'asc');
+        } elseif ($sort === 'z-a') {
+            $query->orderBy('nama_usaha', 'desc');
+        } else {
+            $query->orderBy('created_at', 'desc');
+        }
+
+        $umkms = $query->paginate($perPage);
         $kelurahans = Kelurahan::pluck('nama_kelurahan')->toArray();
         $kategoris = KategoriUMKM::all();
         $sektors = SektorUmkm::all();
@@ -144,7 +155,7 @@ class UmkmController extends Controller
             'id_kategori' => 'required|exists:kategori_umkms,id',
             'id_sektor' => 'nullable|exists:sektor_umkms,id',
             'bentuk_jualan' => 'required|string|max:100',
-            'perkiraan_omset' => 'nullable|string|max:50',
+            'perkiraan_omset' => 'nullable|numeric',
             'status_usaha' => 'nullable|in:aktif,non_aktif,tutup,pindah',
             'tahun_berdiri' => 'nullable|integer|min:1900|max:'.date('Y'),
             'no_izin_usaha' => 'nullable|string|max:100',
@@ -321,7 +332,7 @@ class UmkmController extends Controller
             'id_kategori' => 'nullable|exists:kategori_umkms,id',
             'id_sektor' => 'nullable|exists:sektor_umkms,id',
             'bentuk_jualan' => 'required|string|max:100',
-            'perkiraan_omset' => 'nullable|string|max:50',
+            'perkiraan_omset' => 'nullable|numeric',
             'status_usaha' => 'nullable|in:aktif,non_aktif,tutup,pindah',
             'tahun_berdiri' => 'nullable|integer|min:1900|max:'.date('Y'),
             'no_izin_usaha' => 'nullable|string|max:100',

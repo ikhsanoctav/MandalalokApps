@@ -48,7 +48,7 @@ class RegisteredUserController extends Controller
                 }
             ],
             'password' => ['required', 'confirmed', Rules\Password::defaults()],
-            'no_hp' => ['required', 'string', 'max:20'],
+            'no_hp' => ['required', 'string', 'max:15'],
             'tempat_lahir' => ['nullable', 'string', 'max:100'],
             'tanggal_lahir' => ['nullable', 'date'],
             'jenis_kelamin' => ['nullable', 'in:L,P'],
@@ -56,6 +56,8 @@ class RegisteredUserController extends Controller
             'id_kelurahan' => ['nullable', 'exists:kelurahans,id'],
             'rw' => ['nullable', 'string', 'max:10'],
             'rt' => ['nullable', 'string', 'max:10'],
+        ], [
+            'no_hp.max' => 'Nomor HP terlalu panjang (maksimal 15 karakter).',
         ]);
 
         $kelurahan = $request->filled('id_kelurahan')
@@ -95,7 +97,7 @@ class RegisteredUserController extends Controller
                 'kecamatan' => 'Mandalajati',
                 'kota_kab' => 'Bandung',
                 'provinsi' => 'Jawa Barat',
-                'status_verifikasi_ktp' => 'terverifikasi',
+                'status_verifikasi_ktp' => 'pending',
             ]
         );
 

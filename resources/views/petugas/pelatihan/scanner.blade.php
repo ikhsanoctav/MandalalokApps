@@ -4,7 +4,7 @@
 <div class="mb-6 flex flex-col justify-between gap-4">
     <div>
         <h1 class="text-2xl font-bold text-slate-800">Scanner Kehadiran Pelatihan</h1>
-        <p class="text-sm text-slate-500 mt-1">Gunakan kamera untuk memindai tiket (QR Code) peserta.</p>
+        <p class="text-sm text-slate-700 mt-1">Gunakan kamera untuk memindai tiket (QR Code) peserta.</p>
     </div>
 </div>
 
@@ -174,7 +174,7 @@
                         </div>
                         <div class="mt-3 pt-3 border-t border-emerald-200/50">
                             <p class="text-sm font-semibold text-slate-800">${data.data.nama}</p>
-                            <p class="text-xs text-slate-500">Waktu Hadir: ${data.data.waktu}</p>
+                            <p class="text-xs text-slate-700">Waktu Hadir: ${data.data.waktu}</p>
                         </div>
                     </div>
                 `;
