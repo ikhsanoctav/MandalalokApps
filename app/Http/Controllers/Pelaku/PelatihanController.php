@@ -28,7 +28,7 @@ class PelatihanController extends Controller
         return view('pelaku.pelatihan.index', compact('pelatihans', 'registeredIds'));
     }
 
-    public function show($id)
+    public function show(Request $request, $id)
     {
         $user = auth()->user();
         $pelatihan = Pelatihan::findOrFail($id);
@@ -36,6 +36,15 @@ class PelatihanController extends Controller
         $peserta = PesertaPelatihan::where('pelatihan_id', $id)
             ->where('user_id', $user->id)
             ->first();
+
+        if ($request->ajax()) {
+            return response()->json([
+                'success' => true,
+                'status_kehadiran' => $peserta ? $peserta->status_kehadiran : null,
+                'waktu_hadir' => ($peserta && $peserta->waktu_hadir) ? $peserta->waktu_hadir->format('d M Y, H:i') : null,
+                'kuota_tersisa' => max(0, $pelatihan->kuota - $pelatihan->peserta()->count()),
+            ]);
+        }
 
         return view('pelaku.pelatihan.show', compact('pelatihan', 'peserta'));
     }

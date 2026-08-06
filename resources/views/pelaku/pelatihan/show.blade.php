@@ -112,16 +112,63 @@
                 <p class="font-mono font-bold text-slate-700 tracking-widest text-lg">{{ $peserta->kode_tiket }}</p>
 
                 @if($peserta->status_kehadiran == 'hadir')
-                    <div class="mt-6 p-3 bg-emerald-50 rounded-xl border border-emerald-100">
+                    <div id="attendanceStatusBox" class="mt-6 p-3 bg-emerald-50 rounded-xl border border-emerald-100 transition-all duration-300">
                         <p class="text-sm font-bold text-emerald-700">Telah Hadir</p>
-                        <p class="text-xs text-emerald-600">{{ $peserta->waktu_hadir->format('d M Y, H:i') }}</p>
+                        <p class="text-xs text-emerald-600">{{ $peserta->waktu_hadir ? $peserta->waktu_hadir->format('d M Y, H:i') : '-' }}</p>
                     </div>
                 @else
-                    <div class="mt-6 p-3 bg-slate-50 rounded-xl border border-slate-200">
+                    <div id="attendanceStatusBox" class="mt-6 p-3 bg-slate-50 rounded-xl border border-slate-200 transition-all duration-300">
                         <p class="text-sm font-semibold text-slate-500">Status: Belum Hadir</p>
                     </div>
                 @endif
             </div>
+
+            <script>
+                (function() {
+                    let currentStatus = "{{ $peserta->status_kehadiran }}";
+                    const attendanceContainer = document.getElementById('attendanceStatusBox');
+
+                    function checkAttendance() {
+                        fetch(window.location.href, {
+                            headers: {
+                                'X-Requested-With': 'XMLHttpRequest',
+                                'Accept': 'application/json'
+                            }
+                        })
+                        .then(res => res.ok ? res.json() : null)
+                        .then(data => {
+                            if (!data || !data.success) return;
+
+                            if (data.status_kehadiran === 'hadir' && currentStatus !== 'hadir') {
+                                currentStatus = 'hadir';
+                                if (attendanceContainer) {
+                                    attendanceContainer.style.opacity = '0.2';
+                                    setTimeout(() => {
+                                        attendanceContainer.className = 'mt-6 p-3 bg-emerald-50 rounded-xl border border-emerald-100 transition-all duration-300';
+                                        attendanceContainer.innerHTML = `
+                                            <p class="text-sm font-bold text-emerald-700">Telah Hadir</p>
+                                            <p class="text-xs text-emerald-600">${data.waktu_hadir || 'Baru saja'}</p>
+                                        `;
+                                        attendanceContainer.style.opacity = '1';
+                                    }, 300);
+                                }
+
+                                if (window.showToast) {
+                                    window.showToast('success', 'Absensi Berhasil!', 'Status kehadiran Anda telah diverifikasi oleh petugas.');
+                                }
+                            }
+                        })
+                        .catch(() => {})
+                        .finally(() => {
+                            setTimeout(checkAttendance, 3000);
+                        });
+                    }
+
+                    if (currentStatus !== 'hadir') {
+                        setTimeout(checkAttendance, 3000);
+                    }
+                })();
+            </script>
         @else
             <!-- Tampilan Form Pendaftaran -->
             <div class="bg-white/90 backdrop-blur-sm rounded-3xl border shadow-sm p-6">
