@@ -30,36 +30,53 @@
     }
 
     .mobile-notification-panel {
-        position: absolute !important;
-        top: calc(100% + 0.5rem) !important;
-        right: 0 !important;
+        position: fixed !important;
+        top: 4.25rem !important;
+        right: 1.5rem !important;
         left: auto !important;
-        width: min(24rem, calc(100vw - 1.5rem)) !important;
-        max-width: calc(100vw - 1.5rem) !important;
+        width: min(24rem, calc(100vw - 2rem)) !important;
+        max-width: calc(100vw - 2rem) !important;
         border-radius: 1rem !important;
         transform-origin: top right !important;
-        z-index: 99999 !important;
+        z-index: 999999 !important;
         background-color: #ffffff !important;
-        box-shadow: 0 20px 50px rgba(15, 23, 42, 0.25) !important;
+        background: #ffffff !important;
+        box-shadow: 0 25px 60px -15px rgba(15, 23, 42, 0.35), 0 0 1px rgba(15, 23, 42, 0.2) !important;
     }
 
     .mobile-account-panel {
-        position: absolute !important;
-        top: calc(100% + 0.5rem) !important;
-        right: 0 !important;
+        position: fixed !important;
+        top: 4.25rem !important;
+        right: 1.5rem !important;
         left: auto !important;
-        width: min(18rem, calc(100vw - 1.5rem)) !important;
-        max-width: calc(100vw - 1.5rem) !important;
+        width: min(18rem, calc(100vw - 2rem)) !important;
+        max-width: calc(100vw - 2rem) !important;
         border-radius: 1rem !important;
         transform-origin: top right !important;
-        z-index: 99999 !important;
+        z-index: 999999 !important;
         background-color: #ffffff !important;
-        box-shadow: 0 20px 50px rgba(15, 23, 42, 0.25) !important;
+        background: #ffffff !important;
+        box-shadow: 0 25px 60px -15px rgba(15, 23, 42, 0.35), 0 0 1px rgba(15, 23, 42, 0.2) !important;
     }
 
     @media (max-width: 640px) {
         body {
             background: #f8fafc !important;
+        }
+
+        .mobile-notification-panel {
+            top: 3.75rem !important;
+            right: 0.75rem !important;
+            left: 0.75rem !important;
+            width: auto !important;
+            max-width: none !important;
+        }
+
+        .mobile-account-panel {
+            top: 3.75rem !important;
+            right: 0.75rem !important;
+            left: auto !important;
+            width: min(18rem, calc(100vw - 1.5rem)) !important;
         }
 
         .mobile-topbar-inner {
