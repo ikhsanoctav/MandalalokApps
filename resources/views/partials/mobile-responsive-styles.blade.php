@@ -20,8 +20,8 @@
         .mobile-topbar {
             width: 100%;
             max-width: 100vw;
-            overflow: visible;
-            isolation: isolate;
+            overflow: visible !important;
+            z-index: 50 !important;
         }
 
         .mobile-topbar-inner {
@@ -114,28 +114,30 @@
 
         .mobile-notification-panel {
             position: absolute !important;
-            top: 100% !important;
+            top: calc(100% + 0.5rem) !important;
             right: 0 !important;
             left: auto !important;
             width: min(24rem, calc(100vw - 1.5rem)) !important;
             max-width: calc(100vw - 1.5rem) !important;
-            margin-top: 0.5rem !important;
             border-radius: 1rem !important;
             transform-origin: top right !important;
-            z-index: 9999 !important;
+            z-index: 99999 !important;
+            background-color: #ffffff !important;
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.18) !important;
         }
 
         .mobile-account-panel {
             position: absolute !important;
-            top: 100% !important;
+            top: calc(100% + 0.5rem) !important;
             right: 0 !important;
             left: auto !important;
             width: min(18rem, calc(100vw - 1.5rem)) !important;
             max-width: calc(100vw - 1.5rem) !important;
-            margin-top: 0.5rem !important;
             border-radius: 1rem !important;
             transform-origin: top right !important;
-            z-index: 9999 !important;
+            z-index: 99999 !important;
+            background-color: #ffffff !important;
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.18) !important;
         }
 
         main {
