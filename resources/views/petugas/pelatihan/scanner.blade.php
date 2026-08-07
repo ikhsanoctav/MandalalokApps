@@ -83,6 +83,9 @@
 
         btnStart.addEventListener('click', function() {
             if (pelatihanSelect.value) {
+                if (location.protocol !== 'https:' && location.hostname !== 'localhost') {
+                    alert('Perhatian: Fitur kamera browser diblokir jika situs diakses melalui HTTP biasa (tanpa SSL). Harap pasang SSL (https://) pada VPS Anda.');
+                }
                 overlay.classList.add('hidden');
                 startScanner();
             }
