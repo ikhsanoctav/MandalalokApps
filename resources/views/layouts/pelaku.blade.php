@@ -108,7 +108,7 @@
 
         <x-topbar />
 
-        <div class="p-3 sm:p-4 md:p-6 lg:p-8 relative z-0">
+        <div class="p-3 sm:p-4 md:p-6 lg:p-8 relative z-0" style="isolation: isolate;">
             @yield('content')
         </div>
     </main>
