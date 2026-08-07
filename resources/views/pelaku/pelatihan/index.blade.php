@@ -12,7 +12,8 @@
     @forelse($pelatihans as $p)
         @php
             $isRegistered = in_array($p->id, $registeredIds);
-            $isFull = $p->peserta()->count() >= $p->kuota;
+            $pesertaCount = $p->peserta_count ?? $p->peserta()->count();
+            $isFull = $pesertaCount >= $p->kuota;
         @endphp
         <div class="bg-white/90 backdrop-blur-sm rounded-3xl border shadow-sm overflow-hidden flex flex-col transition-all hover:shadow-md hover:border-slate-300">
             @if($p->banner)
@@ -47,9 +48,9 @@
                     </div>
                     <div class="flex items-start gap-2.5">
                         <i class="fa-solid fa-users mt-1 text-slate-400 w-4 text-center"></i>
-                        <span>Sisa Kuota: <strong>{{ max(0, $p->kuota - $p->peserta()->count()) }}</strong> dari {{ $p->kuota }}</span>
+                        <span>Sisa Kuota: <strong>{{ max(0, $p->kuota - $pesertaCount) }}</strong> dari {{ $p->kuota }}</span>
                     </div>
-                    @if($p->syarat_dokumen)
+                    @if(!$isRegistered && !empty($p->syarat_dokumen) && is_array($p->syarat_dokumen) && count($p->syarat_dokumen) > 0)
                     <div class="flex items-start gap-2.5 text-amber-600">
                         <i class="fa-solid fa-file-invoice mt-1 w-4 text-center"></i>
                         <span class="text-xs font-semibold">Wajib Upload Dokumen</span>

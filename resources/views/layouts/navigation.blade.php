@@ -22,7 +22,7 @@
                 <div class="mr-4 relative" x-data="{
                     open: false,
                     unreadCount: {{ Auth::check() ? Auth::user()->unreadNotifications->count() : 0 }},
-                    notifications: {{ Auth::check() ? Auth::user()->notifications()->take(5)->get()->toJson() : '[]' }},
+                    notifications: {!! Auth::check() ? Auth::user()->notifications()->take(5)->get()->toJson() : '[]' !!},
                     init() {
                         if (window.Echo && {{ Auth::check() ? 'true' : 'false' }}) {
                             window.Echo.private('App.Models.User.' + {{ Auth::id() ?? 'null' }})

@@ -268,9 +268,27 @@
             <tr>
                 <th>Alamat Lengkap KTP</th>
                 <td>
-                    {{ $umkm->pemilik?->alamat ?? '-' }}<br>
-                    RT {{ $umkm->pemilik?->rt ?? '-' }} / RW {{ $umkm->pemilik?->rw ?? '-' }},
-                    Kelurahan {{ $umkm->pemilik?->kelurahan ?? '-' }}
+                    @php
+                        $rawAlamat = trim($umkm->pemilik?->alamat ?? '');
+                        $hasRt = (bool)preg_match('/rt[\.\s]*\d+/i', $rawAlamat);
+                        $hasRw = (bool)preg_match('/rw[\.\s]*\d+/i', $rawAlamat);
+                        $hasKel = !empty($umkm->pemilik?->kelurahan) && stripos($rawAlamat, $umkm->pemilik->kelurahan) !== false;
+                        
+                        $suffixParts = [];
+                        if (!$hasRt && !empty($umkm->pemilik?->rt)) {
+                            $suffixParts[] = 'RT ' . sprintf('%02d', (int)preg_replace('/\D/', '', $umkm->pemilik->rt));
+                        }
+                        if (!$hasRw && !empty($umkm->pemilik?->rw)) {
+                            $suffixParts[] = 'RW ' . sprintf('%02d', (int)preg_replace('/\D/', '', $umkm->pemilik->rw));
+                        }
+                        $rtRwStr = implode(' / ', $suffixParts);
+                        $kelStr = (!$hasKel && !empty($umkm->pemilik?->kelurahan)) ? 'Kelurahan ' . $umkm->pemilik->kelurahan : '';
+                        $extraStr = implode(', ', array_filter([$rtRwStr, $kelStr]));
+                    @endphp
+                    {{ $rawAlamat ?: '-' }}
+                    @if($extraStr)
+                        <br>{{ $extraStr }}
+                    @endif
                 </td>
             </tr>
             <tr>

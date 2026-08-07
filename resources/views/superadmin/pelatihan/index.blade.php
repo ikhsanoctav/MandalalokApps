@@ -31,7 +31,7 @@
                 <tr>
                     <td class="p-4 align-top">
                         <div class="font-bold text-slate-800">{{ $p->judul }}</div>
-                        @if($p->syarat_dokumen)
+                        @if(!empty($p->syarat_dokumen) && is_array($p->syarat_dokumen) && count($p->syarat_dokumen) > 0)
                         <span class="inline-flex items-center gap-1 mt-1 text-[11px] font-medium px-2 py-0.5 rounded-full bg-amber-50 text-amber-600 border border-amber-200">
                             <i class="fa-solid fa-file-invoice"></i> Wajib Dokumen
                         </span>

@@ -72,7 +72,28 @@ class User extends Authenticatable
     public function getProfilePhotoUrlAttribute()
     {
         if ($this->foto) {
+            if (str_starts_with($this->foto, 'http://') || str_starts_with($this->foto, 'https://')) {
+                return $this->foto;
+            }
+            if (str_starts_with($this->foto, 'storage/')) {
+                return asset($this->foto);
+            }
             return asset('storage/' . $this->foto);
+        }
+
+        // Check associated Pemilik record for foto_ktp
+        if ($this->nik_hash) {
+            $pemilik = \App\Models\Pemilik::where('nik_hash', $this->nik_hash)->first();
+            if ($pemilik && $pemilik->foto_ktp) {
+                $ktpPath = $pemilik->foto_ktp;
+                if (str_starts_with($ktpPath, 'http://') || str_starts_with($ktpPath, 'https://')) {
+                    return $ktpPath;
+                }
+                if (str_starts_with($ktpPath, 'storage/')) {
+                    return asset($ktpPath);
+                }
+                return asset('storage/' . $ktpPath);
+            }
         }
 
         $role = $this->roles->first()->name ?? 'super_admin';

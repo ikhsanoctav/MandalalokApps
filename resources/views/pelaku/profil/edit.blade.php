@@ -7,7 +7,7 @@
         selectedKel: '{!! addslashes(old('kelurahan', $pemilik->kelurahan ?? $user->kelurahan ?? '')) !!}',
         selectedRw: '',
         selectedRt: '',
-        kelurahansData: {{ isset($kelurahans) ? $kelurahans->toJson() : (isset($kelurahan) ? $kelurahan->toJson() : '[]') }},
+        kelurahansData: {!! isset($kelurahans) ? $kelurahans->toJson() : (isset($kelurahan) ? $kelurahan->toJson() : '[]') !!},
         normalizeWilayah(value) {
             if (value === null || value === undefined || value === '') return '';
             const parsed = parseInt(String(value).replace(/\D/g, ''), 10);
@@ -48,8 +48,8 @@
                 
                 <!-- Profile Header -->
                 <div class="flex flex-col sm:flex-row items-center gap-6 pb-8 border-b border-slate-200/60 mb-8">
-                    <div class="w-24 h-24 bg-gradient-to-br from-indigo-500 to-purple-600 text-white rounded-[2rem] flex items-center justify-center text-4xl font-black shrink-0 shadow-lg shadow-indigo-200 transform rotate-3">
-                        <div class="-rotate-3">{{ strtoupper(substr($pemilik->nama_lengkap ?? $user->name, 0, 1)) }}</div>
+                    <div class="w-24 h-24 rounded-[2rem] overflow-hidden shadow-lg shadow-indigo-200 shrink-0 border-2 border-white ring-4 ring-indigo-50">
+                        <img src="{{ $user->profile_photo_url }}" alt="{{ $pemilik->nama_lengkap ?? $user->name }}" class="w-full h-full object-cover">
                     </div>
                     <div class="text-center sm:text-left flex-grow">
                         <h3 class="text-3xl font-black text-slate-800 tracking-tight">{{ $pemilik->nama_lengkap ?? $user->name }}</h3>
@@ -250,9 +250,12 @@
                                         @change="if ($event.isTrusted) { selectedRw = ''; selectedRt = '' }" required
                                         class="w-full bg-white border-2 border-slate-200 text-slate-800 font-medium text-base rounded-lg focus:ring-4 focus:ring-indigo-500/20 focus:border-indigo-500 block p-4 appearance-none transition-all">
                                         <option value="">Pilih Kelurahan</option>
-                                        <template x-for="kel in kelurahansData" :key="kel.id">
-                                            <option :value="kel.nama_kelurahan" x-text="kel.nama_kelurahan"></option>
-                                        </template>
+                                        @php
+                                            $kelList = isset($kelurahans) ? $kelurahans : (isset($kelurahan) ? $kelurahan : []);
+                                        @endphp
+                                        @foreach($kelList as $kItem)
+                                            <option value="{{ $kItem->nama_kelurahan }}">{{ $kItem->nama_kelurahan }}</option>
+                                        @endforeach
                                     </select>
                                     <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-4 text-slate-400">
                                         <i class="mdi mdi-chevron-down text-xl"></i>

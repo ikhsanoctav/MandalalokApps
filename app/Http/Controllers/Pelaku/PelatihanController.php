@@ -17,6 +17,7 @@ class PelatihanController extends Controller
         $user = auth()->user();
         
         $pelatihans = Pelatihan::where('status', 'published')
+            ->withCount('peserta')
             ->where('tanggal_selesai', '>=', now()->subDays(7))
             ->orderBy('tanggal_mulai', 'asc')
             ->get();

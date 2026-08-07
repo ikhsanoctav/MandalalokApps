@@ -17,21 +17,11 @@
     }
 
     body {
-        background:
-            radial-gradient(circle at top left, rgba(212, 175, 55, 0.13), transparent 28rem),
-            radial-gradient(circle at 90% 8%, rgba(16, 185, 129, 0.09), transparent 24rem),
-            linear-gradient(180deg, #f8fbff 0%, #f8fafc 42%, #ffffff 100%) !important;
+        background: #f8fafc !important;
     }
 
     body::before {
-        content: "";
-        position: fixed;
-        inset: 0;
-        pointer-events: none;
-        background-image: var(--ml-batik);
-        background-size: 120px 120px;
-        opacity: 0.035;
-        z-index: -1;
+        display: none !important;
     }
 
     aside {

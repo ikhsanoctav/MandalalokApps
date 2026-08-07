@@ -10,19 +10,24 @@
     $patternClass = '';
 
     $textRoleClass = 'text-blue-600';
+    $accentGradient = 'from-blue-500 via-indigo-500 to-cyan-400';
 
     if ($userRole === 'super_admin') {
         $patternClass = 'pattern-batik-blue';
         $textRoleClass = 'text-blue-600';
+        $accentGradient = 'from-blue-500 via-indigo-500 to-cyan-400';
     } elseif ($userRole === 'admin_kecamatan') {
         $patternClass = 'pattern-batik-emerald';
         $textRoleClass = 'text-emerald-600';
+        $accentGradient = 'from-emerald-500 via-teal-500 to-cyan-400';
     } elseif ($userRole === 'operator_lapangan') {
         $patternClass = 'pattern-batik-amber';
         $textRoleClass = 'text-amber-600';
+        $accentGradient = 'from-amber-500 via-orange-500 to-yellow-400';
     } elseif ($userRole === 'pelaku_umkm') {
         $patternClass = 'pattern-batik-purple';
         $textRoleClass = 'text-purple-600';
+        $accentGradient = 'from-purple-500 via-indigo-500 to-pink-400';
     }
 
     // Dynamic nested breadcrumbs trail generation
@@ -266,32 +271,31 @@
 @endphp
 
 <style>
-    /* Elegant Diamond/Line Pattern (Batik style but non-circular) */
+    /* Original Elegant Diamond Batik Motif - Soft Watermark */
     .pattern-batik-blue {
-        background-image: url("data:image/svg+xml,%3Csvg width='40' height='40' viewBox='0 0 40 40' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M20 0 L40 20 L20 40 L0 20 Z M20 10 L30 20 L20 30 L10 20 Z' fill='none' stroke='%233b82f6' stroke-width='1'/%3E%3C/svg%3E");
+        background-image: url("data:image/svg+xml,%3Csvg width='40' height='40' viewBox='0 0 40 40' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M20 0 L40 20 L20 40 L0 20 Z M20 10 L30 20 L20 30 L10 20 Z' fill='none' stroke='%233b82f6' stroke-width='1' stroke-opacity='0.4'/%3E%3C/svg%3E");
         background-size: 40px 40px;
     }
 
     .pattern-batik-emerald {
-        background-image: url("data:image/svg+xml,%3Csvg width='40' height='40' viewBox='0 0 40 40' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M20 0 L40 20 L20 40 L0 20 Z M20 10 L30 20 L20 30 L10 20 Z' fill='none' stroke='%2310b981' stroke-width='1'/%3E%3C/svg%3E");
+        background-image: url("data:image/svg+xml,%3Csvg width='40' height='40' viewBox='0 0 40 40' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M20 0 L40 20 L20 40 L0 20 Z M20 10 L30 20 L20 30 L10 20 Z' fill='none' stroke='%2310b981' stroke-width='1' stroke-opacity='0.4'/%3E%3C/svg%3E");
         background-size: 40px 40px;
     }
 
     .pattern-batik-amber {
-        background-image: url("data:image/svg+xml,%3Csvg width='40' height='40' viewBox='0 0 40 40' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M20 0 L40 20 L20 40 L0 20 Z M20 10 L30 20 L20 30 L10 20 Z' fill='none' stroke='%23f59e0b' stroke-width='1'/%3E%3C/svg%3E");
+        background-image: url("data:image/svg+xml,%3Csvg width='40' height='40' viewBox='0 0 40 40' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M20 0 L40 20 L20 40 L0 20 Z M20 10 L30 20 L20 30 L10 20 Z' fill='none' stroke='%23f59e0b' stroke-width='1' stroke-opacity='0.4'/%3E%3C/svg%3E");
         background-size: 40px 40px;
     }
 
     .pattern-batik-purple {
-        background-image: url("data:image/svg+xml,%3Csvg width='40' height='40' viewBox='0 0 40 40' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M20 0 L40 20 L20 40 L0 20 Z M20 10 L30 20 L20 30 L10 20 Z' fill='none' stroke='%238b5cf6' stroke-width='1'/%3E%3C/svg%3E");
+        background-image: url("data:image/svg+xml,%3Csvg width='40' height='40' viewBox='0 0 40 40' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M20 0 L40 20 L20 40 L0 20 Z M20 10 L30 20 L20 30 L10 20 Z' fill='none' stroke='%238b5cf6' stroke-width='1' stroke-opacity='0.4'/%3E%3C/svg%3E");
         background-size: 40px 40px;
     }
 </style>
 
-<div class="mobile-topbar sticky top-0 z-30 bg-white shadow-sm border-b border-slate-200 transition-all duration-300">
-    
-    <div class="absolute inset-0 pointer-events-none opacity-10 {{ $patternClass }}"></div>
-
+<div class="mobile-topbar sticky top-0 z-10 bg-white/95 backdrop-blur-md shadow-sm border-b border-slate-200/80 transition-all duration-300">
+    <div class="h-[2.5px] w-full bg-gradient-to-r {{ $accentGradient }}"></div>
+    <div class="absolute inset-0 pointer-events-none opacity-[0.06] {{ $patternClass }}"></div>
     <div class="mobile-topbar-inner relative py-2 px-3 md:py-3 md:px-6 flex items-center justify-between gap-2 md:gap-4">
         
         <div class="mobile-topbar-left flex items-center gap-2 md:gap-3 min-w-0">
@@ -515,8 +519,8 @@
 
                     <!-- Premium Header -->
                     <div class="px-5 py-5 bg-slate-50/80 border-b border-slate-100 flex items-center gap-3">
-                        <div class="w-12 h-12 rounded-2xl bg-gradient-to-br from-indigo-500 to-purple-600 text-white flex items-center justify-center text-lg font-black shadow-inner flex-shrink-0 transform rotate-3 hover:rotate-0 transition-transform">
-                            <div class="-rotate-3">{{ strtoupper(substr(Auth::user()->name ?? 'U', 0, 1)) }}</div>
+                        <div class="w-12 h-12 rounded-2xl overflow-hidden shadow-md flex-shrink-0 border-2 border-white ring-2 ring-slate-100">
+                            <img src="{{ Auth::user()->profile_photo_url }}" alt="{{ Auth::user()->name }}" class="w-full h-full object-cover">
                         </div>
                         <div class="min-w-0 flex-1">
                             <p class="text-sm font-bold text-slate-800 truncate">{{ Auth::user()->name ?? 'Pengguna' }}</p>

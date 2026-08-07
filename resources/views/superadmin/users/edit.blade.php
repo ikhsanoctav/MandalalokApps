@@ -221,7 +221,7 @@
                             selectedKel: '{{ old('id_kelurahan', $user->id_kelurahan) }}',
                             selectedRw: '',
                             selectedRt: '',
-                            kelurahans: {{ $kelurahans->toJson() }},
+                            kelurahans: {!! $kelurahans->toJson() !!},
                             normalizeWilayah(value) {
                                 if (value === null || value === undefined || value === '') return '';
                                 const parsed = parseInt(String(value).replace(/\D/g, ''), 10);

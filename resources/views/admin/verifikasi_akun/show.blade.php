@@ -59,12 +59,29 @@
                         <div class="md:col-span-2">
                             <p class="text-xs font-semibold text-slate-400 uppercase tracking-wider mb-1">Alamat Domisili</p>
                             <p class="text-slate-800 font-medium leading-relaxed">
-                                {{ $pemilik->alamat ?? '-' }}<br>
-                                RT/RW: {{ $pemilik->rt ?? '-' }}/{{ $pemilik->rw ?? '-' }}<br>
-                                Kelurahan: {{ $pemilik->kelurahan ?? '-' }}<br>
-                                Kecamatan: {{ $pemilik->kecamatan ?? '-' }}<br>
-                                {{ $pemilik->kota_kab ?? '-' }}, {{ $pemilik->provinsi ?? '-' }}
-                                {{ $pemilik->kode_pos ?? '' }}
+                                @php
+                                    $rawAlamat = trim($pemilik->alamat ?? '');
+                                    $hasRt = (bool)preg_match('/rt[\.\s]*\d+/i', $rawAlamat);
+                                    $hasRw = (bool)preg_match('/rw[\.\s]*\d+/i', $rawAlamat);
+                                    $hasKel = !empty($pemilik->kelurahan) && stripos($rawAlamat, $pemilik->kelurahan) !== false;
+                                    
+                                    $suffixParts = [];
+                                    if (!$hasRt && !empty($pemilik->rt)) {
+                                        $suffixParts[] = 'RT ' . sprintf('%02d', (int)preg_replace('/\D/', '', $pemilik->rt));
+                                    }
+                                    if (!$hasRw && !empty($pemilik->rw)) {
+                                        $suffixParts[] = 'RW ' . sprintf('%02d', (int)preg_replace('/\D/', '', $pemilik->rw));
+                                    }
+                                    $rtRwStr = implode(' / ', $suffixParts);
+                                    $kelStr = (!$hasKel && !empty($pemilik->kelurahan)) ? 'Kel. ' . $pemilik->kelurahan : '';
+                                    $extraStr = implode(', ', array_filter([$rtRwStr, $kelStr]));
+                                @endphp
+                                {{ $rawAlamat ?: '-' }}
+                                @if($extraStr)
+                                    <br><span class="text-slate-500 text-xs">{{ $extraStr }}</span>
+                                @endif
+                                <br>
+                                <span class="text-xs text-slate-500">Kecamatan: {{ $pemilik->kecamatan ?? 'Mandalajati' }}, {{ $pemilik->kota_kab ?? 'Kota Bandung' }}</span>
                             </p>
                         </div>
                         <div>

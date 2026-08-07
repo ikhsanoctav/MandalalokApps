@@ -78,7 +78,7 @@
                     $syaratLama = [''];
                 }
             @endphp
-            <div class="md:col-span-2" x-data="{ syarat: {{ json_encode($syaratLama) }} }">
+            <div class="md:col-span-2" x-data="{ syarat: {!! json_encode($syaratLama) !!} }">
                 <label class="block text-sm font-semibold text-slate-700 mb-2">Syarat Dokumen (Opsional)</label>
                 <p class="text-xs text-slate-700 mb-2">Persyaratan dokumen yang wajib diunggah pelaku UMKM saat mendaftar.</p>
                 

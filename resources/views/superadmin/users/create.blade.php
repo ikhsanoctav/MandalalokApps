@@ -217,7 +217,7 @@
                         <div x-data="{
                             selectedKel: '{{ old('id_kelurahan', '') }}',
                             selectedRw: '{{ old('rw', '') }}',
-                            kelurahans: {{ $kelurahans->toJson() }},
+                            kelurahans: {!! $kelurahans->toJson() !!},
                             get currentRws() {
                                 if (!this.selectedKel) return [];
                                 const kel = this.kelurahans.find(k => k.id == this.selectedKel);
