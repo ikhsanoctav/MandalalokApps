@@ -112,6 +112,21 @@
             border-radius: 0.75rem !important;
         }
 
+        .mobile-topbar {
+            position: sticky !important;
+            top: 0 !important;
+            z-index: 9999 !important;
+            width: 100%;
+            max-width: 100vw;
+            overflow: visible !important;
+        }
+
+        main > div:last-child,
+        main > div.relative.z-0 {
+            position: relative !important;
+            z-index: 1 !important;
+        }
+
         .mobile-notification-panel {
             position: absolute !important;
             top: calc(100% + 0.5rem) !important;
@@ -123,7 +138,7 @@
             transform-origin: top right !important;
             z-index: 99999 !important;
             background-color: #ffffff !important;
-            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.18) !important;
+            box-shadow: 0 20px 50px rgba(15, 23, 42, 0.25) !important;
         }
 
         .mobile-account-panel {
@@ -137,7 +152,7 @@
             transform-origin: top right !important;
             z-index: 99999 !important;
             background-color: #ffffff !important;
-            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.18) !important;
+            box-shadow: 0 20px 50px rgba(15, 23, 42, 0.25) !important;
         }
 
         main {
