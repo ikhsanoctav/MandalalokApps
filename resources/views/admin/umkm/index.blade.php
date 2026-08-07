@@ -696,8 +696,11 @@
                 tableContainer.addEventListener('click', function(e) {
                     const link = e.target.closest('a');
                     if (link && link.href && tableContainer.contains(link) && !link.hasAttribute('data-no-ajax')) {
-                        e.preventDefault();
-                        window.performAjaxFetch(link.href);
+                        const isPagination = link.closest('nav') || link.closest('.pagination') || link.href.includes('page=');
+                        if (isPagination) {
+                            e.preventDefault();
+                            window.performAjaxFetch(link.href);
+                        }
                     }
                 });
 

@@ -103,7 +103,7 @@
                     @if ($umkm->status_verifikasi == 'terverifikasi')
                         <p class="font-semibold text-emerald-800">UMKM Terverifikasi</p>
                         <p class="text-sm text-emerald-700">UMKM ini telah diverifikasi pada
-                            {{ $umkm->tanggal_verifikasi ? \Carbon\Carbon::parse($umkm->tanggal_verifikasi)->format('d/m/Y H:i') : '-' }}
+                            {{ ($umkm->tanggal_verifikasi ?? $umkm->updated_at ?? $umkm->created_at) ? \Carbon\Carbon::parse($umkm->tanggal_verifikasi ?? $umkm->updated_at ?? $umkm->created_at)->format('d/m/Y H:i') : '-' }}
                         </p>
                     @elseif($umkm->status_verifikasi == 'terkirim')
                         <p class="font-semibold text-amber-800">Menunggu Verifikasi</p>
