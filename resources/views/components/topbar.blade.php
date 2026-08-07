@@ -390,7 +390,7 @@
                     x-transition:leave="transition ease-in duration-150"
                     x-transition:leave-start="opacity-100 translate-y-0 scale-100"
                     x-transition:leave-end="opacity-0 translate-y-2 scale-95"
-                    class="mobile-notification-panel absolute right-0 -mr-2 md:mr-0 mt-3 w-[calc(100vw-1rem)] max-w-sm md:w-96 md:max-w-md bg-white rounded-2xl shadow-xl shadow-slate-200/50 border border-slate-100 overflow-hidden z-50">
+                    class="mobile-notification-panel absolute right-0 mt-2 w-80 sm:w-96 max-w-[calc(100vw-1.5rem)] bg-white rounded-2xl shadow-2xl shadow-slate-900/10 border border-slate-200/80 overflow-hidden z-50">
                     <div class="px-5 py-4 border-b border-slate-100 flex justify-between items-center bg-slate-50/50">
                         <h3 class="text-sm font-bold text-slate-800">Notifikasi</h3>
                         <template x-if="totalUnread > 0">

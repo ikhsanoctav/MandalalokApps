@@ -113,27 +113,29 @@
         }
 
         .mobile-notification-panel {
-            position: fixed !important;
-            top: 4rem !important;
-            left: 0.75rem !important;
-            right: 0.75rem !important;
-            width: auto !important;
-            max-width: none !important;
-            margin: 0 !important;
+            position: absolute !important;
+            top: 100% !important;
+            right: 0 !important;
+            left: auto !important;
+            width: min(24rem, calc(100vw - 1.5rem)) !important;
+            max-width: calc(100vw - 1.5rem) !important;
+            margin-top: 0.5rem !important;
             border-radius: 1rem !important;
             transform-origin: top right !important;
+            z-index: 9999 !important;
         }
 
         .mobile-account-panel {
-            position: fixed !important;
-            top: 4rem !important;
+            position: absolute !important;
+            top: 100% !important;
+            right: 0 !important;
             left: auto !important;
-            right: 0.75rem !important;
             width: min(18rem, calc(100vw - 1.5rem)) !important;
             max-width: calc(100vw - 1.5rem) !important;
-            margin: 0 !important;
+            margin-top: 0.5rem !important;
             border-radius: 1rem !important;
             transform-origin: top right !important;
+            z-index: 9999 !important;
         }
 
         main {
