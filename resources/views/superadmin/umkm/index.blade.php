@@ -520,6 +520,7 @@
         </div>
     </div>
 
+    <script>
         function verifyUmkm(id, nama) {
             window.dispatchEvent(new CustomEvent('open-confirm-modal', {
                 detail: {
