@@ -165,6 +165,7 @@
                 <span>Laporan</span>
             </a>
 
+            @if(false)
             <a href="{{ route('admin.pelatihan.index') }}" @click="toggleMobileMenu()"
                 class="flex items-center gap-2 px-3 py-2.5 rounded-lg text-sm text-slate-300 hover:bg-slate-800 transition-all {{ request()->routeIs('admin.pelatihan.*') ? 'menu-item-active bg-slate-800/40 text-blue-400 font-bold' : '' }}">
                 <svg class="w-4 h-4 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -173,6 +174,7 @@
                 </svg>
                 <span>Kelola Pelatihan</span>
             </a>
+            @endif
 
             @if(false)
             <a href="{{ route('dss.index') }}" @click="toggleMobileMenu()"
@@ -298,6 +300,7 @@
                 <span>Rekap & Laporan</span>
             </a>
 
+            @if(false)
             <a href="{{ route('admin.pelatihan.index') }}" @click="toggleMobileMenu()"
                 class="flex items-center gap-2 px-3 py-2.5 rounded-lg text-sm text-slate-300 hover:bg-slate-800 transition-all {{ request()->routeIs('admin.pelatihan.*') ? 'menu-item-active bg-slate-800/40 text-blue-400 font-bold' : '' }}">
                 <svg class="w-4 h-4 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -306,6 +309,7 @@
                 </svg>
                 <span>Kelola Pelatihan</span>
             </a>
+            @endif
 
             @if(false)
             <a href="{{ route('dss.index') }}" @click="toggleMobileMenu()"
@@ -347,6 +351,7 @@
                 <span>Verifikasi Lapangan</span>
             </a>
 
+            @if(false)
             <a href="{{ route('operator.pelatihan.scanner') }}" @click="toggleMobileMenu()"
                 class="flex items-center gap-2 px-3 py-2.5 rounded-lg text-sm text-slate-300 hover:bg-slate-800 transition-all {{ request()->routeIs('operator.pelatihan.scanner*') ? 'menu-item-active bg-slate-800/40 text-blue-400 font-bold' : '' }}">
                 <svg class="w-4 h-4 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -355,6 +360,7 @@
                 </svg>
                 <span>Scanner Pelatihan</span>
             </a>
+            @endif
 
         @elseif($userRole === 'pelaku_umkm')
 
@@ -369,6 +375,7 @@
                 <span>Profil Saya</span>
             </a>
 
+            @if(false)
             <a href="{{ route('pelaku.pelatihan.index') }}" @click="toggleMobileMenu()"
                 class="flex items-center gap-2 px-3 py-2.5 rounded-lg text-sm text-slate-300 hover:bg-slate-800 transition-all {{ request()->routeIs('pelaku.pelatihan.*') ? 'menu-item-active bg-slate-800/40 text-blue-400 font-bold' : '' }}">
                 <svg class="w-4 h-4 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -380,6 +387,7 @@
                     <span class="inline-flex items-center justify-center min-w-[20px] h-5 px-1.5 rounded-full bg-emerald-500 text-white text-[10px] font-bold leading-none">{{ $jumlah_pelatihan_tersedia > 9 ? '9+' : $jumlah_pelatihan_tersedia }}</span>
                 @endif
             </a>
+            @endif
 
             @if(\App\Models\Setting::get('pelaku_submission_active', false))
                 <a href="{{ route('pelaku.pengajuan.index') }}" @click="toggleMobileMenu()"

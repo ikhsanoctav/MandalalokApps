@@ -162,6 +162,7 @@
                 <div x-cloak x-show="!sidebarOpen" class="tooltip-text">Data Pengajuan</div>
             </div>
 
+            @if(false)
             <a href="{{ route('superadmin.pelatihan.index') }}"
                 class="menu-item flex items-center gap-3 px-3 py-2.5 rounded-full transition-all group relative hover:bg-white/5 {{ request()->routeIs('superadmin.pelatihan.*') ? 'menu-item-active' : '' }}">
                 <svg class="w-5 h-5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -171,6 +172,7 @@
                 <span x-cloak x-show="sidebarOpen" class="text-sm font-medium whitespace-nowrap">Kelola Pelatihan</span>
                 <div x-cloak x-show="!sidebarOpen" class="tooltip-text">Kelola Pelatihan</div>
             </a>
+            @endif
 
             <div x-data="{ open: {{ request()->routeIs('superadmin.users*') ? 'true' : 'false' }} }" class="relative">
                 <button @click="if(!sidebarOpen) { sidebarOpen = true; open = true; } else { open = !open; }"
@@ -390,6 +392,7 @@
                 <div x-cloak x-show="!sidebarOpen" class="tooltip-text">Data Pengajuan</div>
             </div>
 
+            @if(false)
             <a href="{{ route('admin.pelatihan.index') }}"
                 class="menu-item flex items-center gap-3 px-3 py-2.5 rounded-full transition-all group relative hover:bg-white/5 {{ request()->routeIs('admin.pelatihan.*') ? 'menu-item-active' : '' }}">
                 <svg class="w-5 h-5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -399,6 +402,7 @@
                 <span x-cloak x-show="sidebarOpen" class="text-sm font-medium whitespace-nowrap">Kelola Pelatihan</span>
                 <div x-cloak x-show="!sidebarOpen" class="tooltip-text">Kelola Pelatihan</div>
             </a>
+            @endif
 
             <div class="my-3">
                 <div class="border-t border-white/5"></div>
@@ -466,6 +470,7 @@
                 <div x-cloak x-show="!sidebarOpen" class="tooltip-text">Verifikasi Lapangan</div>
             </a>
 
+            @if(false)
             <a href="{{ route('operator.pelatihan.scanner') }}"
                 class="menu-item flex items-center gap-3 px-3 py-2.5 rounded-full transition-all group relative hover:bg-white/5 {{ request()->routeIs('operator.pelatihan.scanner*') ? 'menu-item-active' : '' }}">
                 <svg class="w-5 h-5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -475,6 +480,7 @@
                 <span x-cloak x-show="sidebarOpen" class="text-sm font-medium whitespace-nowrap">Scanner Pelatihan</span>
                 <div x-cloak x-show="!sidebarOpen" class="tooltip-text">Scanner Pelatihan</div>
             </a>
+            @endif
 
         @elseif($userRole === 'pelaku_umkm')
             
@@ -491,6 +497,7 @@
                 <div x-cloak x-show="!sidebarOpen" class="tooltip-text">Profil Saya</div>
             </a>
 
+            @if(false)
             <a href="{{ route('pelaku.pelatihan.index') }}"
                 class="menu-item flex items-center gap-3 px-3 py-2.5 rounded-full transition-all group relative hover:bg-white/5 {{ request()->routeIs('pelaku.pelatihan.*') ? 'menu-item-active' : '' }}">
                 <div class="relative flex-shrink-0">
@@ -508,6 +515,7 @@
                 @endif
                 <div x-cloak x-show="!sidebarOpen" class="tooltip-text">Pelatihan UMKM ({{ $jumlah_pelatihan_tersedia }} tersedia)</div>
             </a>
+            @endif
 
             @if(\App\Models\Setting::get('pelaku_submission_active', false))
                 <a href="{{ route('pelaku.pengajuan.index') }}"
