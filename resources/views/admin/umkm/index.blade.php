@@ -364,8 +364,28 @@
                                                 </path>
                                             </svg>
                                         </a>
+                                        @if ($umkm->status_verifikasi != 'terverifikasi')
+                                            <button onclick="verifyAdminUmkm('{{ $umkm->id_umkm }}', '{{ e($umkm->nama_usaha) }}')"
+                                                class="text-emerald-600 hover:text-emerald-800 p-1.5 hover:bg-emerald-50 rounded-2xl transition-all"
+                                                title="Verifikasi / Setujui">
+                                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                        d="M5 13l4 4L19 7"></path>
+                                                </svg>
+                                            </button>
+                                        @endif
+                                        @if ($umkm->status_verifikasi != 'ditolak')
+                                            <button onclick="rejectAdminUmkm('{{ $umkm->id_umkm }}', '{{ e($umkm->nama_usaha) }}')"
+                                                class="text-red-600 hover:text-red-800 p-1.5 hover:bg-red-50 rounded-2xl transition-all"
+                                                title="Tolak / Penolakan">
+                                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                        d="M6 18L18 6M6 6l12 12"></path>
+                                                </svg>
+                                            </button>
+                                        @endif
                                     </div>
-                            </tr>
+                                </td>
                             </tr>
                         @empty
                             <tr>
@@ -577,6 +597,69 @@
     </div>
 
     <script>
+        function verifyAdminUmkm(id, nama) {
+            window.dispatchEvent(new CustomEvent('open-confirm-modal', {
+                detail: {
+                    title: 'Verifikasi / Setujui UMKM',
+                    message: `Apakah Anda yakin ingin menyetujui dan memverifikasi data UMKM "${nama || ''}"?`,
+                    confirmText: 'Ya, Verifikasi',
+                    action: () => {
+                        const token = document.querySelector('meta[name="csrf-token"]')?.content || '{{ csrf_token() }}';
+                        return fetch(`/admin/verifikasi/${id}/verify`, {
+                            method: 'POST',
+                            headers: {
+                                'X-CSRF-TOKEN': token,
+                                'Content-Type': 'application/json',
+                                'Accept': 'application/json'
+                            }
+                        })
+                        .then(r => r.json())
+                        .then(data => {
+                            if (data.success) {
+                                if (window.showToast) window.showToast(data.message || 'UMKM berhasil diverifikasi', 'success');
+                                if (window.triggerFilter) window.triggerFilter();
+                                else location.reload();
+                            } else {
+                                if (window.showToast) window.showToast(data.message || 'Gagal memverifikasi UMKM', 'error');
+                                else alert(data.message);
+                            }
+                        });
+                    }
+                }
+            }));
+        }
+
+        function rejectAdminUmkm(id, nama) {
+            const alasan = prompt(`Masukkan alasan penolakan/pembatalan verifikasi untuk UMKM "${nama || ''}":`);
+            if (alasan === null) return;
+            if (!alasan.trim()) {
+                alert('Alasan penolakan harus diisi.');
+                return;
+            }
+
+            const token = document.querySelector('meta[name="csrf-token"]')?.content || '{{ csrf_token() }}';
+            fetch(`/admin/verifikasi/${id}/reject`, {
+                method: 'POST',
+                headers: {
+                    'X-CSRF-TOKEN': token,
+                    'Content-Type': 'application/json',
+                    'Accept': 'application/json'
+                },
+                body: JSON.stringify({ reason: alasan })
+            })
+            .then(r => r.json())
+            .then(data => {
+                if (data.success) {
+                    if (window.showToast) window.showToast(data.message || 'UMKM berhasil ditolak', 'warning');
+                    if (window.triggerFilter) window.triggerFilter();
+                    else location.reload();
+                } else {
+                    if (window.showToast) window.showToast(data.message || 'Gagal menolak UMKM', 'error');
+                    else alert(data.message);
+                }
+            });
+        }
+
         function exportData() {
             alert('Fitur export sedang dalam pengembangan');
         }

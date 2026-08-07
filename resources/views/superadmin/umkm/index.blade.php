@@ -520,9 +520,67 @@
         </div>
     </div>
 
-    <script>
-        function exportData() {
-            alert('Fitur export sedang dalam pengembangan');
+        function verifyUmkm(id, nama) {
+            window.dispatchEvent(new CustomEvent('open-confirm-modal', {
+                detail: {
+                    title: 'Verifikasi / Setujui UMKM',
+                    message: `Apakah Anda yakin ingin menyetujui dan memverifikasi data UMKM "${nama || ''}"?`,
+                    confirmText: 'Ya, Verifikasi',
+                    action: () => {
+                        const token = document.querySelector('meta[name="csrf-token"]')?.content || '{{ csrf_token() }}';
+                        return fetch(`/superadmin/umkm/${id}/verify`, {
+                            method: 'POST',
+                            headers: {
+                                'X-CSRF-TOKEN': token,
+                                'Content-Type': 'application/json',
+                                'Accept': 'application/json'
+                            }
+                        })
+                        .then(r => r.json())
+                        .then(data => {
+                            if (data.success) {
+                                if (window.showToast) window.showToast(data.message || 'UMKM berhasil diverifikasi', 'success');
+                                if (window.triggerFilter) window.triggerFilter();
+                                else location.reload();
+                            } else {
+                                if (window.showToast) window.showToast(data.message || 'Gagal memverifikasi UMKM', 'error');
+                                else alert(data.message);
+                            }
+                        });
+                    }
+                }
+            }));
+        }
+
+        function rejectUmkm(id, nama) {
+            const alasan = prompt(`Masukkan alasan penolakan/pembatalan verifikasi untuk UMKM "${nama || ''}":`);
+            if (alasan === null) return;
+            if (!alasan.trim()) {
+                alert('Alasan penolakan harus diisi.');
+                return;
+            }
+
+            const token = document.querySelector('meta[name="csrf-token"]')?.content || '{{ csrf_token() }}';
+            fetch(`/superadmin/umkm/${id}/reject`, {
+                method: 'POST',
+                headers: {
+                    'X-CSRF-TOKEN': token,
+                    'Content-Type': 'application/json',
+                    'Accept': 'application/json'
+                },
+                body: JSON.stringify({ reason: alasan })
+            })
+            .then(r => r.json())
+            .then(data => {
+                if (data.success) {
+                    if (window.showToast) window.showToast(data.message || 'UMKM berhasil ditolak', 'warning');
+                    if (window.triggerFilter) window.triggerFilter();
+                    else location.reload();
+                } else {
+                    if (window.showToast) window.showToast(data.message || 'Gagal menolak UMKM', 'error');
+                    else alert(data.message);
+                }
+            });
         }
 
         function confirmDelete(id, nama) {

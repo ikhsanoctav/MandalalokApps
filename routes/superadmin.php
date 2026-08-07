@@ -35,6 +35,7 @@ Route::middleware(['auth', 'role:super_admin'])->prefix('superadmin')->name('sup
     Route::get('/umkm/{id}/modal', [UmkmController::class, 'umkmModal'])->name('umkm.modal');
     Route::post('/umkm/{id}/suspend', [UmkmController::class, 'umkmSuspend'])->name('umkm.suspend');
     Route::post('/umkm/{id}/verify', [UmkmController::class, 'umkmVerify'])->name('umkm.verify');
+    Route::post('/umkm/{id}/reject', [UmkmController::class, 'umkmReject'])->name('umkm.reject');
     // Verifikasi Akun (KTP)
     Route::get('/verifikasi-akun', [App\Http\Controllers\Admin\VerifikasiAkunController::class, 'index'])->name('verifikasi_akun.index');
     Route::get('/verifikasi-akun/{id}', [App\Http\Controllers\Admin\VerifikasiAkunController::class, 'show'])->name('verifikasi_akun.show');

@@ -120,21 +120,6 @@ class VerifikasiController extends Controller
         try {
             $umkm = UMKM::findOrFail($id);
 
-            if ($umkm->status_verifikasi !== 'terkirim') {
-                $messages = [
-                    'draft' => 'UMKM masih berstatus Draft. Belum dikirim untuk verifikasi.',
-                    'terverifikasi' => 'UMKM sudah pernah diverifikasi sebelumnya.',
-                    'ditolak' => 'UMKM sebelumnya ditolak. Pelaku harus memperbaiki & mengirim ulang sebelum dapat diverifikasi.',
-                ];
-                $msg = $messages[$umkm->status_verifikasi] ?? 'Status UMKM tidak valid untuk verifikasi.';
-
-                return redirect()->route('admin.verifikasi.index')->with('toast', [
-                    'type' => 'warning',
-                    'title' => 'Perhatian!',
-                    'message' => $msg,
-                ]);
-            }
-
             $incompleteFields = [];
             
             // Cek Data UMKM
@@ -246,6 +231,13 @@ class VerifikasiController extends Controller
                 ));
             }
 
+            if ($request->wantsJson() || $request->ajax()) {
+                return response()->json([
+                    'success' => true,
+                    'message' => 'UMKM "'.$umkm->nama_usaha.'" berhasil diverifikasi & disetujui.',
+                ]);
+            }
+
             session()->flash('toast', [
                 'type' => 'success',
                 'title' => 'Verifikasi Berhasil!',
@@ -275,21 +267,6 @@ class VerifikasiController extends Controller
 
         try {
             $umkm = UMKM::findOrFail($id);
-
-            if ($umkm->status_verifikasi !== 'terkirim') {
-                $messages = [
-                    'draft' => 'UMKM masih berstatus Draft. Tidak ada pengajuan untuk ditolak.',
-                    'terverifikasi' => 'UMKM sudah diverifikasi, tidak dapat ditolak.',
-                    'ditolak' => 'UMKM sudah pernah ditolak sebelumnya.',
-                ];
-                $msg = $messages[$umkm->status_verifikasi] ?? 'Status UMKM tidak valid untuk penolakan.';
-
-                return redirect()->route('admin.verifikasi.index')->with('toast', [
-                    'type' => 'warning',
-                    'title' => 'Perhatian!',
-                    'message' => $msg,
-                ]);
-            }
 
             $reason = $request->input('reason');
             if (! $reason) {
@@ -374,6 +351,13 @@ class VerifikasiController extends Controller
                     'warning',
                     route('superadmin.umkm.show', $umkm->id_umkm)
                 ));
+            }
+
+            if ($request->wantsJson() || $request->ajax()) {
+                return response()->json([
+                    'success' => true,
+                    'message' => 'UMKM "'.$umkm->nama_usaha.'" telah ditolak.',
+                ]);
             }
 
             session()->flash('toast', [

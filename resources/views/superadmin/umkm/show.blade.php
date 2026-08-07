@@ -31,14 +31,22 @@
                 </svg>
                 Edit
             </a>
-            @if ($umkm->status_verifikasi == 'terverifikasi')
-                <button onclick="openSuspendModal()"
+            @if ($umkm->status_verifikasi != 'terverifikasi')
+                <button onclick="verifyUmkm('{{ $umkm->id_umkm }}', '{{ e($umkm->nama_usaha) }}')"
+                    class="px-4 py-2 text-sm text-white bg-emerald-600 rounded-md hover:bg-emerald-700 transition-all flex items-center gap-2">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                    </svg>
+                    Verifikasi / Setujui
+                </button>
+            @endif
+            @if ($umkm->status_verifikasi != 'ditolak')
+                <button onclick="rejectUmkm('{{ $umkm->id_umkm }}', '{{ e($umkm->nama_usaha) }}')"
                     class="px-4 py-2 text-sm text-white bg-red-600 rounded-md hover:bg-red-700 transition-all flex items-center gap-2">
                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12">
-                        </path>
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
                     </svg>
-                    Tangguhkan
+                    Tolak / Penolakan
                 </button>
             @endif
             <a href="{{ route('superadmin.umkm.print-dokumen', $umkm->id_umkm) }}" target="_blank"
@@ -998,6 +1006,57 @@
             const modal = document.getElementById('imageModal');
             modal.classList.add('hidden');
             document.body.style.overflow = '';
+        }
+
+        function verifyUmkm(id, nama) {
+            if (!confirm(`Apakah Anda yakin ingin menyetujui dan memverifikasi data UMKM "${nama || ''}"?`)) return;
+            const token = document.querySelector('meta[name="csrf-token"]')?.content;
+            fetch(`/superadmin/umkm/${id}/verify`, {
+                method: 'POST',
+                headers: {
+                    'X-CSRF-TOKEN': token,
+                    'Content-Type': 'application/json',
+                    'Accept': 'application/json'
+                }
+            })
+            .then(r => r.json())
+            .then(data => {
+                if (data.success) {
+                    alert(data.message || 'UMKM berhasil diverifikasi');
+                    location.reload();
+                } else {
+                    alert(data.message || 'Gagal memverifikasi UMKM');
+                }
+            });
+        }
+
+        function rejectUmkm(id, nama) {
+            const alasan = prompt(`Masukkan alasan penolakan/pembatalan verifikasi untuk UMKM "${nama || ''}":`);
+            if (alasan === null) return;
+            if (!alasan.trim()) {
+                alert('Alasan penolakan harus diisi.');
+                return;
+            }
+
+            const token = document.querySelector('meta[name="csrf-token"]')?.content;
+            fetch(`/superadmin/umkm/${id}/reject`, {
+                method: 'POST',
+                headers: {
+                    'X-CSRF-TOKEN': token,
+                    'Content-Type': 'application/json',
+                    'Accept': 'application/json'
+                },
+                body: JSON.stringify({ reason: alasan })
+            })
+            .then(r => r.json())
+            .then(data => {
+                if (data.success) {
+                    alert(data.message || 'UMKM berhasil ditolak');
+                    location.reload();
+                } else {
+                    alert(data.message || 'Gagal menolak UMKM');
+                }
+            });
         }
 
         // Close modal with Escape key

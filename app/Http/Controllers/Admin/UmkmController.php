@@ -180,13 +180,13 @@ class UmkmController extends Controller
         // Simpan pemilik & UMKM via service
         $pemilik = $this->umkmService->findOrCreatePemilik($request);
 
+        $statusVerifikasi = $request->input('status_verifikasi', 'terkirim');
         $umkmData = $this->umkmService->buildUmkmData(
             $request,
             $pemilik->id_pemilik,
             auth()->id(),
-            'terverifikasi'
+            $statusVerifikasi
         );
-        // buildUmkmData generates a new UUID, but we want to use the one from validation
         $umkmData['id_umkm'] = (string) Str::uuid();
         $umkm = UMKM::create($umkmData);
 
@@ -196,9 +196,13 @@ class UmkmController extends Controller
             $umkm->id_umkm
         );
 
+        $msgText = $statusVerifikasi === 'terverifikasi'
+            ? 'UMKM "'.$umkm->nama_usaha.'" berhasil ditambahkan.'
+            : 'UMKM "'.$umkm->nama_usaha.'" berhasil ditambahkan (menunggu verifikasi).';
+
         auth()->user()->notify(new SystemNotification(
             'UMKM Ditambahkan',
-            'UMKM "'.$umkm->nama_usaha.'" berhasil ditambahkan dan otomatis terverifikasi.',
+            $msgText,
             'success',
             route('admin.umkm.show', $umkm->id_umkm)
         ));
@@ -206,7 +210,7 @@ class UmkmController extends Controller
         return redirect()->route('admin.umkm.index')->with('toast', [
             'type' => 'success',
             'title' => 'Berhasil!',
-            'message' => 'UMKM "'.$umkm->nama_usaha.'" berhasil ditambahkan dan otomatis terverifikasi.',
+            'message' => $msgText,
         ]);
     }
 

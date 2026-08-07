@@ -57,12 +57,14 @@
                     class="inline-flex items-center justify-center gap-2 px-3 py-2.5 rounded-lg bg-amber-50 text-amber-700 text-sm font-semibold">
                     Edit
                 </a>
-                @if ($umkm->status_verifikasi == 'terkirim')
-                    <button onclick="verifyUmkm('{{ $umkm->id_umkm }}')"
+                @if ($umkm->status_verifikasi != 'terverifikasi')
+                    <button onclick="verifyUmkm('{{ $umkm->id_umkm }}', '{{ e($umkm->nama_usaha) }}')"
                         class="inline-flex items-center justify-center gap-2 px-3 py-2.5 rounded-lg bg-emerald-50 text-emerald-700 text-sm font-semibold">
                         Verifikasi
                     </button>
-                    <button onclick="rejectUmkm('{{ $umkm->id_umkm }}')"
+                @endif
+                @if ($umkm->status_verifikasi != 'ditolak')
+                    <button onclick="rejectUmkm('{{ $umkm->id_umkm }}', '{{ e($umkm->nama_usaha) }}')"
                         class="inline-flex items-center justify-center gap-2 px-3 py-2.5 rounded-lg bg-red-50 text-red-700 text-sm font-semibold">
                         Tolak
                     </button>
@@ -181,18 +183,20 @@
                                 </svg>
                             </a>
 
-                            @if ($umkm->status_verifikasi == 'terkirim')
-                                <button onclick="verifyUmkm('{{ $umkm->id_umkm }}')"
+                            @if ($umkm->status_verifikasi != 'terverifikasi')
+                                <button onclick="verifyUmkm('{{ $umkm->id_umkm }}', '{{ e($umkm->nama_usaha) }}')"
                                     class="text-emerald-600 hover:text-emerald-800 p-1.5 hover:bg-emerald-50 rounded-2xl transition-all"
-                                    title="Verifikasi">
+                                    title="Verifikasi / Setujui">
                                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                             d="M5 13l4 4L19 7"></path>
                                     </svg>
                                 </button>
-                                <button onclick="rejectUmkm('{{ $umkm->id_umkm }}')"
+                            @endif
+                            @if ($umkm->status_verifikasi != 'ditolak')
+                                <button onclick="rejectUmkm('{{ $umkm->id_umkm }}', '{{ e($umkm->nama_usaha) }}')"
                                     class="text-red-600 hover:text-red-800 p-1.5 hover:bg-red-50 rounded-2xl transition-all"
-                                    title="Tolak">
+                                    title="Tolak / Penolakan">
                                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                             d="M6 18L18 6M6 6l12 12"></path>
