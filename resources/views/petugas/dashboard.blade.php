@@ -17,7 +17,7 @@
             <div class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-96 h-96 bg-emerald-100 rounded-full mix-blend-multiply filter blur-3xl opacity-50 animate-pulse" style="animation-delay: 4s;"></div>
 
             <!-- Content Container with Glassmorphism -->
-            <div class="relative z-10 flex flex-col md:flex-row md:items-center justify-between gap-6 backdrop-blur-md bg-white/60 border border-white/80 rounded-2xl p-6 shadow-sm">
+            <div class="relative z-10 flex flex-col md:flex-row md:items-center justify-between gap-6 bg-white/60 border border-white/80 rounded-2xl p-6 shadow-sm">
                 <div class="text-slate-800">
                     <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-cyan-100/80 border border-cyan-200 text-xs font-bold tracking-wider uppercase mb-4 text-cyan-700 shadow-sm">
                         <i class="mdi mdi-account-hard-hat text-cyan-600"></i> Petugas Lapangan

@@ -15,7 +15,7 @@
             <div class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-96 h-96 bg-amber-100 rounded-full mix-blend-multiply filter blur-3xl opacity-50 animate-pulse" style="animation-delay: 4s;"></div>
 
             <!-- Content Container with Glassmorphism -->
-            <div class="relative z-10 flex flex-col md:flex-row md:items-center justify-between gap-6 backdrop-blur-md bg-white/60 border border-white/80 rounded-2xl p-6 shadow-sm">
+            <div class="relative z-10 flex flex-col md:flex-row md:items-center justify-between gap-6 bg-white/80 border border-slate-200/80 rounded-2xl p-6 shadow-sm">
                 <div class="text-slate-800">
                     <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-indigo-100/80 border border-indigo-200 text-xs font-bold tracking-wider uppercase mb-4 text-indigo-700 shadow-sm">
                         <i class="mdi mdi-office-building text-indigo-600"></i> Admin Kecamatan
@@ -28,7 +28,7 @@
                     </p>
                 </div>
 
-                <div class="flex-shrink-0 text-right backdrop-blur-xl bg-white/90 rounded-xl p-4 border border-white shadow-sm">
+                <div class="flex-shrink-0 text-right bg-white rounded-xl p-4 border border-slate-200/80 shadow-sm">
                     <p class="text-xs text-slate-500 uppercase tracking-widest font-bold mb-1">Hari Ini</p>
                     <p class="text-xl font-black text-slate-800">{{ now()->translatedFormat('l, d F Y') }}</p>
                     <p class="text-sm text-slate-600 mt-1 flex items-center justify-end gap-1 font-semibold"><i class="mdi mdi-clock-outline text-indigo-600"></i> <span id="realtimeClock">{{ now()->format('H:i') }}</span></p>

@@ -293,7 +293,7 @@
     }
 </style>
 
-<div class="mobile-topbar sticky top-0 z-50 bg-white/95 backdrop-blur-md shadow-sm border-b border-slate-200/80 transition-all duration-300">
+<div class="mobile-topbar sticky top-0 z-50 bg-white/95 backdrop-blur-md shadow-sm border-b border-slate-200/80 transition-all duration-300" style="transform: translateZ(9999px);">
     <div class="h-[2.5px] w-full bg-gradient-to-r {{ $accentGradient }}"></div>
     <div class="absolute inset-0 pointer-events-none opacity-[0.06] {{ $patternClass }}"></div>
     <div class="mobile-topbar-inner relative py-2 px-3 md:py-3 md:px-6 flex items-center justify-between gap-2 md:gap-4">
