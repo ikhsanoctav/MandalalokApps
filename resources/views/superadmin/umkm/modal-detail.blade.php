@@ -48,8 +48,8 @@
 <div class="space-y-5">
     
     <!-- Beautiful Cover Image Banner -->
-    <div class="relative h-44 sm:h-52 rounded-xl overflow-hidden bg-slate-100 border border-slate-200 shadow-sm flex items-center justify-center">
-        <img src="{{ $coverUrl }}" alt="{{ $umkm->nama_usaha }}" class="w-full h-full object-cover">
+    <div class="relative h-44 sm:h-52 rounded-xl overflow-hidden bg-slate-100 border border-slate-200 shadow-sm flex items-center justify-center group cursor-pointer" onclick="openImageModal('{{ $coverUrl }}')">
+        <img src="{{ $coverUrl }}" alt="{{ $umkm->nama_usaha }}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
         <div class="absolute inset-0 bg-gradient-to-t from-slate-900/60 via-slate-900/10 to-transparent"></div>
         <div class="absolute bottom-4 left-4 text-white">
             <h3 class="text-lg font-black tracking-wide drop-shadow-md">{{ $umkm->nama_usaha }}</h3>
@@ -330,3 +330,45 @@
         cursor: pointer;
     }
 </style>
+
+<script>
+    if (typeof window.openImageModal !== 'function' || !document.getElementById('imageModal')) {
+        window.openImageModal = function(imageUrl) {
+            if (!imageUrl) return;
+            let modal = document.getElementById('globalImageModal');
+            if (!modal) {
+                modal = document.createElement('div');
+                modal.id = 'globalImageModal';
+                modal.className = 'fixed inset-0 z-[99999] hidden bg-black/90 backdrop-blur-sm transition-opacity duration-300 flex items-center justify-center p-4';
+                modal.onclick = function() { window.closeImageModal(); };
+                modal.innerHTML = `
+                    <div class="relative max-w-4xl max-h-[90vh] flex items-center justify-center" onclick="event.stopPropagation()">
+                        <button onclick="window.closeImageModal()" class="absolute -top-10 -right-2 text-white hover:text-red-400 transition-colors p-2 z-10 focus:outline-none" title="Tutup">
+                            <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M6 18L18 6M6 6l12 12"></path>
+                            </svg>
+                        </button>
+                        <img id="globalModalImage" src="" alt="Preview Gambar" class="max-w-full max-h-[85vh] rounded-2xl shadow-2xl object-contain border border-white/20">
+                    </div>
+                `;
+                document.body.appendChild(modal);
+            }
+            const modalImage = document.getElementById('globalModalImage');
+            if (modalImage) modalImage.src = imageUrl;
+            modal.classList.remove('hidden');
+            document.body.style.overflow = 'hidden';
+        };
+
+        window.closeImageModal = function() {
+            const modal = document.getElementById('globalImageModal');
+            if (modal) {
+                modal.classList.add('hidden');
+            }
+            const oldModal = document.getElementById('imageModal');
+            if (oldModal) {
+                oldModal.classList.add('hidden');
+            }
+            document.body.style.overflow = '';
+        };
+    }
+</script>
