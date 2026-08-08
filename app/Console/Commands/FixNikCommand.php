@@ -31,36 +31,48 @@ class FixNikCommand extends Command
     {
         $oldKeyInput = $this->option('key');
         $toPlain = $this->option('plain');
+        $cipher = config('app.cipher', 'AES-256-CBC');
+
+        $makeEncrypter = function ($keyString) use ($cipher) {
+            if (!$keyString) return null;
+            try {
+                $key = trim($keyString);
+                if (Str::startsWith($key, 'base64:')) {
+                    $key = base64_decode(substr($key, 7));
+                }
+                if (Encrypter::supported($key, $cipher)) {
+                    return new Encrypter($key, $cipher);
+                }
+            } catch (\Throwable $e) {
+                // Ignore invalid key
+            }
+            return null;
+        };
 
         $encrypters = [];
 
-        // Current encrypter
+        // 1. Current App Encrypter from Facade
         try {
             $encrypters[] = Crypt::getFacadeRoot();
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             // Ignore
         }
 
-        // If old key provided
-        if ($oldKeyInput) {
-            try {
-                $rawKey = $oldKeyInput;
-                if (Str::startsWith($rawKey, 'base64:')) {
-                    $rawKey = base64_decode(substr($rawKey, 7));
-                }
-                $encrypters[] = new Encrypter($rawKey, config('app.cipher', 'AES-256-CBC'));
-            } catch (\Exception $e) {
-                $this->error("Invalid old key format: {$e->getMessage()}");
-            }
+        // 2. Current APP_KEY from env / config
+        $currentAppKey = config('app.key');
+        if ($enc = $makeEncrypter($currentAppKey)) {
+            $encrypters[] = $enc;
         }
 
-        // Add known default local key as fallback encrypter
+        // 3. User passed --key
+        if ($oldKeyInput && ($enc = $makeEncrypter($oldKeyInput))) {
+            $encrypters[] = $enc;
+        }
+
+        // 4. Fallback known local key
         $defaultLocalKey = 'base64:FQJmZdVFuBOZLEfz2lCoJmMa6fMwkvEE8SJUpy7/qmY=';
-        try {
-            $rawKey = base64_decode(substr($defaultLocalKey, 7));
-            $encrypters[] = new Encrypter($rawKey, 'AES-256-CBC');
-        } catch (\Exception $e) {
-            // Ignore
+        if ($enc = $makeEncrypter($defaultLocalKey)) {
+            $encrypters[] = $enc;
         }
 
         $this->info('Starting NIK repair process...');
@@ -74,18 +86,17 @@ class FixNikCommand extends Command
 
             $plainNik = null;
 
-            // If it starts with 'ey', it is an encrypted payload
             if (Str::startsWith($p->nik, 'ey')) {
                 foreach ($encrypters as $enc) {
+                    if (!$enc) continue;
                     try {
                         $plainNik = $enc->decryptString($p->nik);
                         if ($plainNik) break;
-                    } catch (\Exception $e) {
+                    } catch (\Throwable $e) {
                         // Continue trying next encrypter
                     }
                 }
             } else {
-                // Already plain NIK
                 $plainNik = $p->nik;
             }
 
@@ -101,7 +112,7 @@ class FixNikCommand extends Command
                     ]);
                 $fixedPemiliks++;
             } else {
-                $this->warn("Could not decrypt NIK for Pemilik ID {$p->id_pemilik} (NIK starts with: " . substr($p->nik, 0, 15) . '...)');
+                $this->warn("Could not decrypt NIK for Pemilik ID {$p->id_pemilik}");
             }
         }
 
@@ -118,10 +129,11 @@ class FixNikCommand extends Command
 
             if (Str::startsWith($u->nik, 'ey')) {
                 foreach ($encrypters as $enc) {
+                    if (!$enc) continue;
                     try {
                         $plainNik = $enc->decryptString($u->nik);
                         if ($plainNik) break;
-                    } catch (\Exception $e) {
+                    } catch (\Throwable $e) {
                         // Continue trying next encrypter
                     }
                 }
