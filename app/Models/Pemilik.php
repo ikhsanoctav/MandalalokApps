@@ -62,11 +62,20 @@ class Pemilik extends Model
                 
                 try {
                     return Crypt::decryptString($value);
-                } catch (DecryptException $e) {
-                    return $value; // Fallback to raw value if not encrypted
+                } catch (\Throwable $e) {
+                    return $value; // Fallback to raw value if not encrypted or decryption fails
                 }
             },
-            set: fn ($value) => $value ? Crypt::encryptString($value) : null,
+            set: function ($value) {
+                if (!$value) {
+                    return null;
+                }
+                try {
+                    return Crypt::encryptString($value);
+                } catch (\Throwable $e) {
+                    return $value;
+                }
+            },
         );
     }
 
@@ -84,7 +93,7 @@ class Pemilik extends Model
                 try {
                     $plainNik = \Illuminate\Support\Facades\Crypt::decryptString($pemilik->getAttributes()['nik']);
                     $pemilik->nik_hash = hash('sha256', $plainNik);
-                } catch (\Exception $e) {
+                } catch (\Throwable $e) {
                     $pemilik->nik_hash = hash('sha256', $pemilik->getAttributes()['nik']);
                 }
             }
