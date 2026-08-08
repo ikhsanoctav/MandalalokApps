@@ -70,6 +70,21 @@ services:
         depends_on:
             - mysql
 
+    # phpMyAdmin Database Management GUI
+    phpmyadmin:
+        image: phpmyadmin/phpmyadmin:latest
+        restart: unless-stopped
+        ports:
+            - "8081:80"
+        environment:
+            PMA_HOST: mysql
+            PMA_PORT: 3306
+            MYSQL_ROOT_PASSWORD: '${DB_PASSWORD}'
+        networks:
+            - production_net
+        depends_on:
+            - mysql
+
 networks:
     production_net:
         driver: bridge
