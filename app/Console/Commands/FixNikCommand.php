@@ -53,7 +53,8 @@ class FixNikCommand extends Command
 
         // 1. Current App Encrypter from Facade
         try {
-            $encrypters[] = Crypt::getFacadeRoot();
+            $enc = Crypt::getFacadeRoot();
+            if ($enc) $encrypters[] = $enc;
         } catch (\Throwable $e) {
             // Ignore
         }
@@ -101,7 +102,14 @@ class FixNikCommand extends Command
             }
 
             if ($plainNik) {
-                $newNik = $toPlain ? $plainNik : Crypt::encryptString($plainNik);
+                $newNik = $plainNik;
+                if (!$toPlain) {
+                    try {
+                        $newNik = Crypt::encryptString($plainNik);
+                    } catch (\Throwable $e) {
+                        $newNik = $plainNik; // Safe fallback to plain NIK if env APP_KEY is invalid
+                    }
+                }
                 $newHash = hash('sha256', $plainNik);
 
                 DB::table('pemiliks')
@@ -142,7 +150,14 @@ class FixNikCommand extends Command
             }
 
             if ($plainNik) {
-                $newNik = $toPlain ? $plainNik : Crypt::encryptString($plainNik);
+                $newNik = $plainNik;
+                if (!$toPlain) {
+                    try {
+                        $newNik = Crypt::encryptString($plainNik);
+                    } catch (\Throwable $e) {
+                        $newNik = $plainNik; // Safe fallback to plain NIK if env APP_KEY is invalid
+                    }
+                }
                 $newHash = hash('sha256', $plainNik);
 
                 DB::table('users')
