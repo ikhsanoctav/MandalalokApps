@@ -186,6 +186,7 @@
     @include('partials.toast-container')
     @include('partials.confirm-modal')
     @include('partials.program-flyer-popup')
+    @include('partials.image-preview-modal')
 
 </body>
 

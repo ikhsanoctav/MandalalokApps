@@ -188,6 +188,7 @@
 
     @include('partials.toast-container')
     @include('partials.confirm-modal')
+    @include('partials.image-preview-modal')
 
 </body>
 
