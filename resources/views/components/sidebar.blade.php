@@ -8,7 +8,7 @@
 @endphp
 
 <aside
-    class="hidden md:block fixed inset-y-0 left-0 h-screen bg-gradient-to-b from-slate-950 to-[#0B1021] text-slate-300 z-[999] shadow-xl transition-all duration-300 flex flex-col"
+    class="hidden md:block fixed inset-y-0 left-0 h-screen bg-gradient-to-b from-slate-950 to-[#0B1021] text-slate-300 z-[10000] shadow-xl transition-all duration-300 flex flex-col"
     :class="sidebarOpen ? 'w-64' : 'w-[72px]'">
 
     <div class="relative px-4 py-5 border-b border-white/5 flex items-center justify-between">
@@ -39,7 +39,7 @@
         </div>
 
         <button @click="toggleSidebar()"
-            class="absolute -right-4 top-1/2 -translate-y-1/2 w-8 h-8 rounded-full p-[1.5px] bg-gradient-to-tr from-blue-500 via-indigo-500 to-cyan-400 transition-all duration-300 hover:scale-115 hover:shadow-[0_0_25px_rgba(59,130,246,0.7)] focus:outline-none z-[1000] group">
+            class="absolute -right-4 top-1/2 -translate-y-1/2 w-8 h-8 rounded-full p-[1.5px] bg-gradient-to-tr from-blue-500 via-indigo-500 to-cyan-400 transition-all duration-300 hover:scale-115 hover:shadow-[0_0_25px_rgba(59,130,246,0.7)] focus:outline-none z-[10001] group">
             <div
                 class="w-full h-full bg-gradient-to-b from-slate-950 to-[#0B1021] rounded-full flex items-center justify-center transition-colors group-hover:bg-black/40">
                 <svg class="w-4 h-4 text-blue-400 group-hover:text-cyan-300 transition-transform duration-500 ease-out"
