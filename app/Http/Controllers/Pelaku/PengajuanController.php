@@ -20,13 +20,13 @@ class PengajuanController extends Controller
     {
         if (!Setting::get('pelaku_submission_active', false)) {
             return redirect()->route('pelaku.dashboard')->with('toast', [
-                'type' => 'warning',
-                'title' => 'Fitur Nonaktif',
+                'type'    => 'warning',
+                'title'   => 'Fitur Nonaktif',
                 'message' => 'Pengajuan bantuan oleh pelaku UMKM sedang dinonaktifkan.',
             ]);
         }
 
-        $user = Auth::user();
+        $user   = Auth::user();
         $pemilik = null;
         if ($user->nik_hash) {
             $pemilik = Pemilik::where('nik_hash', $user->nik_hash)->first();
@@ -40,11 +40,51 @@ class PengajuanController extends Controller
                 ->get();
         }
 
+        // --- Filter inputs ---
+        $search        = $request->get('search');
+        $filterJenis   = $request->get('jenis_pengajuan');
+        $filterStatus  = $request->get('status');
+        $filterUmkm    = $request->get('umkm_id');
+        $dateFrom      = $request->get('date_from');
+        $dateTo        = $request->get('date_to');
+        $perPage       = (int) $request->get('per_page', 10);
+
         $umkmIds = $umkms->pluck('id_umkm');
-        $pengajuans = Pengajuan::whereIn('umkm_id', $umkmIds)
-            ->with('umkm')
-            ->orderBy('tanggal_pengajuan', 'desc')
-            ->paginate(10);
+
+        $query = Pengajuan::whereIn('umkm_id', $umkmIds)->with('umkm');
+
+        if ($search) {
+            $query->where(function ($q) use ($search) {
+                $q->where('keterangan', 'like', "%{$search}%")
+                  ->orWhere('nama_program', 'like', "%{$search}%")
+                  ->orWhereHas('umkm', fn($s) => $s->where('nama_usaha', 'like', "%{$search}%")
+                      ->orWhere('no_pendaftaran', 'like', "%{$search}%"));
+            });
+        }
+
+        if ($filterJenis) {
+            $query->where('jenis_pengajuan', $filterJenis);
+        }
+
+        if ($filterStatus) {
+            $query->where('status', $filterStatus);
+        }
+
+        if ($filterUmkm) {
+            $query->where('umkm_id', $filterUmkm);
+        }
+
+        if ($dateFrom) {
+            $query->whereDate('tanggal_pengajuan', '>=', $dateFrom);
+        }
+
+        if ($dateTo) {
+            $query->whereDate('tanggal_pengajuan', '<=', $dateTo);
+        }
+
+        $pengajuans = $query->orderBy('tanggal_pengajuan', 'desc')
+            ->paginate($perPage)
+            ->withQueryString();
 
         return view('pelaku.pengajuan.index', compact('pengajuans', 'umkms'));
     }

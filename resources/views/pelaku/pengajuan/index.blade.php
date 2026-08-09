@@ -47,84 +47,204 @@
                 </a>
             </div>
         @else
-            <!-- List of Submissions Grid -->
-            <div class="flex items-center justify-between mb-6">
-                <h3 class="text-2xl font-black text-slate-800 tracking-tight">Daftar Permohonan Saya</h3>
-                <span class="px-4 py-1.5 bg-white border border-slate-200 rounded-full text-sm font-bold text-slate-600 shadow-sm">
-                    Total: {{ $pengajuans->total() }} Pengajuan
-                </span>
-            </div>
 
-            @if($pengajuans->isEmpty())
-                <div class="bg-white/60 backdrop-blur-xl rounded-[2rem] border border-white/80 p-16 text-center shadow-xl shadow-slate-200/50">
-                    <div class="w-20 h-20 bg-slate-100 rounded-full flex items-center justify-center mx-auto mb-4 border border-slate-200">
-                        <i class="mdi mdi-folder-open-outline text-4xl text-slate-400"></i>
-                    </div>
-                    <h4 class="text-xl font-bold text-slate-700 mb-2">Belum Ada Riwayat Pengajuan</h4>
-                    <p class="text-slate-500 max-w-md mx-auto">Anda belum pernah mengajukan permohonan bantuan apapun. Klik tombol "Buat Pengajuan Baru" untuk memulai.</p>
-                </div>
-            @else
-                <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
-                    @foreach($pengajuans as $pengajuan)
-                        <div class="bg-white/80 backdrop-blur-xl rounded-[1.5rem] border border-white/80 p-6 shadow-lg shadow-slate-200/40 hover:shadow-xl hover:shadow-indigo-100 transition-all duration-300 transform hover:-translate-y-1 relative overflow-hidden group">
-                            
-                            <!-- Card Header -->
-                            <div class="flex justify-between items-start mb-4">
-                                <div class="flex flex-col gap-2 items-start">
-                                    <span class="px-3 py-1 rounded-lg text-xs font-bold tracking-wider uppercase border
-                                        @if($pengajuan->jenis_pengajuan === 'pembiayaan') bg-blue-50 text-blue-700 border-blue-200
-                                        @elseif($pengajuan->jenis_pengajuan === 'bantuan') bg-emerald-50 text-emerald-700 border-emerald-200
-                                        @elseif($pengajuan->jenis_pengajuan === 'perizinan') bg-purple-50 text-purple-700 border-purple-200
-                                        @else bg-slate-50 text-slate-700 border-slate-200 @endif">
-                                        {{ ucfirst($pengajuan->jenis_pengajuan) }}
-                                    </span>
-                                    {!! $pengajuan->status_badge !!}
-                                </div>
-                                <div class="text-right">
-                                    <p class="text-xs font-bold text-slate-400 uppercase tracking-widest mb-1">Tanggal</p>
-                                    <p class="text-sm font-semibold text-slate-700">{{ $pengajuan->tanggal_pengajuan ? $pengajuan->tanggal_pengajuan->translatedFormat('d M Y') : '-' }}</p>
-                                </div>
+            @php
+            $activeFilters = array_filter([
+                request('search'), request('jenis_pengajuan'), request('status'),
+                request('umkm_id'), request('date_from'), request('date_to'),
+            ]);
+        @endphp
+
+        {{-- ===== FILTER BAR ===== --}}
+        <div class="bg-white/80 backdrop-blur-xl rounded-[1.75rem] border border-white/80 shadow-lg shadow-slate-200/40 p-6 mb-6">
+            <form method="GET" action="{{ route('pelaku.pengajuan.index') }}" id="filterForm">
+                <div class="flex flex-col gap-4">
+
+                    {{-- Row 1: Search + Reset --}}
+                    <div class="flex flex-col sm:flex-row gap-3">
+                        <div class="relative flex-1">
+                            <div class="absolute inset-y-0 left-0 flex items-center pl-4 pointer-events-none text-slate-400">
+                                <i class="mdi mdi-magnify text-lg"></i>
                             </div>
+                            <input
+                                type="text"
+                                name="search"
+                                id="searchInput"
+                                value="{{ request('search') }}"
+                                placeholder="Cari nama usaha, program, keterangan..."
+                                class="w-full pl-11 pr-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-sm font-medium text-slate-700 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500/30 focus:border-blue-400 transition-all"
+                            >
+                        </div>
+                        <button type="submit" class="inline-flex items-center gap-2 px-5 py-3 bg-blue-600 hover:bg-blue-700 text-white text-sm font-bold rounded-xl transition-all shadow-md whitespace-nowrap">
+                            <i class="mdi mdi-magnify"></i> Cari
+                        </button>
+                        @if(count($activeFilters) > 0)
+                            <a href="{{ route('pelaku.pengajuan.index') }}" class="inline-flex items-center gap-2 px-5 py-3 bg-rose-50 border border-rose-200 text-rose-600 text-sm font-bold rounded-xl hover:bg-rose-100 transition-all whitespace-nowrap">
+                                <i class="mdi mdi-filter-off-outline"></i> Reset
+                            </a>
+                        @endif
+                    </div>
 
-                            <!-- Card Body -->
-                            <div class="space-y-4">
-                                <div>
-                                    <p class="text-xs font-bold text-slate-400 uppercase tracking-widest mb-1">Usaha Terkait</p>
-                                    <p class="font-black text-slate-800 text-lg truncate">{{ $pengajuan->umkm->nama_usaha ?? 'N/A' }}</p>
-                                    <p class="text-xs text-indigo-500 font-mono mt-0.5"><i class="mdi mdi-identifier"></i> {{ $pengajuan->umkm->no_pendaftaran ?? 'N/A' }}</p>
-                                </div>
+                    {{-- Row 2: Filter dropdowns --}}
+                    <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-3">
 
-                                @if($pengajuan->jenis_pengajuan === 'bantuan' && $pengajuan->nama_program)
-                                    <div class="bg-slate-50 p-3 rounded-xl border border-slate-100">
-                                        <p class="text-xs font-bold text-slate-400 uppercase tracking-widest mb-1">Program Bantuan</p>
-                                        <p class="text-sm font-medium text-slate-700">{{ $pengajuan->nama_program }}</p>
-                                    </div>
-                                @endif
+                        {{-- Jenis Pengajuan --}}
+                        <div class="relative">
+                            <select name="jenis_pengajuan" onchange="this.form.submit()" class="w-full appearance-none bg-slate-50 border border-slate-200 rounded-xl text-sm font-semibold text-slate-700 px-4 py-3 pr-9 focus:outline-none focus:ring-2 focus:ring-blue-500/30 focus:border-blue-400 transition-all cursor-pointer {{ request('jenis_pengajuan') ? 'border-blue-400 bg-blue-50 text-blue-700' : '' }}">
+                                <option value="">Semua Jenis</option>
+                                <option value="pembiayaan" {{ request('jenis_pengajuan') === 'pembiayaan' ? 'selected' : '' }}>💰 Pembiayaan</option>
+                                <option value="bantuan"    {{ request('jenis_pengajuan') === 'bantuan'    ? 'selected' : '' }}>🤝 Bantuan</option>
+                                <option value="perizinan"  {{ request('jenis_pengajuan') === 'perizinan'  ? 'selected' : '' }}>📋 Perizinan</option>
+                                <option value="lainnya"    {{ request('jenis_pengajuan') === 'lainnya'    ? 'selected' : '' }}>📌 Lainnya</option>
+                            </select>
+                            <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-3 text-slate-400"><i class="mdi mdi-chevron-down"></i></div>
+                        </div>
 
-                                @if($pengajuan->nominal)
-                                    <div class="bg-indigo-50 p-3 rounded-xl border border-indigo-100">
-                                        <p class="text-xs font-bold text-indigo-400 uppercase tracking-widest mb-1">Nominal Diajukan</p>
-                                        <p class="text-lg font-black text-indigo-700 font-mono">Rp {{ number_format($pengajuan->nominal, 0, ',', '.') }}</p>
-                                    </div>
-                                @endif
+                        {{-- Status --}}
+                        <div class="relative">
+                            <select name="status" onchange="this.form.submit()" class="w-full appearance-none bg-slate-50 border border-slate-200 rounded-xl text-sm font-semibold text-slate-700 px-4 py-3 pr-9 focus:outline-none focus:ring-2 focus:ring-blue-500/30 focus:border-blue-400 transition-all cursor-pointer {{ request('status') ? 'border-blue-400 bg-blue-50 text-blue-700' : '' }}">
+                                <option value="">Semua Status</option>
+                                <option value="menunggu"   {{ request('status') === 'menunggu'   ? 'selected' : '' }}>⏳ Menunggu</option>
+                                <option value="diproses"   {{ request('status') === 'diproses'   ? 'selected' : '' }}>🔄 Diproses</option>
+                                <option value="disetujui"  {{ request('status') === 'disetujui'  ? 'selected' : '' }}>✅ Disetujui</option>
+                                <option value="ditolak"    {{ request('status') === 'ditolak'    ? 'selected' : '' }}>❌ Ditolak</option>
+                            </select>
+                            <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-3 text-slate-400"><i class="mdi mdi-chevron-down"></i></div>
+                        </div>
 
-                                @if($pengajuan->catatan)
-                                    <div class="mt-4 p-3 bg-amber-50 rounded-xl border border-amber-100">
-                                        <p class="text-[10px] font-bold text-amber-600 uppercase tracking-widest mb-1 flex items-center gap-1"><i class="mdi mdi-message-alert-outline"></i> Catatan Evaluator</p>
-                                        <p class="text-xs font-medium text-amber-800 line-clamp-2" title="{{ $pengajuan->catatan }}">{{ $pengajuan->catatan }}</p>
-                                    </div>
-                                @endif
+                        {{-- Filter UMKM --}}
+                        @if($umkms->count() > 1)
+                        <div class="relative">
+                            <select name="umkm_id" onchange="this.form.submit()" class="w-full appearance-none bg-slate-50 border border-slate-200 rounded-xl text-sm font-semibold text-slate-700 px-4 py-3 pr-9 focus:outline-none focus:ring-2 focus:ring-blue-500/30 focus:border-blue-400 transition-all cursor-pointer {{ request('umkm_id') ? 'border-blue-400 bg-blue-50 text-blue-700' : '' }}">
+                                <option value="">Semua Usaha</option>
+                                @foreach($umkms as $u)
+                                    <option value="{{ $u->id_umkm }}" {{ request('umkm_id') == $u->id_umkm ? 'selected' : '' }}>{{ $u->nama_usaha }}</option>
+                                @endforeach
+                            </select>
+                            <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-3 text-slate-400"><i class="mdi mdi-chevron-down"></i></div>
+                        </div>
+                        @endif
+
+                        {{-- Date From --}}
+                        <div class="relative">
+                            <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none text-slate-400 text-xs font-bold">Dari</div>
+                            <input type="date" name="date_from" value="{{ request('date_from') }}" onchange="this.form.submit()"
+                                class="w-full pl-10 pr-3 py-3 bg-slate-50 border border-slate-200 rounded-xl text-sm font-semibold text-slate-700 focus:outline-none focus:ring-2 focus:ring-blue-500/30 focus:border-blue-400 transition-all {{ request('date_from') ? 'border-blue-400 bg-blue-50 text-blue-700' : '' }}">
+                        </div>
+
+                        {{-- Date To --}}
+                        <div class="relative">
+                            <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none text-slate-400 text-xs font-bold">S/d</div>
+                            <input type="date" name="date_to" value="{{ request('date_to') }}" onchange="this.form.submit()"
+                                class="w-full pl-10 pr-3 py-3 bg-slate-50 border border-slate-200 rounded-xl text-sm font-semibold text-slate-700 focus:outline-none focus:ring-2 focus:ring-blue-500/30 focus:border-blue-400 transition-all {{ request('date_to') ? 'border-blue-400 bg-blue-50 text-blue-700' : '' }}">
+                        </div>
+                    </div>
+
+                    {{-- Row 3: Summary + per-page --}}
+                    <div class="flex flex-col sm:flex-row items-center justify-between gap-3 pt-1 border-t border-slate-100">
+                        <div class="flex items-center gap-2 text-sm text-slate-500">
+                            <i class="mdi mdi-format-list-bulleted text-blue-400"></i>
+                            Menampilkan <span class="font-black text-slate-700">{{ $pengajuans->firstItem() ?? 0 }}–{{ $pengajuans->lastItem() ?? 0 }}</span>
+                            dari <span class="font-black text-blue-600">{{ $pengajuans->total() }}</span> pengajuan
+                            @if(count($activeFilters) > 0)
+                                &mdash; <span class="text-blue-600 font-bold">{{ count($activeFilters) }} filter aktif</span>
+                            @endif
+                        </div>
+                        <div class="flex items-center gap-2">
+                            <span class="text-xs text-slate-500 font-semibold whitespace-nowrap">Tampilkan:</span>
+                            <select name="per_page" onchange="this.form.submit()" class="appearance-none bg-slate-50 border border-slate-200 rounded-lg text-sm font-bold text-slate-700 px-3 py-2 pr-7 focus:outline-none focus:ring-2 focus:ring-blue-500/30 focus:border-blue-400 transition-all cursor-pointer">
+                                @foreach([10, 20, 50] as $pp)
+                                    <option value="{{ $pp }}" {{ request('per_page', 10) == $pp ? 'selected' : '' }}>{{ $pp }}</option>
+                                @endforeach
+                            </select>
+                            <div class="relative -ml-7 pointer-events-none text-slate-400"><i class="mdi mdi-chevron-down text-sm"></i></div>
+                        </div>
+                    </div>
+
+                </div>
+            </form>
+        </div>
+
+        {{-- ===== RESULTS ===== --}}
+        @if($pengajuans->isEmpty())
+            <div class="bg-white/60 backdrop-blur-xl rounded-[2rem] border border-white/80 p-16 text-center shadow-xl shadow-slate-200/50">
+                <div class="w-20 h-20 bg-slate-100 rounded-full flex items-center justify-center mx-auto mb-4 border border-slate-200">
+                    <i class="mdi mdi-folder-search-outline text-4xl text-slate-400"></i>
+                </div>
+                <h4 class="text-xl font-bold text-slate-700 mb-2">
+                    {{ count($activeFilters) > 0 ? 'Tidak Ada Hasil Pencarian' : 'Belum Ada Riwayat Pengajuan' }}
+                </h4>
+                <p class="text-slate-500 max-w-md mx-auto mb-6">
+                    {{ count($activeFilters) > 0 ? 'Coba ubah kata kunci atau filter yang digunakan.' : 'Anda belum pernah mengajukan permohonan bantuan apapun. Klik "Buat Pengajuan Baru" untuk memulai.' }}
+                </p>
+                @if(count($activeFilters) > 0)
+                    <a href="{{ route('pelaku.pengajuan.index') }}" class="inline-flex items-center gap-2 px-5 py-3 bg-rose-50 border border-rose-200 text-rose-600 font-bold rounded-xl hover:bg-rose-100 transition-all text-sm">
+                        <i class="mdi mdi-filter-off-outline"></i> Hapus Semua Filter
+                    </a>
+                @endif
+            </div>
+        @else
+            <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
+                @foreach($pengajuans as $pengajuan)
+                    <div class="bg-white/80 backdrop-blur-xl rounded-[1.5rem] border border-white/80 p-6 shadow-lg shadow-slate-200/40 hover:shadow-xl hover:shadow-indigo-100 transition-all duration-300 transform hover:-translate-y-1 relative overflow-hidden group">
+                        
+                        <!-- Card Header -->
+                        <div class="flex justify-between items-start mb-4">
+                            <div class="flex flex-col gap-2 items-start">
+                                <span class="px-3 py-1 rounded-lg text-xs font-bold tracking-wider uppercase border
+                                    @if($pengajuan->jenis_pengajuan === 'pembiayaan') bg-blue-50 text-blue-700 border-blue-200
+                                    @elseif($pengajuan->jenis_pengajuan === 'bantuan') bg-emerald-50 text-emerald-700 border-emerald-200
+                                    @elseif($pengajuan->jenis_pengajuan === 'perizinan') bg-purple-50 text-purple-700 border-purple-200
+                                    @else bg-slate-50 text-slate-700 border-slate-200 @endif">
+                                    {{ ucfirst($pengajuan->jenis_pengajuan) }}
+                                </span>
+                                {!! $pengajuan->status_badge !!}
+                            </div>
+                            <div class="text-right">
+                                <p class="text-xs font-bold text-slate-400 uppercase tracking-widest mb-1">Tanggal</p>
+                                <p class="text-sm font-semibold text-slate-700">{{ $pengajuan->tanggal_pengajuan ? $pengajuan->tanggal_pengajuan->translatedFormat('d M Y') : '-' }}</p>
                             </div>
                         </div>
-                    @endforeach
-                </div>
-                
-                @if($pengajuans->hasPages())
-                    <div class="mt-8 flex justify-center">
-                        {{ $pengajuans->links() }}
+
+                        <!-- Card Body -->
+                        <div class="space-y-4">
+                            <div>
+                                <p class="text-xs font-bold text-slate-400 uppercase tracking-widest mb-1">Usaha Terkait</p>
+                                <p class="font-black text-slate-800 text-lg truncate">{{ $pengajuan->umkm->nama_usaha ?? 'N/A' }}</p>
+                                <p class="text-xs text-indigo-500 font-mono mt-0.5"><i class="mdi mdi-identifier"></i> {{ $pengajuan->umkm->no_pendaftaran ?? 'N/A' }}</p>
+                            </div>
+
+                            @if($pengajuan->jenis_pengajuan === 'bantuan' && $pengajuan->nama_program)
+                                <div class="bg-slate-50 p-3 rounded-xl border border-slate-100">
+                                    <p class="text-xs font-bold text-slate-400 uppercase tracking-widest mb-1">Program Bantuan</p>
+                                    <p class="text-sm font-medium text-slate-700">{{ $pengajuan->nama_program }}</p>
+                                </div>
+                            @endif
+
+                            @if($pengajuan->nominal)
+                                <div class="bg-indigo-50 p-3 rounded-xl border border-indigo-100">
+                                    <p class="text-xs font-bold text-indigo-400 uppercase tracking-widest mb-1">Nominal Diajukan</p>
+                                    <p class="text-lg font-black text-indigo-700 font-mono">Rp {{ number_format($pengajuan->nominal, 0, ',', '.') }}</p>
+                                </div>
+                            @endif
+
+                            @if($pengajuan->catatan)
+                                <div class="mt-4 p-3 bg-amber-50 rounded-xl border border-amber-100">
+                                    <p class="text-[10px] font-bold text-amber-600 uppercase tracking-widest mb-1 flex items-center gap-1"><i class="mdi mdi-message-alert-outline"></i> Catatan Evaluator</p>
+                                    <p class="text-xs font-medium text-amber-800 line-clamp-2" title="{{ $pengajuan->catatan }}">{{ $pengajuan->catatan }}</p>
+                                </div>
+                            @endif
+                        </div>
                     </div>
-                @endif
+                @endforeach
+            </div>
+
+            @if($pengajuans->hasPages())
+                <div class="mt-8 flex justify-center">
+                    {{ $pengajuans->links() }}
+                </div>
             @endif
+        @endif
         @endif
 
     </div>
