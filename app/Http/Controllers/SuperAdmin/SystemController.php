@@ -41,7 +41,7 @@ class SystemController extends Controller
             $search = $request->search;
             $query->where(function ($q) use ($search) {
                 $q->where('nama_usaha', 'like', "%{$search}%")
-                  ->orWhere('nomor_pendaftaran', 'like', "%{$search}%")
+                  ->orWhere('no_pendaftaran', 'like', "%{$search}%")
                   ->orWhereHas('pemilik', fn($pq) => $pq->where('nama_lengkap', 'like', "%{$search}%"));
             });
         }

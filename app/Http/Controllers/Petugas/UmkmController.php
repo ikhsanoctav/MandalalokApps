@@ -35,7 +35,7 @@ class UmkmController extends Controller
             if ($search) {
                 $q->where(function ($sq) use ($search) {
                     $sq->where('nama_usaha', 'like', "%{$search}%")
-                       ->orWhere('nomor_pendaftaran', 'like', "%{$search}%")
+                       ->orWhere('no_pendaftaran', 'like', "%{$search}%")
                        ->orWhereHas('pemilik', fn($pq) => $pq->where('nama_lengkap', 'like', "%{$search}%"));
                 });
             }
