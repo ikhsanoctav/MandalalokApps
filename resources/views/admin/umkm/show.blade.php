@@ -734,29 +734,50 @@
     </div>
 
     @if(!empty($umkm->no_pendaftaran))
-    <div id="qrModal" class="fixed inset-0 z-50 hidden bg-black/90 backdrop-blur-sm flex items-center justify-center" onclick="closeQrModal()">
-        <div class="relative bg-white p-8 rounded-3xl shadow-2xl text-center transform transition-all" onclick="event.stopPropagation()">
-            <button onclick="closeQrModal()"
-                class="absolute -top-12 right-0 text-white hover:text-gray-300 transition-colors">
-                <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12">
-                    </path>
-                </svg>
-            </button>
-            <h3 class="text-xl font-bold text-slate-800 mb-6">QR Code Usaha</h3>
-            <div class="inline-block p-4 border-4 border-slate-100 rounded-2xl bg-white shadow-inner">
-                {!! \SimpleSoftwareIO\QrCode\Facades\QrCode::size(300)->generate($umkm->no_pendaftaran) !!}
-            </div>
-            <p class="mt-6 font-mono text-slate-600 font-bold text-xl tracking-widest">{{ $umkm->no_pendaftaran }}</p>
-            <p class="mt-1 text-sm text-slate-400">{{ $umkm->nama_usaha }}</p>
-            <div class="mt-8">
-                <button onclick="printQrDirect('{{ route('admin.umkm.print-qr', $umkm->id_umkm) }}', this)"
-                   class="inline-flex items-center gap-2 px-6 py-3 bg-blue-600 text-white font-semibold rounded-xl hover:bg-blue-700 transition-all shadow-md hover:shadow-lg w-full justify-center">
+    <div id="qrModal" class="fixed inset-0 z-[99999] hidden bg-slate-950/70 backdrop-blur-md flex items-center justify-center p-4" onclick="closeQrModal()">
+        <div class="relative w-full max-w-md bg-white rounded-3xl shadow-2xl overflow-hidden border border-slate-100 transform transition-all text-center" onclick="event.stopPropagation()">
+            <!-- Modal Header Banner -->
+            <div class="bg-gradient-to-r from-blue-600 via-indigo-600 to-purple-600 px-6 py-6 text-white relative">
+                <button onclick="closeQrModal()" class="absolute top-4 right-4 text-white/80 hover:text-white hover:bg-white/10 rounded-full p-2 transition-all focus:outline-none" title="Tutup">
                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z"></path>
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M6 18L18 6M6 6l12 12"></path>
                     </svg>
-                    Cetak QR Code
                 </button>
+                <div class="w-12 h-12 bg-white/10 backdrop-blur-md rounded-2xl flex items-center justify-center mx-auto mb-2 border border-white/20 shadow-inner">
+                    <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v1m6 11h2m-6 0h-2v4m0-11v3m0 0h.01M12 12h4.01M16 20h4M4 12h4m12 0h.01M5 8h2a1 1 0 001-1V5a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1zm14 0h2a1 1 0 001-1V5a1 1 0 00-1-1h-2a1 1 0 00-1 1v2a1 1 0 001 1zM5 20h2a1 1 0 001-1v-2a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1z"></path>
+                    </svg>
+                </div>
+                <h3 class="text-lg font-bold text-white leading-tight">QR Code Identitas UMKM</h3>
+                <p class="text-xs text-blue-100/90 mt-0.5 font-medium">Scan QR untuk mengunduh stiker cetak</p>
+            </div>
+
+            <!-- Modal Body Content -->
+            <div class="p-6 space-y-4">
+                <div class="inline-block p-3.5 bg-slate-50 border border-slate-200/80 rounded-2xl shadow-inner">
+                    {!! \SimpleSoftwareIO\QrCode\Facades\QrCode::size(200)->generate($umkm->no_pendaftaran) !!}
+                </div>
+
+                <div>
+                    <span class="inline-flex items-center gap-1.5 px-3.5 py-1 bg-indigo-50 border border-indigo-100 text-indigo-700 font-mono font-bold text-xs rounded-full shadow-sm">
+                        <svg class="w-3.5 h-3.5 text-indigo-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 20l4-16m2 16l4-16M6 9h14M4 15h14"></path>
+                        </svg>
+                        {{ $umkm->no_pendaftaran }}
+                    </span>
+                    <p class="mt-2 text-base font-bold text-slate-800 leading-snug">{{ $umkm->nama_usaha }}</p>
+                </div>
+
+                <!-- Action Buttons -->
+                <div class="pt-2">
+                    <button onclick="printQrDirect('{{ route('admin.umkm.print-qr', $umkm->id_umkm) }}', this)"
+                        class="w-full inline-flex items-center justify-center gap-2.5 px-5 py-3 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white font-semibold text-sm rounded-xl transition-all shadow-md hover:shadow-lg active:scale-95">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z"></path>
+                        </svg>
+                        Cetak Stiker QR Code
+                    </button>
+                </div>
             </div>
         </div>
     </div>
