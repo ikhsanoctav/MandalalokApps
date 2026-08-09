@@ -22,7 +22,10 @@ services:
             context: .
             dockerfile: Dockerfile.prod
         restart: unless-stopped
+        env_file:
+            - .env
         volumes:
+            - ./.env:/var/www/html/.env
             - prod-public:/var/www/html/public
             - prod-storage:/var/www/html/storage
         environment:
