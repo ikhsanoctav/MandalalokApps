@@ -233,6 +233,7 @@
                                             <a href="{{ route('operator.umkm.create') }}" class="text-blue-600 text-sm hover:underline mt-1 inline-block">Mulai Input Data Sekarang</a>
                                         </td>
                                     </tr>
+                                @endforelse
                             </tbody>
                         </table>
                     </div>
