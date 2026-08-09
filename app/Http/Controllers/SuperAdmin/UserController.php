@@ -368,7 +368,7 @@ class UserController extends Controller
     {
         $user = User::findOrFail($id);
 
-        $defaultPassword = $user->nik ?? 'password';
+        $defaultPassword = 'password';
         $user->update([
             'password' => Hash::make($defaultPassword),
             'password_reset_status' => 'approved',
@@ -377,7 +377,7 @@ class UserController extends Controller
 
         return response()->json([
             'success' => true,
-            'message' => 'Password user "'.$user->name.'" berhasil di-reset menjadi NIK ('.$defaultPassword.').',
+            'message' => 'Password user "'.$user->name.'" berhasil di-reset menjadi default (password).',
         ]);
     }
 
