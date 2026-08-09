@@ -107,7 +107,7 @@ class VerifikasiController extends Controller
         }
     }
 
-    public function verify($id)
+    public function verify(Request $request, $id)
     {
         if (! $id) {
             return redirect()->route('admin.verifikasi.index')->with('toast', [
