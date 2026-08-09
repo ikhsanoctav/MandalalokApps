@@ -64,9 +64,9 @@ class UmkmController extends Controller
             'email_usaha' => 'nullable|email|max:255',
             'jumlah_tenaga_kerja' => 'nullable|integer|min:0',
             'deskripsi' => 'nullable|string',
-            'foto_utama' => 'required|image|mimes:jpeg,jpg,png,webp|max:5120',
-            'dokumen_nib' => 'nullable|file|mimes:pdf,jpg,jpeg,png|max:5120',
-            'dokumen_lainnya' => 'nullable|file|mimes:pdf,jpg,jpeg,png,doc,docx|max:5120',
+            'foto_utama' => 'required|image|mimes:jpeg,jpg,png,webp|max:25600',
+            'dokumen_nib' => 'nullable|file|mimes:pdf,jpg,jpeg,png|max:25600',
+            'dokumen_lainnya' => 'nullable|file|mimes:pdf,jpg,jpeg,png,doc,docx|max:25600',
         ]);
 
         $umkm = new UMKM();
@@ -212,7 +212,7 @@ class UmkmController extends Controller
             'email_usaha' => 'nullable|email|max:255',
             'jumlah_tenaga_kerja' => 'nullable|integer|min:0',
             'deskripsi' => 'nullable|string',
-            'foto_utama' => (!$umkm->foto_utama) ? 'required|image|mimes:jpeg,jpg,png,webp|max:5120' : 'nullable|image|mimes:jpeg,jpg,png,webp|max:5120',
+            'foto_utama' => (!$umkm->foto_utama) ? 'required|image|mimes:jpeg,jpg,png,webp|max:25600' : 'nullable|image|mimes:jpeg,jpg,png,webp|max:25600',
             'foto_gallery.*' => 'nullable|image|mimes:jpeg,jpg,png,webp|max:5120',
             'dokumen_nib' => 'nullable|file|mimes:pdf,jpg,jpeg,png|max:5120',
             'dokumen_lainnya' => 'nullable|file|mimes:pdf,jpg,jpeg,png,doc,docx|max:5120',
