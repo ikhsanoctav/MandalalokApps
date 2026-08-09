@@ -15,43 +15,64 @@ class UserController extends Controller
 {
     public function users(Request $request)
     {
-        $search = $request->get('search');
+        $search    = $request->get('search');
+        $roleFilter   = $request->get('role');       // specific role name for staff tab
+        $statusFilter = $request->get('status');     // '' | 'aktif' | 'nonaktif'
+        $perPage   = (int) $request->get('per_page', 15);
 
-        $staffQuery = User::whereHas('roles', function ($q) {
-            $q->where('name', '!=', 'pelaku_umkm');
-        })->with('roles')->latest();
+        // --- Staff query ---
+        $staffQuery = User::whereHas('roles', fn($q) => $q->where('name', '!=', 'pelaku_umkm'))
+            ->with('roles')
+            ->latest();
 
-        $pelakuQuery = User::whereHas('roles', function ($q) {
-            $q->where('name', 'pelaku_umkm');
-        })->with('roles')->latest();
+        // --- Pelaku query ---
+        $pelakuQuery = User::whereHas('roles', fn($q) => $q->where('name', 'pelaku_umkm'))
+            ->with('roles')
+            ->latest();
 
+        // Shared search closure
         if ($search) {
             $searchNikHash = strlen($search) === 16 && ctype_digit($search) ? hash('sha256', $search) : null;
             $filterClosure = function ($q) use ($search, $searchNikHash) {
                 $q->where('name', 'like', "%{$search}%")
                     ->orWhere('email', 'like', "%{$search}%")
-                    ->orWhere('jabatan', 'like', "%{$search}%");
+                    ->orWhere('jabatan', 'like', "%{$search}%")
+                    ->orWhere('kelurahan', 'like', "%{$search}%");
                 if ($searchNikHash) {
                     $q->orWhere('nik_hash', $searchNikHash);
                 }
             };
-
             $staffQuery->where($filterClosure);
             $pelakuQuery->where($filterClosure);
         }
 
-        $staffCount = User::whereHas('roles', fn($q) => $q->where('name', '!=', 'pelaku_umkm'))->count();
+        // Role filter (staff tab only)
+        if ($roleFilter) {
+            $staffQuery->whereHas('roles', fn($q) => $q->where('name', $roleFilter));
+        }
+
+        // Status filter (both tabs)
+        if ($statusFilter === 'aktif') {
+            $staffQuery->where('is_active', true);
+            $pelakuQuery->where('is_active', true);
+        } elseif ($statusFilter === 'nonaktif') {
+            $staffQuery->where('is_active', false);
+            $pelakuQuery->where('is_active', false);
+        }
+
+        // Unfiltered totals for tab badges
+        $staffCount  = User::whereHas('roles', fn($q) => $q->where('name', '!=', 'pelaku_umkm'))->count();
         $pelakuCount = User::whereHas('roles', fn($q) => $q->where('name', 'pelaku_umkm'))->count();
 
-        $nonPelakuUmkm = $staffQuery->paginate(15, ['*'], 'staff_page');
-        $pelakuUmkm = $pelakuQuery->paginate(15, ['*'], 'pelaku_page');
+        $nonPelakuUmkm = $staffQuery->paginate($perPage, ['*'], 'staff_page')->withQueryString();
+        $pelakuUmkm    = $pelakuQuery->paginate($perPage, ['*'], 'pelaku_page')->withQueryString();
 
         return view('superadmin.users.index', [
-            'users' => $nonPelakuUmkm,
-            'pelakuUmkm' => $pelakuUmkm,
-            'nonPelakuUmkm' => $nonPelakuUmkm,
-            'staffCount' => $staffCount,
-            'pelakuCount' => $pelakuCount,
+            'users'        => $nonPelakuUmkm,
+            'pelakuUmkm'   => $pelakuUmkm,
+            'nonPelakuUmkm'=> $nonPelakuUmkm,
+            'staffCount'   => $staffCount,
+            'pelakuCount'  => $pelakuCount,
         ]);
     }
 

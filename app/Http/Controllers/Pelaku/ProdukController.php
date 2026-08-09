@@ -12,19 +12,36 @@ use Illuminate\Support\Facades\Storage;
 
 class ProdukController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $user = Auth::user();
+        $user    = Auth::user();
         $pemilik = Pemilik::where('nik_hash', $user->nik_hash)->first();
 
         if (!$pemilik) {
             return redirect()->route('pelaku.profil.edit')->with('warning', 'Silakan lengkapi profil Anda terlebih dahulu.');
         }
 
-        $umkms = UMKM::where('id_pemilik', $pemilik->id_pemilik)->get();
+        $umkms   = UMKM::where('id_pemilik', $pemilik->id_pemilik)->get();
         $umkmIds = $umkms->pluck('id_umkm');
-        
-        $produks = Produk::whereIn('id_umkm', $umkmIds)->latest()->paginate(10);
+
+        $search      = $request->get('search');
+        $filterUmkm  = $request->get('umkm_id');
+        $perPage     = (int) $request->get('per_page', 10);
+
+        $query = Produk::whereIn('id_umkm', $umkmIds);
+
+        if ($search) {
+            $query->where(function ($q) use ($search) {
+                $q->where('nama_produk', 'like', "%{$search}%")
+                  ->orWhere('deskripsi', 'like', "%{$search}%");
+            });
+        }
+
+        if ($filterUmkm) {
+            $query->where('id_umkm', $filterUmkm);
+        }
+
+        $produks = $query->latest()->paginate($perPage)->withQueryString();
 
         return view('pelaku.produk.index', compact('produks', 'umkms'));
     }

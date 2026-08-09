@@ -93,7 +93,7 @@ class UmkmController extends Controller
             $query->orderBy('created_at', 'desc');
         }
 
-        $umkms = $query->paginate($perPage);
+        $umkms = $query->paginate($perPage)->withQueryString();
 
         $kelurahans = Kelurahan::pluck('nama_kelurahan')->toArray();
         $kategoris = KategoriUMKM::all();

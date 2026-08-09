@@ -19,13 +19,22 @@
                 </div>
 
                 <form action="{{ route('superadmin.laporan') }}" method="GET" id="filter-form">
-                    <div class="grid grid-cols-1 md:grid-cols-4 gap-5 bg-slate-50/50 p-5 rounded-2xl border border-slate-100/60 backdrop-blur-sm">
+                    <div class="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-6 gap-5 bg-slate-50/50 p-5 rounded-2xl border border-slate-100/60 backdrop-blur-sm">
                         
+                        <div class="group col-span-1 md:col-span-1 lg:col-span-2">
+                            <label for="search" class="block text-xs font-bold tracking-wide text-slate-700 uppercase mb-2 ml-1">Pencarian</label>
+                            <div class="relative">
+                                <input type="text" id="search" name="search" value="{{ request('search') }}" placeholder="Cari nama, no. pendaftaran, pemilik..."
+                                    class="w-full pl-4 pr-10 py-3 rounded-lg border-slate-200 bg-white focus:bg-white focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10 shadow-sm transition-all duration-300 text-sm font-medium text-slate-700" 
+                                    onchange="document.getElementById('filter-form').submit()">
+                            </div>
+                        </div>
+
                         <div class="group">
                             <label for="periode_awal" class="block text-xs font-bold tracking-wide text-slate-700 uppercase mb-2 ml-1">Periode Awal</label>
                             <div class="relative">
                                 <input type="date" id="periode_awal" name="periode_awal" value="{{ request('periode_awal') }}" 
-                                    class="w-full pl-4 pr-10 py-3 rounded-lg border-slate-200 bg-white focus:bg-white focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10 shadow-sm transition-all duration-300 text-sm font-medium text-slate-700" 
+                                    class="w-full pl-4 pr-3 py-3 rounded-lg border-slate-200 bg-white focus:bg-white focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10 shadow-sm transition-all duration-300 text-sm font-medium text-slate-700" 
                                     onchange="document.getElementById('filter-form').submit()">
                             </div>
                         </div>
@@ -34,7 +43,7 @@
                             <label for="periode_akhir" class="block text-xs font-bold tracking-wide text-slate-700 uppercase mb-2 ml-1">Periode Akhir</label>
                             <div class="relative">
                                 <input type="date" id="periode_akhir" name="periode_akhir" value="{{ request('periode_akhir') }}" 
-                                    class="w-full pl-4 pr-10 py-3 rounded-lg border-slate-200 bg-white focus:bg-white focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10 shadow-sm transition-all duration-300 text-sm font-medium text-slate-700" 
+                                    class="w-full pl-4 pr-3 py-3 rounded-lg border-slate-200 bg-white focus:bg-white focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10 shadow-sm transition-all duration-300 text-sm font-medium text-slate-700" 
                                     onchange="document.getElementById('filter-form').submit()">
                             </div>
                         </div>
@@ -69,7 +78,25 @@
                                 </select>
                             </div>
                         </div>
+
+                        <div class="group flex items-end">
+                            <div class="w-full">
+                                <label for="per_page" class="block text-xs font-bold tracking-wide text-slate-700 uppercase mb-2 ml-1">Tampilkan</label>
+                                <select id="per_page" name="per_page" 
+                                    class="w-full pl-4 pr-10 py-3 rounded-lg border-slate-200 bg-white focus:bg-white focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10 shadow-sm transition-all duration-300 text-sm font-medium text-slate-700 appearance-none" 
+                                    onchange="document.getElementById('filter-form').submit()">
+                                    @foreach([10, 25, 50] as $pp)
+                                        <option value="{{ $pp }}" {{ request('per_page', 10) == $pp ? 'selected' : '' }}>{{ $pp }} Baris</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                        </div>
                     </div>
+                    @if(count(array_filter([request('search'), request('kategori'), request('status_verifikasi'), request('periode_awal'), request('periode_akhir')])) > 0)
+                        <div class="mt-4 flex justify-end">
+                            <a href="{{ route('superadmin.laporan') }}" class="px-4 py-2 bg-rose-50 text-rose-600 rounded-lg text-sm font-semibold hover:bg-rose-100 transition-colors">Reset Filter</a>
+                        </div>
+                    @endif
                 </form>
             </div>
         </div>
@@ -268,6 +295,7 @@
                     <input type="hidden" name="periode_akhir" value="{{ request('periode_akhir') }}">
                     <input type="hidden" name="kategori" value="{{ request('kategori') }}">
                     <input type="hidden" name="status_verifikasi" value="{{ request('status_verifikasi') }}">
+                    <input type="hidden" name="search" value="{{ request('search') }}">
                     
                     <div class="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
                         <div class="sm:flex sm:items-start">

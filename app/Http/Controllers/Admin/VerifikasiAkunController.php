@@ -12,8 +12,9 @@ class VerifikasiAkunController extends Controller
 {
     public function index(Request $request)
     {
-        $search = $request->get('search');
-        $status = $request->get('status', 'pending'); // Default to pending
+        $search  = $request->get('search');
+        $status  = $request->get('status', 'pending'); // Default to pending
+        $perPage = (int) $request->get('per_page', 10);
         
         $query = Pemilik::query();
 
@@ -29,7 +30,7 @@ class VerifikasiAkunController extends Controller
             });
         }
 
-        $pemiliks = $query->orderBy('created_at', 'desc')->paginate(10);
+        $pemiliks = $query->orderBy('created_at', 'desc')->paginate($perPage)->withQueryString();
         
         // Counts for cards
         $countPending = Pemilik::where('status_verifikasi_ktp', 'pending')->count();

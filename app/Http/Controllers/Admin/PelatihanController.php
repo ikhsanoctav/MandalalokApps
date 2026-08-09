@@ -13,9 +13,26 @@ use Illuminate\Http\Request;
 
 class PelatihanController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $pelatihans = Pelatihan::orderBy('tanggal_mulai', 'desc')->get();
+        $search  = $request->get('search');
+        $status  = $request->get('status');
+        $perPage = (int) $request->get('per_page', 15);
+
+        $query = Pelatihan::orderBy('tanggal_mulai', 'desc');
+
+        if ($search) {
+            $query->where(function ($q) use ($search) {
+                $q->where('judul', 'like', "%{$search}%")
+                  ->orWhere('lokasi', 'like', "%{$search}%");
+            });
+        }
+
+        if ($status) {
+            $query->where('status', $status);
+        }
+
+        $pelatihans = $query->paginate($perPage)->withQueryString();
         return view('admin.pelatihan.index', compact('pelatihans'));
     }
 

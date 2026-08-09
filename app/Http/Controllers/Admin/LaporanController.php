@@ -33,6 +33,15 @@ class LaporanController extends Controller
             $query->where('tanggal_pendataan', '<=', $request->periode_akhir);
         }
 
+        if ($request->filled('search')) {
+            $search = $request->search;
+            $query->where(function ($q) use ($search) {
+                $q->where('nama_usaha', 'like', "%{$search}%")
+                  ->orWhere('nomor_pendaftaran', 'like', "%{$search}%")
+                  ->orWhereHas('pemilik', fn($pq) => $pq->where('nama_lengkap', 'like', "%{$search}%"));
+            });
+        }
+
         $totalUmkm = $query->count();
         $totalTenagaKerja = (clone $query)->sum('jumlah_tenaga_kerja');
 
@@ -47,7 +56,8 @@ class LaporanController extends Controller
         });
         $chartValues = $chartData->pluck('count');
 
-        $umkms = (clone $query)->with(['pemilik', 'kategori', 'sektor'])->latest()->paginate(10)->withQueryString();
+        $perPage = (int) $request->get('per_page', 10);
+        $umkms = (clone $query)->with(['pemilik', 'kategori', 'sektor'])->latest()->paginate($perPage)->withQueryString();
 
         return view('admin.laporan.index', compact('totalUmkm', 'totalTenagaKerja', 'kategoriList', 'chartLabels', 'chartValues', 'umkms'));
     }

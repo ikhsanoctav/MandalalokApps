@@ -59,8 +59,43 @@
             </div>
         </div>
 
+        {{-- Filter Bar --}}
+        @php $activeFiltersUmkm = array_filter([request('search'), request('status')]); @endphp
+        <div class="bg-white rounded-2xl border border-slate-200 shadow-sm p-4">
+            <form method="GET" action="{{ route('operator.umkm.index') }}" class="flex flex-wrap gap-3 items-center">
+                <input type="hidden" name="tab" value="{{ $tab }}">
+                
+                <div class="relative flex-1 min-w-[200px]">
+                    <span class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-slate-400"><i class="mdi mdi-magnify"></i></span>
+                    <input type="text" name="search" value="{{ request('search') }}" placeholder="Cari nama usaha, no. pendaftaran, pemilik..."
+                        class="pl-9 pr-4 py-2.5 w-full bg-slate-50 border border-slate-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all">
+                </div>
+                <div class="relative">
+                    <select name="status" onchange="this.form.submit()" class="appearance-none bg-slate-50 border border-slate-200 rounded-lg text-sm font-semibold text-slate-700 pl-4 pr-9 py-2.5 focus:outline-none transition-all cursor-pointer {{ request('status') ? 'border-blue-400 bg-blue-50 text-blue-700' : '' }}">
+                        <option value="">Semua Status</option>
+                        <option value="pending" {{ request('status') === 'pending' ? 'selected' : '' }}>⏳ Menunggu</option>
+                        <option value="terverifikasi" {{ request('status') === 'terverifikasi' ? 'selected' : '' }}>✅ Terverifikasi</option>
+                        <option value="ditolak" {{ request('status') === 'ditolak' ? 'selected' : '' }}>❌ Ditolak</option>
+                    </select>
+                    <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-3 text-slate-400"><i class="mdi mdi-chevron-down text-sm"></i></div>
+                </div>
+                <div class="flex items-center gap-2">
+                    <span class="text-xs text-slate-500 font-semibold">Tampilkan:</span>
+                    <select name="per_page" onchange="this.form.submit()" class="appearance-none bg-slate-50 border border-slate-200 rounded-lg text-sm font-bold text-slate-700 pl-3 pr-8 py-2.5 focus:outline-none transition-all cursor-pointer">
+                        @foreach([10, 25, 50] as $pp)
+                            <option value="{{ $pp }}" {{ request('per_page', 10) == $pp ? 'selected' : '' }}>{{ $pp }}</option>
+                        @endforeach
+                    </select>
+                </div>
+                <button type="submit" class="px-4 py-2.5 bg-blue-600 hover:bg-blue-700 text-white text-sm font-bold rounded-lg transition-all shadow-sm">Cari</button>
+                @if(count($activeFiltersUmkm) > 0)
+                    <a href="{{ route('operator.umkm.index', ['tab' => $tab]) }}" class="px-4 py-2.5 bg-rose-50 border border-rose-200 text-rose-600 text-sm font-bold rounded-lg hover:bg-rose-100 transition-all">Reset</a>
+                @endif
+            </form>
+        </div>
+
         {{-- Tab Switcher --}}
-        <div x-data="{ activeTab: '{{ $tab === 'peta' ? 'peta' : 'saya' }}', searchSaya: '', searchWilayah: '' }" class="space-y-4">
+        <div x-data="{ activeTab: '{{ $tab === 'peta' ? 'peta' : ($tab === 'wilayah' ? 'wilayah' : 'saya') }}' }" class="space-y-4">
             <div class="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden">
                 {{-- Tab Header --}}
                 <div class="flex border-b border-slate-200">
@@ -92,21 +127,9 @@
 
                 {{-- Tab: Input Saya --}}
                 <div x-show="activeTab === 'saya'" x-transition:enter="transition ease-out duration-200" x-transition:enter-start="opacity-0" x-transition:enter-end="opacity-100">
-                    <div class="p-4 border-b border-slate-100 bg-slate-50/50 flex justify-between items-center gap-4">
-                        <div class="relative w-full max-w-sm">
-                            <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                                <svg class="w-4 h-4 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
-                            </div>
-                            <input type="text" x-model="searchSaya" placeholder="Cari UMKM saya (nama, no. pendaftaran)..." 
-                                class="w-full pl-10 pr-4 py-2 border border-slate-200 rounded-lg text-sm focus:border-blue-500 focus:ring-1 focus:ring-blue-500 outline-none transition-all">
-                        </div>
-                    </div>
                     <div class="block md:hidden divide-y divide-slate-100">
                         @forelse($umkmSaya as $umkm)
-                            @php
-                                $searchStringSaya = strtolower($umkm->nama_usaha . ' ' . $umkm->no_pendaftaran . ' ' . ($umkm->pemilik?->nama_lengkap ?? ''));
-                            @endphp
-                            <article class="p-4 space-y-3" x-show="searchSaya === '' || '{{ $searchStringSaya }}'.includes(searchSaya.toLowerCase())">
+                            <article class="p-4 space-y-3">
                                 <div class="flex items-start justify-between gap-3">
                                     <div class="min-w-0">
                                         <p class="font-mono text-xs font-semibold text-slate-700">{{ $umkm->no_pendaftaran ?? '-' }}</p>
@@ -166,10 +189,7 @@
                             </thead>
                             <tbody class="divide-y divide-slate-100">
                                 @forelse($umkmSaya as $umkm)
-                                    @php
-                                        $searchStringSaya = strtolower($umkm->nama_usaha . ' ' . $umkm->no_pendaftaran . ' ' . ($umkm->pemilik?->nama_lengkap ?? ''));
-                                    @endphp
-                                    <tr class="hover:bg-slate-50 transition-colors" x-show="searchSaya === '' || '{{ $searchStringSaya }}'.includes(searchSaya.toLowerCase())">
+                                    <tr class="hover:bg-slate-50 transition-colors">
                                         <td class="py-4 px-6">
                                             <span class="font-mono text-xs font-semibold text-slate-600 bg-slate-100 px-2 py-1 rounded-md">{{ $umkm->no_pendaftaran ?? '-' }}</span>
                                         </td>
@@ -213,17 +233,17 @@
                                             <a href="{{ route('operator.umkm.create') }}" class="text-blue-600 text-sm hover:underline mt-1 inline-block">Mulai Input Data Sekarang</a>
                                         </td>
                                     </tr>
-                                @endforelse
-                                
-                                <tr x-cloak x-show="searchSaya !== '' && !Array.from($el.closest('tbody').querySelectorAll('tr:not([x-cloak])')).some(tr => tr.style.display !== 'none')">
-                                    <td colspan="6" class="py-8 px-6 text-center text-slate-700">
-                                        Tidak ada UMKM yang cocok dengan pencarian "<span x-text="searchSaya" class="font-bold"></span>".
-                                    </td>
-                                </tr>
                             </tbody>
                         </table>
                     </div>
+                    
+                    @if($umkmSaya->hasPages())
+                        <div class="p-4 border-t border-slate-200">
+                            {{ $umkmSaya->appends(request()->except('saya_page'))->links() }}
+                        </div>
+                    @endif
                 </div>
+
 
                 {{-- Tab: Semua Wilayah --}}
                 <div x-show="activeTab === 'wilayah'" x-transition:enter="transition ease-out duration-200" x-transition:enter-start="opacity-0" x-transition:enter-end="opacity-100">
@@ -254,22 +274,11 @@
                         </div>
                         @endif
                         
-                        <div class="px-6 py-3">
-                            <div class="relative w-full">
-                                <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                                    <svg class="w-4 h-4 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
-                                </div>
-                                <input type="text" x-model="searchWilayah" placeholder="Cari UMKM di wilayah (nama, no pendaftaran, pemilik)..." 
-                                    class="w-full pl-10 pr-4 py-2 border border-slate-200 rounded-lg text-sm focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 outline-none transition-all bg-slate-50">
-                            </div>
-                        </div>
+                        {{-- Distribusi Kategori (kept as is) --}}
 
                         <div class="block md:hidden divide-y divide-slate-100">
                             @foreach ($umkmWilayah as $item)
-                                @php
-                                    $searchStringWil = strtolower($item->nama_usaha . ' ' . $item->no_pendaftaran . ' ' . ($item->pemilik?->nama_lengkap ?? '') . ' ' . ($item->kategori?->nama_kategori ?? ''));
-                                @endphp
-                                <article class="p-4 space-y-3" x-show="searchWilayah === '' || '{{ $searchStringWil }}'.includes(searchWilayah.toLowerCase())">
+                                <article class="p-4 space-y-3">
                                     <div class="flex items-start justify-between gap-3">
                                         <div class="min-w-0">
                                             <p class="font-mono text-xs font-semibold text-slate-700">{{ $item->no_pendaftaran ?? '-' }}</p>
@@ -325,10 +334,7 @@
                                 </thead>
                                 <tbody class="divide-y divide-slate-100">
                                     @foreach ($umkmWilayah as $item)
-                                        @php
-                                            $searchStringWil = strtolower($item->nama_usaha . ' ' . $item->no_pendaftaran . ' ' . ($item->pemilik?->nama_lengkap ?? '') . ' ' . ($item->kategori?->nama_kategori ?? ''));
-                                        @endphp
-                                        <tr class="hover:bg-slate-50 transition-colors" x-show="searchWilayah === '' || '{{ $searchStringWil }}'.includes(searchWilayah.toLowerCase())">
+                                        <tr class="hover:bg-slate-50 transition-colors">
                                             <td class="px-6 py-4">
                                                 <span class="font-mono text-xs font-semibold text-slate-600 bg-slate-100 px-2 py-1 rounded-md">{{ $item->no_pendaftaran ?? '-' }}</span>
                                             </td>
@@ -365,14 +371,15 @@
                                             </td>
                                         </tr>
                                     @endforeach
-                                    <tr x-cloak x-show="searchWilayah !== '' && !Array.from($el.closest('tbody').querySelectorAll('tr:not([x-cloak])')).some(tr => tr.style.display !== 'none')">
-                                        <td colspan="6" class="py-8 px-6 text-center text-slate-700">
-                                            Tidak ada UMKM yang cocok dengan pencarian "<span x-text="searchWilayah" class="font-bold"></span>".
-                                        </td>
-                                    </tr>
                                 </tbody>
                             </table>
                         </div>
+
+                        @if($umkmWilayah->hasPages())
+                            <div class="p-4 border-t border-slate-200">
+                                {{ $umkmWilayah->appends(request()->except('wilayah_page'))->links() }}
+                            </div>
+                        @endif
                     @endif
                 </div>
 

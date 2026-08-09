@@ -26,46 +26,73 @@ class UmkmController extends Controller
     {
         $user = Auth::user();
         $tab = $request->get('tab', 'saya');
+        $search = $request->get('search');
+        $status = $request->get('status');
+        $perPage = (int) $request->get('per_page', 10);
+
+        // Filter Closure
+        $filterClosure = function ($q) use ($search, $status) {
+            if ($search) {
+                $q->where(function ($sq) use ($search) {
+                    $sq->where('nama_usaha', 'like', "%{$search}%")
+                       ->orWhere('nomor_pendaftaran', 'like', "%{$search}%")
+                       ->orWhereHas('pemilik', fn($pq) => $pq->where('nama_lengkap', 'like', "%{$search}%"));
+                });
+            }
+            if ($status) {
+                $q->where('status_verifikasi', $status);
+            }
+        };
 
         // Tab: Input Saya
-        $umkmSaya = UMKM::with(['pemilik', 'kategori', 'sektor'])
+        $querySaya = UMKM::with(['pemilik', 'kategori', 'sektor'])
             ->where('id_petugas', $user->id)
-            ->orderBy('created_at', 'desc')
-            ->get();
+            ->orderBy('created_at', 'desc');
+        
+        $querySaya->where($filterClosure);
+        $umkmSaya = $querySaya->paginate($perPage, ['*'], 'saya_page')->withQueryString();
 
         // Tab: Semua Wilayah
         $kelurahan = $user->kelurahan;
         $umkmWilayah = collect();
+        $mapData = collect();
+        $stats = ['total' => 0, 'terverifikasi' => 0, 'ditolak' => 0, 'per_kategori' => collect()];
+
         if ($kelurahan && $kelurahan !== '-') {
-            $umkmWilayah = UMKM::with(['pemilik', 'kategori', 'sektor'])
+            // Get all for stats and map (unfiltered by search/status, or filtered?)
+            // Usually stats and map reflect the filters, or we can keep them global for the kelurahan
+            $baseWilayahQuery = UMKM::with(['pemilik', 'kategori', 'sektor'])
                 ->whereHas('pemilik', function ($q) use ($kelurahan) {
                     $q->where('kelurahan', $kelurahan);
-                })
-                ->orderBy('created_at', 'desc')
-                ->get();
+                });
+
+            $allWilayah = $baseWilayahQuery->get();
+
+            $stats = [
+                'total' => $allWilayah->count(),
+                'terverifikasi' => $allWilayah->where('status_verifikasi', 'terverifikasi')->count(),
+                'ditolak' => $allWilayah->where('status_verifikasi', 'ditolak')->count(),
+                'per_kategori' => $allWilayah->groupBy(fn ($u) => $u->kategori->nama_kategori ?? 'Lainnya')
+                    ->map->count()->sortDesc(),
+            ];
+
+            $mapData = $allWilayah->filter(fn ($u) => $u->latitude && $u->longitude)
+                ->map(fn ($u) => [
+                    'id' => $u->id_umkm,
+                    'nama' => $u->nama_usaha,
+                    'lat' => (float) $u->latitude,
+                    'lng' => (float) $u->longitude,
+                    'kategori' => $u->kategori->nama_kategori ?? '-',
+                    'status' => $u->status_verifikasi,
+                    'pemilik' => $u->pemilik->nama_lengkap ?? '-',
+                    'alamat' => $u->alamat_usaha ?? '-',
+                ])->values();
+
+            // Filtered query for pagination
+            $queryWilayah = (clone $baseWilayahQuery)->orderBy('created_at', 'desc');
+            $queryWilayah->where($filterClosure);
+            $umkmWilayah = $queryWilayah->paginate($perPage, ['*'], 'wilayah_page')->withQueryString();
         }
-
-        // Data peta (UMKM dengan koordinat di wilayah)
-        $mapData = $umkmWilayah->filter(fn ($u) => $u->latitude && $u->longitude)
-            ->map(fn ($u) => [
-                'id' => $u->id_umkm,
-                'nama' => $u->nama_usaha,
-                'lat' => (float) $u->latitude,
-                'lng' => (float) $u->longitude,
-                'kategori' => $u->kategori->nama_kategori ?? '-',
-                'status' => $u->status_verifikasi,
-                'pemilik' => $u->pemilik->nama_lengkap ?? '-',
-                'alamat' => $u->alamat_usaha ?? '-',
-            ])->values();
-
-        // Statistik wilayah
-        $stats = [
-            'total' => $umkmWilayah->count(),
-            'terverifikasi' => $umkmWilayah->where('status_verifikasi', 'terverifikasi')->count(),
-            'ditolak' => $umkmWilayah->where('status_verifikasi', 'ditolak')->count(),
-            'per_kategori' => $umkmWilayah->groupBy(fn ($u) => $u->kategori->nama_kategori ?? 'Lainnya')
-                ->map->count()->sortDesc(),
-        ];
 
         return view('petugas.umkm.index', compact(
             'umkmSaya',

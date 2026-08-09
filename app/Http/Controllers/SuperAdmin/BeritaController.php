@@ -9,9 +9,27 @@ use Illuminate\Support\Facades\Storage;
 
 class BeritaController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $berita = Berita::latest()->paginate(10);
+        $search  = $request->get('search');
+        $status  = $request->get('status');
+        $perPage = (int) $request->get('per_page', 10);
+
+        $query = Berita::query();
+
+        if ($search) {
+            $query->where(function ($q) use ($search) {
+                $q->where('judul', 'like', "%{$search}%")
+                  ->orWhere('kategori', 'like', "%{$search}%")
+                  ->orWhere('penulis', 'like', "%{$search}%");
+            });
+        }
+
+        if ($status) {
+            $query->where('status', $status);
+        }
+
+        $berita = $query->latest()->paginate($perPage)->withQueryString();
 
         return view('superadmin.master.berita.index', compact('berita'));
     }

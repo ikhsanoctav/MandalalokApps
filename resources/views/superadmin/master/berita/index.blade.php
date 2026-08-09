@@ -12,6 +12,41 @@
             </a>
         </div>
 
+        <x-card class="!p-5">
+            @php $activeFilters = array_filter([request('search'), request('status')]); @endphp
+            <form method="GET" action="{{ route('superadmin.berita.index') }}" class="flex flex-wrap gap-3 items-center">
+                <div class="relative flex-1 min-w-[200px]">
+                    <span class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-slate-400"><i class="mdi mdi-magnify"></i></span>
+                    <input type="text" name="search" value="{{ request('search') }}" placeholder="Cari judul, kategori, atau penulis..."
+                        class="pl-9 pr-4 py-2.5 w-full bg-slate-50 border border-slate-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all">
+                </div>
+                <div class="relative">
+                    <select name="status" onchange="this.form.submit()" class="appearance-none bg-slate-50 border border-slate-200 rounded-lg text-sm font-semibold text-slate-700 pl-4 pr-9 py-2.5 focus:outline-none focus:ring-2 focus:ring-blue-500/20 transition-all cursor-pointer {{ request('status') ? 'border-blue-400 bg-blue-50 text-blue-700' : '' }}">
+                        <option value="">Semua Status</option>
+                        <option value="published" {{ request('status') === 'published' ? 'selected' : '' }}>✅ Published</option>
+                        <option value="draft"     {{ request('status') === 'draft'     ? 'selected' : '' }}>📝 Draft</option>
+                    </select>
+                    <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-3 text-slate-400"><i class="mdi mdi-chevron-down text-sm"></i></div>
+                </div>
+                <div class="relative flex items-center gap-2">
+                    <span class="text-xs text-slate-500 font-semibold">Tampilkan:</span>
+                    <select name="per_page" onchange="this.form.submit()" class="appearance-none bg-slate-50 border border-slate-200 rounded-lg text-sm font-bold text-slate-700 pl-3 pr-8 py-2.5 focus:outline-none transition-all cursor-pointer">
+                        @foreach([10, 25, 50] as $pp)
+                            <option value="{{ $pp }}" {{ request('per_page', 10) == $pp ? 'selected' : '' }}>{{ $pp }}</option>
+                        @endforeach
+                    </select>
+                </div>
+                <button type="submit" class="px-4 py-2.5 bg-blue-600 hover:bg-blue-700 text-white text-sm font-bold rounded-lg transition-all shadow-sm">Cari</button>
+                @if(count($activeFilters) > 0)
+                    <a href="{{ route('superadmin.berita.index') }}" class="px-4 py-2.5 bg-rose-50 border border-rose-200 text-rose-600 text-sm font-bold rounded-lg hover:bg-rose-100 transition-all">Reset</a>
+                @endif
+                <div class="ml-auto text-xs text-slate-500">
+                    Menampilkan <span class="font-black text-slate-700">{{ $berita->firstItem() ?? 0 }}–{{ $berita->lastItem() ?? 0 }}</span> dari <span class="font-black text-blue-600">{{ $berita->total() }}</span>
+                    @if(count($activeFilters) > 0) &mdash; <span class="text-blue-600 font-bold">{{ count($activeFilters) }} filter aktif</span>@endif
+                </div>
+            </form>
+        </x-card>
+
         <x-card>
             <div class="overflow-x-auto">
                 <table class="min-w-full text-sm text-left border border-slate-200 rounded-md">

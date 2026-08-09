@@ -18,7 +18,7 @@ class NotificationController extends Controller
             $query = $user->readNotifications();
         }
 
-        $notifications = $query->paginate(15);
+        $notifications = $query->paginate(15)->withQueryString();
 
         return view('notifications.index', [
             'notifications' => $notifications,

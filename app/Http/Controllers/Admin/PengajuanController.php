@@ -66,7 +66,7 @@ class PengajuanController extends Controller
             $query->whereDate('tanggal_pengajuan', '<=', $date_to);
         }
 
-        $pengajuans = $query->orderBy('tanggal_pengajuan', 'desc')->paginate($perPage);
+        $pengajuans = $query->orderBy('tanggal_pengajuan', 'desc')->paginate($perPage)->withQueryString();
 
         $kelurahans = Kelurahan::pluck('nama_kelurahan')->toArray();
         $umkms = \App\Models\UMKM::where('status_verifikasi', 'terverifikasi')->orderBy('nama_usaha')->get();

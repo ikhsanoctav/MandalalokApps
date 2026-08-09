@@ -14,6 +14,43 @@
     </a>
 </div>
 
+@php $activeFiltersProduk = array_filter([request('search'), request('umkm_id')]); @endphp
+<div class="bg-white rounded-2xl border border-slate-200 shadow-sm p-5 mb-6">
+    <form method="GET" action="{{ route('pelaku.produk.index') }}" class="flex flex-wrap gap-3 items-center">
+        <div class="relative flex-1 min-w-[200px]">
+            <span class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-slate-400"><i class="mdi mdi-magnify"></i></span>
+            <input type="text" name="search" value="{{ request('search') }}" placeholder="Cari nama atau deskripsi produk..."
+                class="pl-9 pr-4 py-2.5 w-full bg-slate-50 border border-slate-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all">
+        </div>
+        @if($umkms->count() > 1)
+        <div class="relative">
+            <select name="umkm_id" onchange="this.form.submit()" class="appearance-none bg-slate-50 border border-slate-200 rounded-lg text-sm font-semibold text-slate-700 pl-4 pr-9 py-2.5 focus:outline-none transition-all cursor-pointer {{ request('umkm_id') ? 'border-blue-400 bg-blue-50 text-blue-700' : '' }}">
+                <option value="">Semua Usaha</option>
+                @foreach($umkms as $u)
+                    <option value="{{ $u->id_umkm }}" {{ request('umkm_id') == $u->id_umkm ? 'selected' : '' }}>{{ $u->nama_usaha }}</option>
+                @endforeach
+            </select>
+            <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-3 text-slate-400"><i class="mdi mdi-chevron-down text-sm"></i></div>
+        </div>
+        @endif
+        <div class="flex items-center gap-2">
+            <span class="text-xs text-slate-500 font-semibold">Tampilkan:</span>
+            <select name="per_page" onchange="this.form.submit()" class="appearance-none bg-slate-50 border border-slate-200 rounded-lg text-sm font-bold text-slate-700 pl-3 pr-8 py-2.5 focus:outline-none transition-all cursor-pointer">
+                @foreach([10, 20, 50] as $pp)
+                    <option value="{{ $pp }}" {{ request('per_page', 10) == $pp ? 'selected' : '' }}>{{ $pp }}</option>
+                @endforeach
+            </select>
+        </div>
+        <button type="submit" class="px-4 py-2.5 bg-blue-600 hover:bg-blue-700 text-white text-sm font-bold rounded-lg transition-all shadow-sm">Cari</button>
+        @if(count($activeFiltersProduk) > 0)
+            <a href="{{ route('pelaku.produk.index') }}" class="px-4 py-2.5 bg-rose-50 border border-rose-200 text-rose-600 text-sm font-bold rounded-lg hover:bg-rose-100 transition-all">Reset</a>
+        @endif
+        <div class="ml-auto text-xs text-slate-500">
+            Menampilkan <span class="font-black text-slate-700">{{ $produks->firstItem() ?? 0 }}–{{ $produks->lastItem() ?? 0 }}</span> dari <span class="font-black text-blue-600">{{ $produks->total() }}</span> produk
+        </div>
+    </form>
+</div>
+
 @if($produks->count() > 0)
 <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6" x-data="produkIndex()">
     @foreach($produks as $produk)

@@ -165,30 +165,96 @@
             </div>
         </div>
 
-        <div
-            class="bg-white rounded-2xl p-5 shadow-sm border border-slate-200/60 flex flex-col md:flex-row justify-between items-center gap-4">
-            <div class="relative w-full md:w-96">
-                <span class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-slate-400">
-                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                            d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
-                    </svg>
-                </span>
-                <input x-model="search" type="text" placeholder="Cari nama, email, NIK, atau jabatan..."
-                    class="pl-10 pr-4 py-2.5 w-full bg-slate-50 border border-slate-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all">
-            </div>
-            <div class="flex items-center gap-4 text-xs font-medium text-slate-700 min-h-[1.5rem]">
-                <!-- Staff Legend -->
-                <div x-show="activeTab === 'staff'" class="flex items-center gap-4">
-                    <span class="flex items-center gap-1.5"><span class="w-2.5 h-2.5 bg-blue-500 rounded-full"></span> Super Admin</span>
-                    <span class="flex items-center gap-1.5"><span class="w-2.5 h-2.5 bg-purple-500 rounded-full"></span> Admin Kecamatan</span>
-                    <span class="flex items-center gap-1.5"><span class="w-2.5 h-2.5 bg-emerald-500 rounded-full"></span> Operator Lapangan</span>
+        @php
+            $activeFilters = array_filter([
+                request('search'), request('role'), request('status'),
+            ]);
+        @endphp
+        <div class="bg-white rounded-2xl p-5 shadow-sm border border-slate-200/60">
+            <form method="GET" action="{{ route('superadmin.users.index') }}" id="userFilterForm">
+                <div class="flex flex-col gap-4">
+
+                    {{-- Row 1: Search + Cari + Reset --}}
+                    <div class="flex flex-col sm:flex-row gap-3">
+                        <div class="relative flex-1">
+                            <span class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-slate-400">
+                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+                                </svg>
+                            </span>
+                            <input type="text" name="search" value="{{ request('search') }}"
+                                placeholder="Cari nama, email, NIK, jabatan, atau kelurahan..."
+                                class="pl-10 pr-4 py-2.5 w-full bg-slate-50 border border-slate-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all">
+                        </div>
+                        <button type="submit" class="inline-flex items-center gap-2 px-5 py-2.5 bg-blue-600 hover:bg-blue-700 text-white text-sm font-bold rounded-lg transition-all shadow-sm whitespace-nowrap">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
+                            Cari
+                        </button>
+                        @if(count($activeFilters) > 0)
+                            <a href="{{ route('superadmin.users.index') }}" class="inline-flex items-center gap-2 px-5 py-2.5 bg-rose-50 border border-rose-200 text-rose-600 text-sm font-bold rounded-lg hover:bg-rose-100 transition-all whitespace-nowrap">
+                                <i class="mdi mdi-filter-off-outline"></i> Reset
+                            </a>
+                        @endif
+                    </div>
+
+                    {{-- Row 2: Role + Status + Per Page --}}
+                    <div class="flex flex-wrap items-center gap-3">
+
+                        {{-- Role (staff tab) --}}
+                        <div class="relative">
+                            <select name="role" onchange="this.form.submit()" class="appearance-none bg-slate-50 border border-slate-200 rounded-lg text-sm font-semibold text-slate-700 pl-4 pr-9 py-2.5 focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all cursor-pointer {{ request('role') ? 'border-blue-400 bg-blue-50 text-blue-700' : '' }}">
+                                <option value="">Semua Role</option>
+                                <option value="super_admin"       {{ request('role') === 'super_admin'       ? 'selected' : '' }}>🔵 Super Admin</option>
+                                <option value="admin_kecamatan"   {{ request('role') === 'admin_kecamatan'   ? 'selected' : '' }}>🟣 Admin Kecamatan</option>
+                                <option value="operator_lapangan" {{ request('role') === 'operator_lapangan' ? 'selected' : '' }}>🟢 Operator Lapangan</option>
+                                <option value="pelaku_umkm"       {{ request('role') === 'pelaku_umkm'       ? 'selected' : '' }}>🔷 Pelaku UMKM</option>
+                            </select>
+                            <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-3 text-slate-400"><i class="mdi mdi-chevron-down text-sm"></i></div>
+                        </div>
+
+                        {{-- Status Aktif --}}
+                        <div class="relative">
+                            <select name="status" onchange="this.form.submit()" class="appearance-none bg-slate-50 border border-slate-200 rounded-lg text-sm font-semibold text-slate-700 pl-4 pr-9 py-2.5 focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all cursor-pointer {{ request('status') ? 'border-blue-400 bg-blue-50 text-blue-700' : '' }}">
+                                <option value="">Semua Status</option>
+                                <option value="aktif"    {{ request('status') === 'aktif'    ? 'selected' : '' }}>✅ Aktif</option>
+                                <option value="nonaktif" {{ request('status') === 'nonaktif' ? 'selected' : '' }}>🔴 Nonaktif</option>
+                            </select>
+                            <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-3 text-slate-400"><i class="mdi mdi-chevron-down text-sm"></i></div>
+                        </div>
+
+                        {{-- Per Page --}}
+                        <div class="relative ml-auto flex items-center gap-2">
+                            <span class="text-xs text-slate-500 font-semibold whitespace-nowrap">Tampilkan:</span>
+                            <select name="per_page" onchange="this.form.submit()" class="appearance-none bg-slate-50 border border-slate-200 rounded-lg text-sm font-bold text-slate-700 pl-3 pr-7 py-2.5 focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all cursor-pointer">
+                                @foreach([15, 25, 50] as $pp)
+                                    <option value="{{ $pp }}" {{ request('per_page', 15) == $pp ? 'selected' : '' }}>{{ $pp }}</option>
+                                @endforeach
+                            </select>
+                            <div class="pointer-events-none absolute right-0 top-1/2 -translate-y-1/2 pr-2 text-slate-400"><i class="mdi mdi-chevron-down text-sm"></i></div>
+                        </div>
+
+                        {{-- Active filter summary --}}
+                        @if(count($activeFilters) > 0)
+                            <span class="text-xs text-blue-600 font-bold">{{ count($activeFilters) }} filter aktif</span>
+                        @endif
+                    </div>
+
+                    {{-- Row 3: Result info (shown per tab) --}}
+                    <div class="flex flex-wrap gap-4 text-xs font-medium text-slate-600 pt-1 border-t border-slate-100">
+                        <span class="flex items-center gap-1.5"><span class="w-2 h-2 bg-blue-500 rounded-full"></span> Super Admin</span>
+                        <span class="flex items-center gap-1.5"><span class="w-2 h-2 bg-purple-500 rounded-full"></span> Admin Kecamatan</span>
+                        <span class="flex items-center gap-1.5"><span class="w-2 h-2 bg-emerald-500 rounded-full"></span> Operator Lapangan</span>
+                        <span class="flex items-center gap-1.5"><span class="w-2 h-2 bg-sky-500 rounded-full"></span> Pelaku UMKM</span>
+                        <div class="ml-auto flex items-center gap-1.5 text-slate-500">
+                            <i class="mdi mdi-format-list-bulleted text-blue-400"></i>
+                            Menampilkan <span class="font-black text-slate-700 mx-1">{{ $nonPelakuUmkm->firstItem() ?? 0 }}–{{ $nonPelakuUmkm->lastItem() ?? 0 }}</span> / <span class="font-black text-blue-600 mx-1">{{ $nonPelakuUmkm->total() }}</span> staf
+                            &nbsp;·&nbsp;
+                            <span class="font-black text-slate-700 mx-1">{{ $pelakuUmkm->firstItem() ?? 0 }}–{{ $pelakuUmkm->lastItem() ?? 0 }}</span> / <span class="font-black text-sky-600 mx-1">{{ $pelakuUmkm->total() }}</span> pelaku
+                        </div>
+                    </div>
+
                 </div>
-                <!-- Pelaku Legend -->
-                <div x-show="activeTab === 'pelaku'" class="flex items-center gap-1.5" x-cloak>
-                    <span class="flex items-center gap-1.5"><span class="w-2.5 h-2.5 bg-blue-500 rounded-full"></span> Pelaku UMKM</span>
-                </div>
-            </div>
+            </form>
         </div>
 
         <!-- Tabs Navigation -->

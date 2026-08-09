@@ -68,20 +68,35 @@
                         Filter</a>
                 </div>
 
-                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 md:gap-4">
-                    <select name="status" class="w-full px-3 py-2 md:px-4 md:py-2.5 rounded-lg border border-slate-300 bg-white text-slate-700 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-200">
-                        <option value="semua" {{ $status === 'semua' ? 'selected' : '' }}>Semua Status</option>
-                        <option value="pending" {{ $status === 'pending' ? 'selected' : '' }}>Menunggu Verifikasi</option>
-                        <option value="terverifikasi" {{ $status === 'terverifikasi' ? 'selected' : '' }}>Terverifikasi</option>
-                        <option value="ditolak" {{ $status === 'ditolak' ? 'selected' : '' }}>Ditolak</option>
-                    </select>
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 md:gap-4 items-end">
+                    <div class="w-full">
+                        <label class="block text-xs text-slate-500 font-semibold mb-1">Status Verifikasi</label>
+                        <select name="status" class="w-full px-3 py-2 md:px-4 md:py-2.5 rounded-lg border border-slate-300 bg-white text-slate-700 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-200">
+                            <option value="semua" {{ $status === 'semua' ? 'selected' : '' }}>Semua Status</option>
+                            <option value="pending" {{ $status === 'pending' ? 'selected' : '' }}>Menunggu Verifikasi</option>
+                            <option value="terverifikasi" {{ $status === 'terverifikasi' ? 'selected' : '' }}>Terverifikasi</option>
+                            <option value="ditolak" {{ $status === 'ditolak' ? 'selected' : '' }}>Ditolak</option>
+                        </select>
+                    </div>
 
-                    <input type="text" name="search" placeholder="Cari nama lengkap..." value="{{ request('search') }}"
-                        class="w-full px-3 py-2 md:px-4 md:py-2.5 rounded-lg border border-slate-300 bg-white text-slate-700 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-200">
+                    <div class="w-full">
+                        <label class="block text-xs text-slate-500 font-semibold mb-1">Pencarian</label>
+                        <input type="text" name="search" placeholder="Cari nama atau NIK..." value="{{ request('search') }}"
+                            class="w-full px-3 py-2 md:px-4 md:py-2.5 rounded-lg border border-slate-300 bg-white text-slate-700 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-200">
+                    </div>
+
+                    <div class="w-full">
+                        <label class="block text-xs text-slate-500 font-semibold mb-1">Tampilkan</label>
+                        <select name="per_page" class="w-full px-3 py-2 md:px-4 md:py-2.5 rounded-lg border border-slate-300 bg-white text-slate-700 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-200">
+                            @foreach([10, 25, 50] as $pp)
+                                <option value="{{ $pp }}" {{ request('per_page', 10) == $pp ? 'selected' : '' }}>{{ $pp }} Baris</option>
+                            @endforeach
+                        </select>
+                    </div>
 
                     <div class="flex gap-2">
                         <button type="submit"
-                            class="px-4 py-2 bg-blue-600 text-white rounded-lg text-sm font-medium hover:bg-blue-700 transition-all">
+                            class="w-full px-4 py-2 md:py-2.5 bg-blue-600 text-white rounded-lg text-sm font-medium hover:bg-blue-700 transition-all">
                             Terapkan Filter
                         </button>
                     </div>
