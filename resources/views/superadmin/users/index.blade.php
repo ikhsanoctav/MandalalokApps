@@ -171,7 +171,7 @@
             ]);
         @endphp
         <div class="bg-white rounded-2xl p-5 shadow-sm border border-slate-200/60">
-            <form method="GET" action="{{ route('superadmin.users.index') }}" id="userFilterForm">
+            <form method="GET" action="{{ route('superadmin.users') }}" id="userFilterForm">
                 <div class="flex flex-col gap-4">
 
                     {{-- Row 1: Search + Cari + Reset --}}
@@ -191,7 +191,7 @@
                             Cari
                         </button>
                         @if(count($activeFilters) > 0)
-                            <a href="{{ route('superadmin.users.index') }}" class="inline-flex items-center gap-2 px-5 py-2.5 bg-rose-50 border border-rose-200 text-rose-600 text-sm font-bold rounded-lg hover:bg-rose-100 transition-all whitespace-nowrap">
+                            <a href="{{ route('superadmin.users') }}" class="inline-flex items-center gap-2 px-5 py-2.5 bg-rose-50 border border-rose-200 text-rose-600 text-sm font-bold rounded-lg hover:bg-rose-100 transition-all whitespace-nowrap">
                                 <i class="mdi mdi-filter-off-outline"></i> Reset
                             </a>
                         @endif
