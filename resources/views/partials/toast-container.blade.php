@@ -1,5 +1,5 @@
     
-    <div id="toastContainer" class="fixed top-5 right-5 z-50 flex flex-col gap-3"></div>
+    <div id="toastContainer" class="fixed top-20 right-6 z-[999999] flex flex-col gap-3 pointer-events-none"></div>
 
     <script>
         // Global function untuk show toast
@@ -16,12 +16,27 @@
             if (!container) return;
 
             const toastId = 'toast-' + type + '-' + Date.now();
-            const colors = {
+            
+            const bgColors = {
                 success: 'bg-emerald-500',
                 error: 'bg-red-500',
                 danger: 'bg-red-500',
                 warning: 'bg-amber-500',
                 info: 'bg-blue-500'
+            };
+            const borderColors = {
+                success: 'border-emerald-500',
+                error: 'border-red-500',
+                danger: 'border-red-500',
+                warning: 'border-amber-500',
+                info: 'border-blue-500'
+            };
+            const textColors = {
+                success: 'text-emerald-500',
+                error: 'text-red-500',
+                danger: 'text-red-500',
+                warning: 'text-amber-500',
+                info: 'text-blue-500'
             };
 
             const icons = {
@@ -32,17 +47,19 @@
                 info: '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />'
             };
 
-            const bgColor = colors[type] || colors.success;
+            const bgColor = bgColors[type] || bgColors.success;
+            const borderColor = borderColors[type] || borderColors.success;
+            const textColor = textColors[type] || textColors.success;
             const icon = icons[type] || icons.success;
 
             const toastHtml = `
-            <div id="${toastId}" class="transform transition-all duration-500 translate-x-full opacity-0" style="min-width: 320px; max-width: 420px;">
-                <div class="bg-white rounded-xl shadow-2xl border-l-4 border-${bgColor.replace('bg-', '')} overflow-hidden">
+            <div id="${toastId}" class="transform transition-all duration-500 translate-x-full opacity-0 pointer-events-auto" style="min-width: 320px; max-width: 420px;">
+                <div class="bg-white rounded-xl shadow-2xl border-l-4 ${borderColor} overflow-hidden">
                     <div class="p-4">
                         <div class="flex items-start gap-3">
                             <div class="flex-shrink-0">
                                 <div class="w-8 h-8 rounded-full ${bgColor} bg-opacity-20 flex items-center justify-center">
-                                    <svg class="w-5 h-5 ${bgColor.replace('bg-', 'text-')}" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <svg class="w-5 h-5 ${textColor}" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         ${icon}
                                     </svg>
                                 </div>
