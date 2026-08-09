@@ -2,33 +2,7 @@
 @section('title', 'Profil Saya')
 
 @section('content')
-    <div class="w-full space-y-8 pb-12" x-data="{ 
-        isEditing: {{ ($errors->any() || !$pemilik || empty($pemilik->tempat_lahir) || empty($pemilik->jenis_kelamin) || empty($pemilik->alamat) || empty($pemilik->kelurahan) || empty($pemilik->foto_ktp) || request()->has('edit')) ? 'true' : 'false' }},
-        selectedKel: '{!! addslashes(old('kelurahan', $pemilik->kelurahan ?? $user->kelurahan ?? '')) !!}',
-        selectedRw: '',
-        selectedRt: '',
-        kelurahansData: {!! isset($kelurahans) ? $kelurahans->toJson() : (isset($kelurahan) ? $kelurahan->toJson() : '[]') !!},
-        normalizeWilayah(value) {
-            if (value === null || value === undefined || value === '') return '';
-            const parsed = parseInt(String(value).replace(/\D/g, ''), 10);
-            return Number.isNaN(parsed) ? '' : String(parsed).padStart(2, '0');
-        },
-        init() {
-            this.selectedRw = this.normalizeWilayah('{{ old('rw', $pemilik->rw ?? $user->rw ?? '') }}');
-            this.selectedRt = this.normalizeWilayah('{{ old('rt', $pemilik->rt ?? $user->rt ?? '') }}');
-        },
-        get currentRws() {
-            if (!this.selectedKel) return [];
-            const kel = this.kelurahansData.find(k => k.nama_kelurahan == this.selectedKel);
-            return kel && kel.rws ? kel.rws : [];
-        },
-        get currentRts() {
-            if (!this.selectedRw) return [];
-            const rws = this.currentRws;
-            const rw = rws.find(r => this.normalizeWilayah(r.nomor_rw) == this.selectedRw);
-            return rw && rw.rts ? rw.rts : [];
-        }
-    }">
+    <div class="w-full space-y-8 pb-12" x-data="editProfil">
         
         <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
             <div class="flex items-center gap-4">
@@ -354,4 +328,36 @@
             </form>
         </div>
     </div>
+
+    <script>
+        document.addEventListener('alpine:init', () => {
+            Alpine.data('editProfil', () => ({
+                isEditing: {{ ($errors->any() || !$pemilik || empty($pemilik->tempat_lahir) || empty($pemilik->jenis_kelamin) || empty($pemilik->alamat) || empty($pemilik->kelurahan) || empty($pemilik->foto_ktp) || request()->has('edit')) ? 'true' : 'false' }},
+                selectedKel: @json(old('kelurahan', $pemilik->kelurahan ?? $user->kelurahan ?? '')),
+                selectedRw: '',
+                selectedRt: '',
+                kelurahansData: @json(isset($kelurahans) ? $kelurahans : (isset($kelurahan) ? $kelurahan : [])),
+                normalizeWilayah(value) {
+                    if (value === null || value === undefined || value === '') return '';
+                    const parsed = parseInt(String(value).replace(/\D/g, ''), 10);
+                    return Number.isNaN(parsed) ? '' : String(parsed).padStart(2, '0');
+                },
+                init() {
+                    this.selectedRw = this.normalizeWilayah(@json(old('rw', $pemilik->rw ?? $user->rw ?? '')));
+                    this.selectedRt = this.normalizeWilayah(@json(old('rt', $pemilik->rt ?? $user->rt ?? '')));
+                },
+                get currentRws() {
+                    if (!this.selectedKel) return [];
+                    const kel = this.kelurahansData.find(k => k.nama_kelurahan == this.selectedKel);
+                    return kel && kel.rws ? kel.rws : [];
+                },
+                get currentRts() {
+                    if (!this.selectedRw) return [];
+                    const rws = this.currentRws;
+                    const rw = rws.find(r => this.normalizeWilayah(r.nomor_rw) == this.selectedRw);
+                    return rw && rw.rts ? rw.rts : [];
+                }
+            }));
+        });
+    </script>
 @endsection
