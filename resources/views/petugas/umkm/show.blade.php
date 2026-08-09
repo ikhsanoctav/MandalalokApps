@@ -765,10 +765,10 @@
     </div>
 
     @if(!empty($umkm->no_pendaftaran))
-    <div id="qrModal" class="fixed inset-0 z-50 hidden bg-black/90 backdrop-blur-sm flex items-center justify-center" onclick="closeQrModal()">
-        <div class="relative bg-white p-8 rounded-3xl shadow-2xl text-center transform transition-all" onclick="event.stopPropagation()">
+    <div id="qrModal" class="fixed inset-0 z-50 hidden bg-black/80 backdrop-blur-sm flex items-center justify-center p-4" onclick="closeQrModal()">
+        <div class="relative bg-white p-8 rounded-3xl shadow-2xl text-center max-w-sm w-full transform transition-all" onclick="event.stopPropagation()">
             <button onclick="closeQrModal()"
-                class="absolute -top-12 right-0 text-white hover:text-gray-300 transition-colors">
+                class="absolute -top-10 right-0 text-white/80 hover:text-white transition-colors focus:outline-none">
                 <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12">
                     </path>
@@ -776,14 +776,14 @@
             </button>
             <h3 class="text-xl font-bold text-slate-800 mb-6">QR Code Usaha</h3>
             <div class="inline-block p-4 border-4 border-slate-100 rounded-2xl bg-white shadow-inner">
-                {!! \SimpleSoftwareIO\QrCode\Facades\QrCode::size(300)->generate($umkm->no_pendaftaran) !!}
+                {!! \SimpleSoftwareIO\QrCode\Facades\QrCode::size(240)->generate($umkm->no_pendaftaran) !!}
             </div>
-            <p class="mt-6 font-mono text-slate-600 font-bold text-xl tracking-widest">{{ $umkm->no_pendaftaran }}</p>
-            <p class="mt-1 text-sm text-slate-400">{{ $umkm->nama_usaha }}</p>
+            <p class="mt-6 font-mono text-slate-600 font-bold text-lg tracking-widest">{{ $umkm->no_pendaftaran }}</p>
+            <p class="mt-1 text-sm text-slate-400 font-medium">{{ $umkm->nama_usaha }}</p>
             <div class="mt-8">
-                <button onclick="printQrDirect('{{ route('operator.umkm.print-qr', $umkm->id_umkm) }}', this)"
-                   class="inline-flex items-center gap-2 px-6 py-3 bg-blue-600 text-white font-semibold rounded-xl hover:bg-blue-700 transition-all shadow-md hover:shadow-lg w-full justify-center">
-                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <button onclick="printQrDirect('{{ route('petugas.umkm.print-qr', $umkm->id_umkm) }}', this)"
+                   class="inline-flex items-center gap-2 px-6 py-3 bg-[#1e40af] hover:bg-[#1e3a8a] text-white font-semibold rounded-xl transition-all shadow-md hover:shadow-lg w-full justify-center text-sm">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z"></path>
                     </svg>
                     Cetak QR Code
