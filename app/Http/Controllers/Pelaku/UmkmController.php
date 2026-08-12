@@ -65,6 +65,7 @@ class UmkmController extends Controller
             'jumlah_tenaga_kerja' => 'nullable|integer|min:0',
             'deskripsi' => 'nullable|string',
             'foto_utama' => 'required|image|mimes:jpeg,jpg,png,webp|max:25600',
+            'foto_gallery.*' => 'nullable|image|mimes:jpeg,jpg,png,webp|max:5120',
             'dokumen_nib' => 'nullable|file|mimes:pdf,jpg,jpeg,png|max:25600',
             'dokumen_lainnya' => 'nullable|file|mimes:pdf,jpg,jpeg,png,doc,docx|max:25600',
         ]);
@@ -110,6 +111,16 @@ class UmkmController extends Controller
             $filename = time().'_pelaku_'.Auth::id().'.'.$file->extension();
             $umkm->foto_utama = $file->storeAs('umkm/foto_utama', $filename, 'public');
         }
+
+        // Handle upload foto gallery
+        $galleryPaths = [];
+        if ($request->hasFile('foto_gallery')) {
+            foreach ($request->file('foto_gallery') as $i => $file) {
+                $filename = time().'_gallery_'.$i.'_pelaku_'.Auth::id().'.'.$file->extension();
+                $galleryPaths[] = $file->storeAs('umkm/gallery', $filename, 'public');
+            }
+        }
+        $umkm->foto_gallery = !empty($galleryPaths) ? $galleryPaths : null;
 
         if ($request->hasFile('dokumen_nib')) {
             $file = $request->file('dokumen_nib');
@@ -317,6 +328,27 @@ class UmkmController extends Controller
             'title' => 'Berhasil!',
             'message' => $msg,
         ]);
+    }
+
+    public function deleteFotoGallery(Request $request, $id, $index)
+    {
+        $user = Auth::user();
+        $pemilik = Pemilik::where('nik_hash', $user->nik_hash)->first();
+
+        if (!$pemilik) {
+            return response()->json(['success' => false, 'message' => 'Unauthorized'], 403);
+        }
+
+        $umkm = UMKM::where('id_umkm', $id)->where('id_pemilik', $pemilik->id_pemilik)->firstOrFail();
+        $gallery = $umkm->foto_gallery ?: [];
+
+        if (isset($gallery[$index])) {
+            Storage::disk('public')->delete($gallery[$index]);
+            array_splice($gallery, $index, 1);
+            $umkm->update(['foto_gallery' => array_values($gallery)]);
+        }
+
+        return response()->json(['success' => true]);
     }
 
     public function printQr($id)

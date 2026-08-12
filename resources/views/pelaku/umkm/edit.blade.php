@@ -294,6 +294,37 @@
                             </div>
                         </div>
                     </div>
+                    
+                    <div class="mt-8 border-t border-slate-100 pt-8">
+                        <label class="block text-sm font-bold text-slate-700 mb-2">Foto Galeri / Etalase Produk <span class="text-slate-400 font-normal">(Opsional)</span></label>
+                        <p class="text-sm text-slate-500 mb-4 font-medium">Tambahkan beberapa foto lainnya untuk menampilkan produk, menu, atau suasana tempat usaha Anda (Maks. 5MB per foto).</p>
+                        
+                        <!-- Existing Gallery -->
+                        @if($umkm->foto_gallery && count($umkm->foto_gallery) > 0)
+                            <div class="mb-6">
+                                <p class="text-xs font-bold text-slate-400 uppercase tracking-widest mb-3">Foto Galeri Saat Ini</p>
+                                <div class="grid grid-cols-2 md:grid-cols-4 gap-4" id="existingGalleryContainer">
+                                    @foreach($umkm->foto_gallery as $index => $foto)
+                                        <div class="relative group aspect-square rounded-xl overflow-hidden border border-slate-200 shadow-sm" id="gallery-item-{{ $index }}">
+                                            <img src="{{ Storage::url($foto) }}" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110">
+                                            <div class="absolute inset-0 bg-gradient-to-t from-slate-900/80 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity"></div>
+                                            <button type="button" onclick="hapusFotoGallery({{ $index }})" class="absolute bottom-3 right-3 bg-rose-500 text-white px-3 py-1.5 rounded-lg shadow-sm hover:bg-rose-600 transition-colors opacity-0 group-hover:opacity-100 flex items-center gap-2" title="Hapus Foto">
+                                                <i class="mdi mdi-delete-outline text-lg"></i> <span class="text-xs font-bold">Hapus</span>
+                                            </button>
+                                        </div>
+                                    @endforeach
+                                </div>
+                            </div>
+                        @endif
+
+                        <p class="text-xs font-bold text-slate-400 uppercase tracking-widest mb-3">Unggah Foto Galeri Baru</p>
+                        <label for="foto_gallery" class="inline-flex items-center gap-2 px-5 py-2.5 bg-pink-50 text-pink-700 font-bold text-sm rounded-lg hover:bg-pink-100 transition-colors border border-pink-200 cursor-pointer">
+                            <i class="mdi mdi-image-multiple text-lg"></i> Pilih Beberapa Foto Sekaligus
+                        </label>
+                        <input id="foto_gallery" name="foto_gallery[]" type="file" class="hidden" accept="image/*" multiple>
+                        
+                        <div id="galleryPreviewContainer" class="grid grid-cols-2 md:grid-cols-4 gap-4 mt-6 empty:hidden"></div>
+                    </div>
                 </div>
             </div>
 
@@ -435,6 +466,55 @@
                 document.getElementById(placeholderId).classList.remove('hidden');
                 document.getElementById('btnHapusUtama').classList.add('hidden');
             }
+
+            // Delete Foto Gallery AJAX
+            window.hapusFotoGallery = function(index) {
+                if(confirm('Apakah Anda yakin ingin menghapus foto galeri ini?')) {
+                    fetch(`{{ url('pelaku/umkm/'.$umkm->id_umkm.'/foto-gallery') }}/${index}`, {
+                        method: 'DELETE',
+                        headers: {
+                            'X-CSRF-TOKEN': '{{ csrf_token() }}',
+                            'Accept': 'application/json'
+                        }
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.success) {
+                            document.getElementById(`gallery-item-${index}`).remove();
+                        } else {
+                            alert('Gagal menghapus foto.');
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Error:', error);
+                        alert('Terjadi kesalahan saat menghapus foto.');
+                    });
+                }
+            };
+
+            // Preview foto gallery
+            document.getElementById('foto_gallery').addEventListener('change', function(e) {
+                const container = document.getElementById('galleryPreviewContainer');
+                container.innerHTML = ''; // reset preview
+                const files = e.target.files;
+                if (!files.length) return;
+                
+                Array.from(files).forEach((file, index) => {
+                    const reader = new FileReader();
+                    reader.onload = function(ev) {
+                        const div = document.createElement('div');
+                        div.className = 'relative group aspect-square rounded-xl overflow-hidden border border-slate-200';
+                        div.innerHTML = `
+                            <img src="${ev.target.result}" class="w-full h-full object-cover">
+                            <div class="absolute inset-0 bg-slate-900/50 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+                                <span class="text-white text-xs font-bold px-2 py-1 bg-slate-900/80 rounded-md">Foto Baru ${index + 1}</span>
+                            </div>
+                        `;
+                        container.appendChild(div);
+                    };
+                    reader.readAsDataURL(file);
+                });
+            });
         </script>
     @endpush
 @endsection

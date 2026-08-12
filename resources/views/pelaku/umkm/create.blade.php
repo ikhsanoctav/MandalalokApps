@@ -275,6 +275,18 @@
                             </button>
                         </div>
                     </div>
+                    
+                    <div class="mt-8 border-t border-slate-100 pt-8">
+                        <label class="block text-sm font-bold text-slate-700 mb-2">Foto Galeri / Etalase Produk <span class="text-slate-400 font-normal">(Opsional)</span></label>
+                        <p class="text-sm text-slate-500 mb-4 font-medium">Tambahkan beberapa foto lainnya untuk menampilkan produk, menu, atau suasana tempat usaha Anda (Maks. 5MB per foto).</p>
+                        
+                        <label for="foto_gallery" class="inline-flex items-center gap-2 px-5 py-2.5 bg-pink-50 text-pink-700 font-bold text-sm rounded-lg hover:bg-pink-100 transition-colors border border-pink-200 cursor-pointer">
+                            <i class="mdi mdi-image-multiple text-lg"></i> Pilih Beberapa Foto Sekaligus
+                        </label>
+                        <input id="foto_gallery" name="foto_gallery[]" type="file" class="hidden" accept="image/*" multiple>
+                        
+                        <div id="galleryPreviewContainer" class="grid grid-cols-2 md:grid-cols-4 gap-4 mt-6 empty:hidden"></div>
+                    </div>
                 </div>
             </div>
 
@@ -481,6 +493,30 @@
                 document.getElementById(placeholderId).classList.remove('hidden');
                 document.getElementById('btnHapusUtama').classList.add('hidden');
             }
+
+            // Preview foto gallery
+            document.getElementById('foto_gallery').addEventListener('change', function(e) {
+                const container = document.getElementById('galleryPreviewContainer');
+                container.innerHTML = ''; // reset preview
+                const files = e.target.files;
+                if (!files.length) return;
+                
+                Array.from(files).forEach((file, index) => {
+                    const reader = new FileReader();
+                    reader.onload = function(ev) {
+                        const div = document.createElement('div');
+                        div.className = 'relative group aspect-square rounded-xl overflow-hidden border border-slate-200';
+                        div.innerHTML = `
+                            <img src="${ev.target.result}" class="w-full h-full object-cover">
+                            <div class="absolute inset-0 bg-slate-900/50 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+                                <span class="text-white text-xs font-bold px-2 py-1 bg-slate-900/80 rounded-md">Foto ${index + 1}</span>
+                            </div>
+                        `;
+                        container.appendChild(div);
+                    };
+                    reader.readAsDataURL(file);
+                });
+            });
         </script>
     @endpush
 @endsection
