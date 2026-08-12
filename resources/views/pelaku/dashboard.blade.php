@@ -372,7 +372,7 @@
                                                 </div>
                                             </div>
 
-                                            @php $gallery = $umkm->foto_gallery ? json_decode($umkm->foto_gallery, true) : []; @endphp
+                                            @php $gallery = is_array($umkm->foto_gallery) ? $umkm->foto_gallery : (is_string($umkm->foto_gallery) ? json_decode($umkm->foto_gallery, true) : []); @endphp
                                             @if (count($gallery) > 0)
                                                 <div class="bg-white p-6 rounded-2xl border border-slate-100 shadow-sm">
                                                     <h4 class="font-black text-slate-800 uppercase tracking-widest text-xs flex items-center gap-2 mb-4">

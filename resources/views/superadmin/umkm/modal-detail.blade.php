@@ -11,7 +11,7 @@
     $galleries = [];
     if (!empty($umkm->foto_gallery)) {
         if (is_string($umkm->foto_gallery)) {
-            $galleries = json_decode($umkm->foto_gallery, true) ?: [];
+            $galleries = is_array($umkm->foto_gallery) ? $umkm->foto_gallery : (is_string($umkm->foto_gallery) ? json_decode($umkm->foto_gallery, true) : []);
         } elseif (is_array($umkm->foto_gallery)) {
             $galleries = $umkm->foto_gallery;
         }

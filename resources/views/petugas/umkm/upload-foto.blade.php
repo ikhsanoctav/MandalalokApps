@@ -135,7 +135,7 @@
                 </div>
                 <div class="p-6">
 
-                    @php $gallery = $umkm->foto_gallery ? json_decode($umkm->foto_gallery, true) : []; @endphp
+                    @php $gallery = is_array($umkm->foto_gallery) ? $umkm->foto_gallery : (is_string($umkm->foto_gallery) ? json_decode($umkm->foto_gallery, true) : []); @endphp
                     @if (count($gallery) > 0)
                         <div class="mb-5">
                             <p class="text-xs font-semibold text-slate-700 uppercase tracking-wide mb-3">Foto Gallery Saat

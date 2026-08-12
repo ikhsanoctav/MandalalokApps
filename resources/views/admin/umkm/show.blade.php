@@ -123,7 +123,7 @@
                 </h3>
             </div>
             <div class="p-5">
-                @if ($umkm->foto_utama || ($umkm->foto_gallery && json_decode($umkm->foto_gallery, true)))
+                @if ($umkm->foto_utama || !empty($umkm->foto_gallery))
                     <div class="space-y-6">
                         @if ($umkm->foto_utama)
                             <div>
