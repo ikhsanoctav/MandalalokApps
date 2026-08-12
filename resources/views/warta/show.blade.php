@@ -328,7 +328,7 @@
     <!-- Hero Header -->
     <header class="hero-section">
         <div class="hero-glow"></div>
-        <div class="max-w-4xl mx-auto px-4 sm:px-6 relative z-10 animate-fade-up">
+        <div class="max-w-5xl mx-auto px-4 sm:px-6 relative z-10 animate-fade-up">
             
             <!-- Category Badge -->
             <div class="flex justify-center mb-6">
@@ -371,7 +371,7 @@
     </header>
 
     <!-- Main Content Area -->
-    <main class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 pb-24">
+    <main class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 pb-24">
         
         <div class="content-card animate-fade-up" style="animation-delay: 0.2s;">
             
@@ -425,7 +425,7 @@
     <!-- Premium Footer -->
     <footer class="bg-[var(--primary)] text-slate-400 py-16 relative overflow-hidden">
         <div class="absolute inset-0 opacity-5" style="background-image: var(--batik-pattern); background-size: 60px;"></div>
-        <div class="max-w-4xl mx-auto px-4 relative z-10 text-center">
+        <div class="max-w-5xl mx-auto px-4 relative z-10 text-center">
             <img src="{{ asset('images/Logo_Mandalaloka.png') }}" alt="Logo" class="w-16 h-16 mx-auto mb-6 opacity-80 drop-shadow-[0_0_15px_rgba(255,255,255,0.2)]">
             <h3 class="text-white font-bold text-xl mb-2 tracking-tight">Kecamatan Mandalajati</h3>
             <p class="text-sm text-slate-400 mb-8 max-w-md mx-auto leading-relaxed">Portal informasi resmi Pemerintah Kecamatan Mandalajati, memberikan layanan informasi terbaik untuk masyarakat.</p>
