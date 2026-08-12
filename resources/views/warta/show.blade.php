@@ -328,7 +328,7 @@
     <!-- Hero Header -->
     <header class="hero-section">
         <div class="hero-glow"></div>
-        <div class="max-w-5xl mx-auto px-4 sm:px-6 relative z-10 animate-fade-up">
+        <div class="max-w-4xl mx-auto px-4 sm:px-6 relative z-10 animate-fade-up">
             
             <!-- Category Badge -->
             <div class="flex justify-center mb-6">
@@ -371,7 +371,7 @@
     </header>
 
     <!-- Main Content Area -->
-    <main class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 pb-24">
+    <main class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 pb-24">
         
         <div class="content-card animate-fade-up" style="animation-delay: 0.2s;">
             
