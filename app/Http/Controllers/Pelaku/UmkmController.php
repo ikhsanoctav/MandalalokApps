@@ -308,27 +308,34 @@ class UmkmController extends Controller
         }
 
 
-        $dataUpdate['status_verifikasi'] = 'terkirim';
+        $statusChanged = false;
+        if (in_array($umkm->status_verifikasi, ['draft', 'ditolak'])) {
+            $dataUpdate['status_verifikasi'] = 'terkirim';
+            $statusChanged = true;
+        }
 
         $umkm->update($dataUpdate);
 
-        // Send notification to Admin Kecamatan
-        $admins = \App\Models\User::role('admin_kecamatan')->get();
-        foreach ($admins as $admin) {
-            $admin->notify(new SystemNotification(
-                '🔄 Pembaruan Data UMKM',
-                'Pelaku UMKM "'.$pemilik->nama_lengkap.'" memperbarui data usaha: "'.$umkm->nama_usaha.'". Silakan tinjau kembali untuk verifikasi.',
-                'info',
-                route('admin.verifikasi.show', $umkm->id_umkm)
-            ));
+        if ($statusChanged) {
+            // Send notification to Admin Kecamatan
+            $admins = \App\Models\User::role('admin_kecamatan')->get();
+            foreach ($admins as $admin) {
+                $admin->notify(new SystemNotification(
+                    '🔄 Pembaruan Data UMKM',
+                    'Pelaku UMKM "'.$pemilik->nama_lengkap.'" memperbarui data usaha: "'.$umkm->nama_usaha.'". Silakan tinjau kembali untuk verifikasi.',
+                    'info',
+                    route('admin.verifikasi.show', $umkm->id_umkm)
+                ));
+            }
+            $msg = 'Data UMKM berhasil diperbarui dan dikirim ulang untuk verifikasi Admin Kecamatan.';
+        } else {
+            $msg = 'Data UMKM berhasil diperbarui.';
         }
-
-        $msg = 'Data UMKM berhasil diperbarui dan sedang menunggu verifikasi ulang dari Admin Kecamatan.';
 
         return redirect()->route('pelaku.dashboard')->with('toast', [
             'type' => 'success',
             'title' => 'Berhasil!',
-            'message' => $msg,
+            'message' => $msg
         ]);
     }
 

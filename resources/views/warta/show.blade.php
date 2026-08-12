@@ -29,16 +29,14 @@
             overflow-x: hidden;
         }
 
-        /* Glassmorphism Header */
-        .glass-nav {
-            background: rgba(10, 25, 48, 0.7);
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
-            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-            position: fixed;
-            top: 0;
-            width: 100%;
-            z-index: 50;
+        /* Floating Pill Navbar */
+        .nav-pill {
+            background: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            border-radius: 9999px;
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1);
         }
 
         /* Progress Bar */
@@ -299,35 +297,54 @@
 
 <body class="antialiased">
 
-    <!-- Premium Navigation -->
-    <nav class="glass-nav transition-all duration-300">
-        <div class="w-full px-4 sm:px-6 lg:px-12">
-            <div class="flex justify-between h-20 items-center">
-                <div class="flex items-center gap-4 sm:gap-6">
-                    <a href="{{ route('welcome') }}#bantuan" class="btn-glass flex items-center gap-2 px-4 py-2 rounded-full font-medium text-sm transition-all hover:-translate-x-1" title="Kembali ke Beranda">
-                        <i class="fas fa-arrow-left"></i>
-                        <span class="hidden sm:inline">Kembali</span>
-                    </a>
-                    <div class="h-8 w-px bg-white/20"></div>
-                    <a href="{{ route('welcome') }}" class="flex items-center gap-3 group">
-                        <img src="{{ asset('images/Logo_Mandalaloka.png') }}" alt="Logo" class="w-10 h-10 object-contain drop-shadow-[0_0_12px_rgba(255,255,255,0.6)] group-hover:scale-105 transition-transform duration-300">
-                        <div class="flex flex-col">
-                            <span class="text-xl font-bold text-white tracking-tight hidden sm:block leading-none">Mandalaloka</span>
-                            <span class="text-[10px] text-slate-300 uppercase tracking-widest hidden sm:block mt-1">Portal Kecamatan</span>
-                        </div>
-                    </a>
-                </div>
-                <div class="flex items-center">
-                    <div class="px-5 py-2 rounded-full bg-gradient-to-r from-[#fcd34d] to-[#f59e0b] text-[#0f2e5c] text-xs font-bold tracking-widest uppercase shadow-[0_0_15px_rgba(245,158,11,0.4)] hidden sm:block">
-                        <i class="fas fa-newspaper mr-1.5"></i> Warta Kecamatan
+    <!-- Premium Navigation Pill (Like Welcome Page) -->
+    <div class="fixed top-4 left-4 right-4 sm:top-6 sm:left-6 sm:right-6 z-50 flex justify-center pointer-events-none">
+        <nav class="pointer-events-auto bg-white/95 backdrop-blur-md rounded-full border border-white/75 shadow-[0_18px_45px_rgba(15,46,92,0.1)] w-full max-w-7xl flex justify-between items-center transition-all duration-300" style="padding: 8px 16px 8px 24px;">
+            <div class="flex items-center gap-4">
+                <a href="{{ route('welcome') }}" class="flex items-center gap-3 group">
+                    <img src="{{ asset('images/Logo_Mandalaloka.png') }}" alt="Logo Mandalaloka" class="h-10 w-auto rounded-md group-hover:scale-105 transition-transform">
+                    <div class="flex flex-col">
+                        <span class="text-[16px] sm:text-[18px] font-black text-[#0f2e5c] leading-[1.1] tracking-wide">Mandalaloka</span>
+                        <span class="text-[9px] sm:text-[10px] text-slate-500 font-semibold tracking-widest uppercase mt-0.5">Pendataan UMKM</span>
                     </div>
-                </div>
+                </a>
             </div>
-        </div>
-        <div id="progress-container">
-            <div id="progress-bar"></div>
-        </div>
-    </nav>
+            
+            <div class="hidden lg:flex items-center gap-6 xl:gap-8">
+                <a href="{{ route('welcome') }}#home" class="text-[14px] font-bold text-[#475569] hover:text-[#d97706] transition-colors py-2">Beranda</a>
+                <a href="{{ route('welcome') }}#statistik" class="text-[14px] font-bold text-[#475569] hover:text-[#d97706] transition-colors py-2">Data UMKM</a>
+                <a href="{{ route('welcome') }}#produk-umkm" class="text-[14px] font-bold text-[#475569] hover:text-[#d97706] transition-colors py-2">Katalog UMKM</a>
+                <a href="{{ route('welcome') }}#peta-umkm" class="text-[14px] font-bold text-[#475569] hover:text-[#d97706] transition-colors py-2">Peta</a>
+                <a href="{{ route('welcome') }}#bantuan" class="text-[14px] font-bold text-[#d97706] transition-colors py-2 border-b-2 border-[#d97706]">Warta</a>
+            </div>
+            
+            <div class="hidden lg:flex items-center gap-3">
+                @auth
+                    <a href="{{ route('dashboard') }}" class="bg-[#1e3a8a] text-white px-5 py-2.5 rounded-full text-[13px] font-bold shadow-md hover:bg-[#1e40af] transition-colors whitespace-nowrap">Masuk ke Dasbor</a>
+                    <a href="{{ route('logout') }}" class="bg-white text-[#1e3a8a] border border-slate-300 px-5 py-2.5 rounded-full text-[13px] font-bold shadow-sm hover:bg-slate-50 transition-colors whitespace-nowrap"
+                       onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
+                        Keluar
+                    </a>
+                    <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
+                        @csrf
+                    </form>
+                @else
+                    <a href="{{ route('login') }}" class="bg-white text-[#1e3a8a] border border-slate-300 px-5 py-2.5 rounded-full text-[13px] font-bold shadow-sm hover:bg-slate-50 transition-colors whitespace-nowrap">Masuk</a>
+                    <a href="{{ route('register') }}" class="bg-[#1e3a8a] text-white px-5 py-2.5 rounded-full text-[13px] font-bold shadow-md hover:bg-[#1e40af] transition-colors whitespace-nowrap">Pendaftaran UMKM</a>
+                @endif
+            </div>
+            
+            <!-- Mobile Menu -->
+            <a href="{{ route('welcome') }}" class="lg:hidden bg-[#f1f5f9] text-[#0f2e5c] px-4 py-2 rounded-full text-sm font-bold border border-slate-200">
+                <i class="fas fa-home mr-1 sm:mr-2"></i> <span class="hidden sm:inline">Beranda</span>
+            </a>
+        </nav>
+    </div>
+
+    <!-- Progress Bar (Fixed at top of screen) -->
+    <div id="progress-container" class="fixed top-0 left-0 w-full h-1 z-[9999] pointer-events-none">
+        <div id="progress-bar" class="h-full bg-gradient-to-r from-[#fcd34d] to-[#f59e0b] w-0 transition-all duration-100 ease-out"></div>
+    </div>
 
     <!-- Hero Header -->
     <header class="hero-section">
