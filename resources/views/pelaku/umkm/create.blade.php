@@ -204,9 +204,29 @@
                             class="w-full bg-slate-50 hover:bg-white border-2 border-slate-200 text-slate-800 font-medium text-base rounded-xl focus:ring-4 focus:ring-amber-500/20 focus:border-amber-500 block p-4 transition-all resize-none">{{ old('alamat_usaha') }}</textarea>
                     </div>
                     
-                    <!-- Peta Tersembunyi tapi scriptnya disiapkan di layout (sebelumnya ada map tapi UI hidden, kita keep struktur aslinya) -->
-                    <input type="hidden" id="latitude" name="latitude" value="{{ old('latitude', '-6.914744') }}">
-                    <input type="hidden" id="longitude" name="longitude" value="{{ old('longitude', '107.609810') }}">
+                    <div>
+                        <div class="flex justify-between items-center mb-2">
+                            <label class="block text-sm font-bold text-slate-700">Titik Koordinat Lokasi <span class="text-rose-500">*</span></label>
+                            <button type="button" id="btn-get-location" class="text-xs bg-indigo-100 text-indigo-700 px-3 py-1.5 rounded-lg font-bold hover:bg-indigo-200 transition-colors flex items-center gap-1">
+                                <i class="mdi mdi-crosshairs-gps"></i> Gunakan Lokasi Saat Ini
+                            </button>
+                        </div>
+                        <div id="map" class="w-full h-64 rounded-xl border-2 border-slate-200 z-10 mb-2"></div>
+                        <p class="text-xs text-slate-500 font-medium mb-3"><i class="mdi mdi-information-outline"></i> Geser penanda (pin) ke lokasi persis usaha Anda.</p>
+                        
+                        <div class="grid grid-cols-2 gap-4">
+                            <div>
+                                <label class="block text-xs font-bold text-slate-500 mb-1">Latitude</label>
+                                <input type="text" id="latitude" name="latitude" value="{{ old('latitude', '-6.90389') }}" readonly
+                                    class="w-full bg-slate-100 border-2 border-slate-200 text-slate-500 font-medium text-sm rounded-lg p-2.5 outline-none cursor-not-allowed">
+                            </div>
+                            <div>
+                                <label class="block text-xs font-bold text-slate-500 mb-1">Longitude</label>
+                                <input type="text" id="longitude" name="longitude" value="{{ old('longitude', '107.66861') }}" readonly
+                                    class="w-full bg-slate-100 border-2 border-slate-200 text-slate-500 font-medium text-sm rounded-lg p-2.5 outline-none cursor-not-allowed">
+                            </div>
+                        </div>
+                    </div>
 
                     <div>
                         <label class="block text-sm font-bold text-slate-700 mb-2">Deskripsi Produk/Jasa <span class="text-slate-400 font-normal">(Opsional)</span></label>
@@ -385,7 +405,62 @@
     </div>
 
     @push('scripts')
+        <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" crossorigin=""></script>
         <script>
+            document.addEventListener('DOMContentLoaded', function () {
+                const latInput = document.getElementById('latitude');
+                const lngInput = document.getElementById('longitude');
+                
+                let initialLat = parseFloat(latInput.value) || -6.90389; // Default Mandalajati
+                let initialLng = parseFloat(lngInput.value) || 107.66861;
+
+                const map = L.map('map').setView([initialLat, initialLng], 15);
+
+                L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                    maxZoom: 19,
+                    attribution: '© OpenStreetMap'
+                }).addTo(map);
+
+                let marker = L.marker([initialLat, initialLng], {draggable: true}).addTo(map);
+
+                marker.on('dragend', function (e) {
+                    const position = marker.getLatLng();
+                    latInput.value = position.lat.toFixed(6);
+                    lngInput.value = position.lng.toFixed(6);
+                });
+
+                map.on('click', function(e) {
+                    marker.setLatLng(e.latlng);
+                    latInput.value = e.latlng.lat.toFixed(6);
+                    lngInput.value = e.latlng.lng.toFixed(6);
+                });
+
+                document.getElementById('btn-get-location').addEventListener('click', function() {
+                    if (navigator.geolocation) {
+                        const btn = this;
+                        const originalText = btn.innerHTML;
+                        btn.innerHTML = '<i class="mdi mdi-loading mdi-spin"></i> Mencari...';
+                        
+                        navigator.geolocation.getCurrentPosition(function(position) {
+                            const lat = position.coords.latitude;
+                            const lng = position.coords.longitude;
+                            
+                            map.setView([lat, lng], 17);
+                            marker.setLatLng([lat, lng]);
+                            latInput.value = lat.toFixed(6);
+                            lngInput.value = lng.toFixed(6);
+                            
+                            btn.innerHTML = originalText;
+                        }, function(error) {
+                            alert("Tidak dapat mengambil lokasi. Pastikan izin lokasi diaktifkan pada browser Anda.");
+                            btn.innerHTML = originalText;
+                        });
+                    } else {
+                        alert("Browser Anda tidak mendukung fitur lokasi otomatis.");
+                    }
+                });
+            });
+
             // Preview foto utama
             document.getElementById('foto_utama').addEventListener('change', function(e) {
                 const file = e.target.files[0];
