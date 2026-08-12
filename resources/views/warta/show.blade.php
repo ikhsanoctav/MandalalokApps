@@ -301,22 +301,26 @@
 
     <!-- Premium Navigation -->
     <nav class="glass-nav transition-all duration-300">
-        <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="w-full px-4 sm:px-6 lg:px-12">
             <div class="flex justify-between h-20 items-center">
-                <div class="flex items-center gap-4">
-                    <a href="{{ route('welcome') }}#bantuan" class="btn-glass w-10 h-10 rounded-full flex items-center justify-center" title="Kembali ke Beranda">
+                <div class="flex items-center gap-4 sm:gap-6">
+                    <a href="{{ route('welcome') }}#bantuan" class="btn-glass flex items-center gap-2 px-4 py-2 rounded-full font-medium text-sm transition-all hover:-translate-x-1" title="Kembali ke Beranda">
                         <i class="fas fa-arrow-left"></i>
+                        <span class="hidden sm:inline">Kembali</span>
                     </a>
-                    <div class="h-6 w-px bg-white/20"></div>
-                    <a href="{{ route('welcome') }}" class="flex items-center gap-3">
-                        <img src="{{ asset('images/Logo_Mandalaloka.png') }}" alt="Logo" class="w-8 h-8 object-contain drop-shadow-[0_0_8px_rgba(255,255,255,0.5)]">
-                        <span class="text-xl font-bold text-white tracking-tight hidden sm:block">Mandalaloka</span>
+                    <div class="h-8 w-px bg-white/20"></div>
+                    <a href="{{ route('welcome') }}" class="flex items-center gap-3 group">
+                        <img src="{{ asset('images/Logo_Mandalaloka.png') }}" alt="Logo" class="w-10 h-10 object-contain drop-shadow-[0_0_12px_rgba(255,255,255,0.6)] group-hover:scale-105 transition-transform duration-300">
+                        <div class="flex flex-col">
+                            <span class="text-xl font-bold text-white tracking-tight hidden sm:block leading-none">Mandalaloka</span>
+                            <span class="text-[10px] text-slate-300 uppercase tracking-widest hidden sm:block mt-1">Portal Kecamatan</span>
+                        </div>
                     </a>
                 </div>
                 <div class="flex items-center">
-                    <span class="px-4 py-1.5 rounded-full bg-white/10 text-white/90 text-xs font-semibold tracking-widest uppercase border border-white/10 hidden sm:block">
-                        Warta Kecamatan
-                    </span>
+                    <div class="px-5 py-2 rounded-full bg-gradient-to-r from-[#fcd34d] to-[#f59e0b] text-[#0f2e5c] text-xs font-bold tracking-widest uppercase shadow-[0_0_15px_rgba(245,158,11,0.4)] hidden sm:block">
+                        <i class="fas fa-newspaper mr-1.5"></i> Warta Kecamatan
+                    </div>
                 </div>
             </div>
         </div>
