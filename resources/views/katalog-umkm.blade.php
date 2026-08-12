@@ -392,6 +392,233 @@
             .catalog-count { width: 100%; justify-content: center; }
             .footer-grid { grid-template-columns: 1fr; gap: 40px; }
         }
+        /* Shopee-like Product Modal */
+        .product-modal-overlay {
+            position: fixed;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: rgba(15, 46, 92, 0.7);
+            backdrop-filter: blur(4px);
+            z-index: 1000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+        .product-modal-content {
+            background: white;
+            border-radius: var(--radius-md);
+            width: 100%;
+            max-width: 900px;
+            max-height: 90vh;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+            overflow: hidden;
+            animation: modalFadeIn 0.3s ease-out;
+        }
+        @media (min-width: 768px) {
+            .product-modal-content {
+                flex-direction: row;
+            }
+        }
+        @keyframes modalFadeIn {
+            from { opacity: 0; transform: translateY(20px) scale(0.95); }
+            to { opacity: 1; transform: translateY(0) scale(1); }
+        }
+        .pm-close-btn {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            background: rgba(255, 255, 255, 0.9);
+            border: none;
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            z-index: 10;
+            color: var(--text-dark);
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            transition: all 0.2s;
+        }
+        .pm-close-btn:hover {
+            background: #f1f5f9;
+            transform: scale(1.05);
+        }
+        .pm-left {
+            width: 100%;
+            background: #f8fafc;
+            padding: 24px;
+            border-right: 1px solid var(--border-color);
+        }
+        @media (min-width: 768px) {
+            .pm-left { width: 45%; }
+        }
+        .pm-main-image {
+            width: 100%;
+            aspect-ratio: 1/1;
+            border-radius: var(--radius-sm);
+            background: white;
+            border: 1px solid var(--border-color);
+            margin-bottom: 16px;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .pm-main-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        .pm-thumbnails {
+            display: flex;
+            gap: 10px;
+            overflow-x: auto;
+            padding-bottom: 8px;
+            scroll-snap-type: x mandatory;
+        }
+        .pm-thumbnails::-webkit-scrollbar { height: 6px; }
+        .pm-thumbnails::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 3px; }
+        .pm-thumb {
+            flex-shrink: 0;
+            width: 70px;
+            height: 70px;
+            border-radius: 8px;
+            border: 2px solid transparent;
+            overflow: hidden;
+            cursor: pointer;
+            transition: all 0.2s;
+            scroll-snap-align: start;
+            padding: 0;
+            background: white;
+        }
+        .pm-thumb.active { border-color: var(--primary); }
+        .pm-thumb:hover { border-color: var(--primary-light); }
+        .pm-thumb img { width: 100%; height: 100%; object-fit: cover; }
+        
+        .pm-right {
+            width: 100%;
+            padding: 24px;
+            display: flex;
+            flex-direction: column;
+            overflow-y: auto;
+        }
+        @media (min-width: 768px) {
+            .pm-right { width: 55%; }
+        }
+        .pm-store-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            background: #e0e7ff;
+            color: #4338ca;
+            padding: 4px 10px;
+            border-radius: 6px;
+            font-size: 11px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 12px;
+            width: max-content;
+        }
+        .pm-title {
+            font-size: 24px;
+            color: var(--text-dark);
+            margin-bottom: 16px;
+            line-height: 1.3;
+        }
+        .pm-price-box {
+            background: #f8fafc;
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-sm);
+            padding: 16px;
+            margin-bottom: 20px;
+        }
+        .pm-price {
+            font-size: 32px;
+            font-weight: 700;
+            color: #ef4444; 
+        }
+        .pm-meta-row {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            margin-bottom: 20px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid var(--border-color);
+        }
+        .pm-meta-item {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 14px;
+            color: var(--text-muted);
+        }
+        .pm-meta-item i.fa-star { color: #fbbf24; }
+        .pm-meta-item strong { color: var(--text-dark); }
+        .pm-desc-title {
+            font-size: 14px;
+            font-weight: 700;
+            color: var(--text-dark);
+            margin-bottom: 12px;
+        }
+        .pm-desc {
+            font-size: 14px;
+            color: var(--text-muted);
+            line-height: 1.6;
+            white-space: pre-wrap;
+            margin-bottom: 24px;
+            flex-grow: 1;
+        }
+        .pm-actions {
+            display: flex;
+            gap: 12px;
+            margin-top: auto;
+            padding-top: 16px;
+            border-top: 1px solid var(--border-color);
+        }
+        .pm-btn-wa {
+            flex: 1;
+            background: #10b981;
+            color: white;
+            border: none;
+            border-radius: var(--radius-sm);
+            padding: 14px;
+            font-size: 15px;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            cursor: pointer;
+            text-decoration: none;
+            transition: all 0.2s;
+            box-shadow: 0 4px 12px rgba(16, 185, 129, 0.2);
+        }
+        .pm-btn-wa:hover {
+            background: #059669;
+            transform: translateY(-2px);
+            color: white;
+        }
+        .pm-btn-disabled {
+            flex: 1;
+            background: #cbd5e1;
+            color: white;
+            border: none;
+            border-radius: var(--radius-sm);
+            padding: 14px;
+            font-size: 15px;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            cursor: not-allowed;
+        }
     </style>
 </head>
 <body>
@@ -510,7 +737,29 @@
         @if($produks->count() > 0)
             <div class="catalog-grid">
                 @foreach($produks as $produk)
-                    <div class="umkm-card reveal">
+                    @php
+                        $pesan = "Halo " . $produk->umkm->nama_usaha . ", saya tertarik dengan produk *" . $produk->nama_produk . "* yang ada di Katalog Mandalaloka. Boleh minta info lebih lanjut?";
+                        $noWa = preg_replace('/\D/', '', $produk->umkm->telp_usaha ?? '');
+                        if($noWa && substr($noWa, 0, 1) == '0'){
+                            $noWa = '62' . substr($noWa, 1);
+                        }
+                        
+                        $productData = [
+                            'nama' => $produk->nama_produk,
+                            'usaha' => $produk->umkm->nama_usaha,
+                            'harga' => $produk->harga ? 'Rp ' . number_format($produk->harga, 0, ',', '.') : 'Harga hubungi penjual',
+                            'deskripsi' => $produk->deskripsi ?? 'Belum ada deskripsi',
+                            'lokasi' => optional(optional($produk->umkm->pemilik)->kelurahanRel)->nama_kelurahan ?? optional($produk->umkm->pemilik)->kelurahan ?? 'Mandalajati',
+                            'images' => $produk->foto_produk ? array_map(fn($f) => Storage::url($f), $produk->foto_produk) : [],
+                            'placeholder' => 'https://placehold.co/600x400/e8f0fb/0f2e5c?text=' . urlencode($produk->nama_produk),
+                            'rating' => $produk->umkm->average_rating > 0 ? $produk->umkm->average_rating : 'Baru',
+                            'ulasan_count' => $produk->umkm->ratings->count()
+                        ];
+                    @endphp
+                    <div class="umkm-card reveal" 
+                         x-data 
+                         @click="$dispatch('open-product-modal', { product: {{ json_encode($productData) }}, waLink: '{{ $noWa ? "https://wa.me/".$noWa."?text=".urlencode($pesan) : "" }}' })" 
+                         style="cursor: pointer;">
                         <div class="umkm-img-wrap">
                             @if($produk->foto_produk && count($produk->foto_produk) > 0)
                                 <img src="{{ Storage::url($produk->foto_produk[0]) }}" alt="{{ $produk->nama_produk }}" loading="lazy" onerror="this.onerror=null;this.src='https://placehold.co/600x400/e8f0fb/0f2e5c?text={{ urlencode($produk->nama_produk) }}';">
@@ -535,34 +784,31 @@
                             </div>
 
                             <div class="card-actions">
-                                <div class="review-trigger" x-data @click="$dispatch('view-reviews', { name: '{{ addslashes($produk->umkm->nama_usaha) }}', html: document.getElementById('reviews-{{ $produk->umkm->id_umkm }}').innerHTML })" title="Lihat Ulasan">
+                                <div class="review-trigger" x-data @click.stop="$dispatch('view-reviews', { name: '{{ addslashes($produk->umkm->nama_usaha) }}', html: document.getElementById('reviews-{{ $produk->umkm->id_umkm }}').innerHTML })" title="Lihat Ulasan">
                                     <i class="fas fa-star" style="color: #fbbf24;"></i>
                                     <span>{{ $produk->umkm->average_rating > 0 ? $produk->umkm->average_rating : 'Baru' }}</span>
                                     <span style="color: #94a3b8; font-weight: 700; font-size: 11px;">{{ $produk->umkm->ratings->count() }} ulasan</span>
                                 </div>
                                 <div x-data>
-                                    <button @click="$dispatch('open-review-form', { id: '{{ $produk->umkm->id_umkm }}', name: '{{ addslashes($produk->umkm->nama_usaha) }}' })" class="review-button">
+                                    <button @click.stop="$dispatch('open-review-form', { id: '{{ $produk->umkm->id_umkm }}', name: '{{ addslashes($produk->umkm->nama_usaha) }}' })" class="review-button">
                                         <i class="far fa-comment-dots"></i> Ulas
                                     </button>
                                 </div>
                             </div>
 
                             <div style="margin-top: 8px;">
-                                @php
-                                    $pesan = "Halo " . $produk->umkm->nama_usaha . ", saya tertarik dengan produk *" . $produk->nama_produk . "* yang ada di Katalog Mandalaloka. Boleh minta info lebih lanjut?";
-                                    $noWa = preg_replace('/\D/', '', $produk->umkm->telp_usaha ?? '');
-                                    if($noWa && substr($noWa, 0, 1) == '0'){
-                                        $noWa = '62' . substr($noWa, 1);
-                                    }
-                                @endphp
                                 @if($noWa)
-                                    <a href="https://wa.me/{{ $noWa }}?text={{ urlencode($pesan) }}" target="_blank" class="wa-button">
-                                        <i class="fab fa-whatsapp" style="font-size: 14px; color: white !important;"></i> Chat Penjual
-                                    </a>
+                                    <div x-data>
+                                        <a @click.stop href="https://wa.me/{{ $noWa }}?text={{ urlencode($pesan) }}" target="_blank" class="wa-button">
+                                            <i class="fab fa-whatsapp" style="font-size: 14px; color: white !important;"></i> Chat Penjual
+                                        </a>
+                                    </div>
                                 @else
-                                    <span class="wa-button" style="background: #94a3b8; cursor: not-allowed;">
-                                        <i class="fas fa-phone-slash" style="font-size: 13px; color: white !important;"></i> Kontak Belum Tersedia
-                                    </span>
+                                    <div x-data>
+                                        <button @click.stop class="wa-button" style="background: #94a3b8; cursor: not-allowed; border: none; width: 100%;">
+                                            <i class="fas fa-phone-slash" style="font-size: 13px; color: white !important;"></i> Kontak Belum Tersedia
+                                        </button>
+                                    </div>
                                 @endif
                             </div>
 
@@ -660,6 +906,93 @@
 
                 <div style="flex-grow: 1; overflow-y: auto; background: white;" x-html="reviewsHtml">
                     <!-- Reviews will be injected here -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Global Product Detail Modal -->
+    <div x-data="{ 
+            showProductModal: false, 
+            activeProduct: null, 
+            activeImage: null,
+            waLink: ''
+        }" 
+        @open-product-modal.window="
+            activeProduct = $event.detail.product; 
+            activeImage = activeProduct.images.length > 0 ? activeProduct.images[0] : activeProduct.placeholder;
+            waLink = $event.detail.waLink;
+            showProductModal = true;
+            document.body.style.overflow = 'hidden';
+        "
+        @close-product-modal.window="
+            showProductModal = false;
+            document.body.style.overflow = 'auto';
+        "
+        x-show="showProductModal" 
+        class="product-modal-overlay" 
+        style="display: none;"
+    >
+        <div class="product-modal-content" @click.stop>
+            <button @click="$dispatch('close-product-modal')" class="pm-close-btn">
+                <i class="fas fa-times"></i>
+            </button>
+
+            <div class="pm-left">
+                <div class="pm-main-image">
+                    <img :src="activeImage" :alt="activeProduct?.nama">
+                </div>
+                
+                <template x-if="activeProduct?.images && activeProduct.images.length > 1">
+                    <div class="pm-thumbnails">
+                        <template x-for="(img, idx) in activeProduct.images" :key="idx">
+                            <button @click="activeImage = img" 
+                                    class="pm-thumb"
+                                    :class="activeImage === img ? 'active' : ''">
+                                <img :src="img">
+                            </button>
+                        </template>
+                    </div>
+                </template>
+            </div>
+
+            <div class="pm-right">
+                <div class="pm-store-badge">
+                    <i class="fas fa-store"></i> <span x-text="activeProduct?.usaha"></span>
+                </div>
+                
+                <h2 class="pm-title" x-text="activeProduct?.nama"></h2>
+                
+                <div class="pm-price-box">
+                    <div class="pm-price" x-text="activeProduct?.harga"></div>
+                </div>
+                
+                <div class="pm-meta-row">
+                    <div class="pm-meta-item">
+                        <i class="fas fa-star"></i>
+                        <strong x-text="activeProduct?.rating"></strong>
+                        <span>(<span x-text="activeProduct?.ulasan_count"></span> Penilaian)</span>
+                    </div>
+                    <div class="pm-meta-item">
+                        <i class="fas fa-map-marker-alt"></i>
+                        <span x-text="activeProduct?.lokasi"></span>
+                    </div>
+                </div>
+
+                <div class="pm-desc-title">Deskripsi Produk</div>
+                <div class="pm-desc" x-text="activeProduct?.deskripsi"></div>
+
+                <div class="pm-actions">
+                    <template x-if="waLink">
+                        <a :href="waLink" target="_blank" class="pm-btn-wa">
+                            <i class="fab fa-whatsapp" style="font-size: 18px;"></i> Chat Penjual Sekarang
+                        </a>
+                    </template>
+                    <template x-if="!waLink">
+                        <button disabled class="pm-btn-disabled">
+                            <i class="fas fa-phone-slash" style="font-size: 18px;"></i> Kontak Belum Tersedia
+                        </button>
+                    </template>
                 </div>
             </div>
         </div>
