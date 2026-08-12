@@ -468,12 +468,41 @@
             display: flex;
             align-items: center;
             justify-content: center;
+            position: relative;
         }
         .pm-main-image img {
             width: 100%;
             height: 100%;
             object-fit: cover;
         }
+        .pm-nav-btn {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            background: rgba(255, 255, 255, 0.9);
+            border: none;
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            z-index: 10;
+            color: var(--text-dark);
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+            transition: all 0.2s;
+            opacity: 0;
+        }
+        .pm-main-image:hover .pm-nav-btn {
+            opacity: 1;
+        }
+        .pm-nav-btn:hover {
+            background: white;
+            transform: translateY(-50%) scale(1.1);
+        }
+        .pm-nav-prev { left: 10px; }
+        .pm-nav-next { right: 10px; }
         .pm-thumbnails {
             display: flex;
             gap: 10px;
@@ -939,8 +968,23 @@
             </button>
 
             <div class="pm-left">
-                <div class="pm-main-image">
+                <div class="pm-main-image" x-data="{ 
+                    get currentIndex() { return activeProduct?.images?.indexOf(activeImage) ?? 0; },
+                    next() { if(this.currentIndex < activeProduct.images.length - 1) activeImage = activeProduct.images[this.currentIndex + 1]; },
+                    prev() { if(this.currentIndex > 0) activeImage = activeProduct.images[this.currentIndex - 1]; }
+                }">
                     <img :src="activeImage" :alt="activeProduct?.nama">
+                    
+                    <template x-if="activeProduct?.images && activeProduct.images.length > 1">
+                        <div>
+                            <button x-show="currentIndex > 0" @click="prev()" class="pm-nav-btn pm-nav-prev">
+                                <i class="fas fa-chevron-left"></i>
+                            </button>
+                            <button x-show="currentIndex < activeProduct.images.length - 1" @click="next()" class="pm-nav-btn pm-nav-next">
+                                <i class="fas fa-chevron-right"></i>
+                            </button>
+                        </div>
+                    </template>
                 </div>
                 
                 <template x-if="activeProduct?.images && activeProduct.images.length > 1">
