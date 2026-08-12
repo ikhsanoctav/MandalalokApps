@@ -296,15 +296,18 @@
                     </div>
                     
                     <div class="mt-8 border-t border-slate-100 pt-8">
-                        <label class="block text-sm font-bold text-slate-700 mb-2">Foto Galeri / Etalase Produk <span class="text-slate-400 font-normal">(Opsional)</span></label>
-                        <p class="text-sm text-slate-500 mb-4 font-medium">Tambahkan beberapa foto lainnya untuk menampilkan produk, menu, atau suasana tempat usaha Anda (Maks. 5MB per foto).</p>
+                        <label class="block text-sm font-bold text-slate-700 mb-2">Foto Lokasi Usaha <span class="text-slate-400 font-normal">(Maks 4 Foto)</span></label>
+                        <p class="text-sm text-slate-500 mb-4 font-medium">Tambahkan 2-4 foto yang menunjukkan bentuk fisik tempat/bangunan usaha Anda (Maks. 5MB per foto).</p>
                         
                         <!-- Existing Gallery -->
-                        @if($umkm->foto_gallery && count($umkm->foto_gallery) > 0)
+                        @php 
+                            $fotoGallery = is_string($umkm->foto_gallery) ? json_decode($umkm->foto_gallery, true) : $umkm->foto_gallery;
+                        @endphp
+                        @if($fotoGallery && count($fotoGallery) > 0)
                             <div class="mb-6">
-                                <p class="text-xs font-bold text-slate-400 uppercase tracking-widest mb-3">Foto Galeri Saat Ini</p>
+                                <p class="text-xs font-bold text-slate-400 uppercase tracking-widest mb-3">Foto Lokasi Saat Ini</p>
                                 <div class="grid grid-cols-2 md:grid-cols-4 gap-4" id="existingGalleryContainer">
-                                    @foreach($umkm->foto_gallery as $index => $foto)
+                                    @foreach($fotoGallery as $index => $foto)
                                         <div class="relative group aspect-square rounded-xl overflow-hidden border border-slate-200 shadow-sm" id="gallery-item-{{ $index }}">
                                             <img src="{{ Storage::url($foto) }}" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110">
                                             <div class="absolute inset-0 bg-gradient-to-t from-slate-900/80 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity"></div>
@@ -317,9 +320,9 @@
                             </div>
                         @endif
 
-                        <p class="text-xs font-bold text-slate-400 uppercase tracking-widest mb-3">Unggah Foto Galeri Baru</p>
+                        <p class="text-xs font-bold text-slate-400 uppercase tracking-widest mb-3">Unggah Foto Lokasi Baru</p>
                         <label for="foto_gallery" class="inline-flex items-center gap-2 px-5 py-2.5 bg-pink-50 text-pink-700 font-bold text-sm rounded-lg hover:bg-pink-100 transition-colors border border-pink-200 cursor-pointer">
-                            <i class="mdi mdi-image-multiple text-lg"></i> Pilih Beberapa Foto Sekaligus
+                            <i class="mdi mdi-image-multiple text-lg"></i> Pilih Foto Lokasi Tambahan (Maks 4)
                         </label>
                         <input id="foto_gallery" name="foto_gallery[]" type="file" class="hidden" accept="image/*" multiple>
                         
@@ -469,7 +472,7 @@
 
             // Delete Foto Gallery AJAX
             window.hapusFotoGallery = function(index) {
-                if(confirm('Apakah Anda yakin ingin menghapus foto galeri ini?')) {
+                if(confirm('Apakah Anda yakin ingin menghapus foto lokasi ini?')) {
                     fetch(`{{ url('pelaku/umkm/'.$umkm->id_umkm.'/foto-gallery') }}/${index}`, {
                         method: 'DELETE',
                         headers: {
@@ -492,12 +495,18 @@
                 }
             };
 
-            // Preview foto gallery
+            // Preview foto lokasi usaha
             document.getElementById('foto_gallery').addEventListener('change', function(e) {
                 const container = document.getElementById('galleryPreviewContainer');
                 container.innerHTML = ''; // reset preview
                 const files = e.target.files;
                 if (!files.length) return;
+
+                if (files.length > 4) {
+                    alert('Maksimal 4 foto yang diizinkan untuk diunggah.');
+                    this.value = '';
+                    return;
+                }
                 
                 Array.from(files).forEach((file, index) => {
                     const reader = new FileReader();

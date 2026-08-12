@@ -230,6 +230,7 @@ Route::middleware(['auth', RoleMiddleware::class.':pelaku_umkm', 'profil.complet
     Route::get('/umkm/{id}/print-dokumen', [App\Http\Controllers\Pelaku\UmkmController::class, 'printDokumen'])->name('umkm.print-dokumen');
     Route::put('/umkm/{id}', [App\Http\Controllers\Pelaku\UmkmController::class, 'update'])->name('umkm.update')->middleware('throttle:10,1');
     Route::delete('/umkm/{id}/foto-gallery/{index}', [App\Http\Controllers\Pelaku\UmkmController::class, 'deleteFotoGallery'])->name('umkm.foto-gallery.delete');
+    Route::delete('/produk/{id}/foto-produk/{index}', [App\Http\Controllers\Pelaku\ProdukController::class, 'deleteFotoProduk'])->name('produk.foto-produk.delete');
 
     // Pengajuan Bantuan
     Route::get('/pengajuan', [App\Http\Controllers\Pelaku\PengajuanController::class, 'index'])->name('pengajuan.index');

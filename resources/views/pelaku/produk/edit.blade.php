@@ -58,21 +58,22 @@
                 
                 @if($produk->foto_produk && count($produk->foto_produk) > 0)
                 <div class="mb-6">
-                    <p class="text-xs text-slate-500 mb-2">Pilih foto yang ingin <span class="text-red-500 font-bold">dihapus</span> (centang kotak di sudut foto):</p>
+                    <p class="text-xs font-bold text-slate-400 uppercase tracking-widest mb-3">Foto Produk Saat Ini</p>
                     <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-4">
                         @foreach($produk->foto_produk as $index => $foto)
-                        <div class="relative aspect-square rounded-2xl overflow-hidden border border-slate-200 bg-white group">
-                            <img src="{{ Storage::url($foto) }}" class="w-full h-full object-cover" onerror="this.onerror=null;this.src='https://placehold.co/600x400/e8f0fb/0f2e5c?text={{ urlencode($produk->nama_produk) }}';">
-                            
-                            <label class="absolute top-2 right-2 bg-white/90 p-1.5 rounded-xl shadow-sm cursor-pointer hover:bg-red-50 transition-colors z-10 flex items-center justify-center">
-                                <input type="checkbox" name="hapus_foto[{{$index}}]" value="1" class="w-4 h-4 text-red-600 border-gray-300 rounded-lg focus:ring-red-500">
-                            </label>
+                        <div class="relative group aspect-square rounded-xl overflow-hidden border border-slate-200 shadow-sm" id="gallery-item-{{ $index }}">
+                            <img src="{{ Storage::url($foto) }}" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110" onerror="this.onerror=null;this.src='https://placehold.co/600x400/e8f0fb/0f2e5c?text={{ urlencode($produk->nama_produk) }}';">
+                            <div class="absolute inset-0 bg-gradient-to-t from-slate-900/80 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity"></div>
+                            <button type="button" onclick="hapusFotoProduk({{ $index }})" class="absolute bottom-3 right-3 bg-rose-500 text-white px-3 py-1.5 rounded-lg shadow-sm hover:bg-rose-600 transition-colors opacity-0 group-hover:opacity-100 flex items-center gap-2" title="Hapus Foto">
+                                <i class="mdi mdi-delete-outline text-lg"></i> <span class="text-xs font-bold">Hapus</span>
+                            </button>
                         </div>
                         @endforeach
                     </div>
                 </div>
                 @endif
 
+                <p class="text-xs font-bold text-slate-400 uppercase tracking-widest mb-3">Unggah Foto Produk Tambahan</p>
                 <div class="mt-1 flex justify-center px-6 pt-5 pb-6 border-2 border-slate-300 border-dashed rounded-xl bg-white hover:bg-slate-50 transition-colors" id="drop-zone">
                     <div class="space-y-2 text-center w-full">
                         <i class="mdi mdi-image-multiple-outline text-4xl text-slate-400"></i>
@@ -82,7 +83,7 @@
                                 <input id="foto_produk" name="foto_produk[]" type="file" class="sr-only" multiple accept="image/*" onchange="previewImages(this)">
                             </label>
                         </div>
-                        <p class="text-xs text-slate-500">Total maksimal foto (termasuk yang lama) adalah 10 foto</p>
+                        <p class="text-xs text-slate-500">Total maksimal foto (termasuk yang lama) adalah 7 foto</p>
                     </div>
                 </div>
                 @error('foto_produk') <p class="mt-1 text-xs text-red-500">{{ $message }}</p> @enderror
@@ -108,11 +109,41 @@
 
 @push('scripts')
 <script>
+    function hapusFotoProduk(index) {
+        if(confirm('Apakah Anda yakin ingin menghapus foto produk ini?')) {
+            fetch(`{{ url('pelaku/produk/'.$produk->id.'/foto-produk') }}/${index}`, {
+                method: 'DELETE',
+                headers: {
+                    'X-CSRF-TOKEN': '{{ csrf_token() }}',
+                    'Accept': 'application/json'
+                }
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    document.getElementById(`gallery-item-${index}`).remove();
+                } else {
+                    alert('Gagal menghapus foto.');
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('Terjadi kesalahan saat menghapus foto.');
+            });
+        }
+    }
+
     function previewImages(input) {
         const container = document.getElementById('image-preview-container');
         container.innerHTML = '';
         
         if (input.files && input.files.length > 0) {
+            if(input.files.length > 7) {
+                alert('Maksimal 7 foto baru yang diizinkan!');
+                input.value = '';
+                container.classList.add('hidden');
+                return;
+            }
             container.classList.remove('hidden');
             
             Array.from(input.files).forEach((file, index) => {

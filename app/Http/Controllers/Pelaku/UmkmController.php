@@ -65,6 +65,7 @@ class UmkmController extends Controller
             'jumlah_tenaga_kerja' => 'nullable|integer|min:0',
             'deskripsi' => 'nullable|string',
             'foto_utama' => 'required|image|mimes:jpeg,jpg,png,webp|max:25600',
+            'foto_gallery' => 'required|array|min:2|max:4',
             'foto_gallery.*' => 'nullable|image|mimes:jpeg,jpg,png,webp|max:5120',
             'dokumen_nib' => 'nullable|file|mimes:pdf,jpg,jpeg,png|max:25600',
             'dokumen_lainnya' => 'nullable|file|mimes:pdf,jpg,jpeg,png,doc,docx|max:25600',
@@ -112,11 +113,11 @@ class UmkmController extends Controller
             $umkm->foto_utama = $file->storeAs('umkm/foto_utama', $filename, 'public');
         }
 
-        // Handle upload foto gallery
+        // Handle upload foto tempat usaha
         $galleryPaths = [];
         if ($request->hasFile('foto_gallery')) {
             foreach ($request->file('foto_gallery') as $i => $file) {
-                $filename = time().'_gallery_'.$i.'_pelaku_'.Auth::id().'.'.$file->extension();
+                $filename = time().'_tempat_usaha_'.$i.'_pelaku_'.Auth::id().'.'.$file->extension();
                 $galleryPaths[] = $file->storeAs('umkm/gallery', $filename, 'public');
             }
         }
@@ -224,6 +225,7 @@ class UmkmController extends Controller
             'jumlah_tenaga_kerja' => 'nullable|integer|min:0',
             'deskripsi' => 'nullable|string',
             'foto_utama' => (!$umkm->foto_utama) ? 'required|image|mimes:jpeg,jpg,png,webp|max:25600' : 'nullable|image|mimes:jpeg,jpg,png,webp|max:25600',
+            'foto_gallery' => 'nullable|array|max:4',
             'foto_gallery.*' => 'nullable|image|mimes:jpeg,jpg,png,webp|max:5120',
             'dokumen_nib' => 'nullable|file|mimes:pdf,jpg,jpeg,png|max:5120',
             'dokumen_lainnya' => 'nullable|file|mimes:pdf,jpg,jpeg,png,doc,docx|max:5120',
@@ -273,13 +275,13 @@ class UmkmController extends Controller
             $dataUpdate['foto_utama'] = $file->storeAs('umkm/foto_utama', $filename, 'public');
         }
 
-        // Foto Gallery
+        // Foto Tempat Usaha
         if ($request->hasFile('foto_gallery')) {
             $existingGalleries = $umkm->foto_gallery ?: [];
             $galleryPaths = $existingGalleries ?: [];
 
             foreach ($request->file('foto_gallery') as $i => $file) {
-                $filename = time().'_gallery_'.$i.'_pelaku_'.Auth::id().'.'.$file->extension();
+                $filename = time().'_tempat_usaha_'.$i.'_pelaku_'.Auth::id().'.'.$file->extension();
                 $galleryPaths[] = $file->storeAs('umkm/gallery', $filename, 'public');
             }
             $dataUpdate['foto_gallery'] = $galleryPaths;
@@ -329,6 +331,8 @@ class UmkmController extends Controller
             'message' => $msg,
         ]);
     }
+
+
 
     public function deleteFotoGallery(Request $request, $id, $index)
     {

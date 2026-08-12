@@ -277,13 +277,13 @@
                     </div>
                     
                     <div class="mt-8 border-t border-slate-100 pt-8">
-                        <label class="block text-sm font-bold text-slate-700 mb-2">Foto Galeri / Etalase Produk <span class="text-slate-400 font-normal">(Opsional)</span></label>
-                        <p class="text-sm text-slate-500 mb-4 font-medium">Tambahkan beberapa foto lainnya untuk menampilkan produk, menu, atau suasana tempat usaha Anda (Maks. 5MB per foto).</p>
+                        <label class="block text-sm font-bold text-slate-700 mb-2">Foto Lokasi Usaha <span class="text-slate-400 font-normal">(Wajib 2-4 Foto)</span></label>
+                        <p class="text-sm text-slate-500 mb-4 font-medium">Tambahkan 2-4 foto yang menunjukkan bentuk fisik tempat/bangunan usaha Anda (Maks. 5MB per foto).</p>
                         
                         <label for="foto_gallery" class="inline-flex items-center gap-2 px-5 py-2.5 bg-pink-50 text-pink-700 font-bold text-sm rounded-lg hover:bg-pink-100 transition-colors border border-pink-200 cursor-pointer">
-                            <i class="mdi mdi-image-multiple text-lg"></i> Pilih Beberapa Foto Sekaligus
+                            <i class="mdi mdi-image-multiple text-lg"></i> Pilih 2-4 Foto Lokasi
                         </label>
-                        <input id="foto_gallery" name="foto_gallery[]" type="file" class="hidden" accept="image/*" multiple>
+                        <input id="foto_gallery" name="foto_gallery[]" type="file" class="hidden" accept="image/*" multiple required>
                         
                         <div id="galleryPreviewContainer" class="grid grid-cols-2 md:grid-cols-4 gap-4 mt-6 empty:hidden"></div>
                     </div>
@@ -494,12 +494,18 @@
                 document.getElementById('btnHapusUtama').classList.add('hidden');
             }
 
-            // Preview foto gallery
+            // Preview foto lokasi usaha
             document.getElementById('foto_gallery').addEventListener('change', function(e) {
                 const container = document.getElementById('galleryPreviewContainer');
                 container.innerHTML = ''; // reset preview
                 const files = e.target.files;
                 if (!files.length) return;
+                
+                if (files.length < 2 || files.length > 4) {
+                    alert('Mohon pilih 2 hingga 4 foto lokasi usaha.');
+                    this.value = '';
+                    return;
+                }
                 
                 Array.from(files).forEach((file, index) => {
                     const reader = new FileReader();

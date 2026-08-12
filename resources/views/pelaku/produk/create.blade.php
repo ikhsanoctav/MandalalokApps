@@ -55,7 +55,7 @@
 
             <!-- Foto Produk (Multiple) -->
             <div class="md:col-span-2 border border-slate-200 rounded-xl p-5 bg-slate-50/50">
-                <label class="block text-sm font-semibold text-slate-700 mb-2">Foto Produk (Maks 10 Foto)</label>
+                <label class="block text-sm font-semibold text-slate-700 mb-2">Foto Produk / Etalase (Maks 7 Foto)</label>
                 
                 <div class="mt-1 flex justify-center px-6 pt-5 pb-6 border-2 border-slate-300 border-dashed rounded-xl bg-white hover:bg-slate-50 transition-colors relative" id="drop-zone">
                     <div class="space-y-2 text-center w-full">
@@ -98,8 +98,8 @@
         container.innerHTML = '';
         
         if (input.files && input.files.length > 0) {
-            if(input.files.length > 10) {
-                alert('Maksimal 10 foto yang diizinkan!');
+            if(input.files.length > 7) {
+                alert('Maksimal 7 foto yang diizinkan!');
                 input.value = '';
                 container.classList.add('hidden');
                 return;

@@ -71,10 +71,10 @@ class ProdukController extends Controller
             'nama_produk' => 'required|string|max:255',
             'deskripsi' => 'nullable|string',
             'harga' => 'nullable|numeric|min:0',
-            'foto_produk' => 'nullable|array|max:10',
+            'foto_produk' => 'nullable|array|max:7',
             'foto_produk.*' => 'image|mimes:jpeg,png,jpg|max:2048'
         ], [
-            'foto_produk.max' => 'Maksimal foto produk yang dapat diunggah adalah 10.',
+            'foto_produk.max' => 'Maksimal foto produk yang dapat diunggah adalah 7.',
             'foto_produk.*.max' => 'Ukuran setiap foto maksimal 2MB.'
         ]);
 
@@ -132,7 +132,7 @@ class ProdukController extends Controller
             'nama_produk' => 'required|string|max:255',
             'deskripsi' => 'nullable|string',
             'harga' => 'nullable|numeric|min:0',
-            'foto_produk' => 'nullable|array|max:10',
+            'foto_produk' => 'nullable|array|max:7',
             'foto_produk.*' => 'image|mimes:jpeg,png,jpg|max:2048'
         ]);
 
@@ -164,8 +164,8 @@ class ProdukController extends Controller
         if ($request->hasFile('foto_produk')) {
             $currentCount = count($fotos);
             $newCount = count($request->file('foto_produk'));
-            if ($currentCount + $newCount > 10) {
-                return back()->with('error', 'Maksimal total foto produk adalah 10. Harap hapus beberapa foto lama terlebih dahulu.')->withInput();
+            if ($currentCount + $newCount > 7) {
+                return back()->with('error', 'Maksimal total foto produk adalah 7. Harap hapus beberapa foto lama terlebih dahulu.')->withInput();
             }
 
             foreach ($request->file('foto_produk') as $file) {
@@ -213,5 +213,32 @@ class ProdukController extends Controller
         }
 
         return redirect()->route('pelaku.produk.index')->with('success', 'Produk berhasil dihapus.');
+    }
+
+    public function deleteFotoProduk(Request $request, $id, $index)
+    {
+        $user = Auth::user();
+        $pemilik = Pemilik::where('nik_hash', $user->nik_hash)->first();
+
+        if (!$pemilik) {
+            return response()->json(['success' => false, 'message' => 'Unauthorized'], 403);
+        }
+
+        $produk = Produk::findOrFail($id);
+        
+        // Verifikasi kepemilikan
+        if ($produk->umkm->id_pemilik !== $pemilik->id_pemilik) {
+            return response()->json(['success' => false, 'message' => 'Unauthorized'], 403);
+        }
+
+        $gallery = $produk->foto_produk ?: [];
+
+        if (isset($gallery[$index])) {
+            Storage::disk('public')->delete($gallery[$index]);
+            array_splice($gallery, $index, 1);
+            $produk->update(['foto_produk' => array_values($gallery)]);
+        }
+
+        return response()->json(['success' => true]);
     }
 }
