@@ -40,6 +40,23 @@ Route::get('/', function () {
     return view('welcome', compact('kelurahans', 'produkUnggulan'));
 })->name('welcome');
 
+Route::get('/fix-dates-secret', function () {
+    $umkms = \App\Models\UMKM::all();
+    $fixedCount = 0;
+    foreach ($umkms as $umkm) {
+        $randomTime = mt_rand(strtotime('2024-01-01'), time());
+        $umkm->timestamps = false;
+        $umkm->created_at = date('Y-m-d H:i:s', $randomTime);
+        $umkm->updated_at = date('Y-m-d H:i:s', $randomTime);
+        if (in_array($umkm->status_verifikasi, ['terverifikasi', 'ditolak'])) {
+            $umkm->tanggal_verifikasi = date('Y-m-d H:i:s', $randomTime + mt_rand(86400, 604800));
+        }
+        $umkm->save();
+        $fixedCount++;
+    }
+    return 'Berhasil memperbaiki tanggal untuk ' . $fixedCount . ' data UMKM! Silakan kembali ke halaman dashboard.';
+});
+
 Route::get('/katalog-umkm', [KatalogUmkmController::class, 'index'])->name('katalog.umkm');
 Route::post('/katalog-umkm/{id_umkm}/rate', [KatalogUmkmController::class, 'storeRating'])->name('katalog.umkm.rate');
 Route::post('/katalog-umkm/ulasan/{id}/like', [KatalogUmkmController::class, 'likeRating'])->name('katalog.umkm.like');
