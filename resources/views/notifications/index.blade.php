@@ -31,7 +31,7 @@
         @if($unreadCount > 0)
             <form action="{{ route('notifications.readAll') }}" method="POST">
                 @csrf
-                <button type="submit" class="px-4 py-2 bg-blue-50 text-blue-600 hover:bg-blue-100 rounded-xl text-xs font-semibold transition-all flex items-center gap-1.5 border border-blue-200">
+                <button type="submit" class="px-4 py-2 bg-blue-600 text-white hover:bg-blue-700 rounded-xl text-xs font-semibold transition-all flex items-center gap-1.5 shadow-sm">
                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
                     </svg>

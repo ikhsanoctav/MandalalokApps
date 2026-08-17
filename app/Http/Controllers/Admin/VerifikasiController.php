@@ -180,8 +180,8 @@ class VerifikasiController extends Controller
                 $petugas = User::find($umkm->id_petugas);
                 if ($petugas) {
                     $petugas->notify(new SystemNotification(
-                        '✅ UMKM Anda Diverifikasi!',
-                        'UMKM "'.$umkm->nama_usaha.'" yang Anda daftarkan telah diverifikasi & disetujui oleh Admin Kecamatan.',
+                        '✅ UMKM Diverifikasi!',
+                        'Data UMKM "'.$umkm->nama_usaha.'" yang Anda tangani telah diverifikasi & disetujui oleh Admin Kecamatan.',
                         'success',
                         route('operator.umkm.show', $umkm->id_umkm)
                     ));
@@ -207,8 +207,8 @@ class VerifikasiController extends Controller
                 $pelaku = User::where('nik_hash', $pemilik->nik_hash)->first();
                 if ($pelaku) {
                     $pelaku->notify(new SystemNotification(
-                        '✅ UMKM Anda Diverifikasi!',
-                        'UMKM "'.$umkm->nama_usaha.'" yang Anda daftarkan telah diverifikasi & disetujui oleh Admin Kecamatan.',
+                        '✅ UMKM Diverifikasi!',
+                        'Data UMKM "'.$umkm->nama_usaha.'" milik Anda telah diverifikasi & disetujui oleh Admin Kecamatan.',
                         'success',
                         route('pelaku.dashboard')
                     ));

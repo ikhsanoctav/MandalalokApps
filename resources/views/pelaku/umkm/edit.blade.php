@@ -83,6 +83,22 @@
                             class="w-full bg-slate-50 hover:bg-white border-2 border-slate-200 text-slate-800 font-bold text-lg rounded-xl focus:ring-4 focus:ring-indigo-500/20 focus:border-indigo-500 block p-4 transition-all">
                     </div>
 
+                    <div class="md:col-span-2">
+                        <label class="block text-sm font-bold text-slate-700 mb-2">Status Usaha Saat Ini <span class="text-rose-500">*</span></label>
+                        <div class="relative">
+                            <select name="status_usaha" required
+                                class="w-full bg-slate-50 hover:bg-white border-2 border-slate-200 text-slate-700 font-medium text-base rounded-lg focus:ring-4 focus:ring-indigo-500/20 focus:border-indigo-500 block p-4 appearance-none transition-all cursor-pointer">
+                                <option value="aktif" {{ old('status_usaha', $umkm->status_usaha) == 'aktif' ? 'selected' : '' }}>🟢 Aktif (Buka)</option>
+                                <option value="non_aktif" {{ old('status_usaha', $umkm->status_usaha) == 'non_aktif' ? 'selected' : '' }}>⏸️ Non-Aktif (Tutup Sementara)</option>
+                                <option value="tutup" {{ old('status_usaha', $umkm->status_usaha) == 'tutup' ? 'selected' : '' }}>🔴 Tutup Permanen</option>
+                                <option value="pindah" {{ old('status_usaha', $umkm->status_usaha) == 'pindah' ? 'selected' : '' }}>🚚 Pindah Lokasi</option>
+                            </select>
+                            <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-4 text-slate-400">
+                                <i class="mdi mdi-chevron-down text-xl"></i>
+                            </div>
+                        </div>
+                    </div>
+
                     <div>
                         <label class="block text-sm font-bold text-slate-700 mb-2">Bentuk Jualan <span class="text-rose-500">*</span></label>
                         <div class="relative">

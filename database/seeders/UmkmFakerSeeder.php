@@ -62,7 +62,7 @@ class UmkmFakerSeeder extends Seeder
                 
             $catatanPenolakan = ($statusVerifikasi === 'ditolak') ? 'Data kurang lengkap.' : null;
 
-            UMKM::create([
+            $umkm = new UMKM([
                 'nama_usaha' => $faker->company,
                 'id_pemilik' => $faker->randomElement($pemilikList),
                 'id_kategori' => $faker->randomElement($kategoriList),
@@ -85,9 +85,11 @@ class UmkmFakerSeeder extends Seeder
                 'status_verifikasi' => $statusVerifikasi,
                 'tanggal_verifikasi' => $tanggalVerifikasi,
                 'catatan_penolakan' => $catatanPenolakan,
-                'created_at' => date('Y-m-d H:i:s', $randomTime),
-                'updated_at' => date('Y-m-d H:i:s', $randomTime),
             ]);
+            $umkm->timestamps = false;
+            $umkm->created_at = date('Y-m-d H:i:s', $randomTime);
+            $umkm->updated_at = date('Y-m-d H:i:s', $randomTime);
+            $umkm->save();
         }
         
         $this->command->info('Selesai membuat 50 data dummy UMKM!');

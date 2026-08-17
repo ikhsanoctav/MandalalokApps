@@ -211,6 +211,7 @@ class UmkmController extends Controller
 
         $request->validate([
             'nama_usaha' => 'required|string|max:150',
+            'status_usaha' => 'required|in:aktif,non_aktif,tutup,pindah',
             'id_sektor' => 'required|exists:sektor_umkms,id',
             'bentuk_jualan' => 'required|string|max:100',
             'perkiraan_omset' => 'nullable|numeric',
@@ -233,6 +234,7 @@ class UmkmController extends Controller
 
         $dataUpdate = [
             'nama_usaha' => strip_tags($request->nama_usaha),
+            'status_usaha' => $request->status_usaha,
             'id_sektor' => $request->id_sektor,
             'bentuk_jualan' => strip_tags($request->bentuk_jualan),
             'alamat_usaha' => strip_tags($request->alamat_usaha),
