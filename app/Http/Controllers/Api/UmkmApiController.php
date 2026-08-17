@@ -187,10 +187,10 @@ class UmkmApiController extends Controller
             return response()->json(['message' => 'Tidak memiliki akses.'], 403);
         }
 
-        if (! in_array($umkm->status_verifikasi, ['draft', 'ditolak', 'terkirim'])) {
+        if (! in_array($umkm->status_verifikasi, ['draft', 'ditolak', 'menunggu_verifikasi'])) {
             if (! $user->hasRole(['admin_kecamatan', 'super_admin'])) {
                 return response()->json([
-                    'message' => 'Data hanya bisa diedit saat status draft, ditolak, atau terkirim.',
+                    'message' => 'Data hanya bisa diedit saat status draft, ditolak, atau menunggu_verifikasi.',
                 ], 422);
             }
         }

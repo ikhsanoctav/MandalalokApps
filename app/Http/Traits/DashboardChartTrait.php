@@ -82,7 +82,7 @@ trait DashboardChartTrait
     {
         $totalUmkm = UMKM::count();
         $umkmAktif = UMKM::where('status_verifikasi', 'terverifikasi')->count();
-        $menungguVerifikasi = UMKM::where('status_verifikasi', 'terkirim')->count();
+        $menungguVerifikasi = UMKM::where('status_verifikasi', 'menunggu_verifikasi')->count();
 
         return [
             'totalUmkm' => $totalUmkm,

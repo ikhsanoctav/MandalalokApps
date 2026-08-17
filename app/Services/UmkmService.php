@@ -120,7 +120,7 @@ class UmkmService
      *
      * @return array<string, mixed>
      */
-    public function buildUmkmData(Request $request, string $idPemilik, ?int $idPetugas = null, string $statusVerifikasi = 'terkirim'): array
+    public function buildUmkmData(Request $request, string $idPemilik, ?int $idPetugas = null, string $statusVerifikasi = 'menunggu_verifikasi'): array
     {
         $fotos = $this->handleFotoUploads($request);
 

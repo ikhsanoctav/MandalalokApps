@@ -98,7 +98,7 @@ class UmkmController extends Controller
         $kelurahans = Kelurahan::pluck('nama_kelurahan')->toArray();
         $kategoris = KategoriUMKM::all();
         $sektors = SektorUmkm::all();
-        $pendingCount = UMKM::where('status_verifikasi', 'terkirim')->count();
+        $pendingCount = UMKM::where('status_verifikasi', 'menunggu_verifikasi')->count();
 
         $totalUmkm = UMKM::count();
         $terverifikasiCount = UMKM::where('status_verifikasi', 'terverifikasi')->count();
@@ -177,7 +177,7 @@ class UmkmController extends Controller
         // Simpan pemilik & UMKM via service
         $pemilik = $this->umkmService->findOrCreatePemilik($request);
 
-        $statusVerifikasi = $request->input('status_verifikasi', 'terkirim');
+        $statusVerifikasi = $request->input('status_verifikasi', 'menunggu_verifikasi');
         $umkmData = $this->umkmService->buildUmkmData(
             $request,
             $pemilik->id_pemilik,
@@ -512,7 +512,7 @@ class UmkmController extends Controller
             return response()->json([
                 'success' => true,
                 'html' => $html,
-                'isPending' => $umkm->status_verifikasi === 'terkirim',
+                'isPending' => $umkm->status_verifikasi === 'menunggu_verifikasi',
             ]);
         } catch (ModelNotFoundException $e) {
             return response()->json([
@@ -756,7 +756,7 @@ class UmkmController extends Controller
         try {
             $umkm = UMKM::findOrFail($id);
 
-            if ($umkm->status_verifikasi !== 'terkirim') {
+            if ($umkm->status_verifikasi !== 'menunggu_verifikasi') {
                 $messages = [
                     'draft' => 'UMKM masih berstatus Draft. Tidak ada pengajuan untuk ditolak.',
                     'terverifikasi' => 'UMKM sudah diverifikasi, tidak dapat ditolak.',

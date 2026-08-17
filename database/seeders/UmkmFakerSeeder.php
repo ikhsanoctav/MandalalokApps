@@ -53,7 +53,7 @@ class UmkmFakerSeeder extends Seeder
             $tanggalPendataan = date('Y-m-d', $randomTime);
             
             // Random status (buat dominan terverifikasi)
-            $statusVerifikasi = $faker->randomElement(['draft', 'terkirim', 'terverifikasi', 'terverifikasi', 'terverifikasi', 'ditolak']);
+            $statusVerifikasi = $faker->randomElement(['draft', 'menunggu_verifikasi', 'terverifikasi', 'terverifikasi', 'terverifikasi', 'ditolak']);
             
             // Tanggal verifikasi (jika sudah terverifikasi atau ditolak)
             $tanggalVerifikasi = in_array($statusVerifikasi, ['terverifikasi', 'ditolak']) 

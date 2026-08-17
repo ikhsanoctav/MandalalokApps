@@ -95,7 +95,7 @@ class DssController extends Controller
         // 1. Verifikasi Status Distribution
         $total         = UMKM::count();
         $terverifikasi = UMKM::where('status_verifikasi', 'terverifikasi')->count();
-        $pending       = UMKM::where('status_verifikasi', 'terkirim')->count();
+        $pending       = UMKM::where('status_verifikasi', 'menunggu_verifikasi')->count();
         $ditolak       = UMKM::where('status_verifikasi', 'ditolak')->count();
         $draft         = UMKM::where('status_verifikasi', 'draft')->count();
 
@@ -295,7 +295,7 @@ class DssController extends Controller
     {
         $totalUMKM     = UMKM::count();
         $terverifikasi = UMKM::where('status_verifikasi', 'terverifikasi')->count();
-        $pending       = UMKM::where('status_verifikasi', 'terkirim')->count();
+        $pending       = UMKM::where('status_verifikasi', 'menunggu_verifikasi')->count();
         $ditolak       = UMKM::where('status_verifikasi', 'ditolak')->count();
 
         $kategoriStats = UMKM::with('kategori')

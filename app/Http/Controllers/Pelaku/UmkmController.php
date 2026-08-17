@@ -103,7 +103,7 @@ class UmkmController extends Controller
             $umkm->id_kategori = $menengahKategori?->id ?? 3;
         }
         
-        $umkm->status_verifikasi = 'terkirim';
+        $umkm->status_verifikasi = 'menunggu_verifikasi';
         $umkm->id_petugas = null; // Pendaftaran mandiri
         $umkm->tanggal_pendataan = now();
 
@@ -310,7 +310,7 @@ class UmkmController extends Controller
 
         $statusChanged = false;
         if (in_array($umkm->status_verifikasi, ['draft', 'ditolak'])) {
-            $dataUpdate['status_verifikasi'] = 'terkirim';
+            $dataUpdate['status_verifikasi'] = 'menunggu_verifikasi';
             $statusChanged = true;
         }
 

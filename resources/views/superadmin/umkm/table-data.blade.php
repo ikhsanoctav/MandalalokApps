@@ -3,12 +3,12 @@
         @php
             $statusVerifikasiBadge = [
                 'terverifikasi' => 'bg-emerald-100 text-emerald-700',
-                'terkirim' => 'bg-amber-100 text-amber-700',
+                'menunggu_verifikasi' => 'bg-amber-100 text-amber-700',
                 'ditolak' => 'bg-red-100 text-red-700',
             ];
             $statusVerifikasiLabel = [
                 'terverifikasi' => 'Terverifikasi',
-                'terkirim' => 'Menunggu',
+                'menunggu_verifikasi' => 'Menunggu',
                 'ditolak' => 'Ditolak',
             ];
             $statusUsahaBadge = [
@@ -118,7 +118,7 @@
                                 <span class="w-1.5 h-1.5 bg-emerald-500 rounded-full"></span>
                                 Terverifikasi
                             </span>
-                        @elseif($umkm->status_verifikasi == 'terkirim')
+                        @elseif($umkm->status_verifikasi == 'menunggu_verifikasi')
                             <span
                                 class="inline-flex items-center gap-1 px-2 py-1 rounded-full text-xs font-semibold bg-amber-100 text-amber-700">
                                 <span class="w-1.5 h-1.5 bg-amber-500 rounded-full"></span>

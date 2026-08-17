@@ -31,7 +31,7 @@ class VerifikasiController extends Controller
         }
 
         $query = UMKM::with(['pemilik', 'kategori', 'sektor', 'latestVerifikasiLapangan'])
-            ->whereIn('status_verifikasi', ['terkirim', 'terverifikasi'])
+            ->whereIn('status_verifikasi', ['menunggu_verifikasi', 'terverifikasi'])
             ->whereHas('pemilik', function ($q) use ($kelurahan) {
                 $q->where('kelurahan', $kelurahan);
             });
@@ -48,7 +48,7 @@ class VerifikasiController extends Controller
 
         // Hitung statistik (gunakan query terpisah untuk mendapatkan total keseluruhan tanpa filter hide)
         $allStatsQuery = UMKM::with(['latestVerifikasiLapangan'])
-            ->whereIn('status_verifikasi', ['terkirim', 'terverifikasi'])
+            ->whereIn('status_verifikasi', ['menunggu_verifikasi', 'terverifikasi'])
             ->whereHas('pemilik', function ($q) use ($kelurahan) {
                 $q->where('kelurahan', $kelurahan);
             })->get();

@@ -63,7 +63,7 @@
         <span
             class="px-2 py-0.5 text-xs font-semibold rounded-full 
             @if ($umkm->status_verifikasi == 'terverifikasi') bg-emerald-100 text-emerald-700
-            @elseif($umkm->status_verifikasi == 'terkirim') bg-amber-100 text-amber-700
+            @elseif($umkm->status_verifikasi == 'menunggu_verifikasi') bg-amber-100 text-amber-700
             @elseif($umkm->status_verifikasi == 'ditolak') bg-red-100 text-red-700
             @else bg-slate-100 text-slate-600 @endif">
             {{ ucfirst($umkm->status_verifikasi ?? 'Draft') }}

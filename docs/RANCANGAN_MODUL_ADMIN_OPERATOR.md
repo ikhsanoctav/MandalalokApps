@@ -11,7 +11,7 @@ Dokumen ini merancang pengembangan modul untuk dua role yang saat ini masih plac
 | **Prefix URL** | `/admin` | `/operator` |
 | **Layout** | `layouts.admin` (turunan pola superadmin) | `layouts.operator` |
 | **Fokus utama** | Verifikasi, monitoring wilayah, pengajuan, laporan | Pendataan UMKM di lapangan |
-| **Verifikasi UMKM** | Ya (terkirim → terverifikasi/ditolak) | Tidak (hanya input, status `terkirim`) |
+| **Verifikasi UMKM** | Ya (menunggu_verifikasi → terverifikasi/ditolak) | Tidak (hanya input, status `menunggu_verifikasi`) |
 | **Kelola user** | Tidak | Tidak |
 | **Pengaturan sistem** | Tidak | Tidak |
 
@@ -78,7 +78,7 @@ Registrasi publik (`/register`) sebaiknya dinonaktifkan di produksi; user hanya 
 
 **KPI (scope kecamatan Mandalajati, sama dengan super admin saat ini):**
 
-- Total UMKM, pending verifikasi (`terkirim`), terverifikasi
+- Total UMKM, pending verifikasi (`menunggu_verifikasi`), terverifikasi
 - Pengajuan menunggu / proses
 - Grafik pendaftaran & verifikasi 6 bulan terakhir
 - Distribusi per kelurahan
@@ -134,7 +134,7 @@ Data dinamis dari query `UMKM` + `Pengajuan`, menggantikan angka statis di view 
 ### 5.1 Dashboard (`GET /operator/dashboard`)
 
 - Total UMKM yang diinput operator ini (`id_petugas = auth()->id()`)
-- Draft / terkirim / ditolak (agar bisa perbaiki)
+- Draft / menunggu_verifikasi / ditolak (agar bisa perbaiki)
 - Shortcut: **Tambah UMKM Baru**
 - Peta/list UMKM terakhir diinput (5 record)
 
@@ -144,14 +144,14 @@ Data dinamis dari query `UMKM` + `Pengajuan`, menggantikan angka statis di view 
 |-------|--------|------|
 | `/operator/umkm` | GET | Hanya UMKM milik `id_petugas = auth()->id()` |
 | `/operator/umkm/create` | GET/POST | Form lengkap (reuse view dengan partial) |
-| `/operator/umkm/{id}/edit` | GET/PUT | Edit jika status `draft`, `terkirim`, atau `ditolak` |
+| `/operator/umkm/{id}/edit` | GET/PUT | Edit jika status `draft`, `menunggu_verifikasi`, atau `ditolak` |
 | `/operator/umkm/{id}` | GET | Detail read-only jika sudah `terverifikasi` |
 
 **Aturan bisnis:**
 
-- Create: `status_verifikasi = terkirim`, `id_petugas = auth()->id()`
+- Create: `status_verifikasi = menunggu_verifikasi`, `id_petugas = auth()->id()`
 - Edit setelah `terverifikasi`: ditolak (tampilkan pesan hubungi admin)
-- Resubmit ditolak: ubah data → set kembali `terkirim`, hapus `catatan_penolakan`
+- Resubmit ditolak: ubah data → set kembali `menunggu_verifikasi`, hapus `catatan_penolakan`
 
 **Tidak ada:** verify, reject, delete, export global.
 
@@ -293,9 +293,9 @@ sequenceDiagram
     participant S as Sistem
     participant A as Admin Kecamatan
 
-    O->>S: POST /operator/umkm (status terkirim)
+    O->>S: POST /operator/umkm (status menunggu_verifikasi)
     S->>S: AktivitasLogger + notify admin
-    A->>S: GET /admin/umkm?status=terkirim
+    A->>S: GET /admin/umkm?status=menunggu_verifikasi
     A->>S: POST verify atau reject
     S->>O: Notifikasi hasil verifikasi
 ```

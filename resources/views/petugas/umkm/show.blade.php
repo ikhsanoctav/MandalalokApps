@@ -47,14 +47,14 @@
         <div
             class="rounded-2xl p-4 
         @if ($umkm->status_verifikasi == 'terverifikasi') bg-emerald-50 border border-emerald-200
-        @elseif($umkm->status_verifikasi == 'terkirim') bg-amber-50 border border-amber-200
+        @elseif($umkm->status_verifikasi == 'menunggu_verifikasi') bg-amber-50 border border-amber-200
         @elseif($umkm->status_verifikasi == 'ditolak') bg-red-50 border border-red-200
         @else bg-slate-50 border border-slate-200 @endif">
             <div class="flex items-center gap-3">
                 <div
                     class="w-10 h-10 rounded-full 
                 @if ($umkm->status_verifikasi == 'terverifikasi') bg-emerald-200
-                @elseif($umkm->status_verifikasi == 'terkirim') bg-amber-200
+                @elseif($umkm->status_verifikasi == 'menunggu_verifikasi') bg-amber-200
                 @elseif($umkm->status_verifikasi == 'ditolak') bg-red-200
                 @else bg-slate-200 @endif flex items-center justify-center">
                     @if ($umkm->status_verifikasi == 'terverifikasi')
@@ -62,7 +62,7 @@
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                 d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
                         </svg>
-                    @elseif($umkm->status_verifikasi == 'terkirim')
+                    @elseif($umkm->status_verifikasi == 'menunggu_verifikasi')
                         <svg class="w-5 h-5 text-amber-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                 d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
@@ -86,7 +86,7 @@
                         <p class="text-sm text-emerald-700">UMKM ini telah diverifikasi pada
                             {{ ($umkm->tanggal_verifikasi ?? $umkm->updated_at ?? $umkm->created_at) ? \Carbon\Carbon::parse($umkm->tanggal_verifikasi ?? $umkm->updated_at ?? $umkm->created_at)->format('d/m/Y H:i') : '-' }}
                         </p>
-                    @elseif($umkm->status_verifikasi == 'terkirim')
+                    @elseif($umkm->status_verifikasi == 'menunggu_verifikasi')
                         <p class="font-semibold text-amber-800">Menunggu Verifikasi</p>
                         <p class="text-sm text-amber-700">UMKM ini perlu segera diverifikasi</p>
                     @elseif($umkm->status_verifikasi == 'ditolak')

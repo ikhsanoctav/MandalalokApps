@@ -480,7 +480,7 @@
 
                 const statusColors = {
                     'terverifikasi': '#059669',
-                    'terkirim': '#d97706',
+                    'menunggu_verifikasi': '#d97706',
                     'ditolak': '#dc2626',
                     'draft': '#64748b',
                 };

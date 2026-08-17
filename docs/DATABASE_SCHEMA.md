@@ -96,7 +96,7 @@ Tabel sentral (transaksional) yang merepresentasikan satu badan atau entitas usa
 - **id_kategori**: Skala usaha (1=Mikro, 2=Kecil, 3=Menengah).
 - **id_sektor**: Jenis/bidang industri (Kuliner, Fashion, Jasa, dll).
 - **id_petugas**: Merujuk ke `users.id` sebagai Operator Lapangan yang pertama kali memasukkan data.
-- **status_verifikasi**: Workflow dokumen (`draft`, `terkirim`, `terverifikasi`, `ditolak`).
+- **status_verifikasi**: Workflow dokumen (`draft`, `menunggu_verifikasi`, `terverifikasi`, `ditolak`).
 
 ### 2.4. Tabel `pengajuans`
 Menyimpan riwayat pengajuan layanan atau perizinan dari sebuah UMKM ke kecamatan.

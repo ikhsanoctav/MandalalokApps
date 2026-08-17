@@ -23,8 +23,8 @@ class VerifikasiController extends Controller
         $kategori_id = $request->get('kategori');
         $perPage = $request->get('per_page', 10);
 
-        // Admin Kecamatan only sees 'terkirim' (pending) UMKM for verification
-        $query = UMKM::with(['pemilik', 'kategori', 'sektor'])->where('status_verifikasi', 'terkirim');
+        // Admin Kecamatan only sees 'menunggu_verifikasi' (pending) UMKM for verification
+        $query = UMKM::with(['pemilik', 'kategori', 'sektor'])->where('status_verifikasi', 'menunggu_verifikasi');
 
         if ($kelurahan) {
             $query->whereHas('pemilik', function ($q) use ($kelurahan) {
@@ -65,7 +65,7 @@ class VerifikasiController extends Controller
 
         $kelurahans = Kelurahan::pluck('nama_kelurahan')->toArray();
         $kategoris = KategoriUMKM::all();
-        $pendingCount = UMKM::where('status_verifikasi', 'terkirim')->count();
+        $pendingCount = UMKM::where('status_verifikasi', 'menunggu_verifikasi')->count();
 
         return view('admin.verifikasi.index', compact('umkms', 'kelurahans', 'kategoris', 'pendingCount'));
     }

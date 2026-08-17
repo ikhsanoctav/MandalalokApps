@@ -18,7 +18,7 @@ Dokumen FRS mendetailkan fungsi-fungsi atau *use case* yang dapat dilakukan oleh
 ### 2.3. Modul Admin Kecamatan
 - **F-ADM-01 (Dashboard Analytics)**: Menampilkan visualisasi data seperti total UMKM terverifikasi, jumlah menunggu (*pending*), dan grafik statistik per wilayah kelurahan.
 - **F-ADM-02 (Verifikasi UMKM)**: 
-  - Admin dapat memfilter dan melihat daftar UMKM dengan status `terkirim` (menunggu validasi).
+  - Admin dapat memfilter dan melihat daftar UMKM dengan status `menunggu_verifikasi` (menunggu validasi).
   - Admin dapat menekan tombol *Verifikasi* untuk menyetujui, sehingga status UMKM menjadi `terverifikasi`.
   - Admin dapat melakukan *Tolak/Reject* (wajib melampirkan teks alasan/`catatan_penolakan`).
 - **F-ADM-03 (Verifikasi Akun Pelaku UMKM)**: Mengulas profil Pemilik dan gambar KTP (yang diwatermark secara dinamis & dilindungi route privat), lalu mengubah status `status_verifikasi_ktp` dari `pending` ke `terverifikasi` atau `ditolak`.
@@ -26,8 +26,8 @@ Dokumen FRS mendetailkan fungsi-fungsi atau *use case* yang dapat dilakukan oleh
 
 ### 2.4. Modul Operator Lapangan
 - **F-OPR-01 (Dashboard Personal)**: Menampilkan statistik dari hasil input mandiri (hanya UMKM yang dikaitkan dengan `id_petugas` miliknya).
-- **F-OPR-02 (Pendataan UMKM Baru)**: Mengisi *form* panjang pendaftaran (kategori, izin, alamat, jumlah pekerja). Ketika dikirim, sistem menetapkan status data sebagai `terkirim`. Operator *tidak memiliki* kewenangan memverifikasi.
-- **F-OPR-03 (Revisi Pendataan)**: Apabila Admin menolak sebuah data UMKM, Operator akan melihat daftar data yang `ditolak`. Operator dapat memperbarui/mengedit data tersebut untuk dikirimkan kembali (status otomatis kembali `terkirim` dan catatan penolakan dihapus).
+- **F-OPR-02 (Pendataan UMKM Baru)**: Mengisi *form* panjang pendaftaran (kategori, izin, alamat, jumlah pekerja). Ketika dikirim, sistem menetapkan status data sebagai `menunggu_verifikasi`. Operator *tidak memiliki* kewenangan memverifikasi.
+- **F-OPR-03 (Revisi Pendataan)**: Apabila Admin menolak sebuah data UMKM, Operator akan melihat daftar data yang `ditolak`. Operator dapat memperbarui/mengedit data tersebut untuk dikirimkan kembali (status otomatis kembali `menunggu_verifikasi` dan catatan penolakan dihapus).
 - **F-OPR-04 (Unggah Foto / Titik GPS)**: Menambahkan informasi geolokasi dan galeri foto ke UMKM yang didatanya.
 
 ### 2.5. Modul Pelaku UMKM

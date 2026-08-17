@@ -50,7 +50,7 @@ return new class extends Migration
             $table->uuid('id_petugas')->nullable();
             $table->date('tanggal_pendataan');
             $table->dateTime('tanggal_verifikasi')->nullable();
-            $table->enum('status_verifikasi', ['draft', 'terkirim', 'terverifikasi', 'ditolak'])->default('draft');
+            $table->enum('status_verifikasi', ['draft', 'menunggu_verifikasi', 'terverifikasi', 'ditolak'])->default('draft');
             $table->text('catatan_penolakan')->nullable();
             $table->text('catatan')->nullable();
 

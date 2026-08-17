@@ -27,7 +27,7 @@ class VerifikasiApiController extends Controller
         }
 
         $query = UMKM::with(['kategori', 'pemilik', 'petugas'])
-            ->where('status_verifikasi', 'terkirim');
+            ->where('status_verifikasi', 'menunggu_verifikasi');
 
         if ($request->search) {
             $query->where(function ($q) use ($request) {

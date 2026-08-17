@@ -170,7 +170,7 @@ class UMKM extends Model
 
     public function scopeMenunggu($query)
     {
-        return $query->where('status_verifikasi', 'terkirim');
+        return $query->where('status_verifikasi', 'menunggu_verifikasi');
     }
 
     public function scopeAktif($query)
@@ -182,14 +182,14 @@ class UMKM extends Model
     {
         $styles = [
             'draft' => 'bg-slate-100 text-slate-700 border-slate-200',
-            'terkirim' => 'bg-amber-100 text-amber-700 border-amber-200',
+            'menunggu_verifikasi' => 'bg-amber-100 text-amber-700 border-amber-200',
             'terverifikasi' => 'bg-emerald-100 text-emerald-700 border-emerald-200',
             'ditolak' => 'bg-rose-100 text-rose-700 border-rose-200',
         ];
         
         $icons = [
             'draft' => 'mdi-file-document-edit-outline',
-            'terkirim' => 'mdi-clock-outline',
+            'menunggu_verifikasi' => 'mdi-clock-outline',
             'terverifikasi' => 'mdi-check-decagram',
             'ditolak' => 'mdi-close-octagon-outline',
         ];

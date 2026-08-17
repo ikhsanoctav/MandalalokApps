@@ -2,7 +2,7 @@
 @props(['role' => 'super_admin'])
 
 @php
-    $pendingCount = \App\Models\UMKM::where('status_verifikasi', 'terkirim')->count();
+    $pendingCount = \App\Models\UMKM::where('status_verifikasi', 'menunggu_verifikasi')->count();
     $pendingAkunCount = \App\Models\Pemilik::where('status_verifikasi_ktp', 'pending')->count();
     $userRole = auth()->user()->roles->first()->name ?? 'super_admin';
 @endphp
@@ -111,7 +111,7 @@
                         UMKM</a>
                     {{--
                     <a href="{{ route('superadmin.umkm', ['status_verifikasi' => 'terverifikasi']) }}"
-                        class="flex items-center justify-between px-3 py-2 rounded-lg text-sm hover:bg-white/5 {{ request()->routeIs('superadmin.umkm') && request('status_verifikasi') == 'terkirim' ? 'text-blue-400 font-bold bg-white/5/30' : '' }}">
+                        class="flex items-center justify-between px-3 py-2 rounded-lg text-sm hover:bg-white/5 {{ request()->routeIs('superadmin.umkm') && request('status_verifikasi') == 'menunggu_verifikasi' ? 'text-blue-400 font-bold bg-white/5/30' : '' }}">
                         <span>UMKM Pending</span>
                         <span
                             class="bg-red-500 text-white text-xs px-1.5 py-0.5 rounded-full">{{ $pendingCount }}</span>

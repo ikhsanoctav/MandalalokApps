@@ -85,7 +85,7 @@ class UmkmDropdownTest extends TestCase
             'alamat_usaha' => 'Jl. Kebangsaan No. 12',
             'foto_utama' => 'umkm/foto_utama/existing.jpg',
             'jumlah_tenaga_kerja' => 2,
-            'status_verifikasi' => 'terkirim',
+            'status_verifikasi' => 'menunggu_verifikasi',
             'tanggal_pendataan' => now(),
             'id_petugas' => $operator->id,
         ]);

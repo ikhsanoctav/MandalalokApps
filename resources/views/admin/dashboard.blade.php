@@ -352,7 +352,7 @@
                                     @if ($umkm->status_verifikasi == 'terverifikasi')
                                         <span
                                             class="inline-flex items-center px-2 py-1 rounded-full text-xs font-semibold bg-emerald-100 text-emerald-700">Terverifikasi</span>
-                                    @elseif($umkm->status_verifikasi == 'terkirim')
+                                    @elseif($umkm->status_verifikasi == 'menunggu_verifikasi')
                                         <span
                                             class="inline-flex items-center px-2 py-1 rounded-full text-xs font-semibold bg-amber-100 text-amber-700">Menunggu</span>
                                     @else
@@ -581,7 +581,7 @@
                 if (umkm.status_verifikasi == 'terverifikasi') {
                     statusHtml =
                         '<span class="inline-flex items-center px-2 py-1 rounded-full text-xs font-semibold bg-emerald-100 text-emerald-700">Terverifikasi</span>';
-                } else if (umkm.status_verifikasi == 'terkirim') {
+                } else if (umkm.status_verifikasi == 'menunggu_verifikasi') {
                     statusHtml =
                         '<span class="inline-flex items-center px-2 py-1 rounded-full text-xs font-semibold bg-amber-100 text-amber-700">Menunggu</span>';
                 } else {

@@ -72,7 +72,7 @@
                                     onchange="document.getElementById('filter-form').submit()">
                                     <option value="">Semua Status</option>
                                     <option value="draft" {{ request('status_verifikasi') == 'draft' ? 'selected' : '' }}>Draft</option>
-                                    <option value="terkirim" {{ request('status_verifikasi') == 'terkirim' ? 'selected' : '' }}>Menunggu Verifikasi (Terkirim)</option>
+                                    <option value="menunggu_verifikasi" {{ request('status_verifikasi') == 'menunggu_verifikasi' ? 'selected' : '' }}>Menunggu Verifikasi (Terkirim)</option>
                                     <option value="terverifikasi" {{ request('status_verifikasi') == 'terverifikasi' ? 'selected' : '' }}>Terverifikasi</option>
                                     <option value="ditolak" {{ request('status_verifikasi') == 'ditolak' ? 'selected' : '' }}>Ditolak</option>
                                 </select>
@@ -169,7 +169,7 @@
                             <div>
                                 @if ($umkm->status_verifikasi == 'terverifikasi')
                                     <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-xs font-semibold bg-emerald-100 text-emerald-700">Terverifikasi</span>
-                                @elseif($umkm->status_verifikasi == 'terkirim')
+                                @elseif($umkm->status_verifikasi == 'menunggu_verifikasi')
                                     <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-xs font-semibold bg-amber-100 text-amber-700">Menunggu</span>
                                 @elseif($umkm->status_verifikasi == 'ditolak')
                                     <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-xs font-semibold bg-red-100 text-red-700">Ditolak</span>
@@ -239,7 +239,7 @@
                                             <span class="w-1.5 h-1.5 bg-emerald-500 rounded-full"></span>
                                             Terverifikasi
                                         </span>
-                                    @elseif($umkm->status_verifikasi == 'terkirim')
+                                    @elseif($umkm->status_verifikasi == 'menunggu_verifikasi')
                                         <span class="inline-flex items-center gap-1 px-2 py-1 rounded-full text-xs font-semibold bg-amber-100 text-amber-700">
                                             <span class="w-1.5 h-1.5 bg-amber-500 rounded-full"></span>
                                             Menunggu

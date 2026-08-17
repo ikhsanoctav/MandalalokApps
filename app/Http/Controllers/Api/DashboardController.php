@@ -53,7 +53,7 @@ class DashboardController extends Controller
             'stats' => [
                 'total_umkm' => (clone $base)->count(),
                 'draft' => (clone $base)->where('status_verifikasi', 'draft')->count(),
-                'menunggu' => (clone $base)->where('status_verifikasi', 'terkirim')->count(),
+                'menunggu' => (clone $base)->where('status_verifikasi', 'menunggu_verifikasi')->count(),
                 'terverifikasi' => (clone $base)->where('status_verifikasi', 'terverifikasi')->count(),
                 'ditolak' => (clone $base)->where('status_verifikasi', 'ditolak')->count(),
             ],
@@ -95,7 +95,7 @@ class DashboardController extends Controller
             'stats' => [
                 'total_umkm' => (clone $base)->count(),
                 'draft' => (clone $base)->where('status_verifikasi', 'draft')->count(),
-                'menunggu' => (clone $base)->where('status_verifikasi', 'terkirim')->count(),
+                'menunggu' => (clone $base)->where('status_verifikasi', 'menunggu_verifikasi')->count(),
                 'terverifikasi' => (clone $base)->where('status_verifikasi', 'terverifikasi')->count(),
                 'ditolak' => (clone $base)->where('status_verifikasi', 'ditolak')->count(),
             ],
@@ -118,12 +118,12 @@ class DashboardController extends Controller
             'role' => 'admin_kecamatan',
             'stats' => [
                 'total_umkm' => UMKM::count(),
-                'menunggu' => UMKM::where('status_verifikasi', 'terkirim')->count(),
+                'menunggu' => UMKM::where('status_verifikasi', 'menunggu_verifikasi')->count(),
                 'terverifikasi' => UMKM::where('status_verifikasi', 'terverifikasi')->count(),
                 'ditolak' => UMKM::where('status_verifikasi', 'ditolak')->count(),
                 'aktif' => UMKM::where('status_usaha', 'aktif')->count(),
             ],
-            'recent_pending' => UMKM::where('status_verifikasi', 'terkirim')
+            'recent_pending' => UMKM::where('status_verifikasi', 'menunggu_verifikasi')
                 ->with(['kategori', 'pemilik', 'petugas'])
                 ->latest()
                 ->take(5)
@@ -141,7 +141,7 @@ class DashboardController extends Controller
             'role' => 'super_admin',
             'stats' => [
                 'total_umkm' => UMKM::count(),
-                'menunggu' => UMKM::where('status_verifikasi', 'terkirim')->count(),
+                'menunggu' => UMKM::where('status_verifikasi', 'menunggu_verifikasi')->count(),
                 'terverifikasi' => UMKM::where('status_verifikasi', 'terverifikasi')->count(),
                 'ditolak' => UMKM::where('status_verifikasi', 'ditolak')->count(),
                 'aktif' => UMKM::where('status_usaha', 'aktif')->count(),

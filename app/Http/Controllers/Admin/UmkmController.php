@@ -84,7 +84,7 @@ class UmkmController extends Controller
 
         $totalUmkm = UMKM::count();
         $terverifikasiCount = UMKM::where('status_verifikasi', 'terverifikasi')->count();
-        $menungguCount = UMKM::where('status_verifikasi', 'terkirim')->count();
+        $menungguCount = UMKM::where('status_verifikasi', 'menunggu_verifikasi')->count();
         $aktifCount = UMKM::where('status_usaha', 'aktif')->where('status_verifikasi', 'terverifikasi')->count();
 
         $lastMonthTotal = UMKM::whereMonth('created_at', now()->subMonth()->month)
@@ -180,7 +180,7 @@ class UmkmController extends Controller
         // Simpan pemilik & UMKM via service
         $pemilik = $this->umkmService->findOrCreatePemilik($request);
 
-        $statusVerifikasi = $request->input('status_verifikasi', 'terkirim');
+        $statusVerifikasi = $request->input('status_verifikasi', 'menunggu_verifikasi');
         $umkmData = $this->umkmService->buildUmkmData(
             $request,
             $pemilik->id_pemilik,

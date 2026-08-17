@@ -63,7 +63,7 @@ class SuperadminVerifikasiLapanganDisplayTest extends TestCase
                 'status_usaha' => 'aktif',
                 'alamat_usaha' => 'Jl. Kebangsaan No. 12',
                 'jumlah_tenaga_kerja' => 2,
-                'status_verifikasi' => 'terkirim',
+                'status_verifikasi' => 'menunggu_verifikasi',
                 'tanggal_pendataan' => now(),
                 'id_petugas' => $operator->id,
             ]);

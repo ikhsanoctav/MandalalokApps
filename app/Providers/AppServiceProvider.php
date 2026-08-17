@@ -44,7 +44,7 @@ class AppServiceProvider extends ServiceProvider
                     ->where('tanggal_selesai', '>=', now())
                     ->count();
                 
-                $pendingCount = \App\Models\UMKM::where('status_verifikasi', 'terkirim')->count();
+                $pendingCount = \App\Models\UMKM::where('status_verifikasi', 'menunggu_verifikasi')->count();
                 $pendingAkunCount = \App\Models\Pemilik::where('status_verifikasi_ktp', 'pending')->count();
             } catch (\Exception $e) {
                 $jumlah_pelatihan_tersedia = 0;
