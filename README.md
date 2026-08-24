@@ -22,7 +22,7 @@
 
 ## 📌 Tentang Mandalaloka
 
-**Mandalaloka** adalah platform web terpadu yang dirancang untuk mendigitalkan seluruh siklus pendataan, pemetaan wilayah, etalase promosi, dan program pembinaan Usaha Mikro, Kecil, dan Menengah (UMKM) di wilayah **Kecamatan Mandalajati, Kota Bandung** (meliputi 5 kelurahan: *Karang Pamulang, Sindangjaya, Cikadut, Pasir Impun, dan Jatihandap*).
+**Mandalaloka** adalah platform web terpadu yang dirancang untuk mendigitalkan seluruh siklus pendataan, pemetaan wilayah, etalase promosi produk, serta program fasilitasi Usaha Mikro, Kecil, dan Menengah (UMKM) di wilayah **Kecamatan Mandalajati, Kota Bandung** (meliputi 5 kelurahan: *Karang Pamulang, Sindangjaya, Cikadut, Pasir Impun, dan Jatihandap*).
 
 Platform ini menghubungkan pihak **Pemerintah Kecamatan**, **Petugas Lapangan (Surveyor)**, **Pelaku Usaha**, dan **Masyarakat Publik** dalam satu ekosistem digital yang transparan dan mudah diakses.
 
@@ -38,8 +38,8 @@ Platform ini menghubungkan pihak **Pemerintah Kecamatan**, **Petugas Lapangan (S
 │  - Katalog Produk │  - Biodata & KTP  │  - Dashboard Statistik Wilayah │
 │  - Peta Interaktif│  - Etalase Produk │  - Validasi UMKM & Verifikasi  │
 │  - Portal Warta   │  - Pengajuan Dana │  - Watermarking Dokumen KTP    │
-│  - Ulasan & Rating│  - Ikut Pelatihan │  - Sensus GPS Lapangan & Foto  │
-│  - Asisten Chat   │  - Tiket QR Code  │  - Scanner Presensi Pelatihan  │
+│  - Ulasan & Rating│  - Pantau Status  │  - Sensus GPS Lapangan & Foto  │
+│  - Asisten Chat   │  - QR Code Usaha  │  - Ekspor/Impor Laporan Excel  │
 └───────────────────┴───────────────────┴────────────────────────────────┘
 ```
 
@@ -66,19 +66,15 @@ Platform ini menghubungkan pihak **Pemerintah Kecamatan**, **Petugas Lapangan (S
 * **Berita & Pengumuman Resmi**: Publikasi warta kegiatan kecamatan, bazar, pameran UMKM, dan sosialisasi perizinan usaha.
 * **Informasi Program & Regulasi**: Panduan tata cara legalitas (NIB, sertifikasi Halal, BPOM) dan informasi agenda dinas.
 
-### 5. 📚 Manajemen Pelatihan & Presensi QR Code Scanner
-* **Publikasi & Pendaftaran Pelatihan**: Pelaku UMKM dapat mendaftar pelatihan kewirausahaan secara online dengan alokasi kuota dinamis.
-* **Scanner Presensi Real-Time**: Petugas lapangan dapat memindai tiket QR Code peserta di lokasi pelatihan untuk pencatatan kehadiran instan.
-
-### 6. 📑 Pengajuan Program Bantuan Modal & Fasilitasi
+### 5. 📑 Pengajuan Program Bantuan Modal & Fasilitasi
 * **Pendaftaran Bantuan Online**: Pengunggahan dokumen proposal dan kelengkapan berkas secara mandiri oleh pelaku usaha.
 * **Verifikasi Berjenjang**: Peninjauan berkas administratif oleh Admin Kecamatan dan verifikasi fisik lapangan oleh Petugas Lapangan.
 
-### 7. 🛡️ Keamanan Data & Dynamic KTP Watermarking
+### 6. 🛡️ Keamanan Data & Dynamic KTP Watermarking
 * **Cek NIK Real-Time**: Validasi NIK otomatis untuk mencegah duplikasi identitas pemilik usaha.
 * **Proteksi Watermark KTP**: Berkas scan KTP otomatis dilapisi watermark dinamis nama pemohon dan stempel sistem saat ditinjau Admin guna mencegah penyalahgunaan dokumen identitas.
 
-### 8. 💬 Chatbot Asisten "Mang Loka"
+### 7. 💬 Chatbot Asisten "Mang Loka"
 * **Asisten Virtual 24/7**: Chatbot interaktif di halaman depan yang siap membantu masyarakat seputar panduan pendaftaran UMKM, persyaratan bantuan, dan lokasi usaha lokal.
 
 ---
@@ -92,9 +88,9 @@ Platform ini menghubungkan pihak **Pemerintah Kecamatan**, **Petugas Lapangan (S
 | **Verifikasi Akun & KTP Watermarking** | ✅ | ✅ | ❌ | ❌ | ❌ |
 | **Validasi Pengajuan UMKM & Bantuan** | ✅ | ✅ | ❌ | ❌ | ❌ |
 | **Input Sensus Lapangan (GPS Tagging)** | ✅ | ✅ | ✅ | ❌ | ❌ |
-| **Scanner Absensi QR Pelatihan** | ✅ | ✅ | ✅ | ❌ | ❌ |
+| **Verifikasi Lapangan Fisik** | ✅ | ✅ | ✅ | ❌ | ❌ |
 | **Kelola Profil Usaha & Katalog Produk** | ✅ | ✅ | ❌ | ✅ Usaha Sendiri | ❌ |
-| **Daftar Program Pelatihan & Bantuan** | ❌ | ❌ | ❌ | ✅ | ❌ |
+| **Pengajuan Program Bantuan Modal** | ❌ | ❌ | ❌ | ✅ | ❌ |
 | **Portal Warta & Berita Kecamatan** | ✅ Kelola | ✅ Kelola | ❌ | ❌ | ✅ Membaca |
 | **Katalog Produk & Review Komunitas** | ✅ Moderasi | ✅ Moderasi | ❌ | ❌ | ✅ Rating/Ulas |
 | **Peta Interaktif OpenStreetMap** | ✅ | ✅ | ✅ | ✅ | ✅ |
@@ -186,11 +182,11 @@ MandalalokaApps/
 ├── app/
 │   ├── Http/Controllers/
 │   │   ├── SuperAdmin/          # Kontrol Master Data, Users, Logs, Settings, Kop Surat
-│   │   ├── Admin/               # Verifikasi Akun KTP, Validasi UMKM, Bantuan, Pelatihan
-│   │   ├── Petugas/             # Pendataan Lapangan, Verifikasi Fisik, QR Presensi
+│   │   ├── Admin/               # Verifikasi Akun KTP, Validasi UMKM, Bantuan
+│   │   ├── Petugas/             # Pendataan Lapangan, Verifikasi Fisik Lapangan
 │   │   ├── Pelaku/              # Profil Pemilik, Registrasi Usaha, Produk, Pengajuan
 │   │   └── Api/                 # Endpoint REST API (Statistik, Peta, Chatbot, Mobile)
-│   ├── Models/                  # Model Eloquent (UMKM, Pemilik, Produk, Pelatihan, dll.)
+│   ├── Models/                  # Model Eloquent (UMKM, Pemilik, Produk, Pengajuan, dll.)
 │   ├── Services/                # Service Layer (UmkmService, PengajuanService, AktivitasLogger)
 │   └── Http/Middleware/         # Middleware Role & EnsureProfilCompleted
 ├── database/
