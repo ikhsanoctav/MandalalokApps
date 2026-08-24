@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="https://raw.githubusercontent.com/ikhsanoctav/MandalalokApps/main/public/images/Logo_Mandalaloka.png" width="130" alt="Logo Mandalaloka">
+  <img src="public/images/Logo_Mandalaloka.png" width="130" alt="Logo Mandalaloka">
 </p>
 
 <h1 align="center">Mandalaloka Apps</h1>
