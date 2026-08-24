@@ -111,7 +111,19 @@ Platform ini menghubungkan pihak **Pemerintah Kecamatan**, **Petugas Lapangan (S
 
 ---
 
-## 🚀 Panduan Menjalankan Aplikasi
+## 🌐 Akses Sistem (Live Deployment)
+
+Platform Mandalaloka telah di-deploy dan dapat diakses secara langsung:
+* 🔗 **Portal Utama Mandalaloka**: [http://103.89.4.245/](http://103.89.4.245/)
+* 🛍️ **Katalog Produk UMKM**: [http://103.89.4.245/katalog-umkm](http://103.89.4.245/katalog-umkm)
+* 📰 **Portal Warta & Informasi**: [http://103.89.4.245/warta](http://103.89.4.245/warta)
+
+---
+
+<details>
+<summary>🛠️ <strong>Panduan Instalasi & Menjalankan di Lokal (Developer Guide - Klik untuk Membuka)</strong></summary>
+
+<br>
 
 ### 🐳 Menggunakan Docker / Laravel Sail (Rekomendasi)
 
@@ -153,13 +165,16 @@ Platform ini menghubungkan pihak **Pemerintah Kecamatan**, **Petugas Lapangan (S
    ./vendor/bin/sail npm run dev
    ```
 
-8. **Akses Aplikasi:**
+8. **Akses Aplikasi Lokal:**
    * **Web Portal:** `http://localhost:8080` (atau `http://localhost`)
    * **phpMyAdmin:** `http://localhost:8081`
 
----
+</details>
 
-## 🧪 Pengujian Sistem (Automated Testing)
+<details>
+<summary>🧪 <strong>Pengujian Sistem (Automated Testing - Klik untuk Membuka)</strong></summary>
+
+<br>
 
 Aplikasi dilengkapi dengan rangkaian automated test suite (*Feature & Unit Tests*) berbasis PHPUnit:
 
@@ -168,9 +183,11 @@ Aplikasi dilengkapi dengan rangkaian automated test suite (*Feature & Unit Tests
 ./vendor/bin/sail test
 ```
 
-Tersedia juga modul skenario pengujian otomatis:
+Tersedia juga modul skenario pengujian otomatis end-to-end:
 * **Katalon Studio**: Direktori `katalon/`
 * **Selenium WebDriver**: Direktori `selenium/`
+
+</details>
 
 ---
 
