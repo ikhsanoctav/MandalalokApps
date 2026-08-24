@@ -90,8 +90,8 @@ Platform ini menghubungkan pihak **Pemerintah Kecamatan**, **Petugas Lapangan (S
 
 | Peran (Role) | Tingkat Pengguna | Deskripsi & Tanggung Jawab Utama |
 | :--- | :--- | :--- |
-| 👑 **Super Admin** | Camat / Administrator Utama | Memegang kendali penuh atas sistem, manajemen akun pengguna & izin role (RBAC), pengelolaan master data wilayah (Kelurahan/RW) dan sektor usaha, pemantauan audit log aktivitas, backup database, serta pengaturan kop surat resmi. |
-| 🏛️ **Admin Kecamatan** | Kasi Ekbang / Pengelola | Bertanggung jawab atas verifikasi identitas akun pendaftar (KTP), validasi pendaftaran data UMKM baru, peninjauan proposal program bantuan modal, publikasi warta kecamatan, dan ekspor rekapitulasi laporan data (Excel). |
+| 👑 **Super Admin** | Kasi Ekbang (Kepala Seksi Ekonomi & Pembangunan) | Memegang kendali penuh atas sistem, manajemen akun pengguna & hak akses (RBAC), pengelolaan master data wilayah (Kelurahan/RW) dan sektor usaha, pemantauan audit log aktivitas, backup database, serta pengaturan kop surat resmi kecamatan. |
+| 🏛️ **Admin Kecamatan** | Staf Ekbang / Petugas Administrasi Kecamatan | Bertanggung jawab atas verifikasi identitas akun pendaftar (KTP), validasi pendaftaran data UMKM baru, peninjauan kelengkapan proposal program bantuan modal, publikasi warta kecamatan, dan ekspor rekapitulasi laporan data (Excel). |
 | 📍 **Petugas Lapangan** | Surveyor / Operator Lapangan | Bertugas melakukan sensus pendataan UMKM langsung dari lapangan, tagging titik koordinat geospasial (GPS), mengunggah dokumentasi foto fisik usaha/produk, serta melaksanakan verifikasi faktual di lapangan. |
 | 🏪 **Pelaku UMKM** | Pemilik Usaha Lokal | Mengelola kelengkapan biodata diri dan legalitas usaha, mengunggah etalase katalog produk, mengajukan permohonan program bantuan modal, memantau status verifikasi secara real-time, serta mencetak QR Code profil usahanya. |
 | 🌐 **Publik (Tamu)** | Masyarakat Umum | Menjelajahi etalase produk UMKM lokal, memberikan ulasan & rating bintang, meninjau peta interaktif sebaran UMKM, membaca warta berita kegiatan kecamatan, dan mendaftarkan akun baru. |
