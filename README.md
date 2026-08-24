@@ -10,7 +10,7 @@
 </p>
 
 <p align="center">
-  <img src="https://img.shields.io/badge/Laravel-11.x-FF2D20?style=for-the-badge&logo=laravel&logoColor=white" alt="Laravel 11">
+  <img src="https://img.shields.io/badge/Laravel-13.x-FF2D20?style=for-the-badge&logo=laravel&logoColor=white" alt="Laravel 13">
   <img src="https://img.shields.io/badge/PHP-8.4%2B-777BB4?style=for-the-badge&logo=php&logoColor=white" alt="PHP 8.4">
   <img src="https://img.shields.io/badge/MySQL-8.4-4479A1?style=for-the-badge&logo=mysql&logoColor=white" alt="MySQL 8.4">
   <img src="https://img.shields.io/badge/Tailwind_CSS-38B2AC?style=for-the-badge&logo=tailwind-css&logoColor=white" alt="Tailwind CSS">
@@ -22,7 +22,7 @@
 
 ## 📌 Tentang Mandalaloka
 
-**Mandalaloka** adalah platform web terpadu yang dirancang untuk mendigitalkan seluruh siklus pendataan, pemetaan wilayah, etalase promosi produk, serta program fasilitasi Usaha Mikro, Kecil, dan Menengah (UMKM) di wilayah **Kecamatan Mandalajati, Kota Bandung** (meliputi 5 kelurahan: *Karang Pamulang, Sindangjaya, Cikadut, Pasir Impun, dan Jatihandap*).
+**Mandalaloka** adalah platform web terpadu yang dirancang untuk mendigitalkan seluruh siklus pendataan, pemetaan wilayah, etalase promosi produk, serta fasilitasi program bagi Usaha Mikro, Kecil, dan Menengah (UMKM) di wilayah **Kecamatan Mandalajati, Kota Bandung** (meliputi 5 kelurahan: *Karang Pamulang, Sindangjaya, Cikadut, Pasir Impun, dan Jatihandap*).
 
 Platform ini menghubungkan pihak **Pemerintah Kecamatan**, **Petugas Lapangan (Surveyor)**, **Pelaku Usaha**, dan **Masyarakat Publik** dalam satu ekosistem digital yang transparan dan mudah diakses.
 
@@ -39,7 +39,7 @@ Platform ini menghubungkan pihak **Pemerintah Kecamatan**, **Petugas Lapangan (S
 │  - Peta Interaktif│  - Etalase Produk │  - Validasi UMKM & Verifikasi  │
 │  - Portal Warta   │  - Pengajuan Dana │  - Watermarking Dokumen KTP    │
 │  - Ulasan & Rating│  - Pantau Status  │  - Sensus GPS Lapangan & Foto  │
-│  - Asisten Chat   │  - QR Code Usaha  │  - Ekspor/Impor Laporan Excel  │
+│  - Rute WhatsApp  │  - QR Code Usaha  │  - Ekspor/Impor Laporan Excel  │
 └───────────────────┴───────────────────┴────────────────────────────────┘
 ```
 
@@ -74,9 +74,6 @@ Platform ini menghubungkan pihak **Pemerintah Kecamatan**, **Petugas Lapangan (S
 * **Cek NIK Real-Time**: Validasi NIK otomatis untuk mencegah duplikasi identitas pemilik usaha.
 * **Proteksi Watermark KTP**: Berkas scan KTP otomatis dilapisi watermark dinamis nama pemohon dan stempel sistem saat ditinjau Admin guna mencegah penyalahgunaan dokumen identitas.
 
-### 7. 💬 Chatbot Asisten "Mang Loka"
-* **Asisten Virtual 24/7**: Chatbot interaktif di halaman depan yang siap membantu masyarakat seputar panduan pendaftaran UMKM, persyaratan bantuan, dan lokasi usaha lokal.
-
 ---
 
 ## 👥 Hak Akses Pengguna (Role-Based Access Control)
@@ -94,14 +91,13 @@ Platform ini menghubungkan pihak **Pemerintah Kecamatan**, **Petugas Lapangan (S
 | **Portal Warta & Berita Kecamatan** | ✅ Kelola | ✅ Kelola | ❌ | ❌ | ✅ Membaca |
 | **Katalog Produk & Review Komunitas** | ✅ Moderasi | ✅ Moderasi | ❌ | ❌ | ✅ Rating/Ulas |
 | **Peta Interaktif OpenStreetMap** | ✅ | ✅ | ✅ | ✅ | ✅ |
-| **Asisten Chatbot Mang Loka** | ✅ | ❌ | ❌ | ❌ | ✅ 24/7 |
 | **Audit Logs & Backup Database** | ✅ | ❌ | ❌ | ❌ | ❌ |
 
 ---
 
 ## 🛠️ Arsitektur Teknologi
 
-* **Backend Framework**: [Laravel 11](https://laravel.com/) (PHP 8.4+)
+* **Backend Framework**: [Laravel 13](https://laravel.com/) (PHP 8.4+)
 * **Basis Data**: [MySQL 8.4](https://www.mysql.com/)
 * **Frontend UI**: Blade Modular Partials, [Tailwind CSS](https://tailwindcss.com/), [Alpine.js](https://alpinejs.dev/), [Chart.js](https://www.chartjs.org/)
 * **Peta & GIS**: [Leaflet.js](https://leafletjs.com/) & [OpenStreetMap](https://www.openstreetmap.org/)
@@ -185,7 +181,7 @@ MandalalokaApps/
 │   │   ├── Admin/               # Verifikasi Akun KTP, Validasi UMKM, Bantuan
 │   │   ├── Petugas/             # Pendataan Lapangan, Verifikasi Fisik Lapangan
 │   │   ├── Pelaku/              # Profil Pemilik, Registrasi Usaha, Produk, Pengajuan
-│   │   └── Api/                 # Endpoint REST API (Statistik, Peta, Chatbot, Mobile)
+│   │   └── Api/                 # Endpoint REST API (Statistik, Peta, Mobile)
 │   ├── Models/                  # Model Eloquent (UMKM, Pemilik, Produk, Pengajuan, dll.)
 │   ├── Services/                # Service Layer (UmkmService, PengajuanService, AktivitasLogger)
 │   └── Http/Middleware/         # Middleware Role & EnsureProfilCompleted
