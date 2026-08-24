@@ -202,25 +202,32 @@ MandalalokaApps/
 │   │   ├── Petugas/             # Pendataan Lapangan, Verifikasi Fisik Lapangan
 │   │   ├── Pelaku/              # Profil Pemilik, Registrasi Usaha, Produk, Pengajuan
 │   │   └── Api/                 # Endpoint REST API (Statistik, Peta, Mobile)
-│   ├── Models/                  # Model Eloquent (UMKM, Pemilik, Produk, Pengajuan, dll.)
+│   ├── Models/                  # Model Eloquent (UMKM, Pemilik, Produk, Pengajuan, Berita, dll.)
 │   ├── Services/                # Service Layer (UmkmService, PengajuanService, AktivitasLogger)
 │   └── Http/Middleware/         # Middleware Role & EnsureProfilCompleted
 ├── database/
-│   ├── migrations/              # Skema tabel database
+│   ├── migrations/              # Skema migrasi tabel database
 │   └── seeders/                 # Seeder master 5 Kelurahan, RW/RT, Sektor, & Akun Default
-├── resources/views/
-│   ├── landing/partials/        # Partials modular Landing Page (Head, Navbar, Hero, Map, dll.)
-│   ├── superadmin/              # Panel UI Super Admin
-│   ├── admin/                   # Panel UI Admin Kecamatan
-│   ├── petugas/                 # Panel UI Petugas Lapangan
-│   ├── pelaku/                  # Panel UI Pelaku UMKM
-│   └── welcome.blade.php        # Layout utama halaman depan
+├── docs/                        # Dokumentasi Sistem (PRD, Skema Database, Panduan Fitur)
+├── resources/
+│   ├── css/                     # Styling custom & asset desain
+│   ├── js/                      # Script JS frontend
+│   └── views/
+│       ├── landing/partials/    # Komponen modular Landing Page (Head, Navbar, Hero, Map, dll.)
+│       ├── superadmin/          # Panel UI Super Admin (Kasi Ekbang)
+│       ├── admin/               # Panel UI Admin Kecamatan (Staf Ekbang)
+│       ├── petugas/             # Panel UI Petugas Lapangan (Staf Kelurahan/RW)
+│       ├── pelaku/              # Dashboard UI Pelaku UMKM
+│       ├── warta/               # Halaman Portal Berita & Warta Kecamatan
+│       ├── katalog-umkm.blade.php # Halaman Etalase & Katalog Produk Publik
+│       └── welcome.blade.php    # Layout utama halaman depan (Modular)
 ├── routes/
 │   ├── web.php                  # Rute antarmuka web
-│   ├── api.php                  # Rute API RESTful (Sanctum)
-│   └── auth.php                 # Rute autentikasi
-├── docker-compose.prod.yml      # Konfigurasi deploy production VPS
-└── compose.yaml                 # Konfigurasi container lokal (Sail)
+│   ├── api.php                  # Rute REST API (Sanctum)
+│   └── auth.php                 # Rute autentikasi pengguna
+├── docker-compose.prod.yml      # Konfigurasi container deploy production VPS
+├── nginx.prod.conf              # Konfigurasi Nginx Reverse Proxy Server
+└── compose.yaml                 # Konfigurasi container development lokal (Sail)
 ```
 
 ---
