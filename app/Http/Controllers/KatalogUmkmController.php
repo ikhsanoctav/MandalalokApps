@@ -14,7 +14,7 @@ class KatalogUmkmController extends Controller
         $query = \App\Models\Produk::query()
             ->with(['umkm.sektor', 'umkm.pemilik.kelurahanRel', 'umkm.ratings'])
             ->whereHas('umkm', function($q) {
-                $q->terverifikasi()->aktif();
+                $q->terverifikasi();
             });
 
         // Filter Pencarian Nama Produk atau UMKM

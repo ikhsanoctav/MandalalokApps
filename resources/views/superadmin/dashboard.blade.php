@@ -179,7 +179,7 @@
         <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
             
             <div
-                class="lg:col-span-2 bg-white rounded-2xl border border-slate-200 shadow-sm hover:shadow-md transition-all overflow-hidden">
+                class="lg:col-span-2 bg-white rounded-2xl border border-slate-200 shadow-sm hover:shadow-md transition-all overflow-hidden flex flex-col">
                 <div class="px-4 md:px-6 py-4 border-b border-slate-200 bg-gradient-to-r from-slate-50 to-white">
                     <div class="flex justify-between items-center flex-wrap gap-4">
                         <div>
@@ -236,9 +236,9 @@
                         </div>
                     </div>
                 </div>
-                <div class="p-4 md:p-6">
-                    <div class="relative w-full" style="min-height: 320px; height: auto;">
-                        <canvas id="trendChart" style="max-height: 320px; width: 100%; height: auto;"></canvas>
+                <div class="p-4 md:p-6 flex-1 flex flex-col">
+                    <div class="relative w-full flex-1" style="min-height: 320px;">
+                        <canvas id="trendChart"></canvas>
                     </div>
                 </div>
             </div>
@@ -785,7 +785,7 @@
                 },
                 options: {
                     responsive: true,
-                    maintainAspectRatio: true,
+                    maintainAspectRatio: false,
                     aspectRatio: 1.8,
                     plugins: {
                         legend: {

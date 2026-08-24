@@ -54,12 +54,12 @@
 
                     <div>
                         <label class="block text-sm font-semibold text-slate-700 mb-2">Gambar / Foto Sampul</label>
-                        @if ($berita->gambar)
-                            <div class="mb-3">
-                                <img src="{{ Storage::url($berita->gambar) }}"
-                                    class="h-24 rounded-xl object-cover border border-slate-200">
-                            </div>
-                        @endif
+                        <div class="mb-3">
+                            <img src="{{ $berita->gambar_url }}"
+                                alt="{{ $berita->judul }}"
+                                class="h-24 rounded-xl object-cover border border-slate-200"
+                                onerror="this.onerror=null;this.src='{{ $berita->dummy_gambar }}';">
+                        </div>
                         <input type="file" name="gambar"
                             class="block w-full text-sm text-slate-700 file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100"
                             accept="image/*">

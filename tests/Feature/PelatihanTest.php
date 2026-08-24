@@ -21,10 +21,39 @@ class PelatihanTest extends TestCase
         Role::firstOrCreate(['name' => 'super_admin']);
     }
 
+    private function createVerifiedPelakuUser(string $nik = '3270010101010001'): User
+    {
+        $user = User::factory()->create(['nik' => $nik]);
+        $user->assignRole('pelaku_umkm');
+
+        \App\Models\Pemilik::create([
+            'id_pemilik' => (string) \Illuminate\Support\Str::uuid(),
+            'nik' => $nik,
+            'nik_hash' => hash('sha256', $nik),
+            'nama_lengkap' => $user->name,
+            'tempat_lahir' => 'Bandung',
+            'tanggal_lahir' => '1990-01-01',
+            'jenis_kelamin' => 'L',
+            'no_hp' => '081234567890',
+            'email' => $user->email,
+            'alamat' => 'Jl. Ujungberung No. 1',
+            'rt' => '001',
+            'rw' => '001',
+            'kelurahan' => 'Karang Pamulang',
+            'kecamatan' => 'Mandalajati',
+            'kota_kab' => 'Bandung',
+            'provinsi' => 'Jawa Barat',
+            'kode_pos' => '40195',
+            'foto_ktp' => 'uploads/ktp/dummy.jpg',
+            'status_verifikasi_ktp' => 'terverifikasi',
+        ]);
+
+        return $user;
+    }
+
     public function test_pelaku_can_register_for_available_pelatihan(): void
     {
-        $user = User::factory()->create();
-        $user->assignRole('pelaku_umkm');
+        $user = $this->createVerifiedPelakuUser('3270010101010001');
 
         $pelatihan = Pelatihan::create([
             'judul' => 'Pelatihan Digital Marketing',
@@ -48,10 +77,8 @@ class PelatihanTest extends TestCase
 
     public function test_registration_blocked_when_quota_is_full(): void
     {
-        $user1 = User::factory()->create();
-        $user1->assignRole('pelaku_umkm');
-        $user2 = User::factory()->create();
-        $user2->assignRole('pelaku_umkm');
+        $user1 = $this->createVerifiedPelakuUser('3270010101010001');
+        $user2 = $this->createVerifiedPelakuUser('3270010101010002');
 
         $pelatihan = Pelatihan::create([
             'judul' => 'Pelatihan Kuota Terbatas',

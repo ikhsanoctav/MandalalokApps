@@ -43,6 +43,16 @@ class PengaduanController extends Controller
         }
 
         $pengaduans = $query->paginate($perPage)->withQueryString();
+
+        if ($request->ajax() || $request->has('ajax')) {
+            $html = view('superadmin.pengaduan.table-data', compact('pengaduans'))->render();
+            return response()->json([
+                'success' => true,
+                'html' => $html,
+                'count' => $pengaduans->total()
+            ]);
+        }
+
         return view('superadmin.pengaduan.index', compact('pengaduans'));
     }
 

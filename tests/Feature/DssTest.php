@@ -222,7 +222,8 @@ class DssTest extends TestCase
         Cache::forget('dss_is_generating');
 
         $response = $this->actingAs($user)->postJson(route('dss.generate'), [
-            'force' => 'true'
+            'force' => 'true',
+            'intervention_focus' => 'Pemberdayaan Wilayah',
         ]);
 
         $response->assertStatus(202)

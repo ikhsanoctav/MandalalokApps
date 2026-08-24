@@ -62,6 +62,7 @@ class PelakuProfileToggleTest extends TestCase
             'provinsi' => 'Jawa Barat',
             'kode_pos' => '40181',
             'status_verifikasi_ktp' => 'terverifikasi',
+            'foto_ktp' => 'uploads/ktp/dummy.jpg',
         ]);
 
         $response = $this->actingAs($user)->get(route('pelaku.profil.edit'));
@@ -73,6 +74,6 @@ class PelakuProfileToggleTest extends TestCase
         // Verify we can see the read-only details
         $response->assertSee('John Doe');
         $response->assertSee('Akun Terverifikasi');
-        $response->assertSee('Edit Profil');
+        $response->assertSee('Edit Data Diri');
     }
 }

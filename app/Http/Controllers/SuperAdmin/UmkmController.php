@@ -38,7 +38,7 @@ class UmkmController extends Controller
         $status = $request->get('status_verifikasi');
         $date_from = $request->get('date_from');
         $date_to = $request->get('date_to');
-        $perPage = $request->get('per_page', 10);
+        $perPage = $request->get('per_page', 20);
 
         $query = UMKM::with(['pemilik', 'kategori', 'sektor']);
 
@@ -506,7 +506,7 @@ class UmkmController extends Controller
         }
 
         try {
-            $umkm = UMKM::with(['pemilik', 'kategori', 'sektor'])->findOrFail($id);
+            $umkm = UMKM::with(['pemilik', 'kategori', 'sektor', 'produks'])->findOrFail($id);
             $html = view('superadmin.umkm.modal-detail', compact('umkm'))->render();
 
             return response()->json([

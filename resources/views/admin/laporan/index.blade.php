@@ -26,7 +26,7 @@
                             <div class="relative">
                                 <input type="text" id="search" name="search" value="{{ request('search') }}" placeholder="Cari nama, no. pendaftaran, pemilik..."
                                     class="w-full pl-4 pr-10 py-3 rounded-lg border-slate-200 bg-white focus:bg-white focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10 shadow-sm transition-all duration-300 text-sm font-medium text-slate-700" 
-                                    onchange="document.getElementById('filter-form').submit()">
+                                    onchange="window.triggerFilter()">
                             </div>
                         </div>
 
@@ -35,7 +35,7 @@
                             <div class="relative">
                                 <input type="date" id="periode_awal" name="periode_awal" value="{{ request('periode_awal') }}" 
                                     class="w-full pl-4 pr-3 py-3 rounded-lg border-slate-200 bg-white focus:bg-white focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10 shadow-sm transition-all duration-300 text-sm font-medium text-slate-700" 
-                                    onchange="document.getElementById('filter-form').submit()">
+                                    onchange="window.triggerFilter()">
                             </div>
                         </div>
                         
@@ -44,7 +44,7 @@
                             <div class="relative">
                                 <input type="date" id="periode_akhir" name="periode_akhir" value="{{ request('periode_akhir') }}" 
                                     class="w-full pl-4 pr-3 py-3 rounded-lg border-slate-200 bg-white focus:bg-white focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10 shadow-sm transition-all duration-300 text-sm font-medium text-slate-700" 
-                                    onchange="document.getElementById('filter-form').submit()">
+                                    onchange="window.triggerFilter()">
                             </div>
                         </div>
                         
@@ -53,7 +53,7 @@
                             <div class="relative">
                                 <select id="kategori" name="kategori" 
                                     class="w-full pl-4 pr-10 py-3 rounded-lg border-slate-200 bg-white focus:bg-white focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10 shadow-sm transition-all duration-300 text-sm font-medium text-slate-700 appearance-none" 
-                                    onchange="document.getElementById('filter-form').submit()">
+                                    onchange="window.triggerFilter()">
                                     <option value="">Semua Kategori</option>
                                     @foreach($kategoriList as $kat)
                                         <option value="{{ $kat->id }}" {{ request('kategori') == $kat->id ? 'selected' : '' }}>
@@ -69,7 +69,7 @@
                             <div class="relative">
                                 <select id="status_verifikasi" name="status_verifikasi" 
                                     class="w-full pl-4 pr-10 py-3 rounded-lg border-slate-200 bg-white focus:bg-white focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10 shadow-sm transition-all duration-300 text-sm font-medium text-slate-700 appearance-none" 
-                                    onchange="document.getElementById('filter-form').submit()">
+                                    onchange="window.triggerFilter()">
                                     <option value="">Semua Status</option>
                                     <option value="draft" {{ request('status_verifikasi') == 'draft' ? 'selected' : '' }}>Draft</option>
                                     <option value="menunggu_verifikasi" {{ request('status_verifikasi') == 'menunggu_verifikasi' ? 'selected' : '' }}>Menunggu Verifikasi (Terkirim)</option>
@@ -84,7 +84,7 @@
                                 <label for="per_page" class="block text-xs font-bold tracking-wide text-slate-500 uppercase mb-2 ml-1">Tampilkan</label>
                                 <select id="per_page" name="per_page" 
                                     class="w-full pl-4 pr-10 py-3 rounded-lg border-slate-200 bg-white focus:bg-white focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10 shadow-sm transition-all duration-300 text-sm font-medium text-slate-700 appearance-none" 
-                                    onchange="document.getElementById('filter-form').submit()">
+                                    onchange="window.triggerFilter()">
                                     @foreach([10, 25, 50] as $pp)
                                         <option value="{{ $pp }}" {{ request('per_page', 10) == $pp ? 'selected' : '' }}>{{ $pp }} Baris</option>
                                     @endforeach
@@ -114,7 +114,7 @@
                             <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2 2v2m4 6h.01M5 20h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path></svg>
                         </div>
                         <p class="text-blue-100 text-sm font-medium mb-1">Total Entitas Ditemukan</p>
-                        <h3 class="text-4xl font-extrabold tracking-tight">{{ number_format($totalUmkm) }}</h3>
+                        <h3 id="total-umkm" class="text-4xl font-extrabold tracking-tight">{{ number_format($totalUmkm) }}</h3>
                     </div>
                 </div>
 
@@ -127,7 +127,7 @@
                             <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"></path></svg>
                         </div>
                         <p class="text-teal-100 text-sm font-medium mb-1">Total Tenaga Kerja</p>
-                        <h3 class="text-3xl font-extrabold tracking-tight">{{ number_format($totalTenagaKerja) }} <span class="text-lg font-medium opacity-80">Jiwa</span></h3>
+                        <h3 class="text-3xl font-extrabold tracking-tight"><span id="total-tenaga-kerja">{{ number_format($totalTenagaKerja) }}</span> <span class="text-lg font-medium opacity-80">Jiwa</span></h3>
                     </div>
                 </div>
             </div>
@@ -154,132 +154,8 @@
             </div>
         </div>
 
-        <div class="bg-white rounded-3xl shadow-[0_8px_30px_rgb(0,0,0,0.04)] border border-slate-100 overflow-hidden">
-            <div class="px-6 py-5 border-b border-slate-100 bg-slate-50/50 flex justify-between items-center">
-                <h3 class="text-lg font-bold text-slate-800">Detail Data UMKM</h3>
-            </div>
-            <div class="block md:hidden divide-y divide-slate-100">
-                @forelse($umkms as $umkm)
-                    <div class="p-4 space-y-3">
-                        <div class="flex justify-between items-start">
-                            <div>
-                                <h4 class="font-semibold text-slate-800">{{ $umkm->nama_usaha }}</h4>
-                                <p class="text-xs text-slate-400">{{ $umkm->no_pendaftaran ?? '-' }}</p>
-                            </div>
-                            <div>
-                                @if ($umkm->status_verifikasi == 'terverifikasi')
-                                    <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-xs font-semibold bg-emerald-100 text-emerald-700">Terverifikasi</span>
-                                @elseif($umkm->status_verifikasi == 'menunggu_verifikasi')
-                                    <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-xs font-semibold bg-amber-100 text-amber-700">Menunggu</span>
-                                @elseif($umkm->status_verifikasi == 'ditolak')
-                                    <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-xs font-semibold bg-red-100 text-red-700">Ditolak</span>
-                                @else
-                                    <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-xs font-semibold bg-slate-100 text-slate-600">Draft</span>
-                                @endif
-                            </div>
-                        </div>
-
-                        <div class="grid grid-cols-2 gap-2 text-xs">
-                            <div>
-                                <p class="text-slate-500">Pemilik</p>
-                                <p class="font-medium text-slate-700">{{ $umkm->pemilik?->nama_lengkap ?? '-' }}</p>
-                                <p class="text-[10px] text-slate-400">{{ $umkm->pemilik?->kelurahan ?? '-' }}</p>
-                            </div>
-                            <div>
-                                <p class="text-slate-500">Kategori</p>
-                                <p class="font-medium text-slate-700">{{ $umkm->kategori?->nama_kategori ?? '-' }}</p>
-                                <p class="text-[10px] text-slate-400">{{ $umkm->sektor?->nama_sektor ?? '-' }}</p>
-                            </div>
-                            <div class="col-span-2 mt-1">
-                                <p class="text-slate-500">Tgl Daftar</p>
-                                <p class="font-medium text-slate-700">{{ $umkm->tanggal_pendataan ? \Carbon\Carbon::parse($umkm->tanggal_pendataan)->format('d/m/Y') : '-' }}</p>
-                            </div>
-                        </div>
-                    </div>
-                @empty
-                    <div class="p-8 text-center text-slate-400">
-                        <svg class="w-12 h-12 mx-auto mb-3 text-slate-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 13V6a2 2 0 00-2-2H6a2 2 0 00-2 2v7m16 0v5a2 2 0 01-2 2H6a2 2 0 01-2-2v-5m16 0h-2.586a1 1 0 00-.707.293l-2.414 2.414a1 1 0 01-.707.293h-3.172a1 1 0 01-.707-.293l-2.414-2.414A1 1 0 006.586 13H4"></path>
-                        </svg>
-                        <p>Tidak ada data UMKM yang sesuai dengan filter.</p>
-                    </div>
-                @endforelse
-            </div>
-            <div class="hidden md:block overflow-x-auto">
-                <table class="w-full">
-                    <thead class="bg-slate-50 border-b border-slate-200">
-                        <tr>
-                            <th class="px-4 py-3 text-left text-xs font-semibold text-slate-500 uppercase">No</th>
-                            <th class="px-4 py-3 text-left text-xs font-semibold text-slate-500 uppercase">Nama Usaha</th>
-                            <th class="px-4 py-3 text-left text-xs font-semibold text-slate-500 uppercase">Pemilik</th>
-                            <th class="px-4 py-3 text-left text-xs font-semibold text-slate-500 uppercase">Kategori & Sektor</th>
-                            <th class="px-4 py-3 text-left text-xs font-semibold text-slate-500 uppercase">Status</th>
-                            <th class="px-4 py-3 text-left text-xs font-semibold text-slate-500 uppercase">Tgl Daftar</th>
-                        </tr>
-                    </thead>
-                    <tbody class="divide-y divide-slate-100">
-                        @forelse($umkms as $index => $umkm)
-                            <tr class="hover:bg-slate-50 transition-colors">
-                                <td class="px-4 py-3 text-sm text-slate-500">{{ $umkms->firstItem() + $index }}</td>
-                                <td class="px-4 py-3">
-                                    <p class="font-medium text-slate-800">{{ $umkm->nama_usaha }}</p>
-                                    <p class="text-xs text-slate-400">{{ $umkm->no_pendaftaran ?? '-' }}</p>
-                                </td>
-                                <td class="px-4 py-3">
-                                    <p class="text-sm text-slate-600">{{ $umkm->pemilik?->nama_lengkap ?? '-' }}</p>
-                                    <p class="text-xs text-slate-400">{{ $umkm->pemilik?->kelurahan ?? '-' }}</p>
-                                </td>
-                                <td class="px-4 py-3">
-                                    <p class="text-sm text-slate-600">{{ $umkm->kategori?->nama_kategori ?? '-' }}</p>
-                                    <p class="text-xs text-slate-400">{{ $umkm->sektor?->nama_sektor ?? '-' }}</p>
-                                </td>
-                                <td class="px-4 py-3">
-                                    @if ($umkm->status_verifikasi == 'terverifikasi')
-                                        <span class="inline-flex items-center gap-1 px-2 py-1 rounded-full text-xs font-semibold bg-emerald-100 text-emerald-700">
-                                            <span class="w-1.5 h-1.5 bg-emerald-500 rounded-full"></span>
-                                            Terverifikasi
-                                        </span>
-                                    @elseif($umkm->status_verifikasi == 'menunggu_verifikasi')
-                                        <span class="inline-flex items-center gap-1 px-2 py-1 rounded-full text-xs font-semibold bg-amber-100 text-amber-700">
-                                            <span class="w-1.5 h-1.5 bg-amber-500 rounded-full"></span>
-                                            Menunggu
-                                        </span>
-                                    @elseif($umkm->status_verifikasi == 'ditolak')
-                                        <div class="flex flex-col gap-1 items-start">
-                                            <span class="inline-flex items-center gap-1 px-2 py-1 rounded-full text-xs font-semibold bg-red-100 text-red-700">
-                                                <span class="w-1.5 h-1.5 bg-red-500 rounded-full"></span>
-                                                Ditolak
-                                            </span>
-                                            <span class="text-[10px] text-red-600 font-medium bg-red-50 px-2 py-0.5 rounded-md border border-red-100 max-w-[200px] truncate" title="{{ $umkm->catatan_penolakan }}">
-                                                Alasan: {{ $umkm->catatan_penolakan ?? 'Tidak ada' }}
-                                            </span>
-                                        </div>
-                                    @else
-                                        <span class="inline-flex items-center gap-1 px-2 py-1 rounded-full text-xs font-semibold bg-slate-100 text-slate-600">
-                                            <span class="w-1.5 h-1.5 bg-slate-500 rounded-full"></span>
-                                            Draft
-                                        </span>
-                                    @endif
-                                </td>
-                                <td class="px-4 py-3 text-sm text-slate-500">
-                                    {{ $umkm->tanggal_pendataan ? \Carbon\Carbon::parse($umkm->tanggal_pendataan)->format('d/m/Y') : '-' }}
-                                </td>
-                            </tr>
-                        @empty
-                            <tr>
-                                <td colspan="6" class="px-4 py-8 text-center text-slate-500">
-                                    Tidak ada data UMKM yang sesuai dengan filter.
-                                </td>
-                            </tr>
-                        @endforelse
-                    </tbody>
-                </table>
-            </div>
-            @if($umkms->hasPages())
-                <div class="px-6 py-4 border-t border-slate-100 bg-slate-50">
-                    {{ $umkms->links() }}
-                </div>
-            @endif
+        <div id="table-container">
+            @include('admin.laporan.table-data')
         </div>
 
     </div>
@@ -420,7 +296,7 @@
         gradient.addColorStop(0, 'rgba(59, 130, 246, 0.5)'); // blue-500
         gradient.addColorStop(1, 'rgba(59, 130, 246, 0.0)');
 
-        new Chart(ctx, {
+        window.myTrenChart = new Chart(ctx, {
             type: 'line',
             data: {
                 labels: chartLabels.length > 0 ? chartLabels : ['Belum ada data'],
@@ -492,6 +368,134 @@
                 },
             }
         });
+    });
+
+    // AJAX Filtering logic
+    function debounce(func, wait) {
+        let timeout;
+        return function executedFunction(...args) {
+            const later = () => {
+                clearTimeout(timeout);
+                func(...args);
+            };
+            clearTimeout(timeout);
+            timeout = setTimeout(later, wait);
+        };
+    }
+
+    window.triggerFilter = function() {
+        const form = document.getElementById('filter-form');
+        const url = new URL(form.action);
+        const formData = new FormData(form);
+        
+        for (const [key, value] of formData.entries()) {
+            if (value) {
+                url.searchParams.append(key, value);
+            }
+        }
+        
+        const container = document.getElementById('table-container');
+        if (container) {
+            container.style.opacity = '0.5';
+            container.style.pointerEvents = 'none';
+        }
+        
+        url.searchParams.append('ajax', '1');
+        
+        fetch(url.toString(), {
+            headers: {
+                'X-Requested-With': 'XMLHttpRequest',
+                'Accept': 'application/json'
+            }
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success && container) {
+                container.innerHTML = data.html;
+                
+                document.getElementById('total-umkm').innerText = data.totalUmkm;
+                document.getElementById('total-tenaga-kerja').innerText = data.totalTenagaKerja;
+                
+                if (window.myTrenChart) {
+                    window.myTrenChart.data.labels = data.chartLabels.length > 0 ? data.chartLabels : ['Belum ada data'];
+                    window.myTrenChart.data.datasets[0].data = data.chartValues.length > 0 ? data.chartValues : [0];
+                    window.myTrenChart.update();
+                }
+
+                url.searchParams.delete('ajax');
+                window.history.pushState({}, '', url.toString());
+                attachPaginationListeners();
+            }
+        })
+        .catch(error => console.error('Error fetching data:', error))
+        .finally(() => {
+            if (container) {
+                container.style.opacity = '1';
+                container.style.pointerEvents = 'auto';
+            }
+        });
+    };
+
+    const searchInput = document.getElementById('search');
+    if (searchInput) {
+        searchInput.onchange = null;
+        searchInput.addEventListener('input', debounce(() => window.triggerFilter(), 500));
+    }
+
+    function attachPaginationListeners() {
+        document.querySelectorAll('.pagination a').forEach(link => {
+            const newLink = link.cloneNode(true);
+            link.parentNode.replaceChild(newLink, link);
+            
+            newLink.addEventListener('click', function(e) {
+                e.preventDefault();
+                const url = new URL(this.href);
+                const form = document.getElementById('filter-form');
+                const formData = new FormData(form);
+                
+                for (const [key, value] of formData.entries()) {
+                    if (value && !url.searchParams.has(key)) {
+                        url.searchParams.append(key, value);
+                    }
+                }
+                
+                const container = document.getElementById('table-container');
+                if (container) {
+                    container.style.opacity = '0.5';
+                    container.style.pointerEvents = 'none';
+                }
+                
+                url.searchParams.append('ajax', '1');
+                
+                fetch(url.toString(), {
+                    headers: {
+                        'X-Requested-With': 'XMLHttpRequest',
+                        'Accept': 'application/json'
+                    }
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success && container) {
+                        container.innerHTML = data.html;
+                        url.searchParams.delete('ajax');
+                        window.history.pushState({}, '', url.toString());
+                        attachPaginationListeners();
+                        window.scrollTo({top: 0, behavior: 'smooth'});
+                    }
+                })
+                .catch(error => console.error('Error fetching data:', error))
+                .finally(() => {
+                    if (container) {
+                        container.style.opacity = '1';
+                        container.style.pointerEvents = 'auto';
+                    }
+                });
+            });
+        });
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+        attachPaginationListeners();
     });
 </script>
 @endpush

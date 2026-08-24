@@ -351,10 +351,13 @@
         <div class="hero-glow"></div>
         <div class="max-w-4xl mx-auto px-4 sm:px-6 relative z-10 animate-fade-up">
             
-            <!-- Category Badge -->
-            <div class="flex justify-center mb-6">
-                <span class="inline-flex items-center gap-2 px-5 py-2 rounded-full bg-gradient-to-r from-[var(--gold)] to-[#b8902d] text-white text-xs font-bold uppercase tracking-widest shadow-[0_0_20px_rgba(212,175,55,0.4)] border border-[var(--gold-light)]/30">
-                    <i class="fas fa-newspaper"></i> Warta Utama
+            <!-- Breadcrumbs & Category Badge -->
+            <div class="flex flex-wrap items-center justify-center gap-3 mb-6">
+                <a href="{{ route('warta.index') }}" class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white/10 hover:bg-white/20 text-white text-xs font-bold transition-all border border-white/20 backdrop-blur-md">
+                    <i class="fas fa-arrow-left text-xs"></i> Semua Warta
+                </a>
+                <span class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-gradient-to-r from-[var(--gold)] to-[#b8902d] text-white text-xs font-bold uppercase tracking-widest shadow-[0_0_20px_rgba(212,175,55,0.4)] border border-[var(--gold-light)]/30">
+                    <i class="fas fa-newspaper"></i> {{ $berita->kategori ?? 'Warta Utama' }}
                 </span>
             </div>
 
@@ -397,17 +400,12 @@
         <div class="content-card animate-fade-up" style="animation-delay: 0.2s;">
             
             <!-- Beautiful Featured Image -->
-            @if (!empty($berita->gambar))
-                @php 
-                    $bgImage = ($berita->gambar == 'news_default.jpg' || empty($berita->gambar)) ? asset('images/Logo_Mandalaloka.png') : Storage::url($berita->gambar);
-                @endphp
-                <div class="featured-image-container">
-                    <img src="{{ $bgImage }}" alt="{{ $berita->judul }}">
-                    <div class="image-caption">
-                        <i class="fas fa-camera mr-2"></i> Dokumentasi Warta Mandalaloka
-                    </div>
+            <div class="featured-image-container">
+                <img src="{{ $berita->gambar_url }}" alt="{{ $berita->judul }}" onerror="this.onerror=null;this.src='{{ $berita->dummy_gambar }}';">
+                <div class="image-caption">
+                    <i class="fas fa-camera mr-2"></i> Dokumentasi Warta Mandalaloka
                 </div>
-            @endif
+            </div>
 
             <!-- Article Body -->
             <article class="article-content mt-8">

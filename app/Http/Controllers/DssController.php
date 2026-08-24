@@ -703,6 +703,11 @@ EOF;
                 'creator'   => $analysis->user ? $analysis->user->name : 'Sistem',
                 'id'        => $analysis->id,
             ]);
+        } catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Riwayat analisis tidak ditemukan.'
+            ], 404);
         } catch (\Exception $e) {
             Log::error('DssController: Error loading history: ' . $e->getMessage());
             return response()->json([

@@ -43,6 +43,15 @@ class ProdukController extends Controller
 
         $produks = $query->latest()->paginate($perPage)->withQueryString();
 
+        if ($request->ajax() || $request->has('ajax')) {
+            $html = view('pelaku.produk.table-data', compact('produks', 'umkms'))->render();
+            return response()->json([
+                'success' => true,
+                'html' => $html,
+                'count' => $produks->total()
+            ]);
+        }
+
         return view('pelaku.produk.index', compact('produks', 'umkms'));
     }
 

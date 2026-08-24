@@ -86,6 +86,15 @@ class PengajuanController extends Controller
             ->paginate($perPage)
             ->withQueryString();
 
+        if ($request->ajax() || $request->has('ajax')) {
+            $html = view('pelaku.pengajuan.table-data', compact('pengajuans', 'umkms'))->render();
+            return response()->json([
+                'success' => true,
+                'html' => $html,
+                'count' => $pengajuans->total()
+            ]);
+        }
+
         return view('pelaku.pengajuan.index', compact('pengajuans', 'umkms'));
     }
 

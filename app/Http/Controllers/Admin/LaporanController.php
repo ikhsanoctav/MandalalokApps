@@ -59,6 +59,18 @@ class LaporanController extends Controller
         $perPage = (int) $request->get('per_page', 10);
         $umkms = (clone $query)->with(['pemilik', 'kategori', 'sektor'])->latest()->paginate($perPage)->withQueryString();
 
+        if ($request->ajax() || $request->has('ajax')) {
+            $html = view('admin.laporan.table-data', compact('umkms'))->render();
+            return response()->json([
+                'success' => true,
+                'html' => $html,
+                'totalUmkm' => number_format($totalUmkm),
+                'totalTenagaKerja' => number_format($totalTenagaKerja),
+                'chartLabels' => $chartLabels,
+                'chartValues' => $chartValues
+            ]);
+        }
+
         return view('admin.laporan.index', compact('totalUmkm', 'totalTenagaKerja', 'kategoriList', 'chartLabels', 'chartValues', 'umkms'));
     }
 

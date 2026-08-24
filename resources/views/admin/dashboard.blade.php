@@ -196,7 +196,7 @@
 
         <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
             
-            <div class="lg:col-span-2 bg-white rounded-2xl border border-slate-200 shadow-sm hover:shadow-md transition-all overflow-hidden">
+            <div class="lg:col-span-2 bg-white rounded-2xl border border-slate-200 shadow-sm hover:shadow-md transition-all overflow-hidden flex flex-col">
                 <div class="px-4 md:px-6 py-4 border-b border-slate-200 bg-gradient-to-r from-slate-50 to-white">
                     <div class="flex justify-between items-center flex-wrap gap-4">
                         <div>
@@ -252,9 +252,9 @@
                     </div>
                 </div>
 
-                <div class="p-4 md:p-6">
-                    <div class="relative w-full" style="min-height: 280px;">
-                        <canvas id="trendChart" style="max-height: 320px; width: 100%; height: auto;"></canvas>
+                <div class="p-4 md:p-6 flex-1 flex flex-col">
+                    <div class="relative w-full flex-1" style="min-height: 280px;">
+                        <canvas id="trendChart"></canvas>
                     </div>
                 </div>
             </div>
@@ -316,7 +316,7 @@
             </div>
         </div>
 
-        <div class="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden">
+        <div class="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden" x-data="{ showUmkmModal: false, selectedUmkm: null }">
             <div class="px-6 py-4 border-b border-slate-200 flex justify-between items-center">
                 <h3 class="text-lg font-bold text-slate-800">UMKM Terbaru</h3>
                 <a href="{{ route('admin.umkm.index') }}" class="text-sm text-blue-600 hover:text-blue-700">Lihat
@@ -331,6 +331,7 @@
                             </th>
                             <th class="px-6 py-3 text-left text-xs font-semibold text-slate-500 uppercase">Kelurahan</th>
                             <th class="px-6 py-3 text-center text-xs font-semibold text-slate-500 uppercase">Status</th>
+                            <th class="px-6 py-3 text-center text-xs font-semibold text-slate-500 uppercase">Aksi</th>
                         </tr>
                     </thead>
                     <tbody id="recentUmkmTable" class="divide-y divide-slate-100">
@@ -338,7 +339,7 @@
                             <tr class="hover:bg-slate-50">
                                 <td class="px-6 py-4">
                                     <p class="font-medium text-slate-800">{{ $umkm->nama_usaha }}</p>
-                                    <p class="text-xs text-slate-400 mt-0.5">{{ $umkm->kategori?->nama_kategori ?? '-' }}
+                                    <p class="text-xs text-slate-400 mt-0.5">{{ $umkm->no_pendaftaran ?? '-' }}
                                     </p>
                                 </td>
                                 <td class="px-6 py-4">
@@ -360,15 +361,87 @@
                                             class="inline-flex items-center px-2 py-1 rounded-full text-xs font-semibold bg-slate-100 text-slate-600">Draft</span>
                                     @endif
                                 </td>
+                                <td class="px-6 py-4 text-center">
+                                    <button type="button" 
+                                        data-umkm="{{ json_encode([
+                                            'nama_usaha' => $umkm->nama_usaha,
+                                            'no_pendaftaran' => $umkm->no_pendaftaran ?? '-',
+                                            'kategori' => $umkm->kategori?->nama_kategori ?? '-',
+                                            'sektor' => $umkm->sektor?->nama_sektor ?? '-',
+                                            'pemilik' => $umkm->pemilik?->nama_lengkap ?? '-',
+                                            'nik' => $umkm->pemilik?->nik_masked ?? '-',
+                                            'kelurahan' => $umkm->pemilik?->kelurahan ?? '-',
+                                            'status' => $umkm->status_verifikasi
+                                        ]) }}" 
+                                        @click="selectedUmkm = JSON.parse($el.dataset.umkm); showUmkmModal = true" 
+                                        class="inline-flex items-center justify-center text-blue-600 hover:text-blue-800 p-1.5 bg-blue-50 rounded-lg hover:bg-blue-100 transition-colors tooltip" title="Lihat Detail">
+                                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path></svg>
+                                    </button>
+                                </td>
                             </tr>
                         @empty
                             <tr>
-                                <td colspan="4" class="px-6 py-8 text-center text-slate-400">Belum ada UMKM terbaru.
+                                <td colspan="5" class="px-6 py-8 text-center text-slate-400">Belum ada UMKM terbaru.
                                 </td>
                             </tr>
                         @endforelse
                     </tbody>
                 </table>
+            </div>
+            
+            <!-- Modal Detail UMKM -->
+            <div x-cloak x-show="showUmkmModal" class="fixed inset-0 z-50 overflow-y-auto" aria-labelledby="modal-title" role="dialog" aria-modal="true">
+                <div class="flex items-end justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
+                    <div x-show="showUmkmModal" x-transition:enter="ease-out duration-300" x-transition:enter-start="opacity-0" x-transition:enter-end="opacity-100" x-transition:leave="ease-in duration-200" x-transition:leave-start="opacity-100" x-transition:leave-end="opacity-0" class="fixed inset-0 bg-slate-900/50 backdrop-blur-sm transition-opacity" @click="showUmkmModal = false" aria-hidden="true"></div>
+                    <span class="hidden sm:inline-block sm:align-middle sm:h-screen" aria-hidden="true">&#8203;</span>
+                    <div x-show="showUmkmModal" x-transition:enter="ease-out duration-300" x-transition:enter-start="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95" x-transition:enter-end="opacity-100 translate-y-0 sm:scale-100" x-transition:leave="ease-in duration-200" x-transition:leave-start="opacity-100 translate-y-0 sm:scale-100" x-transition:leave-end="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95" class="inline-block align-bottom bg-white rounded-2xl text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg w-full">
+                        <div class="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
+                            <div class="sm:flex sm:items-start">
+                                <div class="mx-auto flex-shrink-0 flex items-center justify-center h-12 w-12 rounded-full bg-blue-100 sm:mx-0 sm:h-10 sm:w-10">
+                                    <svg class="h-5 w-5 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"></path></svg>
+                                </div>
+                                <div class="mt-3 text-center sm:mt-0 sm:ml-4 sm:text-left w-full">
+                                    <h3 class="text-lg leading-6 font-bold text-slate-900" id="modal-title" x-text="selectedUmkm?.nama_usaha"></h3>
+                                    <p class="text-xs text-slate-500 font-mono mt-0.5" x-text="selectedUmkm?.no_pendaftaran"></p>
+                                    
+                                    <div class="mt-4 border-t border-slate-100 pt-4 space-y-3">
+                                        <div class="grid grid-cols-2 gap-3">
+                                            <div>
+                                                <p class="text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-1">Kategori</p>
+                                                <p class="text-sm font-medium text-slate-800" x-text="selectedUmkm?.kategori"></p>
+                                            </div>
+                                            <div>
+                                                <p class="text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-1">Sektor</p>
+                                                <p class="text-sm font-medium text-slate-800" x-text="selectedUmkm?.sektor"></p>
+                                            </div>
+                                        </div>
+                                        
+                                        <div class="bg-slate-50 p-3 rounded-xl border border-slate-100 mt-2">
+                                            <div class="flex items-start gap-3">
+                                                <div class="h-8 w-8 rounded-full bg-blue-100 flex items-center justify-center flex-shrink-0 text-blue-600">
+                                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path></svg>
+                                                </div>
+                                                <div class="flex-1 min-w-0">
+                                                    <p class="text-sm font-bold text-slate-800" x-text="selectedUmkm?.pemilik"></p>
+                                                    <p class="text-xs text-slate-500" x-text="selectedUmkm?.nik"></p>
+                                                </div>
+                                            </div>
+                                            <div class="mt-3 flex items-center gap-2 text-sm text-slate-600">
+                                                <svg class="w-4 h-4 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
+                                                <span x-text="selectedUmkm?.kelurahan"></span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="bg-slate-50 px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse border-t border-slate-200">
+                            <button type="button" @click="showUmkmModal = false" class="mt-3 w-full inline-flex justify-center rounded-xl border border-slate-300 shadow-sm px-4 py-2 bg-white text-base font-medium text-slate-700 hover:bg-slate-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 sm:mt-0 sm:ml-3 sm:w-auto sm:text-sm transition-colors">
+                                Tutup
+                            </button>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
 
@@ -589,6 +662,17 @@
                         '<span class="inline-flex items-center px-2 py-1 rounded-full text-xs font-semibold bg-slate-100 text-slate-600">Draft</span>';
                 }
 
+                let modalData = JSON.stringify({
+                    nama_usaha: umkm.nama_usaha,
+                    no_pendaftaran: umkm.no_pendaftaran || '-',
+                    kategori: umkm.kategori ? umkm.kategori.nama_kategori : '-',
+                    sektor: umkm.sektor ? umkm.sektor.nama_sektor : '-',
+                    pemilik: umkm.pemilik ? umkm.pemilik.nama_lengkap : '-',
+                    nik: umkm.pemilik ? umkm.pemilik.nik_masked : '-',
+                    kelurahan: umkm.pemilik ? umkm.pemilik.kelurahan : '-',
+                    status: umkm.status_verifikasi
+                }).replace(/"/g, '&quot;');
+
                 html += `
                 <tr class="hover:bg-slate-50">
                     <td class="px-6 py-4">
@@ -597,12 +681,18 @@
                     </td>
                     <td class="px-6 py-4">
                         <p class="text-sm text-slate-600">${umkm.pemilik ? umkm.pemilik.nama_lengkap : '-'}</p>
+                        <p class="text-xs text-slate-400">${umkm.pemilik ? umkm.pemilik.nik_masked : '-'}</p>
                     </td>
                     <td class="px-6 py-4">
                         <span class="text-sm text-slate-600">${umkm.pemilik ? umkm.pemilik.kelurahan : '-'}</span>
                     </td>
                     <td class="px-6 py-4 text-center">
                         ${statusHtml}
+                    </td>
+                    <td class="px-6 py-4 text-center">
+                        <button type="button" data-umkm="${modalData}" @click="selectedUmkm = JSON.parse($el.dataset.umkm); showUmkmModal = true" class="inline-flex items-center justify-center text-blue-600 hover:text-blue-800 p-1.5 bg-blue-50 rounded-lg hover:bg-blue-100 transition-colors tooltip" title="Lihat Detail">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path></svg>
+                        </button>
                     </td>
                 </tr>
             `;
@@ -727,7 +817,7 @@
                 },
                 options: {
                     responsive: true,
-                    maintainAspectRatio: true,
+                    maintainAspectRatio: false,
                     aspectRatio: 1.8,
                     plugins: {
                         legend: {

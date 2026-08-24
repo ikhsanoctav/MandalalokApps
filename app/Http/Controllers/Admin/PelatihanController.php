@@ -33,7 +33,22 @@ class PelatihanController extends Controller
         }
 
         $pelatihans = $query->paginate($perPage)->withQueryString();
+
+        if ($request->ajax() || $request->has('ajax')) {
+            $html = view('admin.pelatihan.table-data', compact('pelatihans'))->render();
+            return response()->json([
+                'success' => true,
+                'html' => $html,
+                'count' => $pelatihans->total()
+            ]);
+        }
+
         return view('admin.pelatihan.index', compact('pelatihans'));
+    }
+
+    public function create()
+    {
+        return redirect()->route('admin.pelatihan.index');
     }
 
     public function store(Request $request)

@@ -47,7 +47,7 @@ class DashboardController extends Controller
         $distribusiWilayah = $this->getDistribusiWilayah(request('filter_sektor'));
         $distribusiSektor = $this->getDistribusiSektor(request('filter_kelurahan'));
         $distribusiKategori = $this->getDistribusiKategori();
-        $umkmTerbaru = $this->getUmkmTerbaru(5);
+        $umkmTerbaru = $this->getUmkmTerbaru(10);
         $sektors = \App\Models\SektorUmkm::all();
         $kelurahans = \App\Models\Kelurahan::all();
 
@@ -103,7 +103,7 @@ class DashboardController extends Controller
         $distribusiWilayah = $this->getDistribusiWilayah(request('filter_sektor'));
         $distribusiSektor = $this->getDistribusiSektor(request('filter_kelurahan'));
         $distribusiKategori = $this->getDistribusiKategori();
-        $umkmTerbaru = $this->mapUmkmForJson($this->getUmkmTerbaru(5));
+        $umkmTerbaru = $this->mapUmkmForJson($this->getUmkmTerbaru(10));
         $systemStatus = $this->getSystemStatus();
 
         $aktivitasTerbaru = Aktivitas::with('user')

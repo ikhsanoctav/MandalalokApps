@@ -306,8 +306,63 @@
             display: flex; align-items: center; gap: 4px;
         }
         
-        .umkm-meta { display: flex; align-items: center; gap: 6px; font-size: 13px; color: #64748b; margin-bottom: 16px; margin-top: auto; min-width: 0; font-weight: 500; }
-        .umkm-meta i { color: var(--primary-light); font-size: 12px; }
+        .umkm-location-bar {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 6px;
+            margin-bottom: 12px;
+            margin-top: auto;
+            min-width: 0;
+            padding: 5px 8px;
+            background: #f8fafc;
+            border-radius: 8px;
+            border: 1px solid #f1f5f9;
+            transition: all 0.2s ease;
+        }
+        .umkm-location-bar:hover {
+            background: #f1f5f9;
+            border-color: #e2e8f0;
+        }
+        .umkm-meta {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 12.5px;
+            color: #64748b;
+            margin-bottom: 0;
+            min-width: 0;
+            font-weight: 600;
+            overflow: hidden;
+        }
+        .umkm-meta i { color: #ef4444; font-size: 12px; flex-shrink: 0; }
+        .gmaps-card-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            font-size: 11px;
+            font-weight: 700;
+            color: #2563eb;
+            background: #eff6ff;
+            border: 1px solid #bfdbfe;
+            padding: 3px 8px;
+            border-radius: 6px;
+            text-decoration: none;
+            flex-shrink: 0;
+            transition: all .2s ease;
+            box-shadow: 0 1px 2px rgba(37,99,235,0.05);
+        }
+        .gmaps-card-btn:hover {
+            background: #2563eb;
+            color: #ffffff;
+            border-color: #2563eb;
+            transform: translateY(-1px);
+            box-shadow: 0 3px 8px rgba(37,99,235,0.25);
+        }
+        .gmaps-card-btn i {
+            font-size: 10px;
+            color: inherit;
+        }
         .card-actions { display: grid; grid-template-columns: 1fr auto; gap: 10px; align-items: center; margin-bottom: 16px; padding-top: 16px; border-top: 1px solid #f1f5f9; }
         .review-trigger {
             display: inline-flex; align-items: center; gap: 6px; font-size: 13px; font-weight: 700; color: #475569;
@@ -586,9 +641,57 @@
             gap: 6px;
             font-size: 14px;
             color: var(--text-muted);
+            text-decoration: none;
         }
         .pm-meta-item i.fa-star { color: #fbbf24; }
+        .pm-meta-item i.fa-map-marker-alt { color: #ef4444; }
         .pm-meta-item strong { color: var(--text-dark); }
+        .pm-meta-gmaps {
+            transition: all 0.2s ease;
+            padding: 4px 8px;
+            border-radius: 8px;
+            background: #f8fafc;
+            border: 1px solid #f1f5f9;
+        }
+        .pm-meta-gmaps:hover {
+            background: #eff6ff;
+            border-color: #bfdbfe;
+            color: #2563eb;
+        }
+        .pm-gmaps-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            font-size: 11px;
+            font-weight: 700;
+            color: #2563eb;
+            background: #dbeafe;
+            padding: 2px 8px;
+            border-radius: 999px;
+            margin-left: 4px;
+        }
+        .pm-btn-gmaps {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            background: #f8fafc;
+            color: #1e293b;
+            border: 1px solid #cbd5e1;
+            border-radius: var(--radius-sm);
+            padding: 14px 18px;
+            font-size: 14px;
+            font-weight: 700;
+            text-decoration: none;
+            transition: all 0.2s ease;
+        }
+        .pm-btn-gmaps:hover {
+            background: #eff6ff;
+            color: #2563eb;
+            border-color: #93c5fd;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(37, 99, 235, 0.15);
+        }
         .pm-desc-title {
             font-size: 14px;
             font-weight: 700;
@@ -769,18 +872,22 @@
                     @php
                         $pesan = "Halo " . $produk->umkm->nama_usaha . ", saya tertarik dengan produk *" . $produk->nama_produk . "* yang ada di Katalog Mandalaloka. Boleh minta info lebih lanjut?";
                         $noWa = preg_replace('/\D/', '', $produk->umkm->telp_usaha ?? '');
-                        if($noWa && substr($noWa, 0, 1) == '0'){
-                            $noWa = '62' . substr($noWa, 1);
-                        }
+                        $namaKelurahan = optional(optional($produk->umkm->pemilik)->kelurahanRel)->nama_kelurahan ?? optional($produk->umkm->pemilik)->kelurahan ?? 'Mandalajati';
+                        $gmapsQuery = ($produk->umkm->latitude && $produk->umkm->longitude)
+                            ? "{$produk->umkm->latitude},{$produk->umkm->longitude}"
+                            : ($produk->umkm->nama_usaha . " " . ($produk->umkm->alamat_usaha ?? '') . " " . $namaKelurahan . " Bandung");
+                        $gmapsUrl = "https://www.google.com/maps/search/?api=1&query=" . urlencode($gmapsQuery);
                         
                         $productData = [
                             'nama' => $produk->nama_produk,
                             'usaha' => $produk->umkm->nama_usaha,
                             'harga' => $produk->harga ? 'Rp ' . number_format($produk->harga, 0, ',', '.') : 'Harga hubungi penjual',
                             'deskripsi' => $produk->deskripsi ?? 'Belum ada deskripsi',
-                            'lokasi' => optional(optional($produk->umkm->pemilik)->kelurahanRel)->nama_kelurahan ?? optional($produk->umkm->pemilik)->kelurahan ?? 'Mandalajati',
-                            'images' => $produk->foto_produk ? array_map(fn($f) => Storage::url($f), $produk->foto_produk) : [],
-                            'placeholder' => 'https://placehold.co/600x400/e8f0fb/0f2e5c?text=' . urlencode($produk->nama_produk),
+                            'lokasi' => $namaKelurahan,
+                            'alamat' => $produk->umkm->alamat_usaha ?? '',
+                            'gmaps_url' => $gmapsUrl,
+                            'images' => ($produk->foto_produk && count($produk->foto_produk) > 0) ? array_map(fn($f) => Storage::url($f), $produk->foto_produk) : [$produk->foto_utama],
+                            'placeholder' => $produk->dummy_foto,
                             'rating' => $produk->umkm->average_rating > 0 ? $produk->umkm->average_rating : 'Baru',
                             'ulasan_count' => $produk->umkm->ratings->count()
                         ];
@@ -790,13 +897,7 @@
                          @click="$dispatch('open-product-modal', { product: {{ json_encode($productData) }}, waLink: '{{ $noWa ? "https://wa.me/".$noWa."?text=".urlencode($pesan) : "" }}' })" 
                          style="cursor: pointer;">
                         <div class="umkm-img-wrap">
-                            @if($produk->foto_produk && count($produk->foto_produk) > 0)
-                                <img src="{{ Storage::url($produk->foto_produk[0]) }}" alt="{{ $produk->nama_produk }}" loading="lazy" onerror="this.onerror=null;this.src='https://placehold.co/600x400/e8f0fb/0f2e5c?text={{ urlencode($produk->nama_produk) }}';">
-                            @else
-                                <div class="umkm-placeholder">
-                                    <img src="{{ asset('images/Logo_Mandalaloka.png') }}" alt="Produk Mandalaloka" loading="lazy">
-                                </div>
-                            @endif
+                            <img src="{{ $produk->foto_utama }}" alt="{{ $produk->nama_produk }}" loading="lazy" onerror="this.onerror=null;this.src='{{ $produk->dummy_foto }}';">
                             <div class="umkm-badge">{{ $produk->umkm->sektor?->nama_sektor ?? 'Umum' }}</div>
                         </div>
                         <div class="umkm-content">
@@ -807,9 +908,15 @@
                                 {{ $produk->harga ? 'Rp ' . number_format($produk->harga, 0, ',', '.') : 'Harga hubungi penjual' }}
                             </div>
                             
-                            <div class="umkm-meta" style="margin-bottom: 6px;">
-                                <i class="fas fa-map-marker-alt"></i>
-                                <span style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">{{ optional(optional($produk->umkm->pemilik)->kelurahanRel)->nama_kelurahan ?? optional($produk->umkm->pemilik)->kelurahan ?? 'Mandalajati' }}</span>
+                            <div class="umkm-location-bar">
+                                <div class="umkm-meta" title="{{ $produk->umkm->alamat_usaha ?? $namaKelurahan }}">
+                                    <i class="fas fa-map-marker-alt"></i>
+                                    <span style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">{{ $namaKelurahan }}</span>
+                                </div>
+                                <a @click.stop href="{{ $gmapsUrl }}" target="_blank" rel="noopener noreferrer" class="gmaps-card-btn" title="Buka Petunjuk Arah di Google Maps">
+                                    <i class="fas fa-diamond-turn-right"></i>
+                                    <span>Arah</span>
+                                </a>
                             </div>
 
                             <div class="card-actions">
@@ -1017,10 +1124,13 @@
                         <strong x-text="activeProduct?.rating"></strong>
                         <span>(<span x-text="activeProduct?.ulasan_count"></span> Penilaian)</span>
                     </div>
-                    <div class="pm-meta-item">
+                    <a :href="activeProduct?.gmaps_url" target="_blank" rel="noopener noreferrer" class="pm-meta-item pm-meta-gmaps" title="Buka Petunjuk Arah di Google Maps">
                         <i class="fas fa-map-marker-alt"></i>
                         <span x-text="activeProduct?.lokasi"></span>
-                    </div>
+                        <span class="pm-gmaps-badge">
+                            <i class="fas fa-diamond-turn-right"></i> Petunjuk Arah
+                        </span>
+                    </a>
                 </div>
 
                 <div class="pm-desc-title">Deskripsi Produk</div>
@@ -1037,6 +1147,9 @@
                             <i class="fas fa-phone-slash" style="font-size: 18px;"></i> Kontak Belum Tersedia
                         </button>
                     </template>
+                    <a :href="activeProduct?.gmaps_url" target="_blank" rel="noopener noreferrer" class="pm-btn-gmaps" title="Buka Petunjuk Arah Lokasi di Google Maps">
+                        <i class="fas fa-diamond-turn-right" style="color: #2563eb;"></i> Arah GMaps
+                    </a>
                 </div>
             </div>
         </div>

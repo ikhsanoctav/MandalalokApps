@@ -75,7 +75,7 @@
                                 class="w-full pl-11 pr-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-sm font-medium text-slate-700 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500/30 focus:border-blue-400 transition-all"
                             >
                         </div>
-                        <button type="submit" class="inline-flex items-center gap-2 px-5 py-3 bg-blue-600 hover:bg-blue-700 text-white text-sm font-bold rounded-xl transition-all shadow-md whitespace-nowrap">
+                        <button type="button" onclick="window.triggerFilter()" class="inline-flex items-center gap-2 px-5 py-3 bg-blue-600 hover:bg-blue-700 text-white text-sm font-bold rounded-xl transition-all shadow-md whitespace-nowrap">
                             <i class="mdi mdi-magnify"></i> Cari
                         </button>
                         @if(count($activeFilters) > 0)
@@ -90,7 +90,7 @@
 
                         {{-- Jenis Pengajuan --}}
                         <div class="relative">
-                            <select name="jenis_pengajuan" onchange="this.form.submit()" class="w-full appearance-none bg-slate-50 border border-slate-200 rounded-xl text-sm font-semibold text-slate-700 px-4 py-3 pr-9 focus:outline-none focus:ring-2 focus:ring-blue-500/30 focus:border-blue-400 transition-all cursor-pointer {{ request('jenis_pengajuan') ? 'border-blue-400 bg-blue-50 text-blue-700' : '' }}">
+                            <select name="jenis_pengajuan" onchange="window.triggerFilter()" class="w-full appearance-none bg-slate-50 border border-slate-200 rounded-xl text-sm font-semibold text-slate-700 px-4 py-3 pr-9 focus:outline-none focus:ring-2 focus:ring-blue-500/30 focus:border-blue-400 transition-all cursor-pointer {{ request('jenis_pengajuan') ? 'border-blue-400 bg-blue-50 text-blue-700' : '' }}">
                                 <option value="">Semua Jenis</option>
                                 <option value="pembiayaan" {{ request('jenis_pengajuan') === 'pembiayaan' ? 'selected' : '' }}>💰 Pembiayaan</option>
                                 <option value="bantuan"    {{ request('jenis_pengajuan') === 'bantuan'    ? 'selected' : '' }}>🤝 Bantuan</option>
@@ -102,7 +102,7 @@
 
                         {{-- Status --}}
                         <div class="relative">
-                            <select name="status" onchange="this.form.submit()" class="w-full appearance-none bg-slate-50 border border-slate-200 rounded-xl text-sm font-semibold text-slate-700 px-4 py-3 pr-9 focus:outline-none focus:ring-2 focus:ring-blue-500/30 focus:border-blue-400 transition-all cursor-pointer {{ request('status') ? 'border-blue-400 bg-blue-50 text-blue-700' : '' }}">
+                            <select name="status" onchange="window.triggerFilter()" class="w-full appearance-none bg-slate-50 border border-slate-200 rounded-xl text-sm font-semibold text-slate-700 px-4 py-3 pr-9 focus:outline-none focus:ring-2 focus:ring-blue-500/30 focus:border-blue-400 transition-all cursor-pointer {{ request('status') ? 'border-blue-400 bg-blue-50 text-blue-700' : '' }}">
                                 <option value="">Semua Status</option>
                                 <option value="menunggu"   {{ request('status') === 'menunggu'   ? 'selected' : '' }}>⏳ Menunggu</option>
                                 <option value="diproses"   {{ request('status') === 'diproses'   ? 'selected' : '' }}>🔄 Diproses</option>
@@ -115,7 +115,7 @@
                         {{-- Filter UMKM --}}
                         @if($umkms->count() > 1)
                         <div class="relative">
-                            <select name="umkm_id" onchange="this.form.submit()" class="w-full appearance-none bg-slate-50 border border-slate-200 rounded-xl text-sm font-semibold text-slate-700 px-4 py-3 pr-9 focus:outline-none focus:ring-2 focus:ring-blue-500/30 focus:border-blue-400 transition-all cursor-pointer {{ request('umkm_id') ? 'border-blue-400 bg-blue-50 text-blue-700' : '' }}">
+                            <select name="umkm_id" onchange="window.triggerFilter()" class="w-full appearance-none bg-slate-50 border border-slate-200 rounded-xl text-sm font-semibold text-slate-700 px-4 py-3 pr-9 focus:outline-none focus:ring-2 focus:ring-blue-500/30 focus:border-blue-400 transition-all cursor-pointer {{ request('umkm_id') ? 'border-blue-400 bg-blue-50 text-blue-700' : '' }}">
                                 <option value="">Semua Usaha</option>
                                 @foreach($umkms as $u)
                                     <option value="{{ $u->id_umkm }}" {{ request('umkm_id') == $u->id_umkm ? 'selected' : '' }}>{{ $u->nama_usaha }}</option>
@@ -128,14 +128,14 @@
                         {{-- Date From --}}
                         <div class="relative">
                             <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none text-slate-400 text-xs font-bold">Dari</div>
-                            <input type="date" name="date_from" value="{{ request('date_from') }}" onchange="this.form.submit()"
+                            <input type="date" name="date_from" value="{{ request('date_from') }}" onchange="window.triggerFilter()"
                                 class="w-full pl-10 pr-3 py-3 bg-slate-50 border border-slate-200 rounded-xl text-sm font-semibold text-slate-700 focus:outline-none focus:ring-2 focus:ring-blue-500/30 focus:border-blue-400 transition-all {{ request('date_from') ? 'border-blue-400 bg-blue-50 text-blue-700' : '' }}">
                         </div>
 
                         {{-- Date To --}}
                         <div class="relative">
                             <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none text-slate-400 text-xs font-bold">S/d</div>
-                            <input type="date" name="date_to" value="{{ request('date_to') }}" onchange="this.form.submit()"
+                            <input type="date" name="date_to" value="{{ request('date_to') }}" onchange="window.triggerFilter()"
                                 class="w-full pl-10 pr-3 py-3 bg-slate-50 border border-slate-200 rounded-xl text-sm font-semibold text-slate-700 focus:outline-none focus:ring-2 focus:ring-blue-500/30 focus:border-blue-400 transition-all {{ request('date_to') ? 'border-blue-400 bg-blue-50 text-blue-700' : '' }}">
                         </div>
                     </div>
@@ -152,7 +152,7 @@
                         </div>
                         <div class="flex items-center gap-2">
                             <span class="text-xs text-slate-500 font-semibold whitespace-nowrap">Tampilkan:</span>
-                            <select name="per_page" onchange="this.form.submit()" class="appearance-none bg-slate-50 border border-slate-200 rounded-lg text-sm font-bold text-slate-700 px-3 py-2 pr-7 focus:outline-none focus:ring-2 focus:ring-blue-500/30 focus:border-blue-400 transition-all cursor-pointer">
+                            <select name="per_page" onchange="window.triggerFilter()" class="appearance-none bg-slate-50 border border-slate-200 rounded-lg text-sm font-bold text-slate-700 px-3 py-2 pr-7 focus:outline-none focus:ring-2 focus:ring-blue-500/30 focus:border-blue-400 transition-all cursor-pointer">
                                 @foreach([10, 20, 50] as $pp)
                                     <option value="{{ $pp }}" {{ request('per_page', 10) == $pp ? 'selected' : '' }}>{{ $pp }}</option>
                                 @endforeach
@@ -165,86 +165,9 @@
             </form>
         </div>
 
-        {{-- ===== RESULTS ===== --}}
-        @if($pengajuans->isEmpty())
-            <div class="bg-white/60 backdrop-blur-xl rounded-[2rem] border border-white/80 p-16 text-center shadow-xl shadow-slate-200/50">
-                <div class="w-20 h-20 bg-slate-100 rounded-full flex items-center justify-center mx-auto mb-4 border border-slate-200">
-                    <i class="mdi mdi-folder-search-outline text-4xl text-slate-400"></i>
-                </div>
-                <h4 class="text-xl font-bold text-slate-700 mb-2">
-                    {{ count($activeFilters) > 0 ? 'Tidak Ada Hasil Pencarian' : 'Belum Ada Riwayat Pengajuan' }}
-                </h4>
-                <p class="text-slate-500 max-w-md mx-auto mb-6">
-                    {{ count($activeFilters) > 0 ? 'Coba ubah kata kunci atau filter yang digunakan.' : 'Anda belum pernah mengajukan permohonan bantuan apapun. Klik "Buat Pengajuan Baru" untuk memulai.' }}
-                </p>
-                @if(count($activeFilters) > 0)
-                    <a href="{{ route('pelaku.pengajuan.index') }}" class="inline-flex items-center gap-2 px-5 py-3 bg-rose-50 border border-rose-200 text-rose-600 font-bold rounded-xl hover:bg-rose-100 transition-all text-sm">
-                        <i class="mdi mdi-filter-off-outline"></i> Hapus Semua Filter
-                    </a>
-                @endif
-            </div>
-        @else
-            <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
-                @foreach($pengajuans as $pengajuan)
-                    <div class="bg-white/80 backdrop-blur-xl rounded-[1.5rem] border border-white/80 p-6 shadow-lg shadow-slate-200/40 hover:shadow-xl hover:shadow-indigo-100 transition-all duration-300 transform hover:-translate-y-1 relative overflow-hidden group">
-                        
-                        <!-- Card Header -->
-                        <div class="flex justify-between items-start mb-4">
-                            <div class="flex flex-col gap-2 items-start">
-                                <span class="px-3 py-1 rounded-lg text-xs font-bold tracking-wider uppercase border
-                                    @if($pengajuan->jenis_pengajuan === 'pembiayaan') bg-blue-50 text-blue-700 border-blue-200
-                                    @elseif($pengajuan->jenis_pengajuan === 'bantuan') bg-emerald-50 text-emerald-700 border-emerald-200
-                                    @elseif($pengajuan->jenis_pengajuan === 'perizinan') bg-purple-50 text-purple-700 border-purple-200
-                                    @else bg-slate-50 text-slate-700 border-slate-200 @endif">
-                                    {{ ucfirst($pengajuan->jenis_pengajuan) }}
-                                </span>
-                                {!! $pengajuan->status_badge !!}
-                            </div>
-                            <div class="text-right">
-                                <p class="text-xs font-bold text-slate-400 uppercase tracking-widest mb-1">Tanggal</p>
-                                <p class="text-sm font-semibold text-slate-700">{{ $pengajuan->tanggal_pengajuan ? $pengajuan->tanggal_pengajuan->translatedFormat('d M Y') : '-' }}</p>
-                            </div>
-                        </div>
-
-                        <!-- Card Body -->
-                        <div class="space-y-4">
-                            <div>
-                                <p class="text-xs font-bold text-slate-400 uppercase tracking-widest mb-1">Usaha Terkait</p>
-                                <p class="font-black text-slate-800 text-lg truncate">{{ $pengajuan->umkm->nama_usaha ?? 'N/A' }}</p>
-                                <p class="text-xs text-indigo-500 font-mono mt-0.5"><i class="mdi mdi-identifier"></i> {{ $pengajuan->umkm->no_pendaftaran ?? 'N/A' }}</p>
-                            </div>
-
-                            @if($pengajuan->jenis_pengajuan === 'bantuan' && $pengajuan->nama_program)
-                                <div class="bg-slate-50 p-3 rounded-xl border border-slate-100">
-                                    <p class="text-xs font-bold text-slate-400 uppercase tracking-widest mb-1">Program Bantuan</p>
-                                    <p class="text-sm font-medium text-slate-700">{{ $pengajuan->nama_program }}</p>
-                                </div>
-                            @endif
-
-                            @if($pengajuan->nominal)
-                                <div class="bg-indigo-50 p-3 rounded-xl border border-indigo-100">
-                                    <p class="text-xs font-bold text-indigo-400 uppercase tracking-widest mb-1">Nominal Diajukan</p>
-                                    <p class="text-lg font-black text-indigo-700 font-mono">Rp {{ number_format($pengajuan->nominal, 0, ',', '.') }}</p>
-                                </div>
-                            @endif
-
-                            @if($pengajuan->catatan)
-                                <div class="mt-4 p-3 bg-amber-50 rounded-xl border border-amber-100">
-                                    <p class="text-[10px] font-bold text-amber-600 uppercase tracking-widest mb-1 flex items-center gap-1"><i class="mdi mdi-message-alert-outline"></i> Catatan Evaluator</p>
-                                    <p class="text-xs font-medium text-amber-800 line-clamp-2" title="{{ $pengajuan->catatan }}">{{ $pengajuan->catatan }}</p>
-                                </div>
-                            @endif
-                        </div>
-                    </div>
-                @endforeach
-            </div>
-
-            @if($pengajuans->hasPages())
-                <div class="mt-8 flex justify-center">
-                    {{ $pengajuans->links() }}
-                </div>
-            @endif
-        @endif
+        <div id="table-container">
+            @include('pelaku.pengajuan.table-data')
+        </div>
         @endif
 
     </div>
@@ -491,8 +414,8 @@
                         window.showToast('success', 'Berhasil!', data.message || 'Pengajuan Bantuan berhasil ditambahkan.');
                     }
                     setTimeout(() => {
-                        window.location.reload();
-                    }, 1500);
+                        window.triggerFilter();
+                    }, 500);
                 } else {
                     if (window.showToast) {
                         window.showToast('error', 'Gagal!', data.message || 'Gagal menambahkan pengajuan.');
@@ -514,5 +437,122 @@
                 }
             });
         }
+
+        // AJAX Filtering logic
+        function debounce(func, wait) {
+            let timeout;
+            return function executedFunction(...args) {
+                const later = () => {
+                    clearTimeout(timeout);
+                    func(...args);
+                };
+                clearTimeout(timeout);
+                timeout = setTimeout(later, wait);
+            };
+        }
+
+        window.triggerFilter = function() {
+            const form = document.getElementById('filterForm');
+            const url = new URL(form.action);
+            const formData = new FormData(form);
+            
+            for (const [key, value] of formData.entries()) {
+                if (value) {
+                    url.searchParams.append(key, value);
+                }
+            }
+            
+            const container = document.getElementById('table-container');
+            if (container) {
+                container.style.opacity = '0.5';
+                container.style.pointerEvents = 'none';
+            }
+            
+            url.searchParams.append('ajax', '1');
+            
+            fetch(url.toString(), {
+                headers: {
+                    'X-Requested-With': 'XMLHttpRequest',
+                    'Accept': 'application/json'
+                }
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success && container) {
+                    container.innerHTML = data.html;
+                    url.searchParams.delete('ajax');
+                    window.history.pushState({}, '', url.toString());
+                    attachPaginationListeners();
+                }
+            })
+            .catch(error => console.error('Error fetching data:', error))
+            .finally(() => {
+                if (container) {
+                    container.style.opacity = '1';
+                    container.style.pointerEvents = 'auto';
+                }
+            });
+        };
+
+        const searchInput = document.getElementById('searchInput');
+        if (searchInput) {
+            searchInput.addEventListener('input', debounce(() => window.triggerFilter(), 500));
+        }
+
+        function attachPaginationListeners() {
+            document.querySelectorAll('.pagination a').forEach(link => {
+                const newLink = link.cloneNode(true);
+                link.parentNode.replaceChild(newLink, link);
+                
+                newLink.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    const url = new URL(this.href);
+                    const form = document.getElementById('filterForm');
+                    const formData = new FormData(form);
+                    
+                    for (const [key, value] of formData.entries()) {
+                        if (value && !url.searchParams.has(key)) {
+                            url.searchParams.append(key, value);
+                        }
+                    }
+                    
+                    const container = document.getElementById('table-container');
+                    if (container) {
+                        container.style.opacity = '0.5';
+                        container.style.pointerEvents = 'none';
+                    }
+                    
+                    url.searchParams.append('ajax', '1');
+                    
+                    fetch(url.toString(), {
+                        headers: {
+                            'X-Requested-With': 'XMLHttpRequest',
+                            'Accept': 'application/json'
+                        }
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.success && container) {
+                            container.innerHTML = data.html;
+                            url.searchParams.delete('ajax');
+                            window.history.pushState({}, '', url.toString());
+                            attachPaginationListeners();
+                            window.scrollTo({top: 0, behavior: 'smooth'});
+                        }
+                    })
+                    .catch(error => console.error('Error fetching data:', error))
+                    .finally(() => {
+                        if (container) {
+                            container.style.opacity = '1';
+                            container.style.pointerEvents = 'auto';
+                        }
+                    });
+                });
+            });
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            attachPaginationListeners();
+        });
     </script>
 @endpush

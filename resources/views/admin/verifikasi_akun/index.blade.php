@@ -112,25 +112,104 @@
     </div>
 
     <script>
+        window.triggerFilter = function() {
+            const form = document.getElementById('filterForm');
+            if (!form) return;
+            
+            const formData = new FormData(form);
+            const params = new URLSearchParams(formData);
+            params.append('ajax', '1');
+            
+            const url = `${form.action}?${params.toString()}`;
+            
+            const tableContainer = document.getElementById('table-container');
+            if (tableContainer) {
+                tableContainer.style.opacity = '0.5';
+                tableContainer.style.pointerEvents = 'none';
+            }
+            
+            window.history.pushState({}, '', `${form.action}?${new URLSearchParams(formData).toString()}`);
+            
+            fetch(url, {
+                headers: {
+                    'X-Requested-With': 'XMLHttpRequest',
+                    'Accept': 'application/json'
+                }
+            })
+            .then(res => res.json())
+            .then(data => {
+                if (data.success && tableContainer) {
+                    tableContainer.innerHTML = data.html;
+                }
+            })
+            .catch(err => console.error('Error fetching data:', err))
+            .finally(() => {
+                if (tableContainer) {
+                    tableContainer.style.opacity = '1';
+                    tableContainer.style.pointerEvents = 'auto';
+                }
+            });
+        };
+
+        document.addEventListener('click', function(e) {
+            const link = e.target.closest('nav[role="navigation"] a, .pagination a');
+            if (link && document.getElementById('table-container').contains(link)) {
+                e.preventDefault();
+                const url = new URL(link.href);
+                url.searchParams.append('ajax', '1');
+                
+                const tableContainer = document.getElementById('table-container');
+                tableContainer.style.opacity = '0.5';
+                tableContainer.style.pointerEvents = 'none';
+                
+                window.history.pushState({}, '', link.href);
+                
+                fetch(url.toString(), {
+                    headers: {
+                        'X-Requested-With': 'XMLHttpRequest',
+                        'Accept': 'application/json'
+                    }
+                })
+                .then(res => res.json())
+                .then(data => {
+                    if (data.success) {
+                        tableContainer.innerHTML = data.html;
+                    }
+                })
+                .finally(() => {
+                    tableContainer.style.opacity = '1';
+                    tableContainer.style.pointerEvents = 'auto';
+                });
+            }
+        });
+
         document.addEventListener('DOMContentLoaded', function() {
             const filterForm = document.getElementById('filterForm');
             if (filterForm) {
+                filterForm.addEventListener('submit', function(e) {
+                    e.preventDefault();
+                    window.triggerFilter();
+                });
+
                 let searchTimeout;
                 const searchInput = filterForm.querySelector('input[name="search"]');
                 const statusSelect = filterForm.querySelector('select[name="status"]');
+                const perPageSelect = filterForm.querySelector('select[name="per_page"]');
                 
                 if (statusSelect) {
-                    statusSelect.addEventListener('change', function() {
-                        filterForm.submit();
-                    });
+                    statusSelect.addEventListener('change', window.triggerFilter);
+                }
+                
+                if (perPageSelect) {
+                    perPageSelect.addEventListener('change', window.triggerFilter);
                 }
                 
                 if (searchInput) {
                     searchInput.addEventListener('input', function() {
                         clearTimeout(searchTimeout);
                         searchTimeout = setTimeout(() => {
-                            filterForm.submit();
-                        }, 600);
+                            window.triggerFilter();
+                        }, 500);
                     });
                 }
             }

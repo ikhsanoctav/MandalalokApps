@@ -15,14 +15,14 @@
 
     @php $activeFiltersPelatihan = array_filter([request('search'), request('status')]); @endphp
     <div class="bg-white/90 backdrop-blur-sm shadow-sm rounded-3xl border p-5 mb-4">
-        <form method="GET" action="{{ route('admin.pelatihan.index') }}" class="flex flex-wrap gap-3 items-center">
+        <form id="filter-form" method="GET" action="{{ route('admin.pelatihan.index') }}" class="flex flex-wrap gap-3 items-center">
             <div class="relative flex-1 min-w-[200px]">
                 <span class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-slate-400"><i class="mdi mdi-magnify"></i></span>
                 <input type="text" name="search" value="{{ request('search') }}" placeholder="Cari judul atau lokasi pelatihan..."
                     class="pl-9 pr-4 py-2.5 w-full bg-slate-50 border border-slate-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all">
             </div>
             <div class="relative">
-                <select name="status" onchange="this.form.submit()" class="appearance-none bg-slate-50 border border-slate-200 rounded-xl text-sm font-semibold text-slate-700 pl-4 pr-9 py-2.5 focus:outline-none transition-all cursor-pointer {{ request('status') ? 'border-blue-400 bg-blue-50 text-blue-700' : '' }}">
+                <select name="status" onchange="window.triggerFilter()" class="appearance-none bg-slate-50 border border-slate-200 rounded-xl text-sm font-semibold text-slate-700 pl-4 pr-9 py-2.5 focus:outline-none transition-all cursor-pointer {{ request('status') ? 'border-blue-400 bg-blue-50 text-blue-700' : '' }}">
                     <option value="">Semua Status</option>
                     <option value="published" {{ request('status') === 'published' ? 'selected' : '' }}>✅ Published</option>
                     <option value="draft"     {{ request('status') === 'draft'     ? 'selected' : '' }}>📝 Draft</option>
@@ -32,13 +32,13 @@
             </div>
             <div class="flex items-center gap-2">
                 <span class="text-xs text-slate-500 font-semibold">Tampilkan:</span>
-                <select name="per_page" onchange="this.form.submit()" class="appearance-none bg-slate-50 border border-slate-200 rounded-lg text-sm font-bold text-slate-700 pl-3 pr-8 py-2.5 focus:outline-none transition-all cursor-pointer">
+                <select name="per_page" onchange="window.triggerFilter()" class="appearance-none bg-slate-50 border border-slate-200 rounded-lg text-sm font-bold text-slate-700 pl-3 pr-8 py-2.5 focus:outline-none transition-all cursor-pointer">
                     @foreach([15, 25, 50] as $pp)
                         <option value="{{ $pp }}" {{ request('per_page', 15) == $pp ? 'selected' : '' }}>{{ $pp }}</option>
                     @endforeach
                 </select>
             </div>
-            <button type="submit" class="px-4 py-2.5 bg-blue-600 hover:bg-blue-700 text-white text-sm font-bold rounded-xl transition-all shadow-sm">Cari</button>
+            <button type="button" onclick="window.triggerFilter()" class="px-4 py-2.5 bg-blue-600 hover:bg-blue-700 text-white text-sm font-bold rounded-xl transition-all shadow-sm">Cari</button>
             @if(count($activeFiltersPelatihan) > 0)
                 <a href="{{ route('admin.pelatihan.index') }}" class="px-4 py-2.5 bg-rose-50 border border-rose-200 text-rose-600 text-sm font-bold rounded-xl hover:bg-rose-100 transition-all">Reset</a>
             @endif
@@ -48,74 +48,8 @@
         </form>
     </div>
 
-<div class="bg-white/90 backdrop-blur-sm shadow-sm rounded-3xl border overflow-hidden">
-    <div class="overflow-x-auto">
-        <table class="w-full text-left border-collapse">
-            <thead>
-                <tr>
-                    <th class="p-4 font-semibold">Judul Pelatihan</th>
-                    <th class="p-4 font-semibold">Jadwal</th>
-                    <th class="p-4 font-semibold">Lokasi</th>
-                    <th class="p-4 font-semibold text-center">Kuota & Pendaftar</th>
-                    <th class="p-4 font-semibold text-center">Status</th>
-                    <th class="p-4 font-semibold text-right">Aksi</th>
-                </tr>
-            </thead>
-            <tbody class="divide-y divide-slate-100 text-sm">
-                @forelse($pelatihans as $p)
-                <tr>
-                    <td class="p-4 align-top">
-                        <div class="font-bold text-slate-800">{{ $p->judul }}</div>
-                        @if(!empty($p->syarat_dokumen) && is_array($p->syarat_dokumen) && count($p->syarat_dokumen) > 0)
-                        <span class="inline-flex items-center gap-1 mt-1 text-[11px] font-medium px-2 py-0.5 rounded-full bg-amber-50 text-amber-600 border border-amber-200">
-                            <i class="fa-solid fa-file-invoice"></i> Wajib Dokumen
-                        </span>
-                        @endif
-                    </td>
-                    <td class="p-4 align-top">
-                        <div class="font-medium text-slate-700">{{ $p->tanggal_mulai->format('d M Y') }}</div>
-                        <div class="text-slate-500 text-xs">{{ $p->tanggal_mulai->format('H:i') }} - {{ $p->tanggal_selesai->format('H:i') }}</div>
-                    </td>
-                    <td class="p-4 align-top text-slate-600">
-                        {{ $p->lokasi }}
-                    </td>
-                    <td class="p-4 align-top text-center">
-                        <div class="inline-flex flex-col items-center">
-                            <span class="font-bold text-slate-800">{{ $p->peserta()->count() }} / {{ $p->kuota }}</span>
-                            <span class="text-[10px] text-slate-400 uppercase tracking-wider">Peserta</span>
-                        </div>
-                    </td>
-                    <td class="p-4 align-top text-center">
-                        @if($p->status == 'published')
-                            <span class="inline-flex px-2 py-1 text-xs font-semibold rounded-full bg-emerald-100 text-emerald-700">Aktif</span>
-                        @elseif($p->status == 'draft')
-                            <span class="inline-flex px-2 py-1 text-xs font-semibold rounded-full bg-slate-100 text-slate-700">Draft</span>
-                        @else
-                            <span class="inline-flex px-2 py-1 text-xs font-semibold rounded-full bg-blue-100 text-blue-700">Selesai</span>
-                        @endif
-                    </td>
-                    <td class="p-4 align-top text-right">
-                        <div class="flex items-center justify-end gap-2">
-                            <a href="{{ route('admin.pelatihan.show', $p->id) }}" class="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold text-blue-700 bg-blue-100 rounded-lg hover:bg-blue-200 transition-colors">
-                                <i class="fa-solid fa-users"></i> Lihat Peserta
-                            </a>
-                            <a href="{{ route('admin.pelatihan.edit', $p->id) }}" class="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold text-amber-700 bg-amber-100 rounded-lg hover:bg-amber-200 transition-colors">
-                                <i class="fa-solid fa-pen"></i> Edit
-                            </a>
-                        </div>
-                    </td>
-                </tr>
-                @empty
-                <tr>
-                    <td colspan="6" class="p-8 text-center text-slate-500">
-                        <div class="mb-2"><i class="fa-regular fa-calendar-xmark text-3xl opacity-50"></i></div>
-                        Belum ada data pelatihan.
-                    </td>
-                </tr>
-                @endforelse
-            </tbody>
-        </table>
-    </div>
+<div id="table-container">
+    @include('admin.pelatihan.table-data')
 </div>
 
 <!-- Modal Tambah Pelatihan -->
@@ -241,3 +175,122 @@
 </div> <!-- end x-data div -->
 
 @endsection
+@push('scripts')
+<script>
+    function debounce(func, wait) {
+        let timeout;
+        return function executedFunction(...args) {
+            const later = () => {
+                clearTimeout(timeout);
+                func(...args);
+            };
+            clearTimeout(timeout);
+            timeout = setTimeout(later, wait);
+        };
+    }
+
+    window.triggerFilter = function() {
+        const form = document.getElementById('filter-form');
+        const url = new URL(form.action);
+        const formData = new FormData(form);
+        
+        for (const [key, value] of formData.entries()) {
+            if (value) {
+                url.searchParams.append(key, value);
+            }
+        }
+        
+        const container = document.getElementById('table-container');
+        if (container) {
+            container.style.opacity = '0.5';
+            container.style.pointerEvents = 'none';
+        }
+        
+        url.searchParams.append('ajax', '1');
+        
+        fetch(url.toString(), {
+            headers: {
+                'X-Requested-With': 'XMLHttpRequest',
+                'Accept': 'application/json'
+            }
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success && container) {
+                container.innerHTML = data.html;
+                url.searchParams.delete('ajax');
+                window.history.pushState({}, '', url.toString());
+                attachPaginationListeners();
+            }
+        })
+        .catch(error => console.error('Error fetching data:', error))
+        .finally(() => {
+            if (container) {
+                container.style.opacity = '1';
+                container.style.pointerEvents = 'auto';
+            }
+        });
+    };
+
+    const searchInput = document.querySelector('input[name="search"]');
+    if (searchInput) {
+        searchInput.addEventListener('input', debounce(() => window.triggerFilter(), 500));
+    }
+
+    function attachPaginationListeners() {
+        document.querySelectorAll('.pagination a').forEach(link => {
+            const newLink = link.cloneNode(true);
+            link.parentNode.replaceChild(newLink, link);
+            
+            newLink.addEventListener('click', function(e) {
+                e.preventDefault();
+                const url = new URL(this.href);
+                const form = document.getElementById('filter-form');
+                const formData = new FormData(form);
+                
+                for (const [key, value] of formData.entries()) {
+                    if (value && !url.searchParams.has(key)) {
+                        url.searchParams.append(key, value);
+                    }
+                }
+                
+                const container = document.getElementById('table-container');
+                if (container) {
+                    container.style.opacity = '0.5';
+                    container.style.pointerEvents = 'none';
+                }
+                
+                url.searchParams.append('ajax', '1');
+                
+                fetch(url.toString(), {
+                    headers: {
+                        'X-Requested-With': 'XMLHttpRequest',
+                        'Accept': 'application/json'
+                    }
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success && container) {
+                        container.innerHTML = data.html;
+                        url.searchParams.delete('ajax');
+                        window.history.pushState({}, '', url.toString());
+                        attachPaginationListeners();
+                        window.scrollTo({top: 0, behavior: 'smooth'});
+                    }
+                })
+                .catch(error => console.error('Error fetching data:', error))
+                .finally(() => {
+                    if (container) {
+                        container.style.opacity = '1';
+                        container.style.pointerEvents = 'auto';
+                    }
+                });
+            });
+        });
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+        attachPaginationListeners();
+    });
+</script>
+@endpush

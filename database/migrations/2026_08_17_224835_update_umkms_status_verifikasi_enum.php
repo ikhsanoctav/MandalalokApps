@@ -12,6 +12,10 @@ return new class extends Migration
      */
     public function up(): void
     {
+        if (DB::getDriverName() === 'sqlite') {
+            return;
+        }
+
         // 1. Tambah enum baru tanpa hapus yang lama
         DB::statement("ALTER TABLE umkms MODIFY COLUMN status_verifikasi ENUM('draft', 'menunggu_verifikasi', 'terkirim', 'terverifikasi', 'ditolak') DEFAULT 'draft'");
         
@@ -27,6 +31,10 @@ return new class extends Migration
      */
     public function down(): void
     {
+        if (DB::getDriverName() === 'sqlite') {
+            return;
+        }
+
         // 1. Tambah enum lama tanpa hapus yang baru
         DB::statement("ALTER TABLE umkms MODIFY COLUMN status_verifikasi ENUM('draft', 'menunggu_verifikasi', 'terkirim', 'terverifikasi', 'ditolak') DEFAULT 'draft'");
         

@@ -28,7 +28,7 @@ class UmkmController extends Controller
         $tab = $request->get('tab', 'saya');
         $search = $request->get('search');
         $status = $request->get('status');
-        $perPage = (int) $request->get('per_page', 10);
+        $perPage = (int) $request->get('per_page', 20);
 
         // Filter Closure
         $filterClosure = function ($q) use ($search, $status) {
@@ -92,6 +92,23 @@ class UmkmController extends Controller
             $queryWilayah = (clone $baseWilayahQuery)->orderBy('created_at', 'desc');
             $queryWilayah->where($filterClosure);
             $umkmWilayah = $queryWilayah->paginate($perPage, ['*'], 'wilayah_page')->withQueryString();
+        }
+
+        if ($request->ajax() || $request->has('ajax')) {
+            $htmlSaya = view('petugas.umkm.table-saya', compact('umkmSaya'))->render();
+            
+            $htmlWilayah = '';
+            if ($kelurahan && $kelurahan !== '-') {
+                $htmlWilayah = view('petugas.umkm.table-wilayah', compact('umkmWilayah'))->render();
+            }
+            
+            return response()->json([
+                'success' => true,
+                'html_saya' => $htmlSaya,
+                'html_wilayah' => $htmlWilayah,
+                'count_saya' => $umkmSaya->total(),
+                'count_wilayah' => $umkmWilayah instanceof \Illuminate\Pagination\LengthAwarePaginator ? $umkmWilayah->total() : 0,
+            ]);
         }
 
         return view('petugas.umkm.index', compact(

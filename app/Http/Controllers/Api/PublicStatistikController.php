@@ -89,7 +89,7 @@ class PublicStatistikController extends Controller
                 ->whereYear('created_at', now()->year)
                 ->count();
 
-            $growth = $thisMonth > 0 ? "+{$thisMonth} UMKM Baru" : 'Stabil';
+            $growth = $thisMonth > 0 ? "+{$thisMonth} Baru" : 'Stabil';
 
             $top = UMKM::where('status_verifikasi', 'terverifikasi')
                 ->select('id_kategori', DB::raw('count(*) as total'))
@@ -106,7 +106,7 @@ class PublicStatistikController extends Controller
                 'growth' => $growth,
                 'top_kategori' => $top && $top->kategori ? $top->kategori->nama_kategori : '-',
                 'top_kategori_total' => $top ? $top->total : 0,
-                'total_sektor' => $totalSektor,
+                'total_sektor' => $totalSektor . ' Sektor',
             ];
         });
 
@@ -158,7 +158,7 @@ class PublicStatistikController extends Controller
             return [
                 'success' => true,
                 'total' => $umkms->count(),
-                'data' => $umkms->values(),
+                'data' => $umkms->values()->all(),
                 'filters' => [
                     'sektor' => $sektorList,
                     'kelurahan' => $kelurahanList,

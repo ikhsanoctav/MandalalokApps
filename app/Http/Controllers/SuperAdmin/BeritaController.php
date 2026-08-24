@@ -31,6 +31,15 @@ class BeritaController extends Controller
 
         $berita = $query->latest()->paginate($perPage)->withQueryString();
 
+        if ($request->ajax() || $request->has('ajax')) {
+            $html = view('superadmin.master.berita.table-data', compact('berita'))->render();
+            return response()->json([
+                'success' => true,
+                'html' => $html,
+                'count' => $berita->total()
+            ]);
+        }
+
         return view('superadmin.master.berita.index', compact('berita'));
     }
 

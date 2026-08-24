@@ -44,26 +44,69 @@
         @endif
 
         {{-- Statistik Cards (Wilayah) --}}
-        <div class="grid grid-cols-2 md:grid-cols-3 gap-4">
-            <div class="bg-white rounded-2xl border border-slate-200 p-4 shadow-sm">
-                <p class="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Total Wilayah</p>
-                <p class="text-2xl font-black text-slate-800 mt-1">{{ $stats['total'] }}</p>
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
+            
+            <!-- Total Wilayah -->
+            <div class="bg-gradient-to-br from-blue-600 to-indigo-700 rounded-2xl p-6 text-white shadow-lg relative overflow-hidden group hover:-translate-y-1 transition-transform duration-300">
+                <div class="absolute -right-6 -top-6 text-white/10 group-hover:scale-110 transition-transform duration-500">
+                    <svg class="w-32 h-32" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg>
+                </div>
+                <div class="relative z-10">
+                    <div class="flex justify-between items-start mb-2">
+                        <div>
+                            <p class="text-blue-100 text-xs font-semibold tracking-wider uppercase mb-1">Total Wilayah</p>
+                            <h3 class="text-3xl font-bold">{{ $stats['total'] }}</h3>
+                        </div>
+                        <div class="w-12 h-12 bg-white/20 rounded-xl flex items-center justify-center backdrop-blur-sm border border-white/20 shadow-inner">
+                            <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"></path></svg>
+                        </div>
+                    </div>
+                </div>
             </div>
-            <div class="bg-white rounded-2xl border border-emerald-100 p-4 shadow-sm">
-                <p class="text-[10px] font-bold text-emerald-500 uppercase tracking-wider">Terverifikasi</p>
-                <p class="text-2xl font-black text-emerald-700 mt-1">{{ $stats['terverifikasi'] }}</p>
+
+            <!-- Terverifikasi -->
+            <div class="bg-gradient-to-br from-emerald-500 to-teal-600 rounded-2xl p-6 text-white shadow-lg relative overflow-hidden group hover:-translate-y-1 transition-transform duration-300">
+                <div class="absolute -right-6 -top-6 text-white/10 group-hover:scale-110 transition-transform duration-500">
+                    <svg class="w-32 h-32" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/></svg>
+                </div>
+                <div class="relative z-10">
+                    <div class="flex justify-between items-start mb-2">
+                        <div>
+                            <p class="text-emerald-100 text-xs font-semibold tracking-wider uppercase mb-1">Terverifikasi</p>
+                            <h3 class="text-3xl font-bold">{{ $stats['terverifikasi'] }}</h3>
+                        </div>
+                        <div class="w-12 h-12 bg-white/20 rounded-xl flex items-center justify-center backdrop-blur-sm border border-white/20 shadow-inner">
+                            <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                        </div>
+                    </div>
+                </div>
             </div>
-            <div class="bg-white rounded-2xl border border-red-100 p-4 shadow-sm">
-                <p class="text-[10px] font-bold text-red-500 uppercase tracking-wider">Ditolak</p>
-                <p class="text-2xl font-black text-red-700 mt-1">{{ $stats['ditolak'] }}</p>
+
+            <!-- Ditolak -->
+            <div class="bg-gradient-to-br from-rose-500 to-red-600 rounded-2xl p-6 text-white shadow-lg relative overflow-hidden group hover:-translate-y-1 transition-transform duration-300">
+                <div class="absolute -right-6 -top-6 text-white/10 group-hover:scale-110 transition-transform duration-500">
+                    <svg class="w-32 h-32" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2C6.47 2 2 6.47 2 12s4.47 10 10 10 10-4.47 10-10S17.53 2 12 2zm5 13.59L15.59 17 12 13.41 8.41 17 7 15.59 10.59 12 7 8.41 8.41 7 12 10.59 15.59 7 17 8.41 13.41 12 17 15.59z"/></svg>
+                </div>
+                <div class="relative z-10">
+                    <div class="flex justify-between items-start mb-2">
+                        <div>
+                            <p class="text-rose-100 text-xs font-semibold tracking-wider uppercase mb-1">Ditolak</p>
+                            <h3 class="text-3xl font-bold">{{ $stats['ditolak'] }}</h3>
+                        </div>
+                        <div class="w-12 h-12 bg-white/20 rounded-xl flex items-center justify-center backdrop-blur-sm border border-white/20 shadow-inner">
+                            <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                        </div>
+                    </div>
+                </div>
             </div>
+            
         </div>
 
         {{-- Filter Bar --}}
         @php $activeFiltersUmkm = array_filter([request('search'), request('status')]); @endphp
         <div class="bg-white rounded-2xl border border-slate-200 shadow-sm p-4">
-            <form method="GET" action="{{ route('operator.umkm.index') }}" class="flex flex-wrap gap-3 items-center">
-                <input type="hidden" name="tab" value="{{ $tab }}">
+            <form id="filter-form" method="GET" action="{{ route('operator.umkm.index') }}" class="flex flex-wrap gap-3 items-center">
+                <input type="hidden" name="tab" id="active-tab-input" value="{{ $tab }}">
                 
                 <div class="relative flex-1 min-w-[200px]">
                     <span class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-slate-400"><i class="mdi mdi-magnify"></i></span>
@@ -71,7 +114,7 @@
                         class="pl-9 pr-4 py-2.5 w-full bg-slate-50 border border-slate-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all">
                 </div>
                 <div class="relative">
-                    <select name="status" onchange="this.form.submit()" class="appearance-none bg-slate-50 border border-slate-200 rounded-lg text-sm font-semibold text-slate-700 pl-4 pr-9 py-2.5 focus:outline-none transition-all cursor-pointer {{ request('status') ? 'border-blue-400 bg-blue-50 text-blue-700' : '' }}">
+                    <select name="status" onchange="window.triggerFilter()" class="appearance-none bg-slate-50 border border-slate-200 rounded-lg text-sm font-semibold text-slate-700 pl-4 pr-9 py-2.5 focus:outline-none transition-all cursor-pointer {{ request('status') ? 'border-blue-400 bg-blue-50 text-blue-700' : '' }}">
                         <option value="">Semua Status</option>
                         <option value="pending" {{ request('status') === 'pending' ? 'selected' : '' }}>⏳ Menunggu</option>
                         <option value="terverifikasi" {{ request('status') === 'terverifikasi' ? 'selected' : '' }}>✅ Terverifikasi</option>
@@ -81,13 +124,13 @@
                 </div>
                 <div class="flex items-center gap-2">
                     <span class="text-xs text-slate-500 font-semibold">Tampilkan:</span>
-                    <select name="per_page" onchange="this.form.submit()" class="appearance-none bg-slate-50 border border-slate-200 rounded-lg text-sm font-bold text-slate-700 pl-3 pr-8 py-2.5 focus:outline-none transition-all cursor-pointer">
-                        @foreach([10, 25, 50] as $pp)
-                            <option value="{{ $pp }}" {{ request('per_page', 10) == $pp ? 'selected' : '' }}>{{ $pp }}</option>
+                    <select name="per_page" onchange="window.triggerFilter()" class="appearance-none bg-slate-50 border border-slate-200 rounded-lg text-sm font-bold text-slate-700 pl-3 pr-8 py-2.5 focus:outline-none transition-all cursor-pointer">
+                        @foreach([10, 20, 50, 100] as $pp)
+                            <option value="{{ $pp }}" {{ request('per_page', 20) == $pp ? 'selected' : '' }}>{{ $pp }}</option>
                         @endforeach
                     </select>
                 </div>
-                <button type="submit" class="px-4 py-2.5 bg-blue-600 hover:bg-blue-700 text-white text-sm font-bold rounded-lg transition-all shadow-sm">Cari</button>
+                <button type="button" onclick="window.triggerFilter()" class="px-4 py-2.5 bg-blue-600 hover:bg-blue-700 text-white text-sm font-bold rounded-lg transition-all shadow-sm">Cari</button>
                 @if(count($activeFiltersUmkm) > 0)
                     <a href="{{ route('operator.umkm.index', ['tab' => $tab]) }}" class="px-4 py-2.5 bg-rose-50 border border-rose-200 text-rose-600 text-sm font-bold rounded-lg hover:bg-rose-100 transition-all">Reset</a>
                 @endif
@@ -99,21 +142,21 @@
             <div class="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden">
                 {{-- Tab Header --}}
                 <div class="flex border-b border-slate-200">
-                    <button @click="activeTab = 'saya'"
+                    <button @click="activeTab = 'saya'; document.getElementById('active-tab-input').value = 'saya';"
                         :class="activeTab === 'saya' ? 'border-b-2 border-blue-600 text-blue-600 bg-blue-50/50' : 'text-slate-700 hover:text-slate-700 hover:bg-slate-50'"
                         class="flex-1 px-6 py-3.5 text-sm font-semibold transition-all flex items-center justify-center gap-2">
                         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path></svg>
                         Input Saya
-                        <span class="inline-flex items-center justify-center w-6 h-6 rounded-full text-[10px] font-bold"
-                            :class="activeTab === 'saya' ? 'bg-blue-600 text-white' : 'bg-slate-200 text-slate-600'">{{ $umkmSaya->count() }}</span>
+                        <span id="badge-count-saya" class="inline-flex items-center justify-center w-6 h-6 rounded-full text-[10px] font-bold"
+                            :class="activeTab === 'saya' ? 'bg-blue-600 text-white' : 'bg-slate-200 text-slate-600'">{{ $umkmSaya->total() }}</span>
                     </button>
-                    <button @click="activeTab = 'wilayah'"
+                    <button @click="activeTab = 'wilayah'; document.getElementById('active-tab-input').value = 'wilayah';"
                         :class="activeTab === 'wilayah' ? 'border-b-2 border-indigo-600 text-indigo-600 bg-indigo-50/50' : 'text-slate-700 hover:text-slate-700 hover:bg-slate-50'"
                         class="flex-1 px-6 py-3.5 text-sm font-semibold transition-all flex items-center justify-center gap-2">
                         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3.055 11H5a2 2 0 012 2v1a2 2 0 002 2 2 2 0 012 2v2.945M8 3.935V5.5A2.5 2.5 0 0010.5 8h.5a2 2 0 012 2 2 2 0 104 0 2 2 0 012-2h1.064M15 20.488V18a2 2 0 012-2h3.064M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
                         Semua Wilayah
-                        <span class="inline-flex items-center justify-center w-6 h-6 rounded-full text-[10px] font-bold"
-                            :class="activeTab === 'wilayah' ? 'bg-indigo-600 text-white' : 'bg-slate-200 text-slate-600'">{{ $umkmWilayah->count() }}</span>
+                        <span id="badge-count-wilayah" class="inline-flex items-center justify-center w-6 h-6 rounded-full text-[10px] font-bold"
+                            :class="activeTab === 'wilayah' ? 'bg-indigo-600 text-white' : 'bg-slate-200 text-slate-600'">{{ $umkmWilayah instanceof \Illuminate\Pagination\LengthAwarePaginator ? $umkmWilayah->total() : ($umkmWilayah ? $umkmWilayah->count() : 0) }}</span>
                     </button>
                     <button @click="activeTab = 'peta'"
                         :class="activeTab === 'peta' ? 'border-b-2 border-teal-600 text-teal-600 bg-teal-50/50' : 'text-slate-700 hover:text-slate-700 hover:bg-slate-50'"
@@ -127,122 +170,9 @@
 
                 {{-- Tab: Input Saya --}}
                 <div x-show="activeTab === 'saya'" x-transition:enter="transition ease-out duration-200" x-transition:enter-start="opacity-0" x-transition:enter-end="opacity-100">
-                    <div class="block md:hidden divide-y divide-slate-100">
-                        @forelse($umkmSaya as $umkm)
-                            <article class="p-4 space-y-3">
-                                <div class="flex items-start justify-between gap-3">
-                                    <div class="min-w-0">
-                                        <p class="font-mono text-xs font-semibold text-slate-700">{{ $umkm->no_pendaftaran ?? '-' }}</p>
-                                        <h3 class="text-base font-bold text-slate-800 leading-snug">{{ $umkm->nama_usaha }}</h3>
-                                        <p class="text-xs text-slate-700 mt-1">{{ $umkm->kategori?->nama_kategori ?? '-' }}</p>
-                                    </div>
-                                    <div class="shrink-0">
-                                        @include('petugas.umkm._status-badge', ['status' => $umkm->status_verifikasi])
-                                    </div>
-                                </div>
-
-                                <div class="grid grid-cols-2 gap-3 text-sm">
-                                    <div>
-                                        <p class="text-xs font-semibold text-slate-400 uppercase">Pemilik</p>
-                                        <p class="font-medium text-slate-700">{{ $umkm->pemilik?->nama_lengkap ?? '-' }}</p>
-                                        <p class="text-xs text-slate-700">{{ $umkm->pemilik?->nik_masked ?? '-' }}</p>
-                                    </div>
-                                    <div>
-                                        <p class="text-xs font-semibold text-slate-400 uppercase">Tgl Input</p>
-                                        <p class="font-medium text-slate-700">{{ $umkm->tanggal_pendataan ? $umkm->tanggal_pendataan->format('d M Y') : '-' }}</p>
-                                    </div>
-                                </div>
-
-                                <div class="flex flex-col gap-2 pt-1">
-                                    <a href="{{ route('operator.umkm.show', $umkm->id_umkm) }}" class="inline-flex items-center justify-center px-3 py-2.5 bg-blue-50 text-blue-700 rounded-lg text-sm font-semibold">
-                                        Detail
-                                    </a>
-                                    @if($umkm->status_verifikasi !== 'terverifikasi')
-                                        <a href="{{ route('operator.umkm.edit', $umkm->id_umkm) }}" class="inline-flex items-center justify-center px-3 py-2.5 bg-amber-50 text-amber-700 rounded-lg text-sm font-semibold">
-                                            Edit
-                                        </a>
-                                        <a href="{{ route('operator.umkm.upload-foto', $umkm->id_umkm) }}" class="inline-flex items-center justify-center px-3 py-2.5 bg-emerald-50 text-emerald-700 rounded-lg text-sm font-semibold">
-                                            Foto
-                                        </a>
-                                    @endif
-                                </div>
-                            </article>
-                        @empty
-                            <div class="py-12 px-4 text-center">
-                                <p class="text-slate-700 font-medium">Belum ada data UMKM yang diinput.</p>
-                                <a href="{{ route('operator.umkm.create') }}" class="text-blue-600 text-sm hover:underline mt-1 inline-block">Mulai Input Data Sekarang</a>
-                            </div>
-                        @endforelse
+                    <div id="table-saya-container">
+                        @include('petugas.umkm.table-saya')
                     </div>
-
-                    <div class="hidden md:block overflow-x-auto">
-                        <table class="w-full text-left border-collapse">
-                            <thead>
-                                <tr class="bg-slate-50 border-b border-slate-200">
-                                    <th class="py-3 px-6 text-xs font-bold text-slate-700 uppercase tracking-wider">No. Pendaftaran</th>
-                                    <th class="py-3 px-6 text-xs font-bold text-slate-700 uppercase tracking-wider">Nama Usaha</th>
-                                    <th class="py-3 px-6 text-xs font-bold text-slate-700 uppercase tracking-wider">Pemilik</th>
-                                    <th class="py-3 px-6 text-xs font-bold text-slate-700 uppercase tracking-wider">Tgl Input</th>
-                                    <th class="py-3 px-6 text-xs font-bold text-slate-700 uppercase tracking-wider">Status</th>
-                                    <th class="py-3 px-6 text-xs font-bold text-slate-700 uppercase tracking-wider text-right">Aksi</th>
-                                </tr>
-                            </thead>
-                            <tbody class="divide-y divide-slate-100">
-                                @forelse($umkmSaya as $umkm)
-                                    <tr class="hover:bg-slate-50 transition-colors">
-                                        <td class="py-4 px-6">
-                                            <span class="font-mono text-xs font-semibold text-slate-600 bg-slate-100 px-2 py-1 rounded-md">{{ $umkm->no_pendaftaran ?? '-' }}</span>
-                                        </td>
-                                        <td class="py-4 px-6">
-                                            <p class="font-bold text-sm text-slate-800">{{ $umkm->nama_usaha }}</p>
-                                            <p class="text-xs text-slate-700 mt-0.5">{{ $umkm->kategori?->nama_kategori ?? '-' }}</p>
-                                        </td>
-                                        <td class="py-4 px-6">
-                                            <div class="text-sm text-slate-700">{{ $umkm->pemilik?->nama_lengkap ?? '-' }}</div>
-                                            <div class="text-xs text-slate-700 mt-0.5">{{ $umkm->pemilik?->nik_masked ?? '-' }}</div>
-                                        </td>
-                                        <td class="py-4 px-6 text-sm text-slate-600">
-                                            {{ $umkm->tanggal_pendataan ? $umkm->tanggal_pendataan->format('d M Y') : '-' }}
-                                        </td>
-                                        <td class="py-4 px-6">
-                                            @include('petugas.umkm._status-badge', ['status' => $umkm->status_verifikasi])
-                                        </td>
-                                        <td class="py-4 px-6 text-right">
-                                            <div class="flex items-center justify-end gap-1.5">
-                                                <a href="{{ route('operator.umkm.show', $umkm->id_umkm) }}" class="inline-flex p-2 bg-blue-50 text-blue-600 hover:bg-blue-600 hover:text-white rounded-2xl transition-colors tooltip" data-tip="Lihat Detail">
-                                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path></svg>
-                                                </a>
-                                                @if($umkm->status_verifikasi !== 'terverifikasi')
-                                                    <a href="{{ route('operator.umkm.edit', $umkm->id_umkm) }}" class="inline-flex p-2 bg-amber-50 text-amber-600 hover:bg-amber-600 hover:text-white rounded-2xl transition-colors tooltip" data-tip="Edit Data">
-                                                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path></svg>
-                                                    </a>
-                                                    <a href="{{ route('operator.umkm.upload-foto', $umkm->id_umkm) }}" class="inline-flex p-2 bg-emerald-50 text-emerald-600 hover:bg-emerald-600 hover:text-white rounded-2xl transition-colors tooltip" data-tip="Upload Foto">
-                                                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
-                                                    </a>
-                                                @endif
-                                            </div>
-                                        </td>
-                                    </tr>
-                                @empty
-                                    <tr>
-                                        <td colspan="6" class="py-12 px-6 text-center">
-                                            <div class="w-16 h-16 bg-slate-50 text-slate-300 rounded-full flex items-center justify-center mx-auto mb-3">
-                                                <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 13V6a2 2 0 00-2-2H6a2 2 0 00-2 2v7m16 0v5a2 2 0 01-2 2H6a2 2 0 01-2-2v-5m16 0h-2.586a1 1 0 00-.707.293l-2.414 2.414a1 1 0 01-.707.293h-3.172a1 1 0 01-.707-.293l-2.414-2.414A1 1 0 006.586 13H4"></path></svg>
-                                            </div>
-                                            <p class="text-slate-700 font-medium">Belum ada data UMKM yang diinput.</p>
-                                            <a href="{{ route('operator.umkm.create') }}" class="text-blue-600 text-sm hover:underline mt-1 inline-block">Mulai Input Data Sekarang</a>
-                                        </td>
-                                    </tr>
-                                @endforelse
-                            </tbody>
-                        </table>
-                    </div>
-                    
-                    @if($umkmSaya->hasPages())
-                        <div class="p-4 border-t border-slate-200">
-                            {{ $umkmSaya->appends(request()->except('saya_page'))->links() }}
-                        </div>
-                    @endif
                 </div>
 
 
@@ -277,110 +207,9 @@
                         
                         {{-- Distribusi Kategori (kept as is) --}}
 
-                        <div class="block md:hidden divide-y divide-slate-100">
-                            @foreach ($umkmWilayah as $item)
-                                <article class="p-4 space-y-3">
-                                    <div class="flex items-start justify-between gap-3">
-                                        <div class="min-w-0">
-                                            <p class="font-mono text-xs font-semibold text-slate-700">{{ $item->no_pendaftaran ?? '-' }}</p>
-                                            <h3 class="text-base font-bold text-slate-800 leading-snug">{{ $item->nama_usaha }}</h3>
-                                            <p class="text-xs text-slate-700 mt-1">{{ $item->alamat_usaha }}</p>
-                                        </div>
-                                        <div class="shrink-0">
-                                            @include('petugas.umkm._status-badge', ['status' => $item->status_verifikasi])
-                                        </div>
-                                    </div>
-
-                                    <div class="grid grid-cols-2 gap-3 text-sm">
-                                        <div>
-                                            <p class="text-xs font-semibold text-slate-400 uppercase">Pemilik</p>
-                                            <p class="font-medium text-slate-700">{{ $item->pemilik?->nama_lengkap ?? '-' }}</p>
-                                            <p class="text-xs text-slate-700">RT {{ $item->pemilik?->rt ?? '-' }} / RW {{ $item->pemilik?->rw ?? '-' }}</p>
-                                        </div>
-                                        <div>
-                                            <p class="text-xs font-semibold text-slate-400 uppercase">Kategori</p>
-                                            <p class="font-medium text-slate-700">{{ $item->kategori?->nama_kategori ?? '-' }}</p>
-                                            <p class="text-xs text-slate-700">{{ $item->sektor?->nama_sektor ?? '-' }}</p>
-                                        </div>
-                                    </div>
-
-                                    <div class="flex flex-col gap-2 pt-1">
-                                        <a href="{{ route('operator.umkm.show', $item->id_umkm) }}" class="inline-flex items-center justify-center px-3 py-2.5 bg-blue-50 text-blue-700 rounded-lg text-sm font-semibold">
-                                            Detail
-                                        </a>
-                                        @if($item->id_petugas === Auth::id() && $item->status_verifikasi !== 'terverifikasi')
-                                            <a href="{{ route('operator.umkm.edit', $item->id_umkm) }}" class="inline-flex items-center justify-center px-3 py-2.5 bg-amber-50 text-amber-700 rounded-lg text-sm font-semibold">
-                                                Edit
-                                            </a>
-                                            <a href="{{ route('operator.umkm.upload-foto', $item->id_umkm) }}" class="inline-flex items-center justify-center px-3 py-2.5 bg-emerald-50 text-emerald-700 rounded-lg text-sm font-semibold">
-                                                Foto
-                                            </a>
-                                        @endif
-                                    </div>
-                                </article>
-                            @endforeach
+                        <div id="table-wilayah-container">
+                            @include('petugas.umkm.table-wilayah')
                         </div>
-
-                        <div class="hidden md:block overflow-x-auto">
-                            <table class="w-full text-left border-collapse">
-                                <thead>
-                                    <tr class="bg-[#0f2e5c] text-white text-xs uppercase tracking-wider font-semibold">
-                                        <th class="px-6 py-3">No. Pendaftaran</th>
-                                        <th class="px-6 py-3">Nama Usaha</th>
-                                        <th class="px-6 py-3">Pemilik</th>
-                                        <th class="px-6 py-3">Kategori</th>
-                                        <th class="px-6 py-3">Status</th>
-                                        <th class="px-6 py-3 text-center">Aksi</th>
-                                    </tr>
-                                </thead>
-                                <tbody class="divide-y divide-slate-100">
-                                    @foreach ($umkmWilayah as $item)
-                                        <tr class="hover:bg-slate-50 transition-colors">
-                                            <td class="px-6 py-4">
-                                                <span class="font-mono text-xs font-semibold text-slate-600 bg-slate-100 px-2 py-1 rounded-md">{{ $item->no_pendaftaran ?? '-' }}</span>
-                                            </td>
-                                            <td class="px-6 py-4">
-                                                <p class="font-bold text-slate-800">{{ $item->nama_usaha }}</p>
-                                                <p class="text-xs text-slate-700 truncate max-w-[200px]">{{ $item->alamat_usaha }}</p>
-                                            </td>
-                                            <td class="px-6 py-4">
-                                                <p class="font-medium text-slate-700">{{ $item->pemilik?->nama_lengkap ?? '-' }}</p>
-                                                <p class="text-xs text-slate-700">RT {{ $item->pemilik?->rt ?? '-' }} / RW {{ $item->pemilik?->rw ?? '-' }}</p>
-                                            </td>
-                                            <td class="px-6 py-4">
-                                                <span class="inline-flex items-center px-2 py-0.5 rounded-md text-xs font-medium bg-blue-50 text-blue-700 mb-1">{{ $item->kategori?->nama_kategori ?? '-' }}</span>
-                                                <br>
-                                                <span class="inline-flex items-center px-2 py-0.5 rounded-md text-xs font-medium bg-purple-50 text-purple-700">{{ $item->sektor?->nama_sektor ?? '-' }}</span>
-                                            </td>
-                                            <td class="px-6 py-4">
-                                                @include('petugas.umkm._status-badge', ['status' => $item->status_verifikasi])
-                                            </td>
-                                            <td class="px-6 py-4 text-center">
-                                                <div class="flex items-center justify-center gap-1.5">
-                                                    <a href="{{ route('operator.umkm.show', $item->id_umkm) }}" class="inline-flex p-2 bg-blue-50 text-blue-600 hover:bg-blue-600 hover:text-white rounded-2xl transition-colors tooltip" data-tip="Lihat Detail">
-                                                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path></svg>
-                                                    </a>
-                                                    @if($item->id_petugas === Auth::id() && $item->status_verifikasi !== 'terverifikasi')
-                                                        <a href="{{ route('operator.umkm.edit', $item->id_umkm) }}" class="inline-flex p-2 bg-amber-50 text-amber-600 hover:bg-amber-600 hover:text-white rounded-2xl transition-colors tooltip" data-tip="Edit Data">
-                                                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path></svg>
-                                                        </a>
-                                                        <a href="{{ route('operator.umkm.upload-foto', $item->id_umkm) }}" class="inline-flex p-2 bg-emerald-50 text-emerald-600 hover:bg-emerald-600 hover:text-white rounded-2xl transition-colors tooltip" data-tip="Upload Foto">
-                                                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
-                                                        </a>
-                                                    @endif
-                                                </div>
-                                            </td>
-                                        </tr>
-                                    @endforeach
-                                </tbody>
-                            </table>
-                        </div>
-
-                        @if($umkmWilayah->hasPages())
-                            <div class="p-4 border-t border-slate-200">
-                                {{ $umkmWilayah->appends(request()->except('wilayah_page'))->links() }}
-                            </div>
-                        @endif
                     @endif
                 </div>
 
@@ -397,7 +226,7 @@
                         </div>
                     @else
                         <div class="p-4">
-                            <div id="umkmMap" class="w-full rounded-xl overflow-hidden border border-slate-200 shadow-sm" style="height: 450px;"></div>
+                            <div id="umkmMap" class="w-full rounded-xl overflow-hidden border border-slate-200 shadow-sm" style="height: 70vh; min-height: 600px;"></div>
                             <p class="text-xs text-slate-400 text-center mt-2">📍 {{ $mapData->count() }} UMKM dengan data koordinat ditampilkan di peta</p>
                         </div>
                     @endif
@@ -499,12 +328,21 @@
                     }).addTo(map);
 
                     marker.bindPopup(
-                        '<div style="min-width:180px">' +
-                        '<p style="font-weight:700;font-size:14px;margin:0 0 4px">' + u.nama + '</p>' +
-                        '<p style="font-size:11px;color:#64748b;margin:0 0 2px">👤 ' + u.pemilik + '</p>' +
-                        '<p style="font-size:11px;color:#64748b;margin:0 0 2px">📂 ' + u.kategori + '</p>' +
-                        '<p style="font-size:11px;color:#64748b;margin:0 0 6px">📍 ' + u.alamat + '</p>' +
-                        '<a href="/operator/umkm/' + u.id + '/show" style="font-size:11px;color:#2563eb;text-decoration:underline">Lihat Detail →</a>' +
+                        '<div style="min-width:200px; padding:2px; font-family: ui-sans-serif, system-ui, sans-serif;">' +
+                        '<h4 style="font-weight:800; font-size:15px; color:#1e293b; margin:0 0 8px; line-height:1.3; border-bottom:1px solid #f1f5f9; padding-bottom:8px;">' + u.nama + '</h4>' +
+                        '<div style="display:flex; align-items:flex-start; gap:8px; margin-bottom:6px;">' +
+                            '<span style="font-size:13px; line-height:1;">👤</span>' +
+                            '<span style="font-size:12px; color:#475569; font-weight:600; line-height:1.2;">' + u.pemilik + '</span>' +
+                        '</div>' +
+                        '<div style="display:flex; align-items:flex-start; gap:8px; margin-bottom:6px;">' +
+                            '<span style="font-size:13px; line-height:1;">📂</span>' +
+                            '<span style="font-size:12px; color:#475569; line-height:1.2;">' + u.kategori + '</span>' +
+                        '</div>' +
+                        '<div style="display:flex; align-items:flex-start; gap:8px; margin-bottom:12px;">' +
+                            '<span style="font-size:13px; line-height:1;">📍</span>' +
+                            '<span style="font-size:12px; color:#475569; line-height:1.3;">' + u.alamat + '</span>' +
+                        '</div>' +
+                        '<a href="/operator/umkm/' + u.id + '/show" style="display:block; text-align:center; background-color:#2563eb; color:#ffffff; padding:8px 12px; border-radius:6px; font-size:12px; font-weight:600; text-decoration:none; transition: background-color 0.2s;">Lihat Detail Info</a>' +
                         '</div>'
                     );
 
@@ -565,17 +403,27 @@
         }
 
         function closeScanModal() {
+            // Segera sembunyikan modal agar UI responsif dan tidak terblokir error scanner
+            document.getElementById('scan-status').classList.add('hidden');
+            document.getElementById('scanModal').classList.add('hidden');
+            document.body.style.overflow = '';
+
             if (html5QrCode) {
-                html5QrCode.stop().catch(() => {}).finally(() => {
-                    html5QrCode.clear();
+                try {
+                    // Check if it's currently scanning
+                    if (html5QrCode.getState && html5QrCode.getState() === 2) {
+                        html5QrCode.stop().catch(() => {}).finally(() => {
+                            html5QrCode.clear();
+                            html5QrCode = null;
+                        });
+                    } else {
+                        html5QrCode.clear();
+                        html5QrCode = null;
+                    }
+                } catch(e) {
+                    // Ignore errors if clear fails
                     html5QrCode = null;
-                    document.getElementById('scan-status').classList.add('hidden');
-                    document.getElementById('scanModal').classList.add('hidden');
-                    document.body.style.overflow = '';
-                });
-            } else {
-                document.getElementById('scanModal').classList.add('hidden');
-                document.body.style.overflow = '';
+                }
             }
         }
 
@@ -597,3 +445,169 @@
         });
     </script>
 @endsection
+@push('scripts')
+<script>
+    // Debounce function for search
+    function debounce(func, wait) {
+        let timeout;
+        return function executedFunction(...args) {
+            const later = () => {
+                clearTimeout(timeout);
+                func(...args);
+            };
+            clearTimeout(timeout);
+            timeout = setTimeout(later, wait);
+        };
+    }
+
+    // Global trigger function for filtering
+    window.triggerFilter = function() {
+        const form = document.getElementById('filter-form');
+        const url = new URL(form.action);
+        const formData = new FormData(form);
+        
+        for (const [key, value] of formData.entries()) {
+            if (value) {
+                url.searchParams.append(key, value);
+            }
+        }
+        
+        // Show loading state
+        const containers = ['#table-saya-container', '#table-wilayah-container'];
+        containers.forEach(id => {
+            const el = document.querySelector(id);
+            if (el) {
+                el.style.opacity = '0.5';
+                el.style.pointerEvents = 'none';
+            }
+        });
+        
+        url.searchParams.append('ajax', '1');
+        
+        fetch(url.toString(), {
+            headers: {
+                'X-Requested-With': 'XMLHttpRequest',
+                'Accept': 'application/json'
+            }
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                if (data.html_saya && document.getElementById('table-saya-container')) {
+                    document.getElementById('table-saya-container').innerHTML = data.html_saya;
+                }
+                if (data.html_wilayah && document.getElementById('table-wilayah-container')) {
+                    document.getElementById('table-wilayah-container').innerHTML = data.html_wilayah;
+                }
+                if (document.getElementById('badge-count-saya')) {
+                    document.getElementById('badge-count-saya').textContent = data.count_saya;
+                }
+                if (document.getElementById('badge-count-wilayah')) {
+                    document.getElementById('badge-count-wilayah').textContent = data.count_wilayah;
+                }
+                // Update URL without reload
+                url.searchParams.delete('ajax');
+                window.history.pushState({}, '', url.toString());
+                attachPaginationListeners();
+            }
+        })
+        .catch(error => console.error('Error fetching data:', error))
+        .finally(() => {
+            containers.forEach(id => {
+                const el = document.querySelector(id);
+                if (el) {
+                    el.style.opacity = '1';
+                    el.style.pointerEvents = 'auto';
+                }
+            });
+        });
+    };
+
+    // Attach search input listener
+    const searchInput = document.querySelector('input[name="search"]');
+    if (searchInput) {
+        searchInput.addEventListener('input', debounce(() => window.triggerFilter(), 500));
+    }
+
+    // Attach pagination link listeners
+    function attachPaginationListeners() {
+        document.querySelectorAll('.pagination a').forEach(link => {
+            // Remove existing listener to prevent duplicates
+            const newLink = link.cloneNode(true);
+            link.parentNode.replaceChild(newLink, link);
+            
+            newLink.addEventListener('click', function(e) {
+                e.preventDefault();
+                const url = new URL(this.href);
+                const form = document.getElementById('filter-form');
+                const formData = new FormData(form);
+                
+                // Keep form parameters
+                for (const [key, value] of formData.entries()) {
+                    if (value && !url.searchParams.has(key)) {
+                        url.searchParams.append(key, value);
+                    }
+                }
+                
+                // Show loading state
+                const containers = ['#table-saya-container', '#table-wilayah-container'];
+                containers.forEach(id => {
+                    const el = document.querySelector(id);
+                    if (el) {
+                        el.style.opacity = '0.5';
+                        el.style.pointerEvents = 'none';
+                    }
+                });
+                
+                url.searchParams.append('ajax', '1');
+                
+                fetch(url.toString(), {
+                    headers: {
+                        'X-Requested-With': 'XMLHttpRequest',
+                        'Accept': 'application/json'
+                    }
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        if (data.html_saya && document.getElementById('table-saya-container')) {
+                            document.getElementById('table-saya-container').innerHTML = data.html_saya;
+                        }
+                        if (data.html_wilayah && document.getElementById('table-wilayah-container')) {
+                            document.getElementById('table-wilayah-container').innerHTML = data.html_wilayah;
+                        }
+                        if (document.getElementById('badge-count-saya')) {
+                            document.getElementById('badge-count-saya').textContent = data.count_saya;
+                        }
+                        if (document.getElementById('badge-count-wilayah')) {
+                            document.getElementById('badge-count-wilayah').textContent = data.count_wilayah;
+                        }
+                        
+                        url.searchParams.delete('ajax');
+                        window.history.pushState({}, '', url.toString());
+                        attachPaginationListeners();
+                        
+                        // Scroll to top
+                        window.scrollTo({top: 0, behavior: 'smooth'});
+                    }
+                })
+                .catch(error => console.error('Error fetching data:', error))
+                .finally(() => {
+                    containers.forEach(id => {
+                        const el = document.querySelector(id);
+                        if (el) {
+                            el.style.opacity = '1';
+                            el.style.pointerEvents = 'auto';
+                        }
+                    });
+                });
+            });
+        });
+    }
+
+    // Initial attachment
+    document.addEventListener('DOMContentLoaded', () => {
+        attachPaginationListeners();
+    });
+</script>
+@endpush

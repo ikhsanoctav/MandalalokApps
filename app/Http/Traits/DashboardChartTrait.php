@@ -225,9 +225,12 @@ trait DashboardChartTrait
                 'nama_usaha' => $umkm->nama_usaha,
                 'no_pendaftaran' => $umkm->no_pendaftaran,
                 'status_verifikasi' => $umkm->status_verifikasi,
+                'kategori' => $umkm->kategori ? ['nama_kategori' => $umkm->kategori->nama_kategori] : null,
+                'sektor' => $umkm->sektor ? ['nama_sektor' => $umkm->sektor->nama_sektor] : null,
                 'pemilik' => $umkm->pemilik ? [
                     'nama_lengkap' => $umkm->pemilik->nama_lengkap,
                     'kelurahan' => $umkm->pemilik->kelurahan,
+                    'nik_masked' => $umkm->pemilik->nik_masked
                 ] : null,
             ];
         })->toArray();

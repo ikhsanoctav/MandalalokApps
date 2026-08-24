@@ -67,6 +67,15 @@ class VerifikasiController extends Controller
         $kategoris = KategoriUMKM::all();
         $pendingCount = UMKM::where('status_verifikasi', 'menunggu_verifikasi')->count();
 
+        if ($request->ajax() || $request->has('ajax')) {
+            $html = view('admin.verifikasi.table-data', compact('umkms'))->render();
+            return response()->json([
+                'success' => true,
+                'html' => $html,
+                'count' => $umkms->total()
+            ]);
+        }
+
         return view('admin.verifikasi.index', compact('umkms', 'kelurahans', 'kategoris', 'pendingCount'));
     }
 

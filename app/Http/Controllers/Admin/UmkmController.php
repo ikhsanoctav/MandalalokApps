@@ -30,7 +30,7 @@ class UmkmController extends Controller
         $kategori_id = $request->get('kategori');
         $sektor_id = $request->get('sektor');
         $status = $request->get('status_verifikasi');
-        $perPage = $request->get('per_page', 10);
+        $perPage = $request->get('per_page', 20);
 
         $query = UMKM::with(['pemilik', 'kategori', 'sektor']);
 
@@ -529,5 +529,20 @@ class UmkmController extends Controller
     {
         $umkm = UMKM::with(['pemilik', 'kategori', 'sektor', 'petugas'])->findOrFail($id);
         return view('umkm.print-dokumen', compact('umkm'));
+    }
+
+    public function umkmModal($id)
+    {
+        try {
+            $umkm = UMKM::with(['pemilik', 'kategori', 'sektor', 'produks'])->findOrFail($id);
+            $html = view('superadmin.umkm.modal-detail', compact('umkm'))->render();
+            return response()->json([
+                'success' => true,
+                'html' => $html,
+                'isPending' => $umkm->status_verifikasi === 'menunggu_verifikasi',
+            ]);
+        } catch (\Exception $e) {
+            return response()->json(['success' => false, 'message' => 'Data UMKM tidak ditemukan.'], 404);
+        }
     }
 }

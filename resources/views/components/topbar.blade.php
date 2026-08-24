@@ -35,13 +35,16 @@
     $breadcrumbs = [];
     
     // Add Dashboard as the first segment
-    $dashboardRoute = 'dashboard';
+    $routePrefix = 'pelaku';
     if ($userRole === 'super_admin') {
         $dashboardRoute = 'superadmin.dashboard';
+        $routePrefix = 'superadmin';
     } elseif ($userRole === 'admin_kecamatan') {
         $dashboardRoute = 'admin.dashboard';
+        $routePrefix = 'admin';
     } elseif ($userRole === 'operator_lapangan') {
         $dashboardRoute = 'operator.dashboard';
+        $routePrefix = 'operator';
     } elseif ($userRole === 'pelaku_umkm') {
         $dashboardRoute = 'pelaku.dashboard';
     }
@@ -249,9 +252,16 @@
                     foreach ($filtered as $seg) {
                         $label = isset($dictionary[strtolower($seg)]) ? $dictionary[strtolower($seg)] : ucwords(str_replace(['-', '_'], ' ', $seg));
                         if (strtolower($seg) !== 'superadmin' && strtolower($seg) !== 'admin' && strtolower($seg) !== 'operator' && strtolower($seg) !== 'pelaku') {
+                            $resolvedUrl = '#';
+                            if (Route::has("{$routePrefix}.{$seg}.index")) {
+                                $resolvedUrl = route("{$routePrefix}.{$seg}.index");
+                            } elseif (Route::has("{$routePrefix}.{$seg}")) {
+                                $resolvedUrl = route("{$routePrefix}.{$seg}");
+                            }
+                            
                             $breadcrumbs[] = [
                                 'label' => $label,
-                                'url' => '#',
+                                'url' => $resolvedUrl,
                                 'active' => false
                             ];
                         }
@@ -267,6 +277,14 @@
     } else {
         // Mark Dashboard as active if no routeName or it is dashboard
         $breadcrumbs[0]['active'] = true;
+    }
+    
+    // Safety check: Ensure the last breadcrumb is always active
+    if (!empty($breadcrumbs)) {
+        $lastIndex = count($breadcrumbs) - 1;
+        foreach ($breadcrumbs as $i => &$item) {
+            $item['active'] = ($i === $lastIndex);
+        }
     }
 @endphp
 
@@ -313,15 +331,15 @@
                 </svg>
             </button>
 
-            <div class="mobile-topbar-brand flex md:hidden items-center gap-2 min-w-0">
+            <a href="{{ route($dashboardRoute) }}" class="mobile-topbar-brand flex md:hidden items-center gap-2 min-w-0">
                 <img src="{{ asset('images/Logo_Mandalaloka.png') }}" alt="Logo" class="mobile-topbar-logo h-8 w-8 object-contain flex-shrink-0">
                 <div class="min-w-0">
                     <h1 class="mobile-topbar-title text-sm font-bold text-blue-600 leading-tight">Mandalaloka</h1>
                     <p class="mobile-topbar-role text-[9px] text-slate-400 truncate max-w-[8rem]">{{ ucwords(str_replace('_', ' ', $userRole)) }}</p>
                 </div>
-            </div>
+            </a>
 
-            <div class="hidden md:flex items-center gap-1.5 text-xs text-slate-500 flex-wrap">
+            <div class="hidden md:flex items-center gap-1.5 text-xs text-slate-500 flex-wrap pl-2 md:pl-6 lg:pl-2">
                 @foreach ($breadcrumbs as $index => $item)
                     @if ($index > 0)
                         <svg class="w-3 h-3 text-slate-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -330,7 +348,7 @@
                     @endif
 
                     @if ($item['active'])
-                        <span class="text-blue-600 font-bold bg-blue-50 border border-blue-100/60 px-2.5 py-0.5 rounded-xl">
+                        <a href="{{ $item['url'] !== '#' ? $item['url'] : url()->current() }}" class="inline-flex items-center gap-1 text-blue-600 font-bold bg-blue-50 border border-blue-100/60 px-2.5 py-0.5 rounded-xl hover:bg-blue-100 transition-colors">
                             @if ($index === count($breadcrumbs) - 1)
                                 @hasSection('breadcrumb')
                                     @yield('breadcrumb')
@@ -340,7 +358,7 @@
                             @else
                                 {{ $item['label'] }}
                             @endif
-                        </span>
+                        </a>
                     @else
                         <a href="{{ $item['url'] }}" class="flex items-center gap-1 hover:text-blue-600 transition-colors font-medium">
                             @if ($item['label'] === 'Dashboard')

@@ -15,7 +15,7 @@
 @section('breadcrumb', 'Notifikasi / Riwayat')
 
 @section('content')
-<div class="max-w-5xl mx-auto space-y-6">
+<div class="space-y-4 md:space-y-6">
     <!-- Header Card -->
     <div class="bg-white rounded-2xl p-6 shadow-sm border border-slate-200/60 flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
         <div>

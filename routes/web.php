@@ -66,6 +66,34 @@ Route::post('/katalog-umkm/ulasan/{id}/dislike', [KatalogUmkmController::class, 
 Route::post('/api/chat', [ChatbotController::class, 'sendMessage'])->name('api.chat')->middleware('web');
 Route::get('/api/n8n/umkm-search', [ChatbotController::class, 'searchUmkm'])->name('api.n8n.umkm_search')->middleware('web');
 
+Route::get('/warta', function (\Illuminate\Http\Request $request) {
+    $query = Berita::where('status', 'published')
+        ->where('published_at', '<=', now());
+
+    if ($request->filled('search')) {
+        $search = $request->search;
+        $query->where(function ($q) use ($search) {
+            $q->where('judul', 'like', "%{$search}%")
+              ->orWhere('konten', 'like', "%{$search}%")
+              ->orWhere('penulis', 'like', "%{$search}%")
+              ->orWhere('kategori', 'like', "%{$search}%");
+        });
+    }
+
+    if ($request->filled('kategori')) {
+        $query->where('kategori', $request->kategori);
+    }
+
+    $beritaList = $query->latest('published_at')->paginate(9)->withQueryString();
+    $kategoris = Berita::where('status', 'published')
+        ->whereNotNull('kategori')
+        ->where('kategori', '!=', '')
+        ->distinct()
+        ->pluck('kategori');
+
+    return view('warta.index', compact('beritaList', 'kategoris'));
+})->name('warta.index');
+
 Route::get('/warta/{id}', function ($id) {
     $berita = Berita::findOrFail($id);
 
@@ -150,6 +178,7 @@ Route::middleware(['auth', RoleMiddleware::class.':admin_kecamatan'])->prefix('a
     Route::get('/umkm/create', [UmkmController::class, 'create'])->name('umkm.create');
     Route::post('/umkm', [UmkmController::class, 'store'])->name('umkm.store');
     Route::get('/umkm/scan-result', [UmkmController::class, 'scanResult'])->name('umkm.scan-result');
+    Route::get('/umkm/{id}/modal', [UmkmController::class, 'umkmModal'])->name('umkm.modal');
     Route::get('/umkm/{id}', [UmkmController::class, 'show'])->name('umkm.show');
     Route::get('/umkm/{id}/print-qr', [UmkmController::class, 'printQr'])->name('umkm.print-qr');
     Route::get('/umkm/{id}/print-dokumen', [UmkmController::class, 'printDokumen'])->name('umkm.print-dokumen');
