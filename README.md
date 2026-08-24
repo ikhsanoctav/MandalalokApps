@@ -30,17 +30,27 @@ Platform ini menghubungkan pihak **Pemerintah Kecamatan**, **Petugas Lapangan (S
 
 ## 🌟 Fitur Utama Sistem
 
-```
-┌────────────────────────────────────────────────────────────────────────┐
-│                          EKOSISTEM MANDALALOKA                         │
-├───────────────────┬───────────────────┬────────────────────────────────┤
-│    PORTAL PUBLIK  │    PELAKU USAHA   │       ADMIN & PETUGAS          │
-│  - Katalog Produk │  - Biodata & KTP  │  - Dashboard Statistik Wilayah │
-│  - Peta Interaktif│  - Etalase Produk │  - Validasi UMKM & Verifikasi  │
-│  - Portal Warta   │  - Pengajuan Dana │  - Watermarking Dokumen KTP    │
-│  - Ulasan & Rating│  - Pantau Status  │  - Sensus GPS Lapangan & Foto  │
-│  - Rute WhatsApp  │  - QR Code Usaha  │  - Ekspor/Impor Laporan Excel  │
-└───────────────────┴───────────────────┴────────────────────────────────┘
+```text
+🏛️ Ekosistem Mandalaloka
+├── 🌐 Portal Publik (Masyarakat & Tamu)
+│   ├── 🛍️ Katalog Produk Unggulan UMKM & Rating Review
+│   ├── 🗺️ Peta Interaktif Sebaran UMKM (Leaflet & OSM)
+│   ├── 📰 Portal Warta & Publikasi Kegiatan Kecamatan
+│   └── 💬 Navigasi Rute & Direct Chat WhatsApp Penjual
+│
+├── 🏪 Portal Pelaku Usaha (Pemilik UMKM)
+│   ├── 👤 Manajemen Biodata Diri & Berkas KTP
+│   ├── 📦 Manajemen Profil Usaha & Etalase Produk
+│   ├── 📑 Pengajuan Program Bantuan Modal
+│   ├── 🔍 Pemantauan Status Verifikasi Real-Time
+│   └── 🏷️ Generator QR Code & Cetak Lembar Identitas Usaha
+│
+└── 🛡️ Panel Pengelola (Super Admin, Admin, & Petugas)
+    ├── 📊 Dashboard Statistik & Grafik Wilayah Mandalajati
+    ├── 🛡️ Pusat Validasi UMKM & Dynamic KTP Watermarking
+    ├── 📍 Sensus Lapangan (GPS Tagging & Dokumentasi Foto)
+    ├── 📋 Verifikasi Fisik Faktual di Lokasi Usaha
+    └── 📑 Ekspor / Impor Rekapitulasi Data (Excel)
 ```
 
 ### 1. 📋 Pendataan & Manajemen Profil UMKM
