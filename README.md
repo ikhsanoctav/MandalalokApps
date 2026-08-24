@@ -1,58 +1,177 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
-
 <p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
+  <img src="https://raw.githubusercontent.com/ikhsanoctav/MandalalokApps/main/public/images/Logo_Mandalaloka.png" width="130" alt="Logo Mandalaloka">
 </p>
 
-## About Laravel
+<h1 align="center">Mandalaloka Apps</h1>
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+<p align="center">
+  <strong>Sistem Informasi Pendataan, Pemetaan Geospasial, dan Pemberdayaan UMKM Terpadu Berbasis Kecerdasan Buatan (AI)</strong><br>
+  <em>Kecamatan Mandalajati, Kota Bandung, Jawa Barat</em>
+</p>
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+<p align="center">
+  <img src="https://img.shields.io/badge/Laravel-11.x-FF2D20?style=for-the-badge&logo=laravel&logoColor=white" alt="Laravel 11">
+  <img src="https://img.shields.io/badge/PHP-8.4%2B-777BB4?style=for-the-badge&logo=php&logoColor=white" alt="PHP 8.4">
+  <img src="https://img.shields.io/badge/MySQL-8.4-4479A1?style=for-the-badge&logo=mysql&logoColor=white" alt="MySQL 8.4">
+  <img src="https://img.shields.io/badge/Tailwind_CSS-38B2AC?style=for-the-badge&logo=tailwind-css&logoColor=white" alt="Tailwind CSS">
+  <img src="https://img.shields.io/badge/Docker-Ready-2496ED?style=for-the-badge&logo=docker&logoColor=white" alt="Docker Ready">
+  <img src="https://img.shields.io/badge/AI_Engine-n8n_%26_Ollama-EA4B71?style=for-the-badge&logo=openai&logoColor=white" alt="AI Engine">
+</p>
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+---
 
-## Learning Laravel
+## 📌 Tentang Mandalaloka
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+**Mandalaloka** adalah platform web terpadu yang dirancang khusus untuk memodernisasi ekosistem Usaha Mikro, Kecil, dan Menengah (UMKM) di wilayah **Kecamatan Mandalajati, Kota Bandung**. Platform ini menjembatani kolaborasi antara pemerintah kecamatan, petugas survei lapangan, pelaku usaha, dan masyarakat umum melalui digitalisasi data, pemetaan spasial presisi, dan analisis kebijakan berbasis kecerdasan buatan (*AI Decision Support System*).
 
-In addition, [Laracasts](https://laracasts.com) contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+---
 
-You can also watch bite-sized lessons with real-world projects on [Laravel Learn](https://laravel.com/learn), where you will be guided through building a Laravel application from scratch while learning PHP fundamentals.
+## 🌟 Fitur Utama
 
-## Agentic Development
+### 1. 🗺️ Pemetaan Geospasial Interaktif (OpenStreetMap & Leaflet)
+* **Visualisasi Sebaran Spasial**: Peta digital titik lokasi seluruh UMKM se-Kecamatan Mandalajati (Karang Pamulang, Sindangjaya, Pasir Impun, Jatihandap).
+* **Clustering Dinamis**: Pengelompokan marker otomatis saat peta diperkecil untuk menjaga performa rendering.
+* **Filter Multi-Kriteria**: Pencarian dan penyaringan data secara langsung berdasarkan Sektor Usaha, Kelurahan, hingga radius wilayah.
+* **Integrasi Direct Contact**: Pop-up interaktif dilengkapi profil usaha, kategori, rute navigasi, dan tombol direct chat WhatsApp.
 
-Laravel's predictable structure and conventions make it ideal for AI coding agents like Claude Code, Cursor, and GitHub Copilot. Install [Laravel Boost](https://laravel.com/docs/ai) to supercharge your AI workflow:
+### 2. 🤖 AI Decision Support System (DSS) & Policy Generator
+* **Analisis Kebijakan Otomatis**: Integrasi dengan engine **n8n Workflow** & **Ollama LLM** untuk menganalisis tren pertumbuhan, omzet, dan disparitas antar wilayah.
+* **SWOT & Priority Matrix**: Pembuatan analisis SWOT real-time, identifikasi sektor dominan, dan penetapan prioritas intervensi bantuan modal/pelatihan.
+* **Rekomendasi Program Kerja**: Saran langkah operasional jangka pendek, menengah, dan panjang untuk pimpinan kecamatan.
+
+### 3. 🛍️ Etalase Digital & Katalog Publik UMKM
+* **Katalog Produk Terverifikasi**: Menampilkan ragam produk unggulan lokal lengkap dengan foto, deskripsi, harga, dan identitas UMKM.
+* **Sistem Rating & Ulasan Komunitas**: Masyarakat dapat memberikan rating bintang serta reaksi *like/dislike* pada testimoni ulasan.
+* **Pencarian Cepat**: Filter pencarian produk berdasarkan nama, sektor usaha, atau lokasi kelurahan.
+
+### 4. 📚 Manajemen Pelatihan & Absensi QR Code
+* **Publikasi & Pendaftaran Pelatihan**: Pendaftaran pelatihan kewirausahaan secara mandiri oleh pelaku usaha dengan kuota dinamis.
+* **Scanner Presensi Real-Time**: Petugas lapangan dapat memverifikasi kehadiran peserta pelatihan melalui pemindaian QR Code peserta via kamera perangkat.
+
+### 5. 📑 Pengajuan & Penyaluran Program Bantuan
+* **Pendaftaran Program Digital**: Pelaku usaha dapat mengunggah dokumen persyaratan (Proposal, KTP, NIB) secara mandiri.
+* **Verifikasi Berjenjang**: Alur verifikasi dokumen dan verifikasi faktual lapangan oleh Admin Kecamatan & Operator Lapangan.
+
+### 6. 💬 Chatbot Cerdas "Mang Loka"
+* **Asisten Virtual 24/7**: Chatbot interaktif di halaman depan yang dibekali basis pengetahuan regulasi UMKM, tata cara perizinan (NIB/Halal), informasi bantuan, serta statistik kecamatan.
+
+---
+
+## 👥 Hak Akses Pengguna (Role-Based Access Control)
+
+| Role | Tanggung Jawab & Akses Utama |
+| :--- | :--- |
+| **Super Admin** | Manajemen pengguna & role (RBAC), kontrol master wilayah & sektor, audit log sistem, backup database, dan ringkasan DSS tingkat eksekutif. |
+| **Admin Kecamatan** | Verifikasi legalitas KTP akun UMKM, verifikasi proposal bantuan, pengelolaan agenda pelatihan, dan warta publikasi kecamatan. |
+| **Petugas Lapangan** | Input survei UMKM baru langsung dari lapangan, tagging GPS & upload foto usaha, verifikasi lapangan fisik, dan scanner QR presensi pelatihan. |
+| **Pelaku UMKM** | Manajemen profil usaha, input katalog produk/jasa, pendaftaran program bantuan, dan riwayat keikutsertaan pelatihan. |
+| **Publik (Tamu)** | Eksplorasi katalog produk, peta sebaran UMKM, membaca warta berita, konsultasi dengan chatbot Mang Loka, dan pendaftaran akun baru. |
+
+---
+
+## 🛠️ Arsitektur Teknologi
+
+* **Backend**: [Laravel 11](https://laravel.com/) (PHP 8.4+)
+* **Database**: [MySQL 8.4](https://www.mysql.com/)
+* **Frontend**: Blade Templating, [Tailwind CSS](https://tailwindcss.com/), [Alpine.js](https://alpinejs.dev/), [Chart.js](https://www.chartjs.org/)
+* **Peta & GIS**: [Leaflet.js](https://leafletjs.com/) & [OpenStreetMap](https://www.openstreetmap.org/)
+* **Otomasi & AI**: [n8n Automation](https://n8n.io/) + [Ollama LLM](https://ollama.com/) (Qwen 2.5)
+* **Autentikasi & Otorisasi**: Laravel Breeze & [Spatie Laravel Permission](https://spatie.be/docs/laravel-permission/)
+* **Containerization**: [Docker](https://www.docker.com/) & Docker Compose / Laravel Sail
+
+---
+
+## 🚀 Panduan Memulai (Instalasi Lokal)
+
+### Prasyarat
+* [Docker Desktop](https://www.docker.com/products/docker-desktop/) (atau Docker Engine di Linux)
+* [Git](https://git-scm.com/)
+
+### Langkah Instalasi (Menggunakan Docker / Laravel Sail)
+
+1. **Clone repositori:**
+   ```bash
+   git clone https://github.com/ikhsanoctav/MandalalokApps.git
+   cd MandalalokApps
+   ```
+
+2. **Salin file konfigurasi environment:**
+   ```bash
+   cp .env.example .env
+   ```
+
+3. **Jalankan container menggunakan Laravel Sail:**
+   ```bash
+   ./vendor/bin/sail up -d
+   ```
+
+4. **Install dependensi & generate Application Key:**
+   ```bash
+   ./vendor/bin/sail composer install
+   ./vendor/bin/sail artisan key:generate
+   ```
+
+5. **Jalankan migrasi database & seeder:**
+   ```bash
+   ./vendor/bin/sail artisan migrate --seed
+   ```
+
+6. **Buat symlink penyimpanan berkas:**
+   ```bash
+   ./vendor/bin/sail artisan storage:link
+   ```
+
+7. **Kompilasi asset frontend:**
+   ```bash
+   ./vendor/bin/sail npm install
+   ./vendor/bin/sail npm run dev
+   ```
+
+8. **Buka aplikasi di browser:**
+   * Aplikasi Web: `http://localhost:8080` (atau `http://localhost`)
+   * phpMyAdmin: `http://localhost:8081`
+
+---
+
+## 🧪 Menjalankan Pengujian (Testing)
+
+Aplikasi dilengkapi dengan rangkaian automated test suite (*Feature & Unit Tests*):
 
 ```bash
-composer require laravel/boost --dev
-
-php artisan boost:install
+# Menjalankan seluruh test suite via Sail
+./vendor/bin/sail test
 ```
 
-Boost provides your agent 15+ tools and skills that help agents build Laravel applications while following best practices.
+---
 
-## Contributing
+## 📁 Struktur Direktori Utama
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+```text
+MandalalokaApps/
+├── app/
+│   ├── Http/Controllers/     # Controller per role (SuperAdmin, Admin, Petugas, Pelaku, Api)
+│   ├── Models/                  # Model Eloquent (UMKM, Pemilik, Pelatihan, Pengajuan, DSS)
+│   └── Services/                # Service Layer (DssService, UmkmService, OllamaService)
+├── database/
+│   ├── migrations/              # Skema migrasi database
+│   └── seeders/                 # Seeder master data (Wilayah, Kategori, Role)
+├── resources/
+│   └── views/
+│       ├── landing/partials/    # Komponen modular halaman depan (Navbar, Hero, Map, dll.)
+│       ├── superadmin/          # Panel kontrol Super Admin
+│       ├── admin/               # Panel kontrol Admin Kecamatan
+│       ├── petugas/             # Panel operasional Petugas Lapangan
+│       ├── pelaku/              # Dashboard Pelaku UMKM
+│       └── welcome.blade.php    # Halaman depan utama
+├── routes/
+│   ├── web.php                  # Routing antarmuka web
+│   ├── api.php                  # REST API publik & aplikasi mobile
+│   └── auth.php                 # Routing autentikasi pengguna
+└── compose.yaml                 # Konfigurasi container Docker / Laravel Sail
+```
 
-## Code of Conduct
+---
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+## 📄 Lisensi
 
-## Security Vulnerabilities
-
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
-
-## License
-
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+Platform Mandalaloka dikembangkan untuk kebutuhan tata kelola data dan pemberdayaan UMKM Kecamatan Mandalajati, Kota Bandung. Proyek ini dilindungi di bawah lisensi [MIT License](LICENSE).
