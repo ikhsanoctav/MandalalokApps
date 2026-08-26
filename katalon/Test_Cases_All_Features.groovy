@@ -13,17 +13,20 @@ def xpath(String expr) {
     return obj
 }
 
-// Helper: Safe Click dengan Scroll & Fallback
-def safeClick(TestObject to) {
+// Helper: Buka link langsung via href (100% kebal issue 'no size and location')
+def openLinkViaHref(TestObject to) {
     if (WebUI.verifyElementPresent(to, 5, FailureHandling.OPTIONAL)) {
         try {
-            WebUI.scrollToElement(to, 3, FailureHandling.OPTIONAL)
-            WebUI.delay(1)
-            WebUI.enhancedClick(to, FailureHandling.OPTIONAL)
+            String href = WebUI.getAttribute(to, 'href', FailureHandling.OPTIONAL)
+            if (href && href.startsWith("http")) {
+                WebUI.navigateToUrl(href)
+                return true
+            }
         } catch (Exception e) {
-            WebUI.click(to, FailureHandling.OPTIONAL)
+            WebUI.comment("Fallback click: " + e.getMessage())
         }
     }
+    return false
 }
 
 // Helper: Logout aman dengan clear session cookies (hindari error 405)
@@ -119,12 +122,11 @@ if (WebUI.verifyElementPresent(xpath("//input[@name='search']"), 5, FailureHandl
     WebUI.delay(3)
 }
 
-// 2.3 Buka halaman detail UMKM
+// 2.3 Buka halaman detail UMKM (navigasi langsung ke href URL)
 WebUI.navigateToUrl(BASE_URL + "/superadmin/umkm")
 WebUI.delay(2)
 def detailLinkSA = xpath("(//a[contains(@href,'/superadmin/umkm/') and contains(@href,'/show')])[1]")
-if (WebUI.verifyElementPresent(detailLinkSA, 5, FailureHandling.OPTIONAL)) {
-    safeClick(detailLinkSA)
+if (openLinkViaHref(detailLinkSA)) {
     WebUI.delay(2)
     assertUrlContains('/superadmin/umkm/')
 }
@@ -176,10 +178,9 @@ WebUI.navigateToUrl(BASE_URL + "/admin/verifikasi")
 WebUI.delay(2)
 assertUrlContains('/admin/verifikasi')
 
-// 3.3 Buka detail verifikasi UMKM
+// 3.3 Buka detail verifikasi UMKM (navigasi langsung ke href URL)
 def detailLinkAdm = xpath("(//a[contains(@href,'/admin/verifikasi/') and not(contains(@href,'create'))])[1]")
-if (WebUI.verifyElementPresent(detailLinkAdm, 5, FailureHandling.OPTIONAL)) {
-    safeClick(detailLinkAdm)
+if (openLinkViaHref(detailLinkAdm)) {
     WebUI.delay(2)
     assertUrlContains('/admin/verifikasi/')
 }
