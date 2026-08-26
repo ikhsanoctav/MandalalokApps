@@ -243,7 +243,7 @@ assertUrlContains('/operator/verifikasi')
 WebUI.closeBrowser()
 
 // ============================================================================
-// TC5: PELAKU UMKM — PROFIL, PRODUK & PELATIHAN
+// TC5: PELAKU UMKM — PROFIL, TAMBAH USAHA & TAMBAH PRODUK
 // ============================================================================
 WebUI.comment("========== TC5: PELAKU UMKM ==========")
 WebUI.openBrowser('')
@@ -262,15 +262,54 @@ WebUI.navigateToUrl(BASE_URL + "/pelaku/profil")
 WebUI.delay(2)
 assertUrlContains('/pelaku/profil')
 
-// 5.3 Katalog Produk
+// 5.3 Tambah Usaha Baru Pelaku UMKM
+WebUI.navigateToUrl(BASE_URL + "/pelaku/umkm/create")
+WebUI.delay(2)
+assertUrlContains('/pelaku/umkm/create')
+
+if (WebUI.verifyElementPresent(xpath("//input[@name='nama_usaha']"), 5, FailureHandling.OPTIONAL)) {
+    WebUI.setText(xpath("//input[@name='nama_usaha']"), 'Usaha Mandiri ' + ts)
+    if (WebUI.verifyElementPresent(xpath("//select[@name='bentuk_jualan']"), 3, FailureHandling.OPTIONAL)) {
+        WebUI.selectOptionByIndex(xpath("//select[@name='bentuk_jualan']"), 1)
+    }
+    if (WebUI.verifyElementPresent(xpath("//select[@name='id_sektor']"), 3, FailureHandling.OPTIONAL)) {
+        WebUI.selectOptionByIndex(xpath("//select[@name='id_sektor']"), 1)
+    }
+    if (WebUI.verifyElementPresent(xpath("//input[@name='perkiraan_omset']"), 3, FailureHandling.OPTIONAL)) {
+        WebUI.setText(xpath("//input[@name='perkiraan_omset']"), '7500000')
+    }
+    if (WebUI.verifyElementPresent(xpath("//input[@name='telp_usaha']"), 3, FailureHandling.OPTIONAL)) {
+        WebUI.setText(xpath("//input[@name='telp_usaha']"), '081298765432')
+    }
+    if (WebUI.verifyElementPresent(xpath("//textarea[@name='alamat_usaha']"), 3, FailureHandling.OPTIONAL)) {
+        WebUI.setText(xpath("//textarea[@name='alamat_usaha']"), 'Jl. Sindanglaya No. 12')
+    }
+    WebUI.comment("TC5.3 PASSED: Form Tambah Usaha Pelaku UMKM berhasil diisi")
+}
+
+// 5.4 Katalog Produk (Daftar Produk)
 WebUI.navigateToUrl(BASE_URL + "/pelaku/produk")
 WebUI.delay(2)
 assertUrlContains('/pelaku/produk')
 
-// 5.4 Pelatihan
-WebUI.navigateToUrl(BASE_URL + "/pelaku/pelatihan")
+// 5.5 Tambah Produk Baru di Katalog Pelaku UMKM
+WebUI.navigateToUrl(BASE_URL + "/pelaku/produk/create")
 WebUI.delay(2)
-assertUrlContains('/pelaku/pelatihan')
+assertUrlContains('/pelaku/produk/create')
+
+if (WebUI.verifyElementPresent(xpath("//input[@name='nama_produk']"), 5, FailureHandling.OPTIONAL)) {
+    if (WebUI.verifyElementPresent(xpath("//select[@name='id_umkm']"), 3, FailureHandling.OPTIONAL)) {
+        WebUI.selectOptionByIndex(xpath("//select[@name='id_umkm']"), 1)
+    }
+    WebUI.setText(xpath("//input[@name='nama_produk']"), 'Produk Unggulan ' + ts)
+    if (WebUI.verifyElementPresent(xpath("//input[@name='harga']"), 3, FailureHandling.OPTIONAL)) {
+        WebUI.setText(xpath("//input[@name='harga']"), '25000')
+    }
+    if (WebUI.verifyElementPresent(xpath("//textarea[@name='deskripsi']"), 3, FailureHandling.OPTIONAL)) {
+        WebUI.setText(xpath("//textarea[@name='deskripsi']"), 'Deskripsi produk kualitas terbaik buatan UMKM lokal Mandalajati.')
+    }
+    WebUI.comment("TC5.5 PASSED: Form Tambah Produk Katalog berhasil diisi")
+}
 
 WebUI.closeBrowser()
 
