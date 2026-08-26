@@ -151,11 +151,6 @@ WebUI.navigateToUrl(BASE_URL + "/superadmin/sektor")
 WebUI.delay(2)
 assertUrlContains('/superadmin/sektor')
 
-// 2.8 Pengajuan Bantuan
-WebUI.navigateToUrl(BASE_URL + "/superadmin/pengajuan")
-WebUI.delay(2)
-assertUrlContains('/superadmin/pengajuan')
-
 WebUI.closeBrowser()
 
 // ============================================================================
@@ -248,7 +243,7 @@ assertUrlContains('/operator/verifikasi')
 WebUI.closeBrowser()
 
 // ============================================================================
-// TC5: PELAKU UMKM — PROFIL, PRODUK & PENGAJUAN
+// TC5: PELAKU UMKM — PROFIL, PRODUK & PELATIHAN
 // ============================================================================
 WebUI.comment("========== TC5: PELAKU UMKM ==========")
 WebUI.openBrowser('')
@@ -272,12 +267,7 @@ WebUI.navigateToUrl(BASE_URL + "/pelaku/produk")
 WebUI.delay(2)
 assertUrlContains('/pelaku/produk')
 
-// 5.4 Pengajuan Bantuan
-WebUI.navigateToUrl(BASE_URL + "/pelaku/pengajuan")
-WebUI.delay(2)
-assertUrlContains('/pelaku/pengajuan')
-
-// 5.5 Pelatihan
+// 5.4 Pelatihan
 WebUI.navigateToUrl(BASE_URL + "/pelaku/pelatihan")
 WebUI.delay(2)
 assertUrlContains('/pelaku/pelatihan')
