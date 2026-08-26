@@ -173,7 +173,7 @@
                         </div>
 
                         <div class="flex justify-end gap-2 pt-2 border-t">
-                            <button type="button" onclick="detailUmkm('{{ $umkm->id_umkm }}')" title="Lihat Detail"
+                            <a href="{{ route('superadmin.umkm.show', $umkm->id_umkm) }}" data-no-ajax="true" title="Detail"
                                 class="p-2 text-blue-600 hover:bg-blue-50 rounded-2xl transition-all">
                                 <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -182,7 +182,7 @@
                                         d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z">
                                     </path>
                                 </svg>
-                            </button>
+                            </a>
                             <a href="{{ route('superadmin.umkm.edit', $umkm->id_umkm) }}" title="Edit Data" data-no-ajax="true"
                                 class="p-2 text-amber-600 hover:bg-amber-50 rounded-2xl transition-all">
                                 <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -293,7 +293,7 @@
                                 </td>
                                 <td class="px-4 py-3 text-center">
                                     <div class="flex items-center justify-center gap-1">
-                                        <button type="button" onclick="detailUmkm('{{ $umkm->id_umkm }}')" title="Lihat Detail"
+                                        <a href="{{ route('superadmin.umkm.show', $umkm->id_umkm) }}" data-no-ajax="true" title="Detail"
                                             class="text-blue-600 hover:bg-blue-50 p-1.5 rounded-2xl transition-all">
                                             <svg class="w-5 h-5" fill="none" stroke="currentColor"
                                                 viewBox="0 0 24 24">
@@ -303,7 +303,7 @@
                                                     d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z">
                                                 </path>
                                             </svg>
-                                        </button>
+                                        </a>
                                         <a href="{{ route('superadmin.umkm.edit', $umkm->id_umkm) }}" title="Edit Data" data-no-ajax="true"
                                             class="text-amber-600 hover:bg-amber-50 p-1.5 rounded-2xl transition-all">
                                             <svg class="w-5 h-5" fill="none" stroke="currentColor"
@@ -796,7 +796,65 @@
                     resetState();
                 });
             }
-        })();
+        
+            window.triggerFilter = function() {
+                const filterForm = document.getElementById('filterForm');
+                if (!filterForm) return;
+
+                const formData = new FormData(filterForm);
+                const params = new URLSearchParams();
+                for (const [key, val] of formData.entries()) {
+                    if (val !== null && val !== undefined && val.toString().trim() !== '') {
+                        params.append(key, val);
+                    }
+                }
+                const actionUrl = filterForm.action.split('?')[0];
+                const fullUrl = actionUrl + (params.toString() ? '?' + params.toString() : '');
+                window.performAjaxFetch(fullUrl);
+            };
+
+            function setupListeners() {
+                const filterForm = document.getElementById('filterForm');
+                const tableContainer = document.getElementById('umkmTableContainer');
+                if (!filterForm || !tableContainer) return;
+
+                filterForm.addEventListener('submit', function(e) {
+                    e.preventDefault();
+                    window.triggerFilter();
+                });
+
+                const resetLink = filterForm.querySelector('a[href*="umkm"]');
+                if (resetLink) {
+                    resetLink.addEventListener('click', function(e) {
+                        e.preventDefault();
+                        filterForm.querySelectorAll('input[type="text"]').forEach(i => i.value = '');
+                        filterForm.querySelectorAll('select').forEach(s => s.selectedIndex = 0);
+                        window.triggerFilter();
+                    });
+                }
+
+                tableContainer.addEventListener('click', function(e) {
+                    const link = e.target.closest('a');
+                    if (link && link.href && tableContainer.contains(link) && !link.hasAttribute('data-no-ajax')) {
+                        const isPagination = link.closest('nav') || link.closest('.pagination') || link.href.includes('page=');
+                        if (isPagination) {
+                            e.preventDefault();
+                            window.performAjaxFetch(link.href);
+                        }
+                    }
+                });
+
+                window.addEventListener('popstate', function() {
+                    window.performAjaxFetch(window.location.href);
+                });
+            }
+
+            if (document.readyState === 'loading') {
+                document.addEventListener('DOMContentLoaded', setupListeners);
+            } else {
+                setupListeners();
+            }
+})();
 
         function detailUmkm(id) {
             const modalContent = document.getElementById('modalContent');

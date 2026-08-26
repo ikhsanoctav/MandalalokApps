@@ -780,7 +780,65 @@
                     resetState();
                 });
             }
-        })();
+        
+            window.triggerFilter = function() {
+                const filterForm = document.getElementById('filterForm');
+                if (!filterForm) return;
+
+                const formData = new FormData(filterForm);
+                const params = new URLSearchParams();
+                for (const [key, val] of formData.entries()) {
+                    if (val !== null && val !== undefined && val.toString().trim() !== '') {
+                        params.append(key, val);
+                    }
+                }
+                const actionUrl = filterForm.action.split('?')[0];
+                const fullUrl = actionUrl + (params.toString() ? '?' + params.toString() : '');
+                window.performAjaxFetch(fullUrl);
+            };
+
+            function setupListeners() {
+                const filterForm = document.getElementById('filterForm');
+                const tableContainer = document.getElementById('umkmTableContainer');
+                if (!filterForm || !tableContainer) return;
+
+                filterForm.addEventListener('submit', function(e) {
+                    e.preventDefault();
+                    window.triggerFilter();
+                });
+
+                const resetLink = filterForm.querySelector('a[href*="umkm"]');
+                if (resetLink) {
+                    resetLink.addEventListener('click', function(e) {
+                        e.preventDefault();
+                        filterForm.querySelectorAll('input[type="text"]').forEach(i => i.value = '');
+                        filterForm.querySelectorAll('select').forEach(s => s.selectedIndex = 0);
+                        window.triggerFilter();
+                    });
+                }
+
+                tableContainer.addEventListener('click', function(e) {
+                    const link = e.target.closest('a');
+                    if (link && link.href && tableContainer.contains(link) && !link.hasAttribute('data-no-ajax')) {
+                        const isPagination = link.closest('nav') || link.closest('.pagination') || link.href.includes('page=');
+                        if (isPagination) {
+                            e.preventDefault();
+                            window.performAjaxFetch(link.href);
+                        }
+                    }
+                });
+
+                window.addEventListener('popstate', function() {
+                    window.performAjaxFetch(window.location.href);
+                });
+            }
+
+            if (document.readyState === 'loading') {
+                document.addEventListener('DOMContentLoaded', setupListeners);
+            } else {
+                setupListeners();
+            }
+})();
 
         // Barcode Scanner Logic
         let html5QrCode = null;

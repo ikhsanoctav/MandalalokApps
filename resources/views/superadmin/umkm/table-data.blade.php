@@ -49,10 +49,9 @@
             </div>
 
             <div class="grid grid-cols-2 gap-2 pt-1">
-                <button type="button" onclick="detailUmkm('{{ $umkm->id_umkm }}')"
-                    class="inline-flex items-center justify-center gap-2 px-3 py-2.5 rounded-lg bg-blue-50 text-blue-700 text-sm font-semibold">
+                <a href="{{ route('superadmin.umkm.show', $umkm->id_umkm) }}" data-no-ajax="true" class="inline-flex items-center justify-center gap-2 px-3 py-2.5 rounded-lg bg-blue-50 text-blue-700 text-sm font-semibold">
                     Detail
-                </button>
+                </a>
                 <a href="{{ route('superadmin.umkm.edit', $umkm->id_umkm) }}" data-no-ajax="true"
                     class="inline-flex items-center justify-center gap-2 px-3 py-2.5 rounded-lg bg-amber-50 text-amber-700 text-sm font-semibold">
                     Edit
@@ -61,7 +60,7 @@
                     <button type="button" onclick="verifyUmkm('{{ $umkm->id_umkm }}', '{{ e($umkm->nama_usaha) }}')"
                         class="inline-flex items-center justify-center gap-2 px-3 py-2.5 rounded-lg bg-emerald-50 text-emerald-700 text-sm font-semibold">
                         Verifikasi
-                    </button>
+                    </a>
                 @endif
                 @if ($umkm->status_verifikasi != 'ditolak')
                     <button type="button" onclick="rejectUmkm('{{ $umkm->id_umkm }}', '{{ e($umkm->nama_usaha) }}')"
@@ -161,7 +160,7 @@
                     <td class="px-6 py-4 text-center">
                         <div class="flex items-center justify-center gap-1">
                             
-                            <button type="button" onclick="detailUmkm('{{ $umkm->id_umkm }}')"
+                            <a href="{{ route('superadmin.umkm.show', $umkm->id_umkm) }}" data-no-ajax="true" title="Detail"
                                 class="text-blue-600 hover:text-blue-800 p-1.5 hover:bg-blue-50 rounded-2xl transition-all"
                                 title="Detail">
                                 <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -171,7 +170,7 @@
                                         d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z">
                                     </path>
                                 </svg>
-                            </button>
+                            </a>
 
                             <a href="{{ route('superadmin.umkm.edit', $umkm->id_umkm) }}" data-no-ajax="true"
                                 class="text-amber-600 hover:text-amber-800 p-1.5 hover:bg-amber-50 rounded-2xl transition-all"
