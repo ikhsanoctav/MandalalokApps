@@ -49,27 +49,27 @@
             </div>
 
             <div class="grid grid-cols-2 gap-2 pt-1">
-                <button onclick="showDetail('{{ $umkm->id_umkm }}')"
+                <button type="button" onclick="detailUmkm('{{ $umkm->id_umkm }}')"
                     class="inline-flex items-center justify-center gap-2 px-3 py-2.5 rounded-lg bg-blue-50 text-blue-700 text-sm font-semibold">
                     Detail
                 </button>
-                <a href="{{ route('superadmin.umkm.edit', $umkm->id_umkm) }}"
+                <a href="{{ route('superadmin.umkm.edit', $umkm->id_umkm) }}" data-no-ajax="true"
                     class="inline-flex items-center justify-center gap-2 px-3 py-2.5 rounded-lg bg-amber-50 text-amber-700 text-sm font-semibold">
                     Edit
                 </a>
                 @if ($umkm->status_verifikasi != 'terverifikasi')
-                    <button onclick="verifyUmkm('{{ $umkm->id_umkm }}', '{{ e($umkm->nama_usaha) }}')"
+                    <button type="button" onclick="verifyUmkm('{{ $umkm->id_umkm }}', '{{ e($umkm->nama_usaha) }}')"
                         class="inline-flex items-center justify-center gap-2 px-3 py-2.5 rounded-lg bg-emerald-50 text-emerald-700 text-sm font-semibold">
                         Verifikasi
                     </button>
                 @endif
                 @if ($umkm->status_verifikasi != 'ditolak')
-                    <button onclick="rejectUmkm('{{ $umkm->id_umkm }}', '{{ e($umkm->nama_usaha) }}')"
+                    <button type="button" onclick="rejectUmkm('{{ $umkm->id_umkm }}', '{{ e($umkm->nama_usaha) }}')"
                         class="inline-flex items-center justify-center gap-2 px-3 py-2.5 rounded-lg bg-red-50 text-red-700 text-sm font-semibold">
                         Tolak
                     </button>
                 @endif
-                <button onclick="confirmDelete('{{ $umkm->id_umkm }}', this.dataset.nama)"
+                <button type="button" onclick="confirmDelete('{{ $umkm->id_umkm }}', this.dataset.nama)" data-no-ajax="true"
                     class="col-span-2 inline-flex items-center justify-center gap-2 px-3 py-2.5 rounded-lg bg-slate-100 text-slate-700 text-sm font-semibold"
                     data-nama="{{ e($umkm->nama_usaha) }}">
                     Hapus
@@ -161,7 +161,7 @@
                     <td class="px-6 py-4 text-center">
                         <div class="flex items-center justify-center gap-1">
                             
-                            <button onclick="showDetail('{{ $umkm->id_umkm }}')"
+                            <button type="button" onclick="detailUmkm('{{ $umkm->id_umkm }}')"
                                 class="text-blue-600 hover:text-blue-800 p-1.5 hover:bg-blue-50 rounded-2xl transition-all"
                                 title="Detail">
                                 <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -173,7 +173,7 @@
                                 </svg>
                             </button>
 
-                            <a href="{{ route('superadmin.umkm.edit', $umkm->id_umkm) }}"
+                            <a href="{{ route('superadmin.umkm.edit', $umkm->id_umkm) }}" data-no-ajax="true"
                                 class="text-amber-600 hover:text-amber-800 p-1.5 hover:bg-amber-50 rounded-2xl transition-all"
                                 title="Edit">
                                 <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -184,7 +184,7 @@
                             </a>
 
                             @if ($umkm->status_verifikasi != 'terverifikasi')
-                                <button onclick="verifyUmkm('{{ $umkm->id_umkm }}', '{{ e($umkm->nama_usaha) }}')"
+                                <button type="button" onclick="verifyUmkm('{{ $umkm->id_umkm }}', '{{ e($umkm->nama_usaha) }}')"
                                     class="text-emerald-600 hover:text-emerald-800 p-1.5 hover:bg-emerald-50 rounded-2xl transition-all"
                                     title="Verifikasi / Setujui">
                                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -194,7 +194,7 @@
                                 </button>
                             @endif
                             @if ($umkm->status_verifikasi != 'ditolak')
-                                <button onclick="rejectUmkm('{{ $umkm->id_umkm }}', '{{ e($umkm->nama_usaha) }}')"
+                                <button type="button" onclick="rejectUmkm('{{ $umkm->id_umkm }}', '{{ e($umkm->nama_usaha) }}')"
                                     class="text-red-600 hover:text-red-800 p-1.5 hover:bg-red-50 rounded-2xl transition-all"
                                     title="Tolak / Penolakan">
                                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -204,7 +204,7 @@
                                 </button>
                             @endif
 
-                            <button onclick="confirmDelete('{{ $umkm->id_umkm }}', this.dataset.nama)"
+                            <button type="button" onclick="confirmDelete('{{ $umkm->id_umkm }}', this.dataset.nama)" data-no-ajax="true"
                                 class="text-red-600 hover:text-red-800 p-1.5 hover:bg-red-50 rounded-2xl transition-all"
                                 data-nama="{{ e($umkm->nama_usaha) }}"
                                 title="Hapus">

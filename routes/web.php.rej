@@ -1,0 +1,18 @@
+--- web.php
++++ web.php
+@@ -102,6 +102,7 @@
+     Route::get('/umkm', [OperatorUmkmController::class, 'index'])->name('umkm.index');
+     Route::get('/umkm/create', [OperatorUmkmController::class, 'create'])->name('umkm.create');
+     Route::post('/umkm', [OperatorUmkmController::class, 'store'])->name('umkm.store');
++    Route::get('/umkm/{id}/modal', [OperatorUmkmController::class, 'umkmModal'])->name('umkm.modal');
+     Route::get('/umkm/{id}', [OperatorUmkmController::class, 'show'])->name('umkm.show');
+     Route::get('/umkm/{id}/edit', [OperatorUmkmController::class, 'edit'])->name('umkm.edit');
+     Route::put('/umkm/{id}', [OperatorUmkmController::class, 'update'])->name('umkm.update');
+@@ -131,6 +132,7 @@
+     Route::get('/umkm', [SuperAdminUmkmController::class, 'index'])->name('umkm.index');
+     Route::get('/umkm/create', [SuperAdminUmkmController::class, 'create'])->name('umkm.create');
+     Route::post('/umkm', [SuperAdminUmkmController::class, 'store'])->name('umkm.store');
++    Route::get('/umkm/{id}/modal', [SuperAdminUmkmController::class, 'umkmModal'])->name('umkm.modal');
+     Route::get('/umkm/{id}', [SuperAdminUmkmController::class, 'show'])->name('umkm.show');
+     Route::get('/umkm/{id}/edit', [SuperAdminUmkmController::class, 'edit'])->name('umkm.edit');
+     Route::put('/umkm/{id}', [SuperAdminUmkmController::class, 'update'])->name('umkm.update');

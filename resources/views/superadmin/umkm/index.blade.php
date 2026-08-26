@@ -173,7 +173,7 @@
                         </div>
 
                         <div class="flex justify-end gap-2 pt-2 border-t">
-                            <a href="{{ route('superadmin.umkm.show', $umkm->id_umkm) }}" title="Lihat Detail"
+                            <button type="button" onclick="detailUmkm('{{ $umkm->id_umkm }}')" title="Lihat Detail"
                                 class="p-2 text-blue-600 hover:bg-blue-50 rounded-2xl transition-all">
                                 <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -182,8 +182,8 @@
                                         d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z">
                                     </path>
                                 </svg>
-                            </a>
-                            <a href="{{ route('superadmin.umkm.edit', $umkm->id_umkm) }}" title="Edit Data"
+                            </button>
+                            <a href="{{ route('superadmin.umkm.edit', $umkm->id_umkm) }}" title="Edit Data" data-no-ajax="true"
                                 class="p-2 text-amber-600 hover:bg-amber-50 rounded-2xl transition-all">
                                 <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -191,7 +191,28 @@
                                     </path>
                                 </svg>
                             </a>
-                            <button onclick="confirmDelete('{{ $umkm->id_umkm }}', this.dataset.nama)" data-nama="{{ e($umkm->nama_usaha) }}"
+                            @if ($umkm->status_verifikasi != 'terverifikasi')
+                                <button type="button" onclick="verifyUmkm('{{ $umkm->id_umkm }}', '{{ e($umkm->nama_usaha) }}')"
+                                    class="p-2 text-emerald-600 hover:bg-emerald-50 rounded-2xl transition-all"
+                                    title="Verifikasi / Setujui">
+                                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                            d="M5 13l4 4L19 7"></path>
+                                    </svg>
+                                </button>
+                            @endif
+                            @if ($umkm->status_verifikasi != 'ditolak')
+                                <button type="button" onclick="rejectUmkm('{{ $umkm->id_umkm }}', '{{ e($umkm->nama_usaha) }}')"
+                                    class="p-2 text-red-600 hover:bg-red-50 rounded-2xl transition-all"
+                                    title="Tolak / Penolakan">
+                                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                            d="M6 18L18 6M6 6l12 12"></path>
+                                    </svg>
+                                </button>
+                            @endif
+                            <button type="button" onclick="confirmDelete('{{ $umkm->id_umkm }}', this.dataset.nama)" data-no-ajax="true"
+                                data-nama="{{ e($umkm->nama_usaha) }}"
                                 class="p-2 text-red-600 hover:bg-red-50 rounded-2xl transition-all">
                                 <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -272,7 +293,7 @@
                                 </td>
                                 <td class="px-4 py-3 text-center">
                                     <div class="flex items-center justify-center gap-1">
-                                        <a href="{{ route('superadmin.umkm.show', $umkm->id_umkm) }}" title="Lihat Detail"
+                                        <button type="button" onclick="detailUmkm('{{ $umkm->id_umkm }}')" title="Lihat Detail"
                                             class="text-blue-600 hover:bg-blue-50 p-1.5 rounded-2xl transition-all">
                                             <svg class="w-5 h-5" fill="none" stroke="currentColor"
                                                 viewBox="0 0 24 24">
@@ -282,8 +303,8 @@
                                                     d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z">
                                                 </path>
                                             </svg>
-                                        </a>
-                                        <a href="{{ route('superadmin.umkm.edit', $umkm->id_umkm) }}" title="Edit Data"
+                                        </button>
+                                        <a href="{{ route('superadmin.umkm.edit', $umkm->id_umkm) }}" title="Edit Data" data-no-ajax="true"
                                             class="text-amber-600 hover:bg-amber-50 p-1.5 rounded-2xl transition-all">
                                             <svg class="w-5 h-5" fill="none" stroke="currentColor"
                                                 viewBox="0 0 24 24">
@@ -292,8 +313,28 @@
                                                 </path>
                                             </svg>
                                         </a>
-                                        <button
-                                            onclick="confirmDelete('{{ $umkm->id_umkm }}', this.dataset.nama)" data-nama="{{ e($umkm->nama_usaha) }}"
+                                        @if ($umkm->status_verifikasi != 'terverifikasi')
+                                            <button type="button" onclick="verifyUmkm('{{ $umkm->id_umkm }}', '{{ e($umkm->nama_usaha) }}')"
+                                                class="text-emerald-600 hover:text-emerald-800 p-1.5 hover:bg-emerald-50 rounded-2xl transition-all"
+                                                title="Verifikasi / Setujui">
+                                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                        d="M5 13l4 4L19 7"></path>
+                                                </svg>
+                                            </button>
+                                        @endif
+                                        @if ($umkm->status_verifikasi != 'ditolak')
+                                            <button type="button" onclick="rejectUmkm('{{ $umkm->id_umkm }}', '{{ e($umkm->nama_usaha) }}')"
+                                                class="text-red-600 hover:text-red-800 p-1.5 hover:bg-red-50 rounded-2xl transition-all"
+                                                title="Tolak / Penolakan">
+                                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                        d="M6 18L18 6M6 6l12 12"></path>
+                                                </svg>
+                                            </button>
+                                        @endif
+                                        <button type="button" onclick="confirmDelete('{{ $umkm->id_umkm }}', this.dataset.nama)" data-no-ajax="true"
+                                            data-nama="{{ e($umkm->nama_usaha) }}"
                                             class="text-red-600 hover:bg-red-50 p-1.5 rounded-2xl transition-all">
                                             <svg class="w-5 h-5" fill="none" stroke="currentColor"
                                                 viewBox="0 0 24 24">
@@ -303,7 +344,7 @@
                                             </svg>
                                         </button>
                                     </div>
-                            </tr>
+                                </td>
                             </tr>
                         @empty
                             <tr>
@@ -329,6 +370,33 @@
             @endif
         </div>
     </div>
+
+    {{-- Modal Detail UMKM Container --}}
+    <x-modal name="detailModal" maxWidth="2xl">
+        <div class="relative bg-white rounded-2xl max-h-[90vh] overflow-y-auto">
+            <div class="sticky top-0 bg-white border-b px-6 py-4 flex justify-between items-center z-10">
+                <h3 class="text-xl font-bold text-slate-800">
+                    <i class="mdi mdi-store text-blue-600 mr-2"></i>
+                    Detail UMKM
+                </h3>
+                <button onclick="closeModal()" class="text-gray-400 hover:text-gray-600 transition-colors">
+                    <i class="mdi mdi-close text-2xl"></i>
+                </button>
+            </div>
+            <div id="modalContent" class="p-6">
+                <div class="text-center py-8">
+                    <div class="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600 mx-auto"></div>
+                    <p class="mt-2 text-slate-700">Memuat data...</p>
+                </div>
+            </div>
+            <div id="modalFooter" class="sticky bottom-0 bg-white border-t px-6 py-4 flex justify-end gap-3 z-10">
+                <button onclick="closeModal()"
+                    class="px-4 py-2 border border-slate-300 rounded-lg text-sm font-medium text-slate-700 hover:bg-slate-50 transition-all">
+                    Tutup
+                </button>
+            </div>
+        </div>
+    </x-modal>
 
     <div id="importModal" class="fixed inset-0 z-50 hidden overflow-y-auto" aria-labelledby="modal-title" role="dialog"
         aria-modal="true">
@@ -653,10 +721,32 @@
                 tableContainer.style.filter = 'blur(1px)';
                 tableContainer.style.pointerEvents = 'none';
 
-                fetch(url, {
+                const timestamp = new Date().getTime();
+                const separator = url.includes('?') ? '&' : '?';
+                const fetchUrl = url + separator + '_t=' + timestamp;
+
+                const resetState = () => {
+                    tableContainer.style.opacity = '1';
+                    tableContainer.style.filter = 'none';
+                    tableContainer.style.pointerEvents = 'auto';
+                    isFetching = false;
+
+                    if (filterForm) {
+                        const searchInput = filterForm.querySelector('input[name="search"]');
+                        if (searchInput && document.activeElement === searchInput) {
+                            try {
+                                const valLen = searchInput.value.length;
+                                searchInput.setSelectionRange(valLen, valLen);
+                            } catch(e) {}
+                        }
+                    }
+                };
+
+                fetch(fetchUrl, {
                     headers: {
                         'X-Requested-With': 'XMLHttpRequest',
-                        'Accept': 'application/json, text/html'
+                        'Accept': 'application/json, text/html',
+                        'Cache-Control': 'no-cache'
                     }
                 })
                 .then(response => {
@@ -668,110 +758,78 @@
                     }
                 })
                 .then(result => {
-                    let newHtml = '';
-                    if (result.type === 'json' && result.data && result.data.html) {
-                        newHtml = result.data.html;
-                    } else if (result.type === 'html' && result.html) {
-                        const parser = new DOMParser();
-                        const doc = parser.parseFromString(result.html, 'text/html');
-                        const containerInDoc = doc.getElementById('umkmTableContainer');
-                        newHtml = containerInDoc ? containerInDoc.innerHTML : result.html;
-                    }
-
-                    if (newHtml) {
-                        tableContainer.innerHTML = newHtml;
-                        if (window.Alpine) {
-                            window.Alpine.initTree(tableContainer);
+                    try {
+                        let newHtml = '';
+                        if (result.type === 'json' && result.data && result.data.html) {
+                            newHtml = result.data.html;
+                        } else if (result.type === 'html' && result.html) {
+                            const parser = new DOMParser();
+                            const doc = parser.parseFromString(result.html, 'text/html');
+                            const containerInDoc = doc.getElementById('umkmTableContainer');
+                            newHtml = containerInDoc ? containerInDoc.innerHTML : result.html;
                         }
-                    }
 
-                    const exportForm = document.querySelector('#exportModal form');
-                    if (exportForm) {
-                        const currentUrlParams = new URLSearchParams(new URL(url).search);
-                        ['search', 'kelurahan', 'kategori', 'sektor', 'status_verifikasi'].forEach(field => {
-                            const input = exportForm.querySelector(`input[name="${field}"]`);
-                            if (input) input.value = currentUrlParams.get(field) || '';
-                        });
-                    }
+                        if (newHtml) {
+                            tableContainer.innerHTML = newHtml;
+                            if (window.Alpine && typeof window.Alpine.initTree === 'function') {
+                                window.Alpine.initTree(tableContainer);
+                            }
+                        }
 
-                    window.history.pushState({}, '', url);
+                        const exportForm = document.querySelector('#exportModal form');
+                        if (exportForm) {
+                            const currentUrlParams = new URLSearchParams(new URL(url, window.location.origin).search);
+                            ['search', 'kelurahan', 'kategori', 'sektor', 'status_verifikasi'].forEach(field => {
+                                const input = exportForm.querySelector(`input[name="${field}"]`);
+                                if (input) input.value = currentUrlParams.get(field) || '';
+                            });
+                        }
+
+                        window.history.pushState({}, '', url);
+                    } catch (e) {
+                        console.error('Error rendering HTML:', e);
+                    }
+                    resetState();
                 })
                 .catch(err => {
                     console.error('AJAX Filter error:', err);
-                })
-                .finally(() => {
-                    tableContainer.style.opacity = '1';
-                    tableContainer.style.filter = 'none';
-                    tableContainer.style.pointerEvents = 'auto';
-                    isFetching = false;
-
-                    if (filterForm) {
-                        const searchInput = filterForm.querySelector('input[name="search"]');
-                        if (searchInput && document.activeElement === searchInput) {
-                            const valLen = searchInput.value.length;
-                            searchInput.setSelectionRange(valLen, valLen);
-                        }
-                    }
+                    resetState();
                 });
-            };
-
-            window.triggerFilter = function() {
-                const filterForm = document.getElementById('filterForm');
-                if (!filterForm) return;
-
-                const formData = new FormData(filterForm);
-                const params = new URLSearchParams();
-                for (const [key, val] of formData.entries()) {
-                    if (val !== null && val !== undefined && val.toString().trim() !== '') {
-                        params.append(key, val);
-                    }
-                }
-                const actionUrl = filterForm.action.split('?')[0];
-                const fullUrl = actionUrl + (params.toString() ? '?' + params.toString() : '');
-                window.performAjaxFetch(fullUrl);
-            };
-
-            function setupListeners() {
-                const filterForm = document.getElementById('filterForm');
-                const tableContainer = document.getElementById('umkmTableContainer');
-                if (!filterForm || !tableContainer) return;
-
-                filterForm.addEventListener('submit', function(e) {
-                    e.preventDefault();
-                    window.triggerFilter();
-                });
-
-                const resetLink = filterForm.querySelector('a[href*="superadmin/umkm"]');
-                if (resetLink) {
-                    resetLink.addEventListener('click', function(e) {
-                        e.preventDefault();
-                        filterForm.querySelectorAll('input[type="text"]').forEach(i => i.value = '');
-                        filterForm.querySelectorAll('select').forEach(s => s.selectedIndex = 0);
-                        window.triggerFilter();
-                    });
-                }
-
-                tableContainer.addEventListener('click', function(e) {
-                    const link = e.target.closest('a');
-                    if (link && link.href && tableContainer.contains(link) && !link.hasAttribute('data-no-ajax')) {
-                        const isPagination = link.closest('nav') || link.closest('.pagination') || link.href.includes('page=');
-                        if (isPagination) {
-                            e.preventDefault();
-                            window.performAjaxFetch(link.href);
-                        }
-                    }
-                });
-
-                window.addEventListener('popstate', function() {
-                    window.performAjaxFetch(window.location.href);
-                });
-            }
-
-            if (document.readyState === 'loading') {
-                document.addEventListener('DOMContentLoaded', setupListeners);
-            } else {
-                setupListeners();
             }
         })();
+
+        function detailUmkm(id) {
+            const modalContent = document.getElementById('modalContent');
+            const modalFooter = document.getElementById('modalFooter');
+
+            window.dispatchEvent(new CustomEvent('open-modal', { detail: 'detailModal' }));
+            modalContent.innerHTML =
+                `<div class="text-center py-8"><div class="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600 mx-auto"></div><p class="mt-2 text-slate-700">Memuat data...</p></div>`;
+            modalFooter.innerHTML = `<button onclick="closeModal()" class="px-4 py-2 border border-slate-300 rounded-lg text-sm font-medium text-slate-700 hover:bg-slate-50 transition-all">Tutup</button>`;
+
+            fetch(`/superadmin/umkm/${id}/modal`, {
+                    headers: {
+                        'X-Requested-With': 'XMLHttpRequest',
+                        'Accept': 'application/json'
+                    }
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        modalContent.innerHTML = data.html;
+                    } else {
+                        modalContent.innerHTML =
+                            `<div class="text-center py-8 text-red-500"><i class="mdi mdi-alert-circle text-4xl mb-2"></i><p>${data.message || 'Gagal memuat data.'}</p></div>`;
+                    }
+                })
+                .catch(error => {
+                    modalContent.innerHTML =
+                        `<div class="text-center py-8 text-red-500"><i class="mdi mdi-alert-circle text-4xl mb-2"></i><p>Terjadi kesalahan koneksi.</p></div>`;
+                });
+        }
+
+        function closeModal() {
+            window.dispatchEvent(new CustomEvent('close-modal', { detail: 'detailModal' }));
+        }
     </script>
 @endsection

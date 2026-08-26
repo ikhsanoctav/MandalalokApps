@@ -361,6 +361,7 @@
                                 <p class="mt-1">
                                     <span
                                         class="inline-flex px-2 py-1 rounded-md text-xs font-medium bg-blue-100 text-blue-700">
+                                        {{ $umkm->kategori?->nama_kategori ?? '-' }}
                                     </span>
                                 </p>
                             </div>

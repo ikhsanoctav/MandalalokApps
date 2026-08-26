@@ -29,7 +29,7 @@
                 </div>
 
                 <div class="flex-shrink-0 text-right bg-white rounded-xl p-4 border border-slate-200/80 shadow-sm">
-                    <p class="text-xs text-slate-700 uppercase tracking-widest font-bold mb-1">Hari Ini</p>
+                    <p class="text-xs text-slate-100 uppercase tracking-wide tracking-widest font-bold mb-1">Hari Ini</p>
                     <p class="text-xl font-black text-slate-800">{{ now()->translatedFormat('l, d F Y') }}</p>
                     <p class="text-sm text-slate-600 mt-1 flex items-center justify-end gap-1 font-semibold"><i class="mdi mdi-clock-outline text-blue-600"></i> <span id="realtimeClock">{{ now()->format('H:i') }}</span></p>
                 </div>
@@ -315,7 +315,7 @@
         <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
             
             <div
-                class="bg-white rounded-2xl border border-slate-200 shadow-sm hover:shadow-md transition-all overflow-hidden">
+                class="min-w-0 bg-white rounded-2xl border border-slate-200 shadow-sm hover:shadow-md transition-all flex flex-col h-full overflow-hidden">
                 <div class="px-6 py-4 border-b border-slate-200 flex justify-between items-center flex-wrap gap-4">
                     <div>
                         <h3 class="text-lg font-bold text-slate-800">UMKM Terbaru</h3>
@@ -335,13 +335,13 @@
                 </div>
                 <div class="overflow-x-auto">
                     <table class="w-full min-w-[600px]">
-                        <thead class="bg-slate-50 border-b border-slate-200">
+                        <thead class="bg-blue-900 border-b border-blue-950 text-white">
                             <tr>
-                                <th class="px-6 py-3 text-left text-xs font-semibold text-slate-700 uppercase">Nama Usaha
+                                <th class="px-6 py-3 text-left text-xs font-semibold text-slate-100 uppercase tracking-wide">Nama Usaha
                                 </th>
-                                <th class="px-6 py-3 text-left text-xs font-semibold text-slate-700 uppercase">Pemilik</th>
-                                <th class="px-6 py-3 text-left text-xs font-semibold text-slate-700 uppercase">Status</th>
-                                <th class="px-6 py-3 text-center text-xs font-semibold text-slate-700 uppercase">Aksi</th>
+                                <th class="px-6 py-3 text-left text-xs font-semibold text-slate-100 uppercase tracking-wide">Pemilik</th>
+                                <th class="px-6 py-3 text-left text-xs font-semibold text-slate-100 uppercase tracking-wide">Status</th>
+                                <th class="px-6 py-3 text-center text-xs font-semibold text-slate-100 uppercase tracking-wide">Aksi</th>
                             </tr>
                         </thead>
                         <tbody id="recentUmkmTable" class="divide-y divide-slate-100">
@@ -403,7 +403,7 @@
             </div>
 
             <div
-                class="bg-white rounded-2xl border border-slate-200 shadow-sm hover:shadow-md transition-all overflow-hidden">
+                class="min-w-0 bg-white rounded-2xl border border-slate-200 shadow-sm hover:shadow-md transition-all flex flex-col h-full overflow-hidden">
                 <div class="px-6 py-4 border-b border-slate-200 flex justify-between items-center">
                     <div>
                         <h3 class="text-lg font-bold text-slate-800">Aktivitas Terbaru</h3>
@@ -417,7 +417,7 @@
                         </button>
                     </div>
                 </div>
-                <div id="activityList" class="divide-y divide-slate-100 max-h-[400px] overflow-y-auto">
+                <div id="activityList" class="divide-y divide-slate-100 flex-1 overflow-y-auto">
                     @forelse($aktivitasTerbaru as $aktivitas)
                         <div class="px-6 py-4 hover:bg-slate-50 transition-colors">
                             <div class="flex gap-3">
@@ -469,7 +469,7 @@
 
             <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4">
                 <div class="text-center p-4 bg-slate-50 rounded-xl">
-                    <div class="text-xs text-slate-700 uppercase tracking-wider mb-2">DATABASE</div>
+                    <div class="text-xs text-slate-100 uppercase tracking-wide tracking-wider mb-2">DATABASE</div>
                     <div class="flex items-center justify-center gap-2">
                         <span id="dbIndicator"
                             class="w-2 h-2 rounded-full {{ $systemStatus['database']['status'] ? 'bg-emerald-500 animate-pulse' : 'bg-red-500' }}"></span>
@@ -485,7 +485,7 @@
                 </div>
 
                 <div class="text-center p-4 bg-slate-50 rounded-xl">
-                    <div class="text-xs text-slate-700 uppercase tracking-wider mb-2">BEBAN SERVER</div>
+                    <div class="text-xs text-slate-100 uppercase tracking-wide tracking-wider mb-2">BEBAN SERVER</div>
                     <div id="serverLoad"
                         class="text-lg font-bold {{ $systemStatus['server']['load'] < 1 ? 'text-emerald-600' : ($systemStatus['server']['load'] < 2 ? 'text-amber-600' : 'text-red-600') }}">
                         {{ $systemStatus['server']['load'] }}
@@ -495,7 +495,7 @@
                 </div>
 
                 <div class="text-center p-4 bg-slate-50 rounded-xl">
-                    <div class="text-xs text-slate-700 uppercase tracking-wider mb-2">CACHE</div>
+                    <div class="text-xs text-slate-100 uppercase tracking-wide tracking-wider mb-2">CACHE</div>
                     <div id="cacheStatus"
                         class="text-sm font-semibold {{ $systemStatus['cache']['working'] ? 'text-emerald-600' : 'text-red-600' }}">
                         {{ $systemStatus['cache']['working'] ? 'Berjalan' : 'Bermasalah' }}
@@ -505,7 +505,7 @@
                 </div>
 
                 <div class="text-center p-4 bg-slate-50 rounded-xl">
-                    <div class="text-xs text-slate-700 uppercase tracking-wider mb-2">SESI AKTIF</div>
+                    <div class="text-xs text-slate-100 uppercase tracking-wide tracking-wider mb-2">SESI AKTIF</div>
                     <div id="activeSessions" class="text-lg font-bold text-slate-800">
                         {{ $systemStatus['active_sessions'] }}</div>
                     <div id="uptime" class="text-xs text-slate-400 mt-1">Uptime: {{ $systemStatus['uptime'] }}</div>

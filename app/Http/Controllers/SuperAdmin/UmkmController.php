@@ -396,6 +396,7 @@ class UmkmController extends Controller
             'email_usaha' => $request->email_usaha,
             'website' => $request->website,
             'media_sosial' => $request->media_sosial,
+            'perkiraan_omset' => $request->perkiraan_omset,
             'jumlah_tenaga_kerja' => $request->jumlah_tenaga_kerja ?? 0,
             'tenaga_kerja_laki' => $request->tenaga_kerja_laki ?? 0,
             'tenaga_kerja_perempuan' => $request->tenaga_kerja_perempuan ?? 0,

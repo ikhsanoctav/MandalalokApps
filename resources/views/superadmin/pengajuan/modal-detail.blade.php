@@ -185,8 +185,7 @@
                     <label class="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Skala Usaha</label>
                     <p class="text-sm mt-0.5">
                         <span
-                            class="inline-flex px-2 py-0.5 rounded-md text-xs font-semibold bg-blue-50 text-blue-700 border border-blue-100">
-                        </span>
+                            class="inline-flex px-2 py-0.5 rounded-md text-xs font-semibold bg-blue-50 text-blue-700 border border-blue-100">{{ $umkm->kategori?->nama_kategori ?? '-' }}</span>
                     </p>
                 </div>
                 <div>

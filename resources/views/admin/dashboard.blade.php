@@ -29,7 +29,7 @@
                 </div>
 
                 <div class="flex-shrink-0 text-right bg-white rounded-xl p-4 border border-slate-200/80 shadow-sm">
-                    <p class="text-xs text-slate-500 uppercase tracking-widest font-bold mb-1">Hari Ini</p>
+                    <p class="text-xs text-slate-100 uppercase tracking-wide tracking-widest font-bold mb-1">Hari Ini</p>
                     <p class="text-xl font-black text-slate-800">{{ now()->translatedFormat('l, d F Y') }}</p>
                     <p class="text-sm text-slate-600 mt-1 flex items-center justify-end gap-1 font-semibold"><i class="mdi mdi-clock-outline text-indigo-600"></i> <span id="realtimeClock">{{ now()->format('H:i') }}</span></p>
                 </div>
@@ -324,14 +324,14 @@
             </div>
             <div class="overflow-x-auto">
                 <table class="w-full">
-                    <thead class="bg-slate-50 border-b border-slate-200">
+                    <thead class="bg-blue-900 border-b border-blue-950 text-white">
                         <tr>
-                            <th class="px-6 py-3 text-left text-xs font-semibold text-slate-500 uppercase">Nama Usaha</th>
-                            <th class="px-6 py-3 text-left text-xs font-semibold text-slate-500 uppercase">Pemilik / NIK
+                            <th class="px-6 py-3 text-left text-xs font-semibold text-slate-100 uppercase tracking-wide">Nama Usaha</th>
+                            <th class="px-6 py-3 text-left text-xs font-semibold text-slate-100 uppercase tracking-wide">Pemilik / NIK
                             </th>
-                            <th class="px-6 py-3 text-left text-xs font-semibold text-slate-500 uppercase">Kelurahan</th>
-                            <th class="px-6 py-3 text-center text-xs font-semibold text-slate-500 uppercase">Status</th>
-                            <th class="px-6 py-3 text-center text-xs font-semibold text-slate-500 uppercase">Aksi</th>
+                            <th class="px-6 py-3 text-left text-xs font-semibold text-slate-100 uppercase tracking-wide">Kelurahan</th>
+                            <th class="px-6 py-3 text-center text-xs font-semibold text-slate-100 uppercase tracking-wide">Status</th>
+                            <th class="px-6 py-3 text-center text-xs font-semibold text-slate-100 uppercase tracking-wide">Aksi</th>
                         </tr>
                     </thead>
                     <tbody id="recentUmkmTable" class="divide-y divide-slate-100">
