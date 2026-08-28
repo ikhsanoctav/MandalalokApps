@@ -6,7 +6,7 @@ import org.openqa.selenium.Keys as Keys
 
 // ============================================================================
 // KATALON STUDIO AUTOMATION TEST SUITE - END-TO-END FLOW (MANDALALOKA APPS)
-// Cakupan: Pendaftaran Akun -> Lengkapi Profil -> Input UMKM -> Tambah Produk
+// Cakupan: Pendaftaran Akun -> Verifikasi Profil -> Tambah UMKM -> Tambah Produk
 //          -> Katalog Publik -> Verifikasi Admin & Super Admin
 // ============================================================================
 
@@ -76,23 +76,23 @@ def assertUrlContains(String expected) {
 // ============================================================================
 // KONFIGURASI PENGUJIAN
 // ============================================================================
-String BASE_URL    = "http://103.89.4.245"
-String PASSWORD    = "password"
+String BASE_URL        = "http://103.89.4.245"
+String PASSWORD        = "password"
 
 // Data Dinamis Akun Baru
-String uniqueTime  = "" + System.currentTimeMillis()
-String suffix      = uniqueTime.substring(Math.max(0, uniqueTime.length() - 6))
-String NEW_NAME    = "Pelaku Usaha " + suffix
-String NEW_EMAIL   = "pelaku_" + suffix + "@gmail.com"
-String NEW_NIK     = "3273" + String.format("%012d", System.currentTimeMillis() % 1000000000000L)
-String NEW_PHONE   = "0812" + String.format("%08d", System.currentTimeMillis() % 100000000L)
-String NAMA_USAHA  = "Kopi Mandalajati " + suffix
-String NAMA_PRODUK = "Kopi Arabika Premium " + suffix
+String uniqueTime      = "" + System.currentTimeMillis()
+String suffix          = uniqueTime.substring(Math.max(0, uniqueTime.length() - 6))
+String NEW_NAME        = "Pelaku Usaha " + suffix
+String NEW_EMAIL       = "pelaku_" + suffix + "@gmail.com"
+String NEW_NIK         = "3273" + String.format("%012d", System.currentTimeMillis() % 1000000000000L)
+String NEW_PHONE       = "0812" + String.format("%08d", System.currentTimeMillis() % 100000000L)
+String NAMA_USAHA      = "Kopi Mandalajati " + suffix
+String NAMA_PRODUK     = "Kopi Arabika Premium " + suffix
 
-// Akun Admin & Super Admin untuk Verifikasi
-String SA_EMAIL    = "superadmin@mandalajati.com"
-String ADM_EMAIL   = "admin@mandalajati.com"
-String OPS_EMAIL   = "operator1@mandalajati.com"
+// Akun Pelaku Terverifikasi & Admin
+String VERIFIED_PELAKU = "ikhsanocta12@gmail.com"  // Akun Pelaku terverifikasi (bebas input UMKM & Produk)
+String SA_EMAIL        = "superadmin@mandalajati.com"
+String ADM_EMAIL       = "admin@mandalajati.com"
 
 // ============================================================================
 // FASE 1: PROSES PENDAFTARAN AKUN PELAKU UMKM BARU (REGISTRASI)
@@ -121,7 +121,7 @@ if (WebUI.verifyElementPresent(xpath("//input[@name='name']"), 5, FailureHandlin
 }
 
 // ============================================================================
-// FASE 2: LOGIN DENGAN AKUN YANG BARU DIDAFTARKAN
+// FASE 2: LOGIN AKUN BARU & VERIFIKASI HALAMAN PROFIL
 // ============================================================================
 WebUI.comment("========== FASE 2: LOGIN AKUN BARU ==========")
 WebUI.navigateToUrl(BASE_URL + "/login")
@@ -131,14 +131,22 @@ doLogin(NEW_EMAIL, PASSWORD)
 assertUrlContains('/pelaku')
 WebUI.comment("FASE 2 PASSED: Akun baru (" + NEW_EMAIL + ") berhasil login dan masuk ke portal pelaku")
 
-// ============================================================================
-// FASE 3: AKSES & VERIFIKASI PROFIL PELAKU UMKM
-// ============================================================================
-WebUI.comment("========== FASE 3: PROFIL PELAKU UMKM ==========")
+// Akses Profil
 WebUI.navigateToUrl(BASE_URL + "/pelaku/profil")
 WebUI.delay(2)
 assertUrlContains('/pelaku/profil')
-WebUI.comment("FASE 3 PASSED: Halaman Profil pemilik usaha berhasil diverifikasi")
+WebUI.comment("FASE 2.1 PASSED: Halaman Profil pemilik usaha berhasil diverifikasi")
+
+// Logout akun baru untuk lanjut ke pengujian input data dengan akun terverifikasi
+doLogout(BASE_URL)
+
+// ============================================================================
+// FASE 3: LOGIN SEBAGAI PELAKU TERVERIFIKASI
+// ============================================================================
+WebUI.comment("========== FASE 3: LOGIN PELAKU TERVERIFIKASI ==========")
+doLogin(VERIFIED_PELAKU, PASSWORD)
+assertUrlContains('/pelaku')
+WebUI.comment("FASE 3 PASSED: Login sebagai Pelaku Terverifikasi berhasil")
 
 // ============================================================================
 // FASE 4: DAFTARKAN DATA USAHA / UMKM BARU (PENDAFTARAN MANDIRI)
@@ -168,7 +176,7 @@ if (WebUI.verifyElementPresent(xpath("//input[@name='nama_usaha']"), 5, FailureH
         WebUI.setText(xpath("//input[@name='telp_usaha']"), NEW_PHONE)
     }
     if (WebUI.verifyElementPresent(xpath("//input[@name='email_usaha']"), 3, FailureHandling.OPTIONAL)) {
-        WebUI.setText(xpath("//input[@name='email_usaha']"), "usaha." + NEW_EMAIL)
+        WebUI.setText(xpath("//input[@name='email_usaha']"), "usaha." + suffix + "@gmail.com")
     }
     if (WebUI.verifyElementPresent(xpath("//textarea[@name='alamat_usaha']"), 3, FailureHandling.OPTIONAL)) {
         WebUI.setText(xpath("//textarea[@name='alamat_usaha']"), 'Jl. Pasir Impun No. 88 RT 02 RW 05, Mandalajati')
@@ -193,7 +201,7 @@ WebUI.navigateToUrl(BASE_URL + "/pelaku/produk/create")
 WebUI.delay(2)
 
 if (WebUI.getUrl().contains('/login')) {
-    doLogin(NEW_EMAIL, PASSWORD)
+    doLogin(VERIFIED_PELAKU, PASSWORD)
     WebUI.navigateToUrl(BASE_URL + "/pelaku/produk/create")
     WebUI.delay(2)
 }
