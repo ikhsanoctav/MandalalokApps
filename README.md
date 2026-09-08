@@ -246,3 +246,7 @@ Sistem ini melayani pendataan UMKM pada 5 Kelurahan resmi di Kecamatan Mandalaja
 ## 📄 Lisensi
 
 Platform Mandalaloka dikembangkan untuk tata kelola pendataan dan pemberdayaan UMKM Kecamatan Mandalajati, Kota Bandung. Dilindungi di bawah lisensi [MIT License](LICENSE).
+
+---
+
+**Dibuat oleh Ikhsan Octaviana Subagja**
